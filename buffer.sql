@@ -15,7 +15,7 @@ CREATE TABLE "message" (
   "message_type_id" INT(10) UNSIGNED DEFAULT '1',
   "message_status_id" INT(10) UNSIGNED NOT NULL DEFAULT '1',
   "message" BLOB,
-  "timestamp" DATETIME DEFAULT NOW(),
+  "timestamp" TIMESTAMP DEFAULT NOW(),
   "upload_status" INTEGER uNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY  ("message_id"),
   UNIQUE KEY "i_message_type" ("message_type_id","message_status_id","message_id"),
