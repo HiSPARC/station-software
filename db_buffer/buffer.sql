@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS `device`;
 CREATE TABLE `device` (
   `device_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `device_serial` VARCHAR(40) DEFAULT NULL,
-  `sensor_uploadcode` varchar(3) DEFAULT NULL,
   `sensor_password` varchar(20) DEFAULT NULL,
   PRIMARY KEY  (`device_id`),
   UNIQUE KEY `i_device_serial` (`device_serial`)
