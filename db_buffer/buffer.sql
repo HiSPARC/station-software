@@ -1,3 +1,7 @@
+DROP DATABASE IS EXISTS 'buffer';
+CREATE DATABASE 'buffer';
+USE 'buffer';
+
 DROP TABLE IF EXISTS `device`;
 CREATE TABLE `device` (
   `device_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -41,3 +45,12 @@ CREATE TABLE `settings` (
   `value` TEXT NULL,
   PRIMARY KEY(`code`)
 );
+
+
+--- Adding users 
+CREATE USER 'buffer' INDENTIFIED BY 'PLACEHOLDER';
+GRANT ALL ON buffer.* TO buffer;
+
+
+
+
