@@ -15,10 +15,9 @@ CREATE TABLE `message` (
   `message_status_id` INT(10) UNSIGNED NOT NULL DEFAULT '1',
   `message` BLOB,
   `timestamp` TIMESTAMP DEFAULT NOW(),
-  `upload_status` INTEGER uNSIGNED NOT NULL DEFAULT '0',
+  `upload_status` INTEGER UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY  (`message_id`),
-  UNIQUE KEY `i_message_type` (`message_type_id`,`message_status_id`,`message_id`),
-  KEY `i_device_id` (`device_id`,`message_id`)
+  KEY `i_upload_status` (`device_id`,`message_status_id`,`upload_status`)
 ) DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `message_status`;
