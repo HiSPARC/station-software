@@ -1,6 +1,6 @@
-DROP DATABASE IS EXISTS 'buffer';
-CREATE DATABASE 'buffer';
-USE 'buffer';
+DROP DATABASE IF EXISTS `buffer`;
+CREATE DATABASE `buffer`;
+CONNECT `buffer`;
 
 DROP TABLE IF EXISTS `device`;
 CREATE TABLE `device` (
@@ -47,10 +47,10 @@ CREATE TABLE `settings` (
 );
 
 
---- Adding users 
-CREATE USER 'buffer' INDENTIFIED BY 'PLACEHOLDER';
+-- Adding users 
+-- First make sure the user exists before dropping it. Braindamage: there
+-- is no drop user if exists statemtent.
+GRANT USAGE ON *.* TO `buffer`@`%`;
+DROP USER `buffer`@`%`;
+CREATE USER `buffer`@`%` IDENTIFIED BY 'PLACEHOLDER';
 GRANT ALL ON buffer.* TO buffer;
-
-
-
-
