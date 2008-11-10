@@ -18,7 +18,7 @@ CREATE TABLE `message` (
   `timestamp` TIMESTAMP DEFAULT NOW(),
   `upload_status` INTEGER UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY  (`message_id`),
-  KEY `i_upload_status` (`device_id`,`message_type_id`,`upload_status`)
+  KEY `i_upload_status` (`device_id`,`message_type_id`,`upload_status`,`message_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 CREATE TABLE `message_status` (
