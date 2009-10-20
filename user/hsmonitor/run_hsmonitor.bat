@@ -1,0 +1,1 @@
+@call "%~dp0\..\startstop\runmanually.bat" \user\hsmonitor\src HsMonitor.py

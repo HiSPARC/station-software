@@ -1,0 +1,111 @@
+===PYTHON=== (fixme: change to steps for python 2.5)
+
+How to set up a python installation for distribution with the Hisparc updater and installer:
+
+Under Windows, it is not trivial to install Python to a directory without changing any system-wide settings. It is theoretically possible, but all the installers of Python modules depend on the Windows Registry to find the appropriate Python installation.
+
+Nevertheless, it is perfectly possible to _use_ a Python installation which has not been registered in the registry. This means that the person preparing the correct Python installation has to install Python in the normal way, but the entire installation can just be distributed to the HiSPARC Client users in an unpacker that does not change any system settings. This means that updating the Python installation with a newer version or with additional modules can be performed by the automatic updater, as it is simply a matter of replacing the entire Python directory.
+
+This section briefly describes the steps required to 
+
+python 2.6.2 (msi installer)
+
+installation options; select:
+ * Python
+ * Tcl/Tck
+ * Not necessary:
+   * Register Extensions
+   * Documentation
+   * Utility Scripts
+   * Python Test Suite
+ * Advanced options: checking "Compile .py files to byte code after installation" not necessary
+
+Pywin32 (version 2.1.4) 
+* download and run pywin32-214.win32-py2.6.exe
+* I had an error message at the end of the installation, but it does not appear to create problems.
+
+WMI
+* Download wmi-1.3.2.zip and unzip it somewhere
+* From that directory on the command line, do 
+  c:\Python26\python.exe setup.py install
+
+Setuptools 
+Seems not necessary for any of the required modules - most are distributed with distutils which comes with Python.
+If needed later anyway, the fool-proof way is:
+* download setuptools-0.6c9.tar.gz and unzip it somewhere
+* download setuptools-0.6c9-py2.6.egg and put it in the same directory
+* from that directory on the command line, do 
+    c:\Python26\Python.exe ez_setup.py setuptools-0.6c9-py2.6.egg
+
+Py2exe
+Seems not needed
+
+
+===MYSQL===
+
+* downloaded newest version
+
+* took the my.ini from the hisparc buffer
+
+* changed the following directives:
+
+    basedir="/user/mysql/"
+    datadir="/persistent/data/mysql/"
+
+* moved /user/mysql/data/* to /persistent/data/mysql
+
+* from /user/mysql/bin, ran "start cmd /k mysqld --console" (displays some log messages)
+
+* from /user/mysql/bin, ran "start cmd /k mysql -u root" (initially, root has no password)
+
+  * (as documented on http://dev.mysql.com/doc/refman/5.1/en/default-privileges.html):
+  * DROP USER ''; (remove anonymous account)
+  * DROP USER ''@'localhost'; (remove anonymous account) 
+  * SET PASSWORD FOR 'root'@'localhost' = PASSWORD('PLACEHOLDER'); 
+  * SET PASSWORD FOR 'root'@'127.0.0.1' = PASSWORD('PLACEHOLDER'); 
+  
+* from /user/mysql/bin, ran "mysql -u root --password=PLACEHOLDER < c:\hisparc\buffer.sql"
+  * where c:\hisparc\buffer.sql is the buffer sql file from the old buffer installer
+  
+* deleted:
+
+  * in directory /user/mysql/..
+    * mysql-test
+    * sql-bench
+    * Docs
+    * Embedded
+    * include
+    * lib
+  * in directory /user/mysql/share, deleted all folders except /charset and /english
+  * deleted /user/mysql/*.map and /user/mysql/*.pdb (only useful for debugging)
+  * note: it is theoretically possible to also delete many of the executables in /user/mysql/bin, as in fact
+    only mysqld.exe is used. However, that seemed over the top to me right now.
+
+===MONITOR===
+
+* in /user/persistent/configuration/hsmonitor/config.ini, changed settings to match buffer.sql:
+    Username=buffer
+    Password=PLACEHOLDER
+    
+* moved all files in /src in the original distribution to /user/hsmonitor; removed backup copies and log files
+
+* changed in all .py files:
+  * "../data/config.ini" to "../../persistent/configuration/hsmonitor/config.ini" (for now, might change)
+  * "../data/stats.db" to "../../persistent/data/hsmonitor/stats.db"
+  
+* todo: 
+  * make up how station_id and password is put in the buffer db
+  * move log file path to somewhere in /persistent/logs
+  * split the hsmonitor config.ini file such that the non-station-specific information is not in 
+    /persistent/configuration but just in /user/hsmonitor/<somewhere>
+    
+    
+===NATIONAL INSTRUMENTS RUNTIME===
+* ran LVRTE86std.exe and unpack it to <somewhere> without running the actual installer
+* copied <somewhere>\National Instruments Downloads\LabVIEW\8.6\Run-Time\Standard\* to \admin\niruntime\installer
+* from \admin\niruntime\installer, ran:
+  * setup /generatespecfile .\hisparcspec.ini
+    * selected Z:\admin\niruntime as installation directory (assuming the virtual drive is running at Z:)
+    * selected all components except USI (which requires WinXP SP2 or higher) (FIXME: confirm which components are needed)
+      * for USI, selected "Do not install this feature. Do not remove this feature if it is already installed"
+* edited \admin\niruntime\hisparcspec.ini and changed "z:\admin\niruntime" to "\admin\niruntime"

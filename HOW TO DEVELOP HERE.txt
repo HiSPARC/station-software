@@ -1,0 +1,21 @@
+To develop user-mode software, do the following:
+
+1. copy \persistent\configuration\startup_settings_example.bat to startup_settings.bat
+2. edit the file to use a drive that's free on your computer for a virtual drive
+3. start hisparc_cmd.bat. this command creates the virtual drive if it does not exist yet, and
+   sets up the right environment variables for all python stuff to work correctly.
+4. cd to your directory and start your python application(s)
+
+tip: if you want to be entirely sure that your application will work on the actual high schools,
+use commands such as
+
+  > \user\python\python.exe mytest.py
+
+and not
+
+  > mytest.py
+
+This way, the shipped python interpreter is used. if your application doesn't work there,
+the system deployment team probably has to add some libraries to it. 
+
+For any questions, get in touch.
