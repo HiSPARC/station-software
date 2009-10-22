@@ -116,6 +116,13 @@ Section -LabviewRuntimeSetup
 SectionEnd
 
 #
+# Install FTDI USB drivers
+#
+Section -FTDIDrivers
+    ExecWait "$InstallPathApplication\hisparc\admin\ftdi_drivers\dpinst.exe"
+SectionEnd
+
+#
 # Post install page die de services start.
 #
 Section RegisterServices
