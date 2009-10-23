@@ -1,10 +1,14 @@
 Section -CreateUserAccounts
+    SetDetailsPrint none
+
     # admin
     ExecWait "net user ${ADMHISPARC_USERNAME} ${ADMHISPARC_PASSWORD} /add"
     ExecWait "net localgroup Administrators ${ADMHISPARC_USERNAME} /add"
 
     # user
     ExecWait "net user ${HISPARC_USERNAME} ${HISPARC_PASSWORD} /add"
+
+    SetDetailsPrint both
 SectionEnd
 
 Section -AutologonEnabling

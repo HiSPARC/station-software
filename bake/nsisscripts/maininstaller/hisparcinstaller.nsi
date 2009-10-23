@@ -126,6 +126,7 @@ Section -AdditionalIcons
   CreateShortCut "$SMPROGRAMS\HiSPARC\StartHiSPARCSoftware.lnk" "$INSTDIR\hisparc\persistent\startstopbatch\StartUserMode.bat"
   CreateShortCut "$SMPROGRAMS\HiSPARC\LocalDiagnosticTool.lnk" "$INSTDIR\hisparc\user\diagnostictool\run_diagnostictool.bat"
   CreateShortCut "$SMPROGRAMS\HiSPARC\HiSPARCDAQ.lnk" "$INSTDIR\hisparc\user\hisparcdaq\run_hisparcdaq.bat"
+  CreateShortCut "$SMPROGRAMS\HiSPARC\DSPMon.lnk" "$INSTDIR\hisparc\user\dspmon\DSPMon.exe"
   CreateShortCut "$SMPROGRAMS\HiSPARC\Uninstall.lnk" "$INSTDIR\hisparc\persistent\uninstallers\mainuninst.exe"
   
   #Add shortcuts to the startup folder
