@@ -1,6 +1,7 @@
 from startStop import *
 from hslog import *
 import sys
+import time
 path='%s:' %os.getenv("HISPARC_DRIVE")
 
 
@@ -43,6 +44,9 @@ def start():
 			log ('An exception was generated!')
 	except:
 		log('An exception was generated while starting LabView:' + str(sys.exc_info()[1]))
+
+        # Introduce a 30-second pause to let MySQL start completely
+        time.sleep(30)
 	
 	try:
 		#start HSMonitor

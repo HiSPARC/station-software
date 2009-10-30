@@ -121,9 +121,9 @@ class StorageSize(Check):
                     
             self.storageSize = self.storageManager.getNumEvents()
 
-            if self.storageSize <= cmin or self.storageSize >= cmax:
+            if self.storageSize < cmin or self.storageSize > cmax:
                 self.nagiosResult.status_code = CRITICAL
-            elif self.storageSize <= wmin or self.storageSize >= wmax:
+            elif self.storageSize < wmin or self.storageSize > wmax:
                 self.nagiosResult.status_code = WARNING
             else:
                 self.nagiosResult.status_code = OK
@@ -211,7 +211,7 @@ class StorageGrowth(Check):
                 self.nagiosResult.status_code = CRITICAL
 
 
-            self.nagiosResult.description = "Storage growth: %d" % (self.storageGrowth)
+            self.nagiosResult.description = "Storage growth: %f Hz" % (self.storageGrowth)
                         
             yield (self.nagiosResult)
 #end Storage growth

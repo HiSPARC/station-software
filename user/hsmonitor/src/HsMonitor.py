@@ -7,6 +7,7 @@ __author__="thevinh"
 __date__ ="$16-sep-2009"
 
 import os, sys, cmd
+import re
 sys.path.append("..\..\pythonshared")
 import hslog
 from EConfigParser import EConfigParser
@@ -59,6 +60,8 @@ class HsMonitor:
 			# check scheduler
 			# get the nagios configuration section from config file 
 			nagiosConf = self.cfg.itemsdict('NagiosPush')	
+                        m = re.search('([a-z0-9]+).zip', self.cfg.get('Station', 'Certificate'))
+                        nagiosConf['machine_name'] = m.groups()[0]
 			checkSched = self.createCheckScheduler(it, nagiosConf)
 			eventrate = checkSched.getEventRate()
 			sm.addObserver(eventrate)

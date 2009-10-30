@@ -83,6 +83,7 @@ class Interpreter:
 		trigger_rate = TriggerRateHolder(0, 0)
 		hslog.log("Interpreter: parsing %d messages" % len(messages))
 
+		firsttime = True
 		for message in messages:					
 			try:					
 				# get the event message code
@@ -106,8 +107,9 @@ class Interpreter:
 					'nanoseconds': event.nanoseconds,
 				}			
 				
-				# store the trigger rate variable
-				if eventcode == 'CIC':
+				# store the trigger rate variable, only for the newest event
+				if eventcode == 'CIC' and firsttime:
+					firsttime = False
 					trigger_rate.triggerRate = event.eventrate
 					trigger_rate.date = event.datetime				
 				

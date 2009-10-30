@@ -234,7 +234,11 @@ def groupPolicy():
 #..........................................................................
 
 
-def checkBufferdb():
+def checkBufferdb(warn=None, crit=None):
+    if warn:
+        wmin, wmax = warn
+    if crit:
+        cmin, cmax = crit
     
     config = ConfigParser.ConfigParser()
 	
@@ -257,9 +261,19 @@ def checkBufferdb():
     except MySQLdb.OperationalError, (errid, errmsg):
         print '%s (Error %d)' % (errmsg, errid)
         return CRITICAL
-    
+
+    cursor = dbcon.cursor()
+    cursor.execute('SELECT COUNT(*) FROM message')
+    num_events = cursor.fetchone()[0]
     dbcon.close()
-    print 'Buffer DB connection is fine.'
+    print 'Buffer DB contains %d events' % num_events
+
+    if crit:
+        if not cmin <= num_events <= cmax:
+            return CRITICAL
+    if warn:
+        if not wmin <= num_events <= wmax:
+            return WARNING
     return OK
 
 #..........................................................................
@@ -274,7 +288,7 @@ def check_lvusage(warn, crit):
     
     wmin, wmax = warn
     cmin, cmax = crit
-    LABVIEW_CAPTION = 'HiSPARCII'
+    LABVIEW_CAPTION = 'hisparcdaq'
 	
     for p in w.Win32_Process():
         if p.Name.startswith(LABVIEW_CAPTION):

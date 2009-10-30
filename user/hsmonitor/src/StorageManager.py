@@ -11,7 +11,7 @@ import sys
 sys.path.append("..\..\pythonshared")
 from hslog import log
 
-FILENAME = "Storage.db"
+FILENAME = "../../../persistent/data/hsmonitor/Storage.db"
 
 lock = Lock()
 

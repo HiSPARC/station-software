@@ -26,7 +26,9 @@ def main(argv):
 		
 	# Buffer database connection.
 	if function_name == 'bufferdb':
-		retval = checkBufferdb()
+                warn = parse_range(argv[1])
+		crit = parse_range(argv[2])
+		retval = checkBufferdb(warn, crit)
 
 	# labview usage
 	elif function_name == 'lvusage':

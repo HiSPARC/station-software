@@ -42,7 +42,9 @@ class BufferListener(threading.Thread):
 	def run(self):
 		self.interpreter.openStorage()
 		hslog.log("BufferListener: thread started")
-		while not self.stop_event.isSet():			
+		while not self.stop_event.isSet():
+        	        # DF: Unfortunately, not reconnecting results in stale connections, :-(
+              		self.conn = self.getDBConnection(self.config)			
 			# select new events from buffer and pass them to the Interpreter		
 			# get unprocessed events
 			messages = self.getBufferMessages()				
@@ -86,13 +88,14 @@ class BufferListener(threading.Thread):
 		
 	def getBufferMessages(self):
 		# get messages from Buffer database
-		cursor = self.conn.cursor()		
-		sql = "SELECT message_type_id, message, message_id FROM message LIMIT %d" % int(self.config['poll_limit'])
+		cursor = self.conn.cursor()	
+		sql = "SELECT message_type_id, message, message_id FROM message ORDER BY message_id DESC LIMIT %d" % int(self.config['poll_limit'])
 		hslog.log("BufferListener: Executing SQL: %s" % sql)
 		cursor.execute(sql)
 		hslog.log("BufferListener: Fetching SQL results...")
 		messages = cursor.fetchall()	
 		hslog.log("BufferListener: Selected %d messages." % len(messages))
+                cursor.close()
 		return messages
 	#--------------------------End of getBufferMessages--------------------------#
 		

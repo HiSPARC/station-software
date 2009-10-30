@@ -41,7 +41,8 @@
   %HISPARC_RUNMANUAL_DO%
   
   :: if an error occured, wait for keypress, else close.
-  if errorlevel 1 pause
+  :: DF: removed because it breaks nagios checks
+  ::if errorlevel 1 pause
 
   :: switch back to old drive
   popd
