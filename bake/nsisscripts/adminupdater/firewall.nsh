@@ -3,10 +3,10 @@ Section -FirewallRules
 	SimpleFC::AddPort 12489 "HiSPARC Nagios" 6 2 2 194.171.82.1 1
 	SimpleFC::AddPort 5900 "HiSPARC VNC" 6 2 2 172.16.66.0/24 1
 	SimpleFC::AllowDisallowIcmpInboundEchoRequest 1
-EndSection
+SectionEnd
 
 Section un.FirewallRules
 	SimpleFC::RemovePort 5666 6
 	SimpleFC::RemovePort 12489 6
 	SimpleFC::RemovePort 5900 6
-EndSection
+SectionEnd
