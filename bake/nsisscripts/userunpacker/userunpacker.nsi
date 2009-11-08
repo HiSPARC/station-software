@@ -18,6 +18,7 @@ OutFile "..\..\releases\userUnpacker_v${PRODUCT_VERSION}.exe"
 InstallDir "$VIRTUALDRIVE:\user\"
 ShowInstDetails show
 ShowUnInstDetails show
+AutoCloseWindow true
 
 Function .onInit
   ;!insertmacro MUI_LANGDLL_DISPLAY

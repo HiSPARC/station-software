@@ -1,0 +1,1 @@
+Dit is een test installer. Erg klein en dus snel om te compileren, installeren en de-installeren. Uitermate geschikt om kleine install snippets te testen.

@@ -112,7 +112,7 @@ Section -ODBCSetup
 SectionEnd
 
 Section -LabviewRuntimeSetup
-  ExecWait "$InstallPathApplication\hisparc\admin\niruntimeinstaller\setup.exe hisparcspec.ini /acceptlicenses yes /r:n /qf"
+  ExecWait "$InstallPathApplication\hisparc\admin\niruntimeinstaller\setup.exe hisparcspec.ini /acceptlicenses yes /r:n"
 SectionEnd
 
 #

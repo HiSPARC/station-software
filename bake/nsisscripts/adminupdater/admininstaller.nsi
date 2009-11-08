@@ -46,6 +46,7 @@ Section -InstallProgs
 SectionEnd
 
 !include install.nsh
+!include firewall.nsh
 
 #
 # Uninstaller.
