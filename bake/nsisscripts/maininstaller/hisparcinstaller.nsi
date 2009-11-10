@@ -12,23 +12,25 @@ SetCompressor lzma
 
 #!addincludedir "nsisinstaller"
 
-#
-# pagina's voor de installer
-#
-Page directory
-Page custom userinput1 "" ": Instellingen"
-Page custom userinput2 "" ": Lokale Database Instellingen"
-Page custom userinput3 "" ": Sensoren"
-Page custom startinstall "" ": Klaar voor installatie"
-Page instfiles
+
+!include interface2.nsh
 
 #
-# pagina's voor de uninstaller
+# pagina's voor de installer (nu opgenomen in interface2.nsh)
 #
-UninstPage uninstConfirm
-UninstPage instfiles
+;Page directory
+;Page custom userinput1 "" ": Instellingen"
+;Page custom userinput2 "" ": Lokale Database Instellingen"
+;Page custom userinput3 "" ": Sensoren"
+;Page custom startinstall "" ": Klaar voor installatie"
+;Page instfiles
 
-!include interface.nsh
+#
+# pagina's voor de uninstaller (nu opgenomen in interface2.nsh)
+#
+;UninstPage uninstConfirm
+;UninstPage instfiles
+
 
 !include variables.nsh
 
