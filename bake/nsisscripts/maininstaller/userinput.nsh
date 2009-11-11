@@ -1,4 +1,5 @@
 Function userinput1
+    !insertmacro MUI_HEADER_TEXT "Stationgegevens" "Geef stationnummer, wachtwoord en certificaat op."
     loginsettings_start:
     ;Display the InstallOptions dialog
     InstallOptions::dialog "$PLUGINSDIR\userinput1.ini"
@@ -23,6 +24,7 @@ Function userinput1
 FunctionEnd
 
 Function userinput2
+    !insertmacro MUI_HEADER_TEXT "Lokale database" "Dit veld blijft meestal leeg. Voor vragen, neemt u contact op met het HiSPARC team."
     InstallOptions::dialog "$PLUGINSDIR\userinput2.ini"
     Pop $0
 
@@ -34,6 +36,7 @@ Function userinput2
 FunctionEnd
 
 Function userinput3
+    !insertmacro MUI_HEADER_TEXT "Aangesloten detectoren" "U kunt hier de aangesloten detectoren aanvinken. Meestal is dit alleen een HiSPARC detector."
     InstallOptions::dialog "$PLUGINSDIR\userinput3.ini"
     Pop $0
 
@@ -47,6 +50,7 @@ Function userinput3
 FunctionEnd
 
 Function startinstall
+    !insertmacro MUI_HEADER_TEXT "Gereed voor installatie" ""
     ;Display the InstallOptions dialog
     InstallOptions::dialog "$PLUGINSDIR\startinstall.ini"
     Pop $0
