@@ -42,8 +42,8 @@
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "..\..\releases\hisparcInstaller_v${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\HiSPARC Client Application"
-ShowInstDetails show
-ShowUnInstDetails show
+ShowInstDetails hide
+ShowUnInstDetails hide
 
 Function .onInit
   InitPluginsDir
