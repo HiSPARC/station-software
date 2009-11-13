@@ -3,10 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. include:: subst.inc
+
 Welcome to HiSPARC software's documentation!
 ============================================
 
-Contents:
+De |hisparc| software installatiehandleiding.
+
+Bij vragen, onduidelijkheden of suggesties, neem contact op met onze
+projectcoördinator Surya Bonam (suryab@nikhef.nl).
 
 .. toctree::
    :maxdepth: 2
@@ -14,6 +19,7 @@ Contents:
    introductie
    installatie
    configuratie
+
 
 Indices and tables
 ==================
