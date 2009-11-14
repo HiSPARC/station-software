@@ -8,9 +8,9 @@
 Welcome to HiSPARC software's documentation!
 ============================================
 
-De |hisparc| software installatiehandleiding.
+Voor meer informatie over |hisparc|, zie http://www.hisparc.nl/.
 
-Bij vragen, onduidelijkheden of suggesties, neem contact op met onze
+Bij vragen, onduidelijkheden of suggesties kunt u contact opnemen met onze
 projectcoördinator Surya Bonam (suryab@nikhef.nl).
 
 .. toctree::
