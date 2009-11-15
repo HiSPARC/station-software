@@ -1,7 +1,7 @@
 .. include:: subst.inc
 
-Installatie
-===========
+Installatie van de |hisparc| software
+=====================================
 
 De installatie van de |hisparc| software is recent zeer vereenvoudigd
 [#ooti]_.  We maken nu gebruik van één installatiepakket dat alle

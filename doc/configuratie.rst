@@ -10,13 +10,12 @@ Zodra de |hisparc| data acquisitie software opstart, zal hij vragen in
 welke modus dat moet gebeuren.  Kies hier *Expert Mode*.  Zodra de
 software vraagt om het invullen van het wachtwoord klikt u gewoon op *Ok*.
 
-<img>
 
 Basisinstellingen
 ^^^^^^^^^^^^^^^^^
 
-Als de |hisparc| kastjes nog niet zijn aangesloten, dan kunt u dat nu
-doen.
+.. note:: Als de |hisparc| kastjes nog niet zijn aangesloten, dan kunt u
+   dat nu doen.
 
 .. note:: Zorgt u ervoor dat bij het aansluiten van de kastjes op de pc de
    kastjes **uit** staan.  Dus eerst de USB kabels aansluiten, dan pas de
@@ -24,7 +23,13 @@ doen.
    al periodiek data verzenden naar de computer en Windows denkt dat het
    dan wel om een muis moet gaan.  Gevolg: de data van het kastje
    geïnterpreteerd als muis doet de muiscursor willekeurig over het scherm
-   springen terwijl er van alles wordt opgengeklikt of gesleept.
+   springen terwijl er van alles wordt opengeklikt of gesleept.
+
+.. note:: Elke keer als u een instelling wijzigt wordt deze pas
+   doorgevoerd wanneer u op *Apply Settings* klikt.  *Voor u dat doet,
+   verandert er dus helemaal niets*.  Wanneer u wilt dat de instellingen
+   behouden blijven na een herstart van het programma, klikt u op *Save
+   settings*.
 
 Het belangrijkste op dit moment is om de interne ADC's in te regelen,
 anders zullen de kastjes alleen maar ruis lijken te geven.  Ga hiervoor
@@ -42,13 +47,15 @@ Number* uw stationnummer in.
    gevraagd wordt bij het opstarten van *Expert Mode*.  In de meeste
    gevallen kunt u dit gewoon leeg laten.
 
+
 Calibratie van de detector
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Als de detectoren nog niet zijn aangesloten, kunt u dat nu doen.  Het is
-nu van belang de detectoren zelf in te regelen.  Hiervoor moet u de juiste
-hoogspanning kiezen om op de fotobuizen te zetten.  Om dit te doen hebben
-we een korte procedure opgesteld:
+.. note:: Als de detectoren nog niet zijn aangesloten, kunt u dat nu doen.
+
+Het is nu van belang de detectoren zelf in te regelen.  Hiervoor moet u de
+juiste hoogspanning kiezen om op de fotobuizen te zetten.  Om dit te doen
+hebben we een korte procedure opgesteld:
 
 * Stel op de *Events / Settings* tab op het *Thresholds* tabje alle
   thresholds (drempelwaarden) in op -250 mV (voor de *Low* thresholds) en
@@ -138,6 +145,49 @@ instelling moeten veranderen, druk dan op de bijbehorende *Set* knop.
 Data acquisitie modus
 ---------------------
 
+.. note:: U kunt de detector pas in gebruik nemen wanneer *alle*
+   voorgaande procedures correct zijn uitgevoerd.
+
+De definitieve instellingen voor *alle* |hisparc| detectorstations zijn
+als volgt.
+
+
+Opstelling met twee detectoren
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+De instellingen voor stations met twee detectoren zijn als volgt:
+
+* Threshold Low (alle kanalen): -30 mV
+* Threshold High (alle kanalen): -70 mV
+* Trigger: *2 low* **OR** *2 high* **AND** *don't use external trigger*
+
+
+Opstelling met vier detectoren
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+De instellingen voor stations met vier detectoren zijn als volgt:
+
+* Threshold Low (alle kanalen): -30 mV
+* Threshold High (alle kanalen): -70 mV
+* Trigger: *3 low* **OR** *2 high* **AND** *don't use external trigger*
+
+
+Automatisch opstarten in DAQ modus
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Iedere keer als het programma is opgestart kunt u op de knop *Start DAQ
+mode* klikken om over te gaan naar de data acquisitie modus.  *Alleen dan
+wordt er daadwerkelijk data naar het Nikhef gestuurd!*
+
+Om er voor te zorgen dat de detector na elke reboot automatisch opstart in
+de data acquisitie modus gaat u naar de *Expert Settings* tab en vinkt
+u *Start in DAQ mode* aan.
+
+.. note:: Het is aan te bevelen de werking van de pc te testen door de pc
+   nu opnieuw op te starten.  Als hij automatisch inlogt, het |hisparc|
+   DAQ programma start en automatisch overgaat naar de DAQ modus, is het
+   meeste werk gedaan.  Controleert u alstublieft in Nagios
+   (:ref:`nagios-doc`) of uw detectorstation volledig functioneert.
 
 
 .. rubric:: Footnotes

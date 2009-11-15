@@ -17,7 +17,8 @@ projectcoördinator Surya Bonam (suryab@nikhef.nl).
    :maxdepth: 2
 
    introductie
-   installatie
+   hardware-installatie
+   software-installatie
    configuratie
 
 
