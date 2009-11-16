@@ -23,7 +23,8 @@ dan één besturingssysteem hebben we helaas niet de mankracht.
    Asus EEE PC's.  Deze pc's zijn goedkoop, hebben voldoende geheugen,
    zijn energiezuinig, compact en snel genoeg voor onze doeleinden.  De
    pc's worden geleverd met Microsoft Windows XP Home en ook dat is
-   voldoende.  Let wel: een monitor wordt *niet* meegeleverd.
+   voldoende.  Let wel: een monitor wordt *niet* meegeleverd; toetsenbord
+   en muis weer wel.
 
 .. note:: Op aanvraag is alle broncode beschikbaar.  Wilt u zelf met
    |labview| aan de slag, bijvoorbeeld, dan kunt u contact met ons opnemen
@@ -32,6 +33,49 @@ dan één besturingssysteem hebben we helaas niet de mankracht.
    de |hisparc| data in zijn werk gaat, kijkt u dan na installatie in de
    ``Z:\user\hsmonitor\src`` map.  Hier vindt u de Python [#python]_
    broncode van de |hisparc| monitor.
+
+
+Verwijderen van een oude software installatie
+---------------------------------------------
+
+.. note:: Installeert u de |hisparc| software voor het eerst, dan kunt u
+   deze sectie overslaan.  Het volgende is alléén bedoeld voor diegenen
+   die een oude versie van de |hisparc| software hebben geïnstalleerd, te
+   herkennen aan de opsplitsing in meerdere installatiepakketten: *Client,
+   Monitor, Buffer en LabVIEW*.
+
+U werkte al eerder met de nieuwe electronica
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+De nieuwe |hisparc| software biedt vele verbeteringen, waaronder het
+onderbrengen van alle software in één installatiepakket.  Voordat de
+nieuwe software geïnstalleerd kan worden dient de oude software verwijderd
+te zijn.
+
+Ga hiervoor naar *Start -> Settings -> Control Panel -> Add or Remove
+Programs*.  En verwijder, *in deze volgorde*, de volgende pakketten:
+
+* |hisparc| Monitor
+* |hisparc| Client
+* |hisparc| Buffer
+* HiSPARCII V3.0.2 (of een vergelijkbare versie, in sommige gevallen zelfs
+  nog 2.1.1)
+
+Start de pc opnieuw op.
+
+U heeft nu voor het eerst alle electronica vervangen
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note:: Wij raden u ten sterkste aan uw pc te vervangen of in ieder
+   geval Windows XP opnieuw te installeren.  Dit omdat uw installatie
+   hoogstwaarschijnlijk al jaren oud is.
+
+Mocht u tóch besluiten om alleen de oude software te verwijderen, dan gaat
+het om de volgende pakketten:
+
+* Trimble GPS
+* |hisparc| software versie 6
+* PicoScope
 
 
 Benodigdheden
@@ -48,12 +92,17 @@ Vóór u aan de installatie begint dient u te beschikken over:
   controle op een vergissing in stationnummers.  Denkt u er in het geval
   van een zelfgekozen wachtwoord aan dit wachtwoord aan de
   clustercoördinator te vestrekken.
+* de naam van uw pc zoals gebruikt in ons monitorsysteem
+  (:ref:`nagios-doc`).  Dit is niet vereist voor de installatie, maar wel
+  handig om na afloop en tijdens gebruik de status van uw detector te
+  controleren.
 
 .. note:: U dient zich bij uw *systeembeheerder* te verzekeren van het
    volgende:
    
    * Een proxy-vrije verbinding vanaf de |hisparc| pc over
-     *poort 443 (https)* naar *vpn.hisparc.nl* is **vereist**.
+     *poort 443 (https)* naar *vpn.hisparc.nl* is **vereist**.  Het gaat
+     hier dus alleen om de verbinding **naar buiten**.
    * Een proxy-vrije verbinding vanaf de |hisparc| pc over
      *poort 80 (http)* naar *peene.nikhef.nl* en *frome.nikhef.nl* is
      **gewenst**.
@@ -216,6 +265,17 @@ waarschuwing in de toekomst te negeren (zie figuur).
 .. figure:: images/screenshot-mysql-firewall.png
    :align: center
    :scale: 85
+
+Nadat alle software is opgestart zijn verschillende vensters geopend.
+Ieder venster, behalve *StartHiSPARCSoftware*, moeten blijven draaien.
+Het is dus niet mogelijk vensters te sluiten.  De vensters mogen
+natuurlijk wel geminimaliseerd worden.
+
+<img>
+
+.. note:: Voor een correcte werking van de detector is het van het
+   grootste belang dat de vensters *HiSPARCDAQ, HiSPARC Monitor en HiSPARC
+   Updater blijven draaien!*
 
 .. note:: Vóór uiteindelijk gebruik is het nodig de |hisparc| data
    acquisitie software te configureren! Zie :doc:`configuratie`.

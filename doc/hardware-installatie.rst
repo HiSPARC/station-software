@@ -104,6 +104,7 @@ aan de achterzijde).
    ‘LVDS data out’ (kruislings) met elkaar verbinden.
 
 .. _nagios-doc:
+
 Monitor en controle
 -------------------
 

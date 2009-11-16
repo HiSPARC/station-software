@@ -38,7 +38,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'HiSPARC software'
-copyright = u'2009, David Fokkema'
+copyright = u'2009, HiSPARC'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -172,8 +172,8 @@ latex_font_size = '11pt'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'HiSPARCsoftware.tex', u'HiSPARC software Documentation',
-   u'David Fokkema', 'manual'),
+  ('index', 'HiSPARCsoftware.tex', u'HiSPARC Software Documentatie',
+   u'David Fokkema en Bob van Eijk', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

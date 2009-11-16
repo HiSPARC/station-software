@@ -66,12 +66,23 @@ hebben we een korte procedure opgesteld:
   pulsen per seconde dat over de drempelwaardes ging.  Dat wil zeggen: bij
   *Channel 1 - low* staat het aantal pulsen per seconde dat de fotobuis
   van detector 1 zag die sterker waren dan -250 mV [#drempels]_.
+* Voor een nauwkeurige bepaling van het gemiddelde aantal pulsen per
+  seconde gebruikt u de timer functie in het midden van het scherm,
+  onderaan.  U kijkt dan ook bij de singles in de laatste kolom, *Average
+  per second*.
 * Verhoog de spanningen op de fotobuizen nu zodanig dat bij alle *low
   thresholds* waarden staan tussen de 50 en de 60 (55), en bij alle *high
   thresholds* waarden tussen de 30 en de 40 (35).  Als de gemeten waarden
   te *laag* zijn, dan *verhoogt* u de spanningen en omgekeerd.  Maakt u
   bij het verhogen van de spanningen nooit grotere stappen dan 50 V om
   zeker te zijn dat de fotobuis niet beschadigd.
+
+.. figure:: images/singles.png
+   :align: center
+   :scale: 100
+
+   Het aantal pulsen per seconde dat over de drempelwaarden gaat
+   (singles).
 
 .. note:: Fotobuizen verschillen sterk van elkaar aangezien assemblage
    grotendeels een handmatig proces is.  De spanningen op de fotobuizen
@@ -152,6 +163,23 @@ De definitieve instellingen voor *alle* |hisparc| detectorstations zijn
 als volgt.
 
 
+Time window instellingen
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Op de *Events / Settings* tab, klik op het tabje *Time Window*.  Als het
+goed is zijn de instellingen niet veranderd en staan ze nog als volgt:
+
+* Precoincidence time: 1 us
+* Coincidence time: 1,5 us
+* Post coincidence time: 3,5 us
+
+.. figure:: images/time-window.png
+   :align: center
+   :scale: 100
+
+   De instellingen voor het coïncidentie tijdvenster.
+
+
 Opstelling met twee detectoren
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -159,7 +187,14 @@ De instellingen voor stations met twee detectoren zijn als volgt:
 
 * Threshold Low (alle kanalen): -30 mV
 * Threshold High (alle kanalen): -70 mV
-* Trigger: *2 low* **OR** *2 high* **AND** *don't use external trigger*
+* Trigger: *2 low* **AND** *Don't use high threshold* **AND** *Don't use
+  external trigger*
+
+.. figure:: images/trigger-two-detectors.jpg
+   :align: center
+   :scale: 100
+
+   De triggerinstellingen voor een detectorstation met twee detectoren.
 
 
 Opstelling met vier detectoren
@@ -169,7 +204,13 @@ De instellingen voor stations met vier detectoren zijn als volgt:
 
 * Threshold Low (alle kanalen): -30 mV
 * Threshold High (alle kanalen): -70 mV
-* Trigger: *3 low* **OR** *2 high* **AND** *don't use external trigger*
+* Trigger: *3 low* **OR** *2 high* **AND** *Don't use external trigger*
+
+.. figure:: images/trigger-four-detectors.jpg
+   :align: center
+   :scale: 100
+
+   De triggerinstellingen voor een detectorstation met vier detectoren.
 
 
 Automatisch opstarten in DAQ modus
@@ -187,7 +228,8 @@ u *Start in DAQ mode* aan.
    nu opnieuw op te starten.  Als hij automatisch inlogt, het |hisparc|
    DAQ programma start en automatisch overgaat naar de DAQ modus, is het
    meeste werk gedaan.  Controleert u alstublieft in Nagios
-   (:ref:`nagios-doc`) of uw detectorstation volledig functioneert.
+   (:ref:`nagios-doc`) of uw detectorstation volledig functioneert.  Het
+   kan ongeveer twintig minuten duren voordat Nagios volledig geupdate is.
 
 
 .. rubric:: Footnotes

@@ -5,7 +5,7 @@
 
 .. include:: subst.inc
 
-Welcome to HiSPARC software's documentation!
+Welkom bij HiSPARC software documentatie!
 ============================================
 
 Voor meer informatie over |hisparc|, zie http://www.hisparc.nl/.
