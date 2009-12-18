@@ -128,6 +128,7 @@ class CMDStartStop(StartStop):
 		w = win32gui.FindWindow(None, self.title)
 		if w!=0:
 			result=running
+			win32gui.SetWindowText(w, self.title + ' (shutdown in progress...)')
 			dword = c_ulong()
 			tid = windll.user32.GetWindowThreadProcessId(w, byref(dword))
 			pid = dword.value
