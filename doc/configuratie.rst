@@ -57,6 +57,11 @@ Het is nu van belang de detectoren zelf in te regelen.  Hiervoor moet u de
 juiste hoogspanning kiezen om op de fotobuizen te zetten.  Om dit te doen
 hebben we een korte procedure opgesteld:
 
+.. note:: Volg eerst de *volledige* procedure, inclusief het verhogen van
+   de spanningen op de fotobuizen, voordat u resultaat verwacht.  Bij
+   spanningen onder de 700 V ziet u gewoonlijk geen enkel signaal.  Maar
+   volg de procedure nauwgezet en begin bij 300 V.
+
 * Stel op de *Events / Settings* tab op het *Thresholds* tabje alle
   thresholds (drempelwaarden) in op -250 mV (voor de *Low* thresholds) en
   -300 mV (voor de *High* thresholds).
