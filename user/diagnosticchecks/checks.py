@@ -137,18 +137,19 @@ def checkDAQ():
 
 def checkVPNport():
     s = socket(AF_INET, SOCK_STREAM)
-    result = s.connect_ex((localhost, 1194))
+    VPN_PORT = 443
+    result = s.connect_ex(('vpn.hisparc.nl', VPN_PORT))
     if(result == 0) :
-        print 'VPN Port %d is Open' % (1194,)
+        print 'VPN Port %d is Open' % VPN_PORT
         return OK
     else:
-        print 'VPN Port %d is not Open' % (1194,)
+        print 'VPN Port %d is not Open' % VPN_PORT
         return CRITICAL
     s.close()
 
 def checkHTTPport():
     s = socket(AF_INET, SOCK_STREAM)
-    result = s.connect_ex((localhost, 80))
+    result = s.connect_ex(('frome.nikhef.nl', 80))
     if(result == 0):
         print 'HTTP Port %d is Open' % (80,)
         return OK

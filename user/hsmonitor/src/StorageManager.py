@@ -232,3 +232,33 @@ class StorageManager(Subject):
 		self.db.commit()
                 c.close()
                 self.lock.release()
+
+	def clearOldUploadedEvents(self):
+		"""Delete old, already uploaded events
+
+		   Beware: if the number of servers is NOT correctly
+		   set, you might accidentally delete events which are
+		   only uploaded to the central datastore, because this
+		   function is created to delete old events when the
+		   local URL is dropped.  Therefore, once that URL has
+		   been dropped, it will even delete events which have
+		   not yet been uploaded to that URL.
+
+		"""
+		self.lock.acquire()
+		self.openConnection()
+		c = self.db.cursor()
+
+		log("Deleting old events which have already been uploaded to all currently specified servers")
+		sql = "SELECT COUNT(*) FROM Event WHERE UploadedTo & ? = ?"
+		args = (self.allUploadedMask, self.allUploadedMask)
+		c.execute(sql, args)
+		log("Deleting %d events." % c.fetchone()[0])
+
+		sql = "DELETE FROM Event WHERE UploadedTo & ? = ?"
+		args = (self.allUploadedMask, self.allUploadedMask)
+		c.execute(sql, args)
+		self.db.commit()
+
+		c.close()
+		self.lock.release()

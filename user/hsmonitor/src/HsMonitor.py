@@ -1,6 +1,18 @@
 """
 This is the main process of the HiSPARC monitor.
 This process creates other objects and threads.
+
+DF: Unfortunately, I think the UML model of this system is not entirely
+    correct.  For example, this creates several instances of our
+    StorageManager class.  It has its own class, that's good, but I
+    think it should also have just one instance.  At the moment, there
+    are three instances: the HsMonitor one, which doubles as an instance
+    for the BufferListener and which contains the observers, and one for
+    each uploader, which handle the actual data storage.  As a result of
+    this, we have four (!) instances of a numServers variable, which
+    *all* need to have the exact same value and thus need to be updated
+    when there is a change in the number of uploaders.
+
 """
 
 __author__="thevinh"
@@ -35,11 +47,11 @@ class HsMonitor:
 			hslog.log("Cannot open the config file!")
 			return
 		else:
-			hslog.log("Initilize variables")			
+			hslog.log("Initialize variables")			
 			
 			#list of all the threads
 			self.hsThreads = []		
-		# Assume one server (eventwarehouse)
+		# Assume one server (datastore)
 		# if the local is also specified it will be added
 		self.numServers = 1
 			
@@ -61,14 +73,14 @@ class HsMonitor:
 			# get the nagios configuration section from config file 
 			nagiosConf = self.cfg.itemsdict('NagiosPush')	
                         m = re.search('([a-z0-9]+).zip', self.cfg.get('Station', 'Certificate'))
-                        nagiosConf['machine_name'] = m.groups()[0]
+                        nagiosConf['machine_name'] = m.group(1)
 			checkSched = self.createCheckScheduler(it, nagiosConf)
 			eventrate = checkSched.getEventRate()
 			sm.addObserver(eventrate)
 			self.hsThreads.append(checkSched)
 		
 			# Uploader central
-			up = self.createUploader(0, "Upload-eventwarehouse", nagiosConf)
+			up = self.createUploader(0, "Upload-datastore", nagiosConf)
 			self.hsThreads.append(up)
 			sm.addObserver(up)
 			up.setNumServer(self.numServers)
@@ -78,12 +90,16 @@ class HsMonitor:
 				up2 = self.createUploader(1, "Upload-local", nagiosConf)
 				self.hsThreads.append(up2)
 				sm.addObserver(up2)
-				self.numServers+=1
+				self.numServers += 1
 				up.setNumServer(self.numServers)
 				up2.setNumServer(self.numServers)
 			except Exception, msg:
 				hslog.log("Error while parsing local server: %s" %(msg,))
 				hslog.log("Will not upload to local server!")
+
+			# Set number of servers for our own StorageManager
+			sm.setNumServer(self.numServers)
+			sm.clearOldUploadedEvents()
 		
 			# Start all threads
 			for t in self.hsThreads:
