@@ -118,6 +118,11 @@ Controleert u eerst alle instellingen van de GPS en zorg ervoor dat ze
 nauwkeurig overeenkomen met de volgende screenshots.  Mocht u een
 instelling moeten veranderen, druk dan op de bijbehorende *Set* knop.
 
+.. note:: In het verleden werkten we met UTC tijd.  Helaas introduceert
+   UTC af en toe schrikkelseconden en is de tijd daardoor niet altijd
+   eenduidig.  Voorts start de GPS module altijd op in GPS-tijd, om na een
+   minuut over te schakelen naar UTC.  Daarom gebruiken we nu GPS-tijd.
+
 .. note:: Let op: er komen soms meerdere *Set* knoppen per venster voor.
 
 .. figure:: images/screenshot-gps-receiver.png
@@ -132,7 +137,7 @@ instelling moeten veranderen, druk dan op de bijbehorende *Set* knop.
    :scale: 85
 
    In dit venster stelt u de tijdsinstellingen in.  Het is zeer belangrijk
-   om hier goed te controleren dat u *UTC* meet, en geen *GPS*-tijd.
+   om hier goed te controleren dat u *GPS* meet, en geen *UTC*-tijd.
 
 .. figure:: images/screenshot-gps-survey.png
    :align: center
