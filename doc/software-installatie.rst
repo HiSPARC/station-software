@@ -83,7 +83,7 @@ Benodigdheden
 
 Vóór u aan de installatie begint dient u te beschikken over:
 
-* ``hisparcInstaller_v3.3.exe``
+* ``hisparcInstaller_v3.5.exe``
 * een door de clustercoördinator verstrekt beveiligingscertificaat,
   bijvoorbeeld: ``sciencepark501.zip``
 * een door de clustercoördinator verstrekt stationnummer
