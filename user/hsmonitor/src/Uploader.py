@@ -125,7 +125,7 @@ class Uploader(Observer, Thread):
 		# Open the connection and send our data. Exceptions are catched explicitly
     		# to make sure we understand the implications of errors.
     		try:
-        		f = urlopen(self.URL, params)
+        		f = urlopen(self.URL, params, timeout=30)
 		except (URLError, HTTPError), msg:
         		# For example: connection refused or internal server error
         		returncode = str(msg)
