@@ -12,6 +12,7 @@ sys.path.append("..\..\pythonshared")
 from hslog import log
 
 FILENAME = "../../../persistent/data/hsmonitor/Storage.db"
+VACUUMTHRESHOLD = 1000
 
 lock = Lock()
 
@@ -20,6 +21,9 @@ class StorageManager(Subject):
 	cannot transfer objects of SQLite, e.g. the connection or the cursor, accross threads. Therefore thread needs to use
 	its own instance of the storagemanager. Make sure to create the instance within the run()-method and not in the 
 	constructor"""
+        
+        storagesize = None
+        lastvacuum = 0
         
         def __init__(self, db_name=FILENAME):
 		global lock
@@ -78,9 +82,12 @@ class StorageManager(Subject):
                 """
                 serverbit = 1 << serverID
                 self.lock.acquire()
-#		db = sqlite3.connect(self.db_name)
-#		c = db.cursor()
                 c = self.db.cursor()
+                if StorageManager.storagesize < VACUUMTHRESHOLD and time.time() - StorageManager.lastvacuum > 100000:
+                        log("Starting VACUUM operation...")
+                        c.execute("VACUUM")
+                        StorageManager.lastvacuum = time.time()
+                        log("VACUUM finished.")
                 c.execute("""
                         SELECT * FROM Event WHERE (UploadedTo & ?) == 0 LIMIT ?;
                         """, (serverbit, numEvents))
@@ -127,20 +134,24 @@ class StorageManager(Subject):
                 if n_events > 0:
 			log("StorageManager: adding %d parsed events into Storage" %(n_events,))
                         self.lock.acquire()
+			log("Acquired lock.")
+                        t0 = time.time()
+
                         c = self.db.cursor()
-                        # SQLite doesn't support multirow inserts according to the syntax-definition.
-                        # So we just construct one query per event.
-                        for event in events:
-                                query = """INSERT INTO Event (EventData, UploadedTo, DateTime) VALUES (?,0,?)"""
-				try:
-	                                c.execute(query, (dumps(event), event['header']['datetime']))
-                        		self.db.commit()
-		                        c.close()
-				except sqlite3.OperationalError, msg:
-					res = False # return False so that events are NOT removed from buffer
-					log("StorageManager: Error AddEvents: %s" % (str(msg),))
+                        query = """INSERT INTO Event (EventData, UploadedTo, DateTime) VALUES (?,0,?)"""
+                        try:
+                                c.executemany(query, ((dumps(event), event['header']['datetime']) for event in events))
+                                self.db.commit()
+                                c.close()
+                        except sqlite3.OperationalError, msg:
+                                res = False # return False so that events are NOT removed from buffer
+                                log("StorageManager: Error AddEvents: %s" % (str(msg),))
+                                
+                        if StorageManager.storagesize is not None:
+                                StorageManager.storagesize += n_events
 
                         self.lock.release()
+			log("Events added in %d seconds." % (time.time() - t0))
                         
                         # notify the observers
                         self.update(n_events)
@@ -190,14 +201,16 @@ class StorageManager(Subject):
                 n_remove = len(need_remove)
                 if n_remove > 0:
                         query = """DELETE from Event WHERE EventID in %s;""" % self.__IDList2String(need_remove)
-			log("StorageManager: %d events removed from Storage, query:\n %s" % (n_remove, query))
+			log("StorageManager: %d events removed from Storage" % n_remove)
                         c.execute(query)
+                        if StorageManager.storagesize is not None:
+                                StorageManager.storagesize -= n_remove
                         
                 # Update status of events that have not yet been uploaded to all servers
 		n_need_update = len(need_update)
                 if len(need_update) > 0:
                         query = """UPDATE Event Set UploadedTo = UploadedTo | ? WHERE EventId in %s;""" % self.__IDList2String(need_update)
-			log("StorageManager: %d events updated in Storage, query:\n %s" % (n_need_update, query))
+			log("StorageManager: %d events updated in Storage" % n_need_update)
                         c.execute(query, (serverbit,))
 
                 self.db.commit()
@@ -208,6 +221,7 @@ class StorageManager(Subject):
                 """ Return the number of events currently in the storage. """
                 self.lock.acquire()
                 (res,) = self.db.execute("""SELECT COUNT(*) FROM Event;""")
+                StorageManager.storagesize, = res
                 self.lock.release()
                 (numEvents,) = res
 		return int(numEvents)

@@ -7,6 +7,7 @@ from Observer import Observer
 from threading import Lock
 from hslog import log
 from NagiosResult import NagiosResult
+from StorageManager import StorageManager
 
 OK = 0
 WARNING = 1
@@ -105,6 +106,9 @@ class StorageSize(Check):
 ##    Check de buffer size
 ##    cmin <= wmin <= OK >= wmax >= cmax
 ##    """
+        if StorageManager.storagesize is None:
+                self.storageManager.getNumEvents()
+                
         while True:
 			
             try:
@@ -119,7 +123,7 @@ class StorageSize(Check):
             wmin, wmax = warn
             cmin, cmax = crit
                     
-            self.storageSize = self.storageManager.getNumEvents()
+            self.storageSize = StorageManager.storagesize
 
             if self.storageSize < cmin or self.storageSize > cmax:
                 self.nagiosResult.status_code = CRITICAL
@@ -199,7 +203,7 @@ class StorageGrowth(Check):
                 log ("Unable to read config.ini in %s" %(self.nagiosResult.serviceName))
                 self.nagiosResult.status_code = CRITICAL
                 
-            self.newStorageSize = self.storageManager.getNumEvents()
+            self.newStorageSize = StorageManager.storagesize
             self.storageGrowth = ((self.newStorageSize - self.oldStorageSize)/float(self.interval))
             self.oldStorageSize = self.newStorageSize
 

@@ -264,8 +264,9 @@ def checkBufferdb(warn=None, crit=None):
         return CRITICAL
 
     cursor = dbcon.cursor()
-    cursor.execute('SELECT COUNT(*) FROM message')
-    num_events = cursor.fetchone()[0]
+    cursor.execute("SHOW TABLE STATUS LIKE 'message'")
+    idx = [x[0] for x in cursor.description].index('Rows')
+    num_events = cursor.fetchone()[idx]
     dbcon.close()
     print 'Buffer DB contains %d events' % num_events
 
@@ -289,10 +290,10 @@ def check_lvusage(warn, crit):
     
     wmin, wmax = warn
     cmin, cmax = crit
-    LABVIEW_CAPTION = 'hisparcdaq'
+    LABVIEW_CAPTIONS = ['hisparcdaq.exe', 'HISPAR~1.EXE']
 	
     for p in w.Win32_Process():
-        if p.Name.startswith(LABVIEW_CAPTION):
+        if p.Name in LABVIEW_CAPTIONS:
             mem = float(p.WorkingSetSize) / (1024 * 1024.0)
             cpu = (float(p.UserModeTime) + float(p.KernelModeTime)) / 10000000.0
             
