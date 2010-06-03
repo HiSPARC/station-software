@@ -1,1 +1,1 @@
-@call "%~dp0\..\startstop\runmanually.bat" \user\diagnostictool LocalDiagnostic.py
+@call "%~dp0\..\startstop\runmanually.bat" \user\diagnostictool gui.py
