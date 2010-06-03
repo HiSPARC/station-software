@@ -138,13 +138,13 @@ class Uploader(Observer, Thread):
     		return returncode
 
 	def run(self):
-		
 		log("Uploader %i: thread started for %s" % (self.serverID, self.URL))
 
 		# Initialize storage manager
 		self.storageManager.openConnection()
 
 		# number of events that have been received
+                log("Getting number of events to upload")
 		self.numEvents = self.storageManager.getNumEventsServer(self.serverID)
 		log("Uploader %i: %i events in storage" % (self.serverID, self.numEvents))
 
