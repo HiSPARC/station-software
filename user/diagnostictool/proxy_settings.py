@@ -27,6 +27,8 @@ class Check(DiagnosticCheck):
         server = r.GetStringValue(hDefKey, sSubKeyName, 'ProxyServer')[1]
 
         self.server = server
+        if enabled is None:
+            enabled = 0
         self.enabled = [False, True][enabled]
         enabled = ["disabled", "enabled"][enabled]
         self.message = "Proxy (%s) is %s" % (server, enabled)

@@ -13,7 +13,7 @@ def write_config():
     config_name = 'hisparc.ovpn'
     dst_dir = '../../admin/openvpn/config'
     config = os.path.join(dst_dir, config_name)
-    bak_config = config + '.' + datetime.datetime.now().isoformat()
+    bak_config = config + '.' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     logger.debug("Moving old config to %s" % bak_config)
     try:
         os.rename(config, bak_config)
