@@ -37,7 +37,7 @@ CONFIG_INI_PATH2 = '../../../persistent/configuration/config.ini'
 class HsMonitor:
 	def __init__(self):		
 		# setup the log mode
-		hslog.setLogMode(hslog.MODE_PRINT)
+		hslog.setLogMode(hslog.MODE_BOTH)
 
 		# read the configuration file
 		try:

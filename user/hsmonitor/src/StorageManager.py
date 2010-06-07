@@ -83,7 +83,9 @@ class StorageManager(Subject):
                 serverbit = 1 << serverID
                 self.lock.acquire()
                 c = self.db.cursor()
-                if StorageManager.storagesize < VACUUMTHRESHOLD and time.time() - StorageManager.lastvacuum > 100000:
+                ssize = StorageManager.storagesize
+                if (ssize is not None and ssize < VACUUMTHRESHOLD and
+                    time.time() - StorageManager.lastvacuum > 100000):
                         log("Starting VACUUM operation...")
                         c.execute("VACUUM")
                         StorageManager.lastvacuum = time.time()

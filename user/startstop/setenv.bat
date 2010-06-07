@@ -27,7 +27,11 @@
   ::
   :: instead, we add the directory containing these DLL files to the PATH before starting any application.
   :: because this startup script calls the start scripts, everything we run inherits this environment
-  set path=%path%;%HISPARC_DRIVE%:\user\python\Lib\site-packages\pywin32_system32
+  :: set path=%path%;%HISPARC_DRIVE%:\user\python\Lib\site-packages\pywin32_system32
+  :: DF: UNFORTUNATELY, this doesn't work anymore.  I've copied around
+  :: some dll's and manifests and we now add the python directory to the
+  :: path.
+  set path=%path%;%HISPARC_DRIVE%:\user\python
 
   :: go back to original current directory
   popd
