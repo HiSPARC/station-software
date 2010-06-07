@@ -122,8 +122,18 @@ export_values = {
 		('N', 'CMP_COMPARATOR', 'cmp_comparator'),
 		('N', 'CMP_COUNT', 'cmp_count_over_threshold')],
 	'WTR': [
-		('Y', 'WT1', 'tempInside'),
-		('Y', 'WT2', 'tempOutside'),
-		('Y', 'WT3', 'humidityOutside'),
-		('Y', 'WT4', 'humidityInside'),
-		('N', 'WTR', 'blob')]}
+		('N', 'WTR_TEMP_INSIDE', 'tempInside'),
+		('N', 'WTR_TEMP_OUTSIDE', 'tempOutside'),
+		('N', 'WTR_HUMIDITY_OUTSIDE', 'humidityOutside'),
+		('N', 'WTR_HUMIDITY_INSIDE', 'humidityInside'),
+		('N', 'WTR_BAROMETER', 'barometer'),
+		('N', 'WTR_WIND_DIR', 'windDir'),
+		('N', 'WTR_WIND_SPEED', 'windSpeed'),
+		('N', 'WTR_SOLAR_RAD', 'solarRad'),
+		('N', 'WTR_UV', 'UV'),
+		('Y', 'WTR_ET', 'ET'),
+		('N', 'WTR_RAIN_RATE', 'rainRate'),
+		('Y', 'WTR_HEAT_INDEX', 'heatIndex'),
+		('Y', 'WTR_DEW_POINT', 'dewPoint'),
+		('Y', 'WTR_WIND_CHILL', 'windChill')],
+}
