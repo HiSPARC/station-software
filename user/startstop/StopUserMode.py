@@ -23,6 +23,22 @@ def stop():
 			log ('An exception was generated!')
 	except:
 		log('An exception was generated while stopping LabView!')
+
+	try:
+		#stop LabView
+		log('Stopping LabView Weather...')
+		labViewHandler=StartStop()
+		labViewHandler.exeName='hisparcweather.exe'
+		labViewHandler.currentDirectory="%s\\user\\hisparcweather" %path
+		resLabView=labViewHandler.stopProcess()
+		if resLabView==0:
+			log('Status:running')
+		elif resLabView==1:
+			log('Status:stopped')
+		else:
+			log ('An exception was generated!')
+	except:
+		log('An exception was generated while stopping LabView Weather!')
 	
 	try:
 		#stop mySql

@@ -4,10 +4,16 @@ import sys
 import time
 path='%s:' %os.getenv("HISPARC_DRIVE")
 
+import ConfigParser
+import os
+
 
 def start():
 	setLogMode(MODE_BOTH)
 	log('\nStarting User-Mode applications...')
+
+        c = ConfigParser.ConfigParser()
+        c.read(os.path.join(path, '/persistent/configuration/config.ini'))
 	
 	try:
 		#start mySql
@@ -30,20 +36,43 @@ def start():
 	
 	try:
 		#start LabView
-		log('Starting LabView...')
-		labViewHandler=StartStop()
-		labViewHandler.exeName='hisparcdaq.exe'
-		labViewHandler.currentDirectory="%s\\user\\hisparcdaq" %path
-		labViewHandler.command="%s\\user\\hisparcdaq\\hisparcdaq.exe" %path
-		resLabView=labViewHandler.startProcess()
-		if resLabView==0:
-			log('Status:running')
-		elif resLabView==1:
-			log('Status:stopped')
-		else:
-			log ('An exception was generated!')
-	except:
-		log('An exception was generated while starting LabView:' + str(sys.exc_info()[1]))
+                if c.getboolean('Detector', 'enabled'):
+                    log('Starting LabView...')
+                    labViewHandler=StartStop()
+                    labViewHandler.exeName='hisparcdaq.exe'
+                    labViewHandler.currentDirectory="%s\\user\\hisparcdaq" %path
+                    labViewHandler.command="%s\\user\\hisparcdaq\\hisparcdaq.exe" %path
+                    resLabView=labViewHandler.startProcess()
+                    if resLabView==0:
+                            log('Status:running')
+                    elif resLabView==1:
+                            log('Status:stopped')
+                    else:
+                            log ('An exception was generated!')
+                else:
+                    log('HiSPARC detector disabled...')
+        except:
+                log('An exception was generated while starting LabView:' + str(sys.exc_info()[1]))
+
+	try:
+		#start LabView weather
+                if c.getboolean('Weerstation', 'enabled'):
+                    log('Starting LabView weather...')
+                    labViewHandler=StartStop()
+                    labViewHandler.exeName='hisparcweather.exe'
+                    labViewHandler.currentDirectory="%s\\user\\hisparcweather" %path
+                    labViewHandler.command="%s\\user\\hisparcweather\\hisparcweather.exe" %path
+                    resLabView=labViewHandler.startProcess()
+                    if resLabView==0:
+                            log('Status:running')
+                    elif resLabView==1:
+                            log('Status:stopped')
+                    else:
+                            log ('An exception was generated!')
+                else:
+                    log('HiSPARC weather station disabled...')
+        except:
+                log('An exception was generated while starting LabView:' + str(sys.exc_info()[1]))
 
         # Introduce a 30-second pause to let MySQL start completely
         time.sleep(30)

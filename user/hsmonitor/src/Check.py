@@ -14,6 +14,8 @@ WARNING = 1
 CRITICAL = 2            		
 UNKNOWN = 3
 
+TIME_DIFF_INI = '../../../persistent/configuration/HisparcII.ini'
+
 class Check:
     def __init__(self):
         self.nagiosResult = NagiosResult()
@@ -70,9 +72,27 @@ class TriggerRate(Check):
 
             if self.lastupdate:
                 t = time.strptime(str(self.lastupdate), '%Y-%m-%d %H:%M:%S')
-                # sqlite's timestamp is in UTC, so use calendar.timegm (see python time
-                # library reference)
-                t = calendar.timegm(t)
+
+                # Timestamp is in GPS time.  Naively treat it as a local
+                # time stamp, then subtract the LabVIEW-determined offset
+                # between pc clock time (local time) and GPS time.
+
+                # Read offset from file
+                with open(TIME_DIFF_INI) as f:
+                    d = {}
+                    for line in f:
+                        key, value = line.split('=')
+                        d[key] = value
+
+                # Naively calculate timestamp and adjust for pc / gps
+                # offset
+                t = time.mktime(t)
+                try:
+                    t += int(d['time_difference'])
+                except TypeError:
+                    # offset is not yet determined
+                    pass
+                # Calculate time difference between trigger and 'now'
                 dt = time.time() - t
             else:
                 #'Never updated, make dt very large'
@@ -81,7 +101,7 @@ class TriggerRate(Check):
             # if last update was significantly longer than time between monitor
             # upload checks, detector is probably stalled
             interval = int(config['triggerrate_interval'])
-            if dt > (2 * interval):
+            if abs(dt) > (2 * interval):
                 self.nagiosResult.description = "No recent triggers. Trigger rate: %.2f Last update: %d seconds ago" % (self.trate, dt)
                 self.nagiosResult.status_code = CRITICAL
 
