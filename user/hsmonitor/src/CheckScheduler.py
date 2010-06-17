@@ -5,6 +5,7 @@ import hslog
 from Check import *
 from NagiosPush import NagiosPush
 from StorageManager import StorageManager
+from UserExceptions import ThreadCrashError
 
 class ScheduledJob:    
     def __init__(self, job, jobfunc, interval, args):
@@ -105,6 +106,18 @@ class CheckScheduler(threading.Thread):
 		
 	#--------------------------End of stop--------------------------#
 	
+        crashes = []
+        def init_restart(self):
+            """Support for restarting crashed threads"""
+
+            if len(self.crashes) > 3 and time.time() - self.crashes[-3] < 60.:
+                raise ThreadCrashError("Thread has crashed three times in "
+                                       "less than a minute")
+            else:
+                super(CheckScheduler, self).__init__()
+                self.crashes.append(time.time())
+
+
 	# this function is what the thread actually runs; the required name is run().
 	# The threading.Thread.start() calls threading.Thread.run(), which is always overridden.
 	def run(self):		

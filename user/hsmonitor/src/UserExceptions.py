@@ -1,0 +1,2 @@
+class ThreadCrashError(Exception):
+    pass

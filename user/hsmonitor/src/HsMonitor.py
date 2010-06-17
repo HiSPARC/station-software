@@ -18,8 +18,9 @@ DF: Unfortunately, I think the UML model of this system is not entirely
 __author__="thevinh"
 __date__ ="$16-sep-2009"
 
-import os, sys, cmd
+import os, sys
 import re
+import time
 sys.path.append("..\..\pythonshared")
 import hslog
 from EConfigParser import EConfigParser
@@ -28,6 +29,7 @@ from Interpreter import Interpreter
 from CheckScheduler import CheckScheduler
 from StorageManager import StorageManager
 from Uploader import Uploader
+from UserExceptions import ThreadCrashError
 
 # Default configuration file path
 CONFIG_INI_PATH1 = '..\data\config.ini'
@@ -165,19 +167,30 @@ def main():
 	
 	# start all threads
 	hsMonitor.startAll()
-	
-	# this to get the keyboard interruption
-	c = cmd.Cmd()	
-	
-	try:
-		c.cmdloop()		
-	except KeyboardInterrupt:
-		 # stop all threads
-		 hsMonitor.stopAll()
-	
+
+        # Periodically check for crashed threads, and restart them if
+        # necessary
+        try:
+            while True:
+                time.sleep(10)
+                for t in hsMonitor.hsThreads:
+                    if not t.is_alive():
+                        hslog.log("Thread %s died, restarting" % t.name)
+                        t.init_restart()
+                        t.start()
+                        hslog.log("Thread %s restarted." % t.name)
+        except ThreadCrashError, exc:
+            hslog.log(exc)
+            hslog.log("Thread %s keeps crashing, shutting down." % t.name)
+        except KeyboardInterrupt:
+            hslog.log("Interrupted by keyboard, closing down.")
+
+
+        # Close down everything
+        hsMonitor.stopAll()
 	# wait for all threads to finish
-	#for thread in hsMonitor.hsThreads:
-	#	thread.join()	
+	for thread in hsMonitor.hsThreads:
+		thread.join()	
 		
 #--------------------------Main--------------------------#
 if __name__ == '__main__':

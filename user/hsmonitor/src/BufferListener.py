@@ -15,6 +15,7 @@ import _mysql
 from MySQLdb import connect, OperationalError
 import hslog
 from Interpreter import Interpreter
+from UserExceptions import ThreadCrashError
 
 class BufferListener(threading.Thread):
 	# the instantiation operation
@@ -36,6 +37,18 @@ class BufferListener(threading.Thread):
 		self.stop_event.set()
 		
 	#--------------------------End of stop--------------------------#
+
+        crashes = []
+        def init_restart(self):
+            """Support for restarting crashed threads"""
+
+            if len(self.crashes) > 3 and time.time() - self.crashes[-3] < 60.:
+                raise ThreadCrashError("Thread has crashed three times in "
+                                       "less than a minute")
+            else:
+                super(BufferListener, self).__init__()
+                self.crashes.append(time.time())
+
 	
 	# this function is what the thread actually runs; the required name is run().
 	# The threading.Thread.start() calls threading.Thread.run(), which is always overridden.

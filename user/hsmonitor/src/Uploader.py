@@ -5,6 +5,7 @@ sys.path.append("..\..\pythonshared")
 from hslog import log
 from NagiosPush import NagiosPush
 from NagiosResult import NagiosResult
+from UserExceptions import ThreadCrashError
 
 from threading import Thread
 from threading import Semaphore
@@ -13,6 +14,7 @@ from time import sleep
 from cPickle import dumps
 from urllib import urlencode
 from urllib2 import urlopen, HTTPError, URLError
+import time
 
 # TODO add observer
 # use BUI's trick to stop a thread
@@ -63,6 +65,20 @@ class Uploader(Observer, Thread):
 		self.stop_event.set()
 		# release semaphore
 		self.noEventsSem.release()
+
+        crashes = []
+        def init_restart(self):
+            """Support for restarting crashed threads"""
+
+            if len(self.crashes) > 3 and time.time() - self.crashes[-3] < 60.:
+                raise ThreadCrashError("Thread has crashed three times in "
+                                       "less than a minute")
+            else:
+                # FIXME correctly work out that super stuff.  I think that
+                # the superclasses should both use super, but ...?
+                #super(Uploader, self).__init__()
+                Thread.__init__(self)
+                self.crashes.append(time.time())
 
 	def notify(self, count=1):
 		"""Notify the uploader that count events were received."""
@@ -163,7 +179,6 @@ class Uploader(Observer, Thread):
 
 				# record succesfull upload in storagemanager
 				self.storageManager.setUploaded(self.serverID, eidlist)
-				
 				# reduce counter
 				self.numEventsLock.acquire()
 				self.numEvents -= bsize
