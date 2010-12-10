@@ -61,7 +61,8 @@ Programs*.  En verwijder, *in deze volgorde*, de volgende pakketten:
 * HiSPARCII V3.0.2 (of een vergelijkbare versie, in sommige gevallen zelfs
   nog 2.1.1)
 
-Start de pc opnieuw op.
+.. note:: Het is belangrijk om de |hisparc| user accounts van het systeem
+   te verwijderen.
 
 U heeft nu voor het eerst alle electronica vervangen
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -83,7 +84,7 @@ Benodigdheden
 
 Vóór u aan de installatie begint dient u te beschikken over:
 
-* ``hisparcInstaller_v3.6.exe``
+* ``hisparcInstaller_v3.7.exe``
 * een door de clustercoördinator verstrekt beveiligingscertificaat,
   bijvoorbeeld: ``sciencepark501.zip``
 * een door de clustercoördinator verstrekt stationnummer
