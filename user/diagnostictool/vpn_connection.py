@@ -34,7 +34,7 @@ class Check(DiagnosticCheck):
             self.message = "VPN service is not running."
             pythoncom.CoUninitialize()
             return status.FAIL
-        path = os.path.dirname(vpn_service.PathName)
+        path = os.path.dirname(vpn_service.PathName).replace('\"', '')
         path = os.path.join(path, '../log/hisparc.log')
         vpnstatus = 'unknown'
         try:

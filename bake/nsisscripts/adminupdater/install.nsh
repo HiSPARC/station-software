@@ -119,7 +119,7 @@ SectionEnd
 # Install FTDI USB drivers
 #
 Section -FTDIDrivers
-    ExecWait "$InstallPathApplication\hisparc\admin\ftdi_drivers\dpinst.exe"
+    ExecWait "$InstallPathApplication\hisparc\admin\ftdi_drivers\dpinst.exe /q"
 SectionEnd
 
 #
