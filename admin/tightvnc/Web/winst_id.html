@@ -1,0 +1,375 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>TightVNC Documentation, Win32 Version (Translation to Indonesian)</title>
+    <link rel="stylesheet" href="tightvnc.css">
+    <meta name="author" content="Constantin Kaplinsky">
+    <meta name="generator" content="XEmacs + Ruby + Guava tools">
+    <meta name="description"
+          content="TightVNC - An enhanced VNC version with many new features, improvements,
+                   optimizations and bugfixes.">
+    <meta name="keywords"
+          content="vnc, remote desktop, remote control, remote administration, compression">
+  </head>
+  <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#FDFAEC"
+    link="#9A1614" alink="#FF4040" vlink="#8A7634">
+    <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="8">
+          &nbsp;
+        </td><td valign="top">
+          <table width="100%" border="0" cellspacing="0" cellpadding="16">
+            <tr><td valign="top">
+  <table width="100%" border="0" align="center" cellspacing="0" cellpadding="0">
+    <tr><td width="99%">
+      <table width="100%" bgcolor="#C49A82" border="0" cellspacing="0" cellpadding="2">
+        <tr><td align="center" valign="middle">
+          <table width="100%" border="0" bgcolor="#F8EECB" align="center" cellspacing="0"
+            cellpadding="6">
+            <tr><td align="center" valign="middle">
+              <font size="+2"><b>Dokumentasi TightVNC [Win32]</b></font>
+            </td></tr>
+          </table>
+        </td></tr>
+      </table>
+    </td><td width="1%">&nbsp;
+    </td><td align="right" valign="middle">
+      <table border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="right" valign="middle"><a href="http://www.tightvnc.com/donate.html"><img
+            border="0" hspace="8" src="donate.jpg" width="96" height="32"
+            alt="[DONATE]"></a></td>
+          <td nowrap align="center" valign="middle"><b>Improve TightVNC:</b><br><a
+            href="http://www.tightvnc.com/donate.html">Make a Donation</a>!</td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+  <br>
+  <h3>Daftar Isi</h3>
+  <ul>
+    <li><a href="#inst">Instalasi</a>
+      <ul>
+        <li><a href="#upgr">Pembaharuan Jarak Jauh</a></li>
+      </ul></li>
+    <li><a href="#start"><b>Memulai</b></a>
+      <ul>
+        <li><a href="#start_serv">Menjalankan Sebuah Server (WinVNC)</a></li>
+        <li><a href="#start_view">Menjalankan Sebuah Pemantau</a></li>
+        <li><a href="#start_java">Menggunakan Sebuah Peramban Web Sebagai Pemantau</a></li>
+      </ul></li>
+    <li><a href="#uninst">Membongkar TightVNC</a></li>
+    <li><a href="#refs">Referensi</a></li>
+  </ul>
+  <a name="inst"></a>
+  <h3>Instalasi</h3>
+  <p>
+  	TightVNC tersedia sebagai paket yang dapat dieksekusi dan terinstal sendiri. Jalankan saja, 
+  	dan Anda akan melihat sebuah wizard instalasi yang sudah lazim yang akan mengizinkan Anda
+  	untuk membaca catatan instalasi, pilih direktori tujuan, set opsi instalasi dan seterusnya.
+  </p>
+  <p>
+  	Stelah program instalasi selesai, bagian &quot;TightVNC&quot; baru akan muncul di menu
+  	Start-&gt;Program. Jika Anda ingin memulai TightVNC secara otmooatis dan menjalankannya 
+  	bahkan saat ada user yang masuk log, Anda dianjurkan untuk menginstalasinya sebagai servis
+  	sistem dengan menggunakan item menu yang bersangkutan dari bagian Administrasi TightVNC.
+  	Mohon dicatat bahwa instalasi servis WinVNC adalah satu-satunya cara untuk membuat Ctrl-Alt-
+  	Del untuk bekerja jarak jauh (teraplikasikan hanya pada sistem Windows NT/2000/XP).
+  </p>
+  <p>
+  	TightVNC secara bawaan diinstall ke direktori <tt>Program Files\TightVNC</tt>, tapi Anda
+  	dapat memilih lokasi lain saat instalasi. Perlu dicatat bahwa TightVNC tidak menginstal
+  	apa pun di dalam direktori sistem jadi alternatif lain untuk menginstal TightVNC adalah
+  	dengan menyalin berkas program dan DLL ke direktori yang Anda inginkan (tapi untuk kasus
+  	ini Anda harus membuat jalan pintas ke program secara manual).
+  </p>
+  <p>
+  	Jika Anda ingin menginstal TightVNC pada beberapa komputer, dan tidak ingin memasukkan
+  	kata sandi yang sama pada setiap mesin, instal TightVNC sekali dan set kata sandi, lalu
+  	salin pengaturan registry ke komputer lainnya. Pengaturan TightVNC dapat ditemukan pada bagian
+  	berikut ini di registry:
+    <ul>
+      <li><tt>HKEY_LOCAL_MACHINE\Software\ORL\WinVNC3</tt></li>
+      <li><tt>HKEY_CURRENT_USER\Software\ORL\WinVNC3</tt></li>
+    </ul>
+  </p>
+  <p>
+  	Penginstal TightVNC dapat bekerja pada modus senyap dan tidak bertanya pada saat instalasi
+  	(tapi ia mungkin akan menunjukkan kotak kesalahan jika terjadi kesalahan). Pada modus ini
+  	TightVNC akan diinstalasi ke direktori bawaan, yaitu subdirektori <tt>TightVNC</tt> dalam
+  	<tt>Program Files</tt>). Ini adalah baris perintah untuk menginstal TightVNC dalam modus senyap:
+    <pre>
+tightvnc-1.3.10-setup.exe /sp- /verysilent</pre>
+  </p>
+  <a name="upgr"></a>
+  <h4><font color="#007000">Pembaharuan Jarak Jauh</font></h4>
+  <p>
+  	Server TightVNC dapat diperbaharui dari jarak jauh. Ini berarti Anda dapat melakukan instalasi
+  	TightVNC dengan bekerja pada sesi TightVNC yang aktif. Pada saat servis TightVNC sedang berjalan,
+  	ianya tidak mungkin untuk menggantikan file eksesusi yang telah ada, jadi penginstal akan menyalin
+  	berkas baru ke lokasi sementara, dan berkas baru ini akan menggantikan versi lama pada reboot
+  	yang berikutnya. Penginstal akan menanyakan reboot jika ia tidak dapat menggantikan berkas program.
+  </p>
+  <p>
+  	Sebelum menggunakan fitur ini, Anda dianjurkan untuk membaca dan mengerti hal di bawah ini:
+  </p>
+  <ul>
+    <li>Pembaharuan jarak jauh membutuhkan reboot dari komputer tersebut. Jika Anda ingin dapat
+    	mengakses komputer setelah reboot, pastikan Anda menjalankan WinVNC sebagai servis, bukan dalam
+    	modus aplikasi.</li>
+    <li>Jika Anda menjalankan servis WinVNC dari distribusi VNC lainnya, prosedur instalasi ini tidak
+    	akan menggantikannya dengan servis TightVNC secara bawaan. Ini adalah kelemahan yang mungkin
+    	akan diatasi dalam versi berikutnya. Namun, ada satu cara untuk menlakukan pembaharuan untuk ini:
+    	instal TightVNC pada direktori yang sama di mana berkas yang lama (<tt>WinVNC.exe</tt> dan
+    	<tt>VNCHooks.dl</tt>) diinstal. Dalam kasus ini, binari yang lama akan digantikan dengan yang
+    	baru pada saat reboot, dan tidak perlu menginstal ulang servis. Mohon dicatat bahwa penginstal
+    	seharusnya menampilkan pertanyaan reboot pada akhir dari proses instalasi, jika tidak mungkin
+    	Anda telah memilih direktori instalasi yang salah.</li>
+    <li>Ada beberapa hal yang mencegah mesin untuk direboot secara benar, dan ini dapat menyebabkan
+    	hilangnya kontrol atas komputer. Dengan kata lain, tidak ada GARANSI pembaharuan jarak jauh
+    	sepenuhnya dapat diandalkan. Untuk meminimalkan risiko yang mungkin, tutup semua aplikasi yang
+    	berjalan (di samping servis WinVNC) sebelum manjalankan penginstal TightVNC.</li>
+  </ul>
+  <a name="start"></a>
+  <h3>Memulai</h3>
+  <p>
+  	TightVNC, tidak seperti VNC yang biasa, mempunyai dua bagian: Server (juga direfernsi sebagai WinVNC),
+  	yang membagi layar dari mesin di mana ia berjalan, dan Pemantau yang menampilkan layar jarak jauh
+  	dari server. Untuk memulai, And aperlu menjalankan sebuah server pada mesin yang Anda ingin akses
+  	secara jarak jauh, dan menhubungkannya dengan sebuah pemantau. Distribusi TightVNC untuk Windows
+  	mengikutsertakan bagian server dan pemantau.
+  </p>
+  <a name="start_serv"></a>
+  <h4><font color="#007000">Menjalankan Sebuah Server (WinVNC)</font></h4>
+  <p>
+  	Server TightVNC dapat dimulai dengan satu dari dua cara berikut:
+  </p>
+  <ul>
+    <li>sebagai aplikasi (untuk pemakai saat ini saja);</li>
+    <li>sebagai servis Windows (operasi menyeluruh sistem).</li>
+  </ul>
+  <p>
+  	Dalam modus aplikasi, server dapat dijalankan hanya pada sesi pemakai saat ini, dan akan ditutup
+  	pada saat keluar log. Untuk memulai WinVNC dalam modus aplikasi, pilih
+  	<b>Start-&gt;Programs-&gt;TightVNC-&gt;Launch TightVNC Server</b>.
+  </p>
+  <p>
+  	Agar mesin dapat diakses pada saat tidak ada pengguna yang masuk log, dan agar server dimulai
+  	secara otomatis saat reboot, Server TightVNC seharusnya dijalankan sebagai servis sistem. Untuk
+  	menginstalasinya sebagai servis, pilih
+  	<b>Start-&gt;Programs-&gt;TightVNC-&gt;Administration-&gt;Install VNC Service</b>. Dalam Windows
+  	95/98/ME ia akan memulai servis secara langsung, sedangkan pada Windows NT/2000/XP Anda harus
+  	memulai servis secara manual dari Control Panel atau dari perintah baris (net start winnvc).
+  	Dalam kasus manapun, ianya akan memulai secara otomatis pada reboot sistem selanjutnya. Perlu
+  	dicatat bahwa jike servis VNC dimulai secara manual, Anda mungkin harus menjalankan
+  	<b>Start-&gt;Programs-&gt;TightVNC-&gt;Administration-&gt;Run Service Helper</b>, untuk membuat
+  	WinVNC menampilkan ikon baki (lihat di bawah).
+  </p>
+  <p>
+  	Tidak tergantung dari bagaimana Server TightVNC dimulai, ia akan menampilkan jendela Properties pada
+  	startup pertama, untuk mengizinkan Anda untuk memasukkan kata sandi yang akan Anda pergunakan dalam
+  	pemantau untuk mengakses mesin. Sampai kata sandi dimasukkan, TightVNC tidak akan menerima koneksi
+  	jaringan yang masuk.
+  </p>
+  <p>
+  	Dalam konfigurasi bawaan, setiap pemakai dapat memiliki kata sandi WinVNC yang terpisah, ada juga
+  	kata sandi bawaan yang khusus yang dipergunakan jika tidak ada kata sandi yang tersedeia (contoh:
+  	pada saat tidak ada yang masuk log, atau jika tidak ada kata sandi pemakai yang diatur). Catatan:
+  	tidak ada kata sandi bawaan yang telah didefinisikan di dalam TightVNC, kata sandi mesin  dinamai
+  	&quot;bawaan&quot; hanya karena ia dipergunakan ketika tidak ada kata sandi spesifik untuk pemakai
+  	yang tersedia.
+  </p>
+  <p>
+  	Untuk mengatur kata sandi pemakai, akses ke dialog Properties dari menu, seperti dijelaskan di 
+  	bawah ini. Jika Anda ingin mengatur kata sandi bawaan, jalankan
+  	<b>Start-&gt;Programs-&gt;TightVNC-&gt;Administration-&gt;Show Default Settings</b>.
+  	Catatan: Judul dari dialog Properties menampilkan &quot:Current User Properties&quot; atau
+  	&quot;Default Local System Properties&quot;, tergantung kelompok pengaturan mana yang disunting.
+  </p>
+  <p>
+  	Pada startup yang sukses, TightVNC akan menambahkan sebuah ikon kecil pada baki dalam task bar
+  	sistem (area pemberitahuan). Ikon itu memiliki latar belakang putih jika tidak ada pemantau yang
+  	terkoneksi, dan warna berlawanan jika setidaknya ada satu pemantau yang mengakses mesin. Menggerakkan
+  	tetikus di atas ikon ini menunjukkan alamat IP dari mesin (yang dapat dimasukkan dalam pemantau
+  	jarak jauh untuk mengakses server).
+  </p>
+  <table border="0" align="center" cellspacing="0" cellpadding="8">
+    <tr align="center">
+      <td nowrap><img src="images/winvnc-icon-normal.png" width="320" height="96" hspace="18"
+        vspace="4" alt="[tray icon]"><br><font size="-1"><i>Sebuah ikon normal Server TightVNC</i></font></td>
+      <td nowrap><img src="images/winvnc-icon-ip.png" width="320" height="96" hspace="18"
+        vspace="4" alt="[tray icon]"><br><font size="-1"><i>Menggeratakkan tetikus di atas ikon menunjukkan alamat IP</i></font></td>
+    </tr>
+    <tr align="center">
+      <td nowrap><img src="images/winvnc-icon-service-hint.png" width="320" height="96" hspace="18"
+        vspace="4" alt="[tray icon]"><br><font size="-1"><i>Petunjuk menunjukkan TightVNC sedang<br>dijalankan sebagai servis sistem</i></font></td>
+      <td nowrap><img src="images/winvnc-icon-connected.png" width="320" height="96" hspace="18"
+        vspace="4" alt="[tray icon]"><br><font size="-1"><i>Ikon ditunjukkan dengan warna berlawanan<br>ketika pemantau terkoneksi</i></font></td>
+    </tr>
+    <tr align="center">
+      <td nowrap><img src="images/winvnc-icon-disabled.png" width="320" height="96" hspace="18"
+        vspace="4" alt="[tray icon]"><br><font size="-1"><i>Tepian merah mengindikasikan bahwa<br>koneksi klien baru dimatikan</i></font></td>
+      <td nowrap><img src="images/winvnc-icon-disabled-hint.png" width="320" height="96" hspace="18"
+        vspace="4" alt="[tray icon]"><br><font size="-1"><i>Petunjuk menampilkan alasan mengapa<em>koneksi klien dimatikan</i></font></td>
+    </tr>
+  </table>
+  <p>
+    Klik kanan pada ikon baki untuk menunjukkan menu:
+  </p>
+  <table border="0" align="center" cellspacing="0" cellpadding="8">
+    <tr align="center">
+    <td nowrap><img src="images/winvnc-menu.png" width="256" height="192" hspace="18" vspace="4"
+      alt="[tray menu]"><br><font size="-1"><i>Menu dari Server TightVNC</i></font></td>
+    </tr>
+  </table>
+  <p>
+  Perintah menu berikut ini tersedia:
+  </p>
+  <ul>
+    <li><b>Properties...</b> - Ini akan mengakibatkan dialog Properties ditampilkan, mengizinkan
+    	pemakai untuk mengubah berbagai parameter dari Server TightVNC. Dialog ini akan ditampilkan
+    	juga pada saat klik-ganda pada ikon baki.</li>
+    <li><b>Add New Client...</b> - Ini mengizinkan koneksi keluar untuk dibuat dari server ke
+    	pemantau dimulai pada saat modus &quot;dengar&quot;. Nama dari mesin pemantau target dan
+    	nomor tampilan (opsional) dapat dimasukkan ke dalam dialog. Koneksi diciptakan
+    	dengan cara ini dianggap terbagi. &quot;Koneksi kembali&quot; dapat juga dimulai dari perintah
+    	baris dengan menggunakan opsi <tt>-connect</tt>.</li>
+    <li><b>Kill All Clients</b> - Ini akan memutuskan semua klien yang terkoneksi dari server.</li>
+    <li><b>Disable New Clients</b> - Ini akan mematikan koneksi klien baru secara sementara ke server.
+    	Pilih item menu yang sama untuk mengaktifkan kembali koneksi klien baru. Catat bahwa modus ini
+    	tidak dikembalikan pada saat server dimulai kembali.</li>
+    <li><b>About...</b> - Menunjukkan informasi tentang perangkat lunak.</li>
+    <li><b>Close TightVNC Server</b> - Keluar.</li>
+  </ul>
+  <a name="start_view"></a>
+  <h4><font color="#007000">Menjalankan Sebuah Pemantau</font></h4>
+  <p>
+  	Untuk memantau dan mengontrol mesin jarak jauh di mana Server TightVNC dijalankan, Anda perlu
+  	menjalankan Pemantau TightVNC. Untuk menjalankan pemantau, pilih <b>Start-&gt;Programs-&gt;TightVNC-&gt;TightVNC
+    Viewer</b>. Anda akan melihat sebuah jendela yang mengizinkan Anda untuk memilih server tujuan.
+  </p>
+  <table border="0" align="center" cellspacing="0" cellpadding="8">
+    <tr align="center">
+      <td nowrap><img src="images/viewer-newconn.png" width="386" height="163" hspace="18"
+        vspace="4" alt="[dialog]"><br><font size="-1"><i>Jendela dialog &quot;Koneksi Baru&quot;</i></font></td>
+    </tr>
+  </table>
+  <p>
+  	Setelah memasukkan nama hosti dan alamat IP-nya (dan secara opsional nomor tampilannya), pilih
+  	&quot;Connect&quot. Pada koneksi yang berhasil, Anda akan ditanyakan kata sandi, dan jika
+  	kata sandi yang dimasukkan benar, akhirnya Anda bisa melihat mesin jarak jauh.
+  </p>
+  <p>
+  	Secara alternatif, Anda dapat memulai pemantau dalam modus dengar, dengan menggunakan tombol
+  	yang bersangkutan di dalam jendela &quot;New Connection&quot;. Dalam modus itu, ikon pemantau akan
+  	tampil di dalam baki sistem, dan ia akan menerima koneksi terbalk dari server TightVNC (lihat
+  	deskripsi di atas tentang item menu WinVNC &quot;Add New Client&quot;.
+  </p>
+  <p>
+  	Dalam jendela &quot;New Connection&quot;, Anda dapat menggunakan konteks bantuan yang ada. Untuk
+  	mendapatkan bantuan dengan menggunakan kontrol yang ada, pertama klik sebuah tombol tanda tanya
+  	pada judul jendela, lalu klik pada kontrol tersebut. Cara lain untuk mendapatkan bantuan konteks
+  	adalah dengan menekan tombol F1 pada saat fokus papan tombol sedang berada pada kontrol yang
+  	bersangkutan.
+  </p>
+  <table border="0" align="center" cellspacing="0" cellpadding="8">
+    <tr align="center">
+      <td nowrap><img src="images/viewer-newconn-help1.png" width="386" height="163" hspace="18"
+        vspace="4" alt="[help instructions]"><br><font size="-1"><i>Menggunakan bantuank konteks</i></font></td>
+    </tr>
+    <tr align="center">
+      <td nowrap><img src="images/viewer-newconn-help2.png" width="386" height="163" hspace="18"
+        vspace="4" alt="[contex help text]"><br><font size="-1"><i>Hasil jendela bantuan</i></font></td>
+    </tr>
+  </table>
+  <a name="start_java"></a>
+  <h4><font color="#007000">Menggunakan Sebuah Peramban Web Sebagai Pemantau</font></h4>
+  <p>
+  	Server VNC juga dapat berisi server Web kecil. Jika Anda melakukan koneksi kepadanya dengan
+  	peramban web, versi Java dari pemantau akan diunduh secara otomatis, yang mengizinkan Anda
+  	untuk mengakses desktop jarak jauh. Jelasnya, peramban Web harus mendukung applet Java.
+  	Anda juga dianjurkan tidak memakai proxy,  untuk mengizinkan aplet Java mengakses server
+  	jarak jauh secara langsung.
+  </p>
+  <p>
+  	Server mendengar koneksi HTTP pada port 5800 + nomor tampilan. (Ingat mesin WinVNC secara bawaan
+  	adalah tampilan 0.) Jadi untuk melakukan koneksi ke tampilan 2 pada mesin &quot;myhost&quot;,
+  	Anda ingin menunjukkan peramban web pada http://myhost:5802/ . Applet akan menanyakan kata
+  	sandi Anda, dan selanjutnya akan menampilkan desktop.
+  </p>
+  <a name="uninst"></a>
+  <h3>Membongkar TightVNC</h3>
+  <p>
+  	TightVNC dapat dibongkar menggunakan Add/Remove Programs di dalam Control Panel, tapi
+  	Anda juga dapat menghilangkan direktori yang Anda instal (biasanya <tt>C:\Program Files\TightVNC</tt>).
+  	Perlu dicatat bahwa instalasi TightVNC tidak menyalin berkas apapun ke direktori sistem.
+  	Sebelum membongkar TightVNC, pastikan bahwa WinVNC tidak berjalan dant idak diinstalasi
+  	sebagai servis.
+  </p>
+  <a name="refs"></a>
+  <h3>Referensi</h3>
+  <p>
+  	Untuk informasi lebih lanjut tentang instalasi dan konfigurasi, lihat <a
+    href="docs.html">halaman dokumentasi utama</a> dan <a href="faq.html">FAQ TightVNC</a>.
+  </p>
+  <p>
+  	Jika Anda ingin mengompilasi sumber, mohon baca instruksi pada
+  	<a href="doc/win32/BUILDING.txt">berkas BUILDING.txt</a> yang diikutsertakan dalam arsip sumber.
+  </p>
+  <h3>Terjemahan Bahasa Indonesia</h2>
+  <p>
+  	Dokumen ini diterjemahkan secara bebas oleh Hendry, hendry.lee [at] gmail [dot] com.
+  </p>
+  <p>
+  	Situs: <a href="http://blogbuildingu.com/">Blog Tips</a> - Blog Building University.
+  </p>
+  <p>
+  	Lokasi: Pematangsiantar, Indonesia.
+  </p>
+            </td></tr>
+          </table>
+        </td><td width="2" bgcolor="#C49A82">
+          <img src="brpixel.jpg" width="2" height="1" alt="">
+        </td><td width="6" valign="top" bgcolor="#F8EECB">
+          &nbsp;
+        </td><td width="128" valign="top" bgcolor="#F8EECB">
+          <table border="0" width="100%" cellspacing="0" cellpadding="8">
+            <tr><td align="center"><a href="http://www.tightvnc.com/"><img
+              src="tightvnc-logo.jpg" width="128" height="128" border="0"
+              alt="[LOGO]"></a></td></tr>
+            <tr><td align="center">
+              <table align="center" border="0"><tr><td nowrap>
+  <p><b>TightVNC:</b><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="index.html">Home</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="download.html"><b>Download</b></a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="support.html">Get Support</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="contact.html">Contact Us</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="sitemap.html">Site Map</a><br>
+  <p><b>Information:</b><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="intro.html">Introduction</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="http://www.tightvnc.com/screenshots.html">Screenshots</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="docs.html">Documentation</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="faq.html">F.A.Q.</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="lists.html">Mailing Lists</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="whatsnew.html">What's New</a><br>
+  <p><b>Contributions:</b><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="http://www.tightvnc.com/supporters/"><b>Hall of Fame</b></a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="http://www.tightvnc.com/donate.html">Donate</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="contribute.html">How to Help</a><br>
+  <p><b>Development:</b><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="bugs.html">Report Bugs</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="rfe.html">Suggest Features</a><br>
+  <p><b>Links:</b><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="http://www.tightvnc.com/">Primary Site</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="othersites.html">Other Sites</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="related.html">Related Software</a><br>
+              </td></tr></table>
+            </td></tr>
+          </table>
+        </td><td width="6" bgcolor="#F8EECB">
+          &nbsp;
+        </td></tr>
+    </table> 
+  </body>
+</html>
+<!-- Guava tools by Steve Morphet 1999-2001. -->

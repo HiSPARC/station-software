@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>TightVNC: Version 1.3.10 Released</title>
+    <link rel="stylesheet" href="tightvnc.css">
+    <meta name="author" content="Constantin Kaplinsky">
+    <meta name="generator" content="XEmacs + Ruby + Guava tools">
+    <meta name="description"
+          content="TightVNC - An enhanced VNC version with many new features, improvements,
+                   optimizations and bugfixes.">
+    <meta name="keywords"
+          content="vnc, remote desktop, remote control, remote administration, compression">
+  </head>
+  <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#FDFAEC"
+    link="#9A1614" alink="#FF4040" vlink="#8A7634">
+    <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="8">
+          &nbsp;
+        </td><td valign="top">
+          <table width="100%" border="0" cellspacing="0" cellpadding="16">
+            <tr><td valign="top">
+  <table width="100%" border="0" align="center" cellspacing="0" cellpadding="0">
+    <tr><td width="99%">
+      <table width="100%" bgcolor="#C49A82" border="0" cellspacing="0" cellpadding="2">
+        <tr><td align="center" valign="middle">
+          <table width="100%" border="0" bgcolor="#F8EECB" align="center" cellspacing="0"
+            cellpadding="6">
+            <tr><td align="center" valign="middle">
+              <font size="+2"><b>TightVNC 1.3.10 Released</b></font>
+            </td></tr>
+          </table>
+        </td></tr>
+      </table>
+    </td><td width="1%">&nbsp;
+    </td><td align="right" valign="middle">
+      <table border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="right" valign="middle"><a href="http://www.tightvnc.com/donate.html"><img
+            border="0" hspace="8" src="donate.jpg" width="96" height="32"
+            alt="[DONATE]"></a></td>
+          <td nowrap align="center" valign="middle"><b>Improve TightVNC:</b><br><a
+            href="http://www.tightvnc.com/donate.html">Make a Donation</a>!</td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+  <br>
+  <p>
+    Hello everyone,
+  </p>
+  <p>
+    I am glad to announce that <font color="#007000"><b>TightVNC 1.3.10 has been released</b></font>. It fixes various bugs
+    that were reported for previous versions and adds a number of minor improvements. The files
+    are <a href="http://www.tightvnc.com/download.html">available here</a>.
+  </p>
+  <p>
+    In this announcement:
+  </p>
+  <ul>
+    <li><a href="#new">What's New in TightVNC 1.3.10</a></li>
+    <li><a href="#vista">Windows Vista Compatibility</a></li>
+    <li><a href="#u3">(New!) TightVNC for U3 Smart Drives</a></li>
+    <li><a href="#dev">Ongoing TightVNC 1.4 Development</a></li>
+  </ul>
+  <a name="new"></a>
+  <h3>What's New in TightVNC 1.3.10</h3>
+  <p>
+  The <font color="#007000"><b>most important changes</b></font> in the new release are as follows:
+  </p>
+  <ul>
+    <li><font color="#007000"><b>Windows Server:</b></font> Impersonating currently logged on user while processing file
+    transfer requests. Disabling file transfers completely if current user is unknown or nobody
+    is logged in.</li>
+    <li><font color="#007000"><b>Windows Viewer:</b></font> Fixed integer overflow vulnerabilities reported by Core Security
+    Technologies. A specially modified VNC server could currupt the heap of the connected viewer
+    causing its crash or malfunction.</li>
+    <li><font color="#007000"><b>Windows Server:</b></font> Fixed rendering problems when multiple CopyRects were combined with
+    normal updates. That could caused distortions that never updated even with full-screen
+    polling active.</li>
+    <li><font color="#007000"><b>Windows Viewer:</b></font> TightVNC Viewer version 1.3.9 saved only successful connections in
+    the list of recently visited VNC servers. Now we save unsuccessful connections too so that
+    users would not ever have to re-type server names after connection failures. Also, several
+    other enhancements were made to the code which handles the list of recent connections.</li>
+    <li><font color="#007000"><b>Windows Viewer:</b></font> Fixed problems under Windows Vista where Windows taskbar could
+    remain visible above the full-screen window.</li>
+    <li><font color="#007000"><b>Unix Server</b></font>: Applied fixes for 64-bit Linux issues, a patch from Russel Miranda.</li>
+    <li><font color="#007000"><b>Unix Server:</b></font> Made the vncserver script read configuration from files (system-wide
+    /etc/tightvncserver.conf and user-specific $HOME/.vnc/tightvncserver.conf).</li>
+    <li><font color="#007000"><b>Java viewer:</b></font> Fixed a bug that caused NullPointerException when connecting to any
+    VNC server not supporting TightVNC protocol extensions.</li>
+  </ul>
+  <p>
+    The complete summary of changes is <a href="whatsnew.html">available here</a>.
+  </p>
+  <a name="vista"></a>
+  <h3>Windows Vista Compatibility</h3>
+  <p>
+    Unfortunately, TightVNC Server 1.3.10 still cannot be used as a system service in Windows
+    Vista. This problem cannot be solved without major architectural changes in TightVNC Server
+    code. This will be addressed in TightVNC 1.4 series (there is more information on TightVNC
+    1.4 development below in this document).
+  </p>
+  <p>
+    Besides service mode problems, TightVNC is compatible with Windows Vista and its
+    compatibility has been improved since previous version. While TightVNC Viewer 1.3.9 might
+    have problems with Windows taskbar shown above full-screen remote desktop, new version works
+    in Vista the same way as it worked on any other Windows.
+  </p>
+  <a name="u3"></a>
+  <h3>TightVNC for U3 Smart Drives</h3>
+  <p>
+    U3 Smart Drives are special USB flash drives developed by SanDisk. When you plug such a USB
+    stick into any PC, it shows U3 Launchpad panel (similar to the Start menu, but on the right
+    side of the screen) and allows you to start applications installed on that U3
+    drive. Applications keep their settings and documents on the U3 drive. On ejecting the drive,
+    <font color="#007000"><b>no personal data is left behind</b></font> on the host computer (visit <a
+    href="http://www.u3.com/">www.u3.com</a> for more information).
+  </p>
+  <p>
+    We have prepared a special version of TightVNC for U3 Smart Drives. It can be installed on a
+    U3 stick like any other U3 application and allows to use TightVNC (both server and viewer) in
+    a portable way. When run from a U3 drive, TightVNC keeps its configuration and connection
+    history (including passwords) on the flash drive and does not use the registry of the host
+    computer.
+  </p>
+  <p>
+    TightVNC 1.3.10 for U3 is freely available for 30-day evaluation and should be registered
+    after the evaluation period. TightVNC itself remains free but the U3 loader application (a
+    separate executable) is proprietary. Note that by registering TightVNC for U3 you effectively
+    support our free software project.
+  </p>
+  <ul>
+    <li><b><a href="http://www.tightvnc.com/u3/">Download TightVNC for U3</a></b></li>
+  </ul>
+  <p>
+    <font color="#007000"><b>IMPORTANT NOTE:</b></font> TightVNC for U3 will not work on usual USB flash drives. You will need
+    a U3-compliant flash drive in order to install and run TightVNC for U3.
+  </p>
+  <a name="dev"></a>
+  <h3>Ongoing TightVNC 1.4 Development</h3>
+  <p>
+    At the moment, TightVNC 1.3 development is almost closed. Our focus is on making next major
+    version of TightVNC, 1.4. Our <font color="#007000"><b>goals for TightVNC 1.4</b></font> are the following:
+  </p>
+  <ul>
+    <li>Full Support for Windows Vista including the service mode of the
+    TightVNC Server, proper compatibility with Fast User Switching and
+    Remote Desktop sessions.</li>
+    <li>Fast and reliable screen updates in TightVNC Server for Windows,
+    even without mirror driver installed.</li>
+    <li>File transfers with support for big files and ability to copy
+    directory trees, rename and delete files and directories.</li>
+    <li>Major usability improvements, self-documented user interface.</li>
+    <li>Modular architecture and extensibility via plugins.</li>
+  </ul>
+  <p>
+    It's not just a plan, we are actively working on this since summer 2008. And we expect
+    that the first version of TightVNC 1.4 for Windows will be ready this spring.
+  </p>
+  <p>
+    Besides that, we plan to resume development of TightVNC for Unix that was almost stalled for
+    a long time. Expect new major releases of TightVNC for Unix in the nearest months.
+  </p>
+  <p>
+    -- <br>
+    With Best Wishes,<br>
+    Constantin Kaplinsky
+  </p>
+            </td></tr>
+          </table>
+        </td><td width="2" bgcolor="#C49A82">
+          <img src="brpixel.jpg" width="2" height="1" alt="">
+        </td><td width="6" valign="top" bgcolor="#F8EECB">
+          &nbsp;
+        </td><td width="128" valign="top" bgcolor="#F8EECB">
+          <table border="0" width="100%" cellspacing="0" cellpadding="8">
+            <tr><td align="center"><a href="http://www.tightvnc.com/"><img
+              src="tightvnc-logo.jpg" width="128" height="128" border="0"
+              alt="[LOGO]"></a></td></tr>
+            <tr><td align="center">
+              <table align="center" border="0"><tr><td nowrap>
+  <p><b>TightVNC:</b><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="index.html">Home</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="download.html"><b>Download</b></a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="support.html">Get Support</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="contact.html">Contact Us</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="sitemap.html">Site Map</a><br>
+  <p><b>Information:</b><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="intro.html">Introduction</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="http://www.tightvnc.com/screenshots.html">Screenshots</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="docs.html">Documentation</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="faq.html">F.A.Q.</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="lists.html">Mailing Lists</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="whatsnew.html">What's New</a><br>
+  <p><b>Contributions:</b><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="http://www.tightvnc.com/supporters/"><b>Hall of Fame</b></a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="http://www.tightvnc.com/donate.html">Donate</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="contribute.html">How to Help</a><br>
+  <p><b>Development:</b><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="bugs.html">Report Bugs</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="rfe.html">Suggest Features</a><br>
+  <p><b>Links:</b><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="http://www.tightvnc.com/">Primary Site</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="othersites.html">Other Sites</a><br>
+  <img src="ldot.jpg" width="8" height="8" hspace="4" alt="*">   <a href="related.html">Related Software</a><br>
+              </td></tr></table>
+            </td></tr>
+          </table>
+        </td><td width="6" bgcolor="#F8EECB">
+          &nbsp;
+        </td></tr>
+    </table> 
+  </body>
+</html>
+<!-- Guava tools by Steve Morphet 1999-2001. -->

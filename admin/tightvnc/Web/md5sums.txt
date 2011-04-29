@@ -1,0 +1,12 @@
+33f3846fa411a5c8a495d5e40c961124  tightvnc-1.3.10_javabin.tar.gz
+2174d7307bdb7df35d97e41ae4d2f7a8  tightvnc-1.3.10_javabin.zip
+5dc173c83fadfea5da0dd10ed01ab7e3  tightvnc-1.3.10_javasrc.tar.gz
+a8027a2de2c930955803c814e0af4744  tightvnc-1.3.10_javasrc.zip
+397b35faad32d5246b6d44b142f8304f  tightvnc-1.3.10_unixsrc.tar.bz2
+9537127b02a4589443f2d0971bd8b1af  tightvnc-1.3.10_unixsrc.tar.gz
+95514227824c2ac4075918d3552d3245  tightvnc-1.3.10_winsrc.tar.bz2
+f9e2b50e2242046704508c71f04d7da4  tightvnc-1.3.10_winsrc.zip
+30b7dfdab43724f0df521e715d8273ff  tightvnc-1.3.10_x86_viewer.zip
+caee9cf9714c55955f8f57facb9d0a9e  tightvnc-1.3.9-1.i386.rpm
+ca214413e6d20b426e8d80be5f19075b  tightvnc-1.3.9-1.src.rpm
+81fb12378cd3005ad46b15627a9a4df0  tightvnc-server-1.3.9-1.i386.rpm
