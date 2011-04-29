@@ -11,6 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   setup-development
    rebuild-tree
 
 Indices and tables

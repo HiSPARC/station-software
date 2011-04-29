@@ -47,8 +47,8 @@ Steps:
    terminal with a HiSPARC detector pc environment
 
 
-Notepad++ (a Source Code Editor)
---------------------------------
+Notepad++ (a Source Code Editor) (Optional)
+-------------------------------------------
 
 :Homepage: http://notepad-plus-plus.org/
 :Version: 5.8.5 (Installer)
