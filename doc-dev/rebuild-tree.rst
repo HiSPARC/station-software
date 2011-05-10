@@ -5,10 +5,11 @@ This is a complete log of building the development environment from
 scratch.  Lots of third-party packages need to be installed and included
 in the installer tree.
 
-.. note:: In general, you don't need to follow these instructions to just
-          start building a package.  This is only needed when you need to
-          recreate the whole tree.  It is more useful as a reference when
-          one wants to update a package or two with newer versions.
+.. note:: **Do not use these instructions**.  You don't need to follow
+          these instructions to start building a package.  This is only
+          needed when you need to recreate the whole tree *from scratch*.
+          It is mostly useful as a reference when one wants to update a
+          package or two with newer versions.
 
 
 Bazaar (a Distributed Version Control System (DVCS))
