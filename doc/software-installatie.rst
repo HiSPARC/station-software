@@ -3,28 +3,30 @@
 Installatie van de |hisparc| software
 =====================================
 
-De installatie van de |hisparc| software is recent zeer vereenvoudigd
-[#ooti]_.  We maken nu gebruik van één installatiepakket dat alle
-benodigde software op de |hisparc| detector pc's installeert.  We raden
-aan om de software te installeren op een moderne pc met een schone
-installatie van Microsoft Windows XP.  Windows Vista en Windows 7 zouden
-in principe ook moeten werken, maar daarop is de software niet getest.
-Mocht u de software toch willen installeren op deze besturingssystemen,
-dan horen we graag over uw ervaringen.  De keuze voor Windows is slechts
-gemaakt omdat een aantal systeembeheerders in het voortgezet onderwijs
-alleen ervaring heeft met Windows en in het verleden aangaf geen Linux
-pc's toe te staan op het schoolnetwerk.  Voor het ondersteunen van meer
-dan één besturingssysteem hebben we helaas niet de mankracht.
+De software bestaat uit één installatiepakket [#OOTI]_.  We raden aan om
+de software te installeren op een moderne pc met een schone installatie
+van Microsoft Windows XP.  Windows Vista en Windows 7 zouden in principe
+ook moeten werken, maar daarop is de software (nog) niet getest.  De keuze
+voor Windows is slechts gemaakt omdat een groot aantal systeembeheerders
+in het voortgezet onderwijs alleen ervaring heeft met Windows en een
+aantal van hen in het verleden aangaf geen Linux pc's toe te staan op het
+schoolnetwerk.  Voor het ondersteunen van meer dan één besturingssysteem
+hebben we helaas niet de mankracht.
 
 .. note:: Vóór uiteindelijk gebruik is het nodig de |hisparc| data
-   acquisitie software te configureren! Zie :doc:`configuratie`.
+   acquisitie software na installatie te configureren!  Zie
+   :doc:`configuratie`.  **Als u deze stap (per ongeluk) overslaat, dan
+   zijn uw meetgegevens ONBRUIKBAAR.**  Als u deze handleiding stap voor
+   stap volgt, dan komt u vanzelf aan de configuratie toe.
 
 .. note:: Op het science park en de TU/E maken we sinds kort gebruik van
    Asus EEE PC's.  Deze pc's zijn goedkoop, hebben voldoende geheugen,
    zijn energiezuinig, compact en snel genoeg voor onze doeleinden.  De
    pc's worden geleverd met Microsoft Windows XP Home en ook dat is
    voldoende.  Let wel: een monitor wordt *niet* meegeleverd; toetsenbord
-   en muis weer wel.
+   en muis weer wel.  De nieuwste modellen worden echter geleverd met
+   Windows 7, op zeer korte termijn ondersteunen we Windows 7 dan ook
+   volledig.
 
 .. note:: Op aanvraag is alle broncode beschikbaar.  Wilt u zelf met
    |labview| aan de slag, bijvoorbeeld, dan kunt u contact met ons opnemen
@@ -33,50 +35,6 @@ dan één besturingssysteem hebben we helaas niet de mankracht.
    de |hisparc| data in zijn werk gaat, kijkt u dan na installatie in de
    ``Z:\user\hsmonitor\src`` map.  Hier vindt u de Python [#python]_
    broncode van de |hisparc| monitor.
-
-
-Verwijderen van een oude software installatie
----------------------------------------------
-
-.. note:: Installeert u de |hisparc| software voor het eerst, dan kunt u
-   deze sectie overslaan.  Het volgende is alléén bedoeld voor diegenen
-   die een oude versie van de |hisparc| software hebben geïnstalleerd, te
-   herkennen aan de opsplitsing in meerdere installatiepakketten: *Client,
-   Monitor, Buffer en LabVIEW*.
-
-U werkte al eerder met de nieuwe electronica
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-De nieuwe |hisparc| software biedt vele verbeteringen, waaronder het
-onderbrengen van alle software in één installatiepakket.  Voordat de
-nieuwe software geïnstalleerd kan worden dient de oude software verwijderd
-te zijn.
-
-Ga hiervoor naar *Start -> Settings -> Control Panel -> Add or Remove
-Programs*.  En verwijder, *in deze volgorde*, de volgende pakketten:
-
-* |hisparc| Monitor
-* |hisparc| Client
-* |hisparc| Buffer
-* HiSPARCII V3.0.2 (of een vergelijkbare versie, in sommige gevallen zelfs
-  nog 2.1.1)
-
-.. note:: Het is belangrijk om de |hisparc| user accounts van het systeem
-   te verwijderen.
-
-U heeft nu voor het eerst alle electronica vervangen
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. note:: Wij raden u ten sterkste aan uw pc te vervangen of in ieder
-   geval Windows XP opnieuw te installeren.  Dit omdat uw installatie
-   hoogstwaarschijnlijk al jaren oud is.
-
-Mocht u tóch besluiten om alleen de oude software te verwijderen, dan gaat
-het om de volgende pakketten:
-
-* Trimble GPS
-* |hisparc| software versie 6
-* PicoScope
 
 
 Benodigdheden
@@ -92,21 +50,16 @@ Vóór u aan de installatie begint dient u te beschikken over:
   verstrekt of door uzelf gekozen.  Dit wachtwoord wordt gebruikt als
   controle op een vergissing in stationnummers.  Denkt u er in het geval
   van een zelfgekozen wachtwoord aan dit wachtwoord aan de
-  clustercoördinator te vestrekken.
-* de naam van uw pc zoals gebruikt in ons monitorsysteem
-  (:ref:`nagios-doc`).  Dit is niet vereist voor de installatie, maar wel
-  handig om na afloop en tijdens gebruik de status van uw detector te
-  controleren.
+  clustercoördinator te verstrekken.
 
-.. note:: U dient zich bij uw *systeembeheerder* te verzekeren van het
-   volgende:
-   
-   * Een proxy-vrije verbinding vanaf de |hisparc| pc over
-     *poort 443 (https)* naar *vpn.hisparc.nl* is **vereist**.  Het gaat
-     hier dus alleen om de verbinding **naar buiten**.
-   * Een proxy-vrije verbinding vanaf de |hisparc| pc over
-     *poort 80 (http)* naar *peene.nikhef.nl* en *frome.nikhef.nl* is
-     **gewenst**.
+.. note:: de naam van uw pc zoals gebruikt in ons monitorsysteem
+   (:ref:`nagios-doc`) is gelijk aan de naam van het certificaat, zonder
+   de ``.zip`` extensie.  Als het certificaat ``sciencepark501.zip`` heet,
+   dan is de pc-naam ``sciencepark501``.
+
+.. note:: In het verleden ondersteunden we geen proxy-servers.  Nu we dat
+   wel doen, is het niet langer nodig de systeembeheerder te vragen
+   poorten open te zetten.
 
 .. note:: Stel de pc in de *BIOS setup* zódanig in dat hij in het geval
    van stroomuitval automatisch weer opstart.  Bij een *EEE PC* kan dat
@@ -160,7 +113,8 @@ Lokale database
 
 Als uw school of instelling beschikt over de nodige software om |hisparc|
 data te ontvangen, te verwerken en langdurig op te slaan, dan kunt u hier
-het adres invullen.  Voor vrijwel alle installaties blijft dit veld leeg.
+het adres invullen.  *Voor vrijwel alle installaties blijft dit veld
+leeg.*
 
 .. figure:: images/screenshot-lokaledatabase.png
    :align: center

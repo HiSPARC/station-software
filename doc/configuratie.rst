@@ -112,8 +112,6 @@ alle tekstvelden een vraagteken en zijn alle indicatielampjes grijs.
 Rechts onderin het venster kunt u rechts-klikken op *No Com Port* en een
 com-poort selecteren.  Er is er slechts één bij die werkt.
 
-<img>
-
 Controleert u eerst alle instellingen van de GPS en zorg ervoor dat ze
 nauwkeurig overeenkomen met de volgende screenshots.  Mocht u een
 instelling moeten veranderen, druk dan op de bijbehorende *Set* knop.
@@ -144,7 +142,11 @@ instelling moeten veranderen, druk dan op de bijbehorende *Set* knop.
    :scale: 85
 
    In dit venster zorgt u er voor dat de *self survey* lang genoeg duurt
-   (één uur).
+   (één dag).
+
+.. note:: In het verleden hadden we de lengte van de self survey ingesteld
+   op één uur, maar het blijkt dat we de nauwkeurigheid van een dag nodig
+   hebben.
 
 .. figure:: images/screenshot-gps-position.png
    :align: center
