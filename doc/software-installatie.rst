@@ -260,7 +260,7 @@ Bij aanhoudende problemen, kunt u in het witte venster klikken, en met
 *Ctrl-A* alle tekst selecteren.  Met *Ctrl-C* kopieert u het naar het
 klembord.  U kunt dan in een e-mail op *Ctrl-V* drukken en u heeft de
 volledige uitvoer van de controles.  U kunt uw mail sturen naar
-info@hisparc.nl.  We zullen dan zo snel mogelijk contact met u opnemen.
+suryab@hisparc.nl.  We zullen dan zo snel mogelijk contact met u opnemen.
 
 .. note:: Vóór uiteindelijk gebruik is het nodig de |hisparc| data
    acquisitie software te configureren! Zie :doc:`configuratie`.
