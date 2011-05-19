@@ -226,11 +226,41 @@ Ieder venster, behalve *StartHiSPARCSoftware*, moeten blijven draaien.
 Het is dus niet mogelijk vensters te sluiten.  De vensters mogen
 natuurlijk wel geminimaliseerd worden.
 
-<img>
-
 .. note:: Voor een correcte werking van de detector is het van het
    grootste belang dat de vensters *HiSPARCDAQ, HiSPARC Monitor en HiSPARC
    Updater blijven draaien!*
+
+
+HiSPARC Local Diagnostic Tool
+-----------------------------
+
+Om te controleren of de installatie succesvol is verlopen en alle
+netwerkverbindingen zonder problemen werken is het van belang de *Local
+Diagnostic Tool* te draaien.  Deze vindt u onder *Start -> Alle
+Programma's -> HiSPARC -> LocalDiagnosticTool*.
+
+.. figure:: images/screenshot-localdiagnostictool.png
+   :align: center
+   :scale: 85
+
+   Screenshot van de Local Diagnostic Tool.  Op deze PC is alles in orde,
+   en er is geen proxy server vereist.
+
+Na opstarten van het programma verschijnt een wit tekstscherm waarin de
+resultaten van een aantal controles worden weergegeven.  De samenvatting
+aan het eind moet overal *SUCCESS* weergeven.  Voor de beste instellingen,
+klikt u op *Write VPN config*, ook als alles in orde is.  Is dit *niet*
+het geval, en staat er vlak boven de samenvatting iets als *Proxy
+(proxy01.server.example.com) is enabled*, klikt u dan op *Write VPN
+config*, herstart de pc en start u nogmaals de Local Diagnostic Tool.  De
+proxy instellingen zijn dan geschreven en er wordt van via die weg
+geprobeerd verbinding te maken.
+
+Bij aanhoudende problemen, kunt u in het witte venster klikken, en met
+*Ctrl-A* alle tekst selecteren.  Met *Ctrl-C* kopieert u het naar het
+klembord.  U kunt dan in een e-mail op *Ctrl-V* drukken en u heeft de
+volledige uitvoer van de controles.  U kunt uw mail sturen naar
+info@hisparc.nl.  We zullen dan zo snel mogelijk contact met u opnemen.
 
 .. note:: Vóór uiteindelijk gebruik is het nodig de |hisparc| data
    acquisitie software te configureren! Zie :doc:`configuratie`.

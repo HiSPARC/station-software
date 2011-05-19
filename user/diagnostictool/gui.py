@@ -20,7 +20,7 @@ class GUI(Tkinter.Frame):
 
     def create_widgets(self):
         self.scrollbar = Tkinter.Scrollbar(self, orient='vertical')
-        self.text = Tkinter.Text(self, width=80, height=40,
+        self.text = Tkinter.Text(self, width=80, height=25,
                                  state='disabled',
                                  yscrollcommand=self.scrollbar.set)
         self.scrollbar['command'] = self.text.yview
