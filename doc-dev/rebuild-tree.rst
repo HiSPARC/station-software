@@ -107,6 +107,17 @@ Installation steps:
 #. Edit the ``my.ini`` file:
     #. **Section [mysqld]:** add ``basedir="/user/mysql/"``
     #. **Section [mysqld]:** add ``datadir=/persistent/data/mysql/"``
+    #. **Section [mysqld]:** remove comments from following lines::
+
+        innodb_buffer_pool_size
+        innodb_additional_mem_pool_size
+        innodb_log_file_size=10M
+        innodb_log_buffer_size
+        innodb_flush_log_at_trx_commit
+        innodb_lock_wait_timeout
+
+    #. Especially mind the 10M parameter to ``innodb_log_file_size``, or
+       MySQL will crash on startup.
 #. Create the ``\persistent\data`` folder
 #. Move the ``\user\mysql\data`` folder to ``\persistent\data`` and
    rename to ``mysql`` (you now have a ``\persistent\data\mysql``
