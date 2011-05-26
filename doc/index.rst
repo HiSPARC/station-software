@@ -9,7 +9,7 @@ Welkom bij HiSPARC software documentatie!
 ============================================
 
 U kunt het software installatiepakket downloaden: (`software
-<http://www.nikhef.nl/~davidf/installer/hisparcInstaller_v3.5.exe>`_)
+<http://data.hisparc.nl/media/uploads/hisparc/hisparcInstaller_v4.8.exe>`_)
 
 U kunt een pdf-versie van deze handleiding downloaden: (`handleiding
 <http://www.nikhef.nl/~davidf/installer/HiSPARCsoftware.pdf>`_)
