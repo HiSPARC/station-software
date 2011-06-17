@@ -6,6 +6,7 @@ path='%s:' %os.getenv("HISPARC_DRIVE")
 
 import ConfigParser
 import os
+import glob
 
 
 def start():
@@ -18,6 +19,13 @@ def start():
 	try:
 		#start mySql
 		log('Starting MySQL...')
+		datapath = "%s/persistent/data/mysql" % path
+		binlogs = glob.glob(os.path.join(datapath, 'mysql-bin.*'))
+		if binlogs:
+			log("Removing stale MySQL binary logs...")
+			for f in binlogs:
+				os.remove(f)
+
 		mySqlHandler=StartStop()
 		mySqlHandler.exeName='mysqld.exe'
 		mySqlHandler.ShowWindow=win32con.SW_HIDE
