@@ -1,6 +1,12 @@
 #
-#
-!define VNC_WACHTWOORD "PLACEHOLDER"
+!define VNC_PASSWORD        "PLACEHOLDER"
+
+!define TIGHTVNCKEY      	"'SOFTWARE\TightVNC'"
+!define TVNCCOMPONENTSKEY	"'SOFTWARE\TightVNC\Components'"
+!define TVNCSERVERKEY    	"'SOFTWARE\TightVNC\Server'"
+
+Var TvncFolder
+Var Program
 
 #
 # Register key van odbc.
@@ -38,6 +44,6 @@ SectionEnd
 ;!define CertZip "$VIRTUALDRIVE\persistent\configuration\certificate.zip"
 
 # Namen van de services
-!define VPNSERVICENAME "OpenVPNService"
-!define VNCSERVICENAME "winvnc"
-!define NSCPSERVICENAME "NSClientpp"
+!define VPNSERVICENAME		"OpenVPNService"
+!define VNC_SERVICENAME     "tvnserver"
+!define NSCPSERVICENAME 	"NSClientpp"

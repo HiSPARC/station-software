@@ -12,7 +12,7 @@ def start():
 		#start tightVNC
 		log('Starting TightVNC service...')
 		tightVNCHandler=StartStop()
-		tightVNCHandler.serviceName='winvnc'
+		tightVNCHandler.serviceName='tvnserver'
 		resTightVNC=tightVNCHandler.startService()
 		if resTightVNC==0:
 			log('Status:running')

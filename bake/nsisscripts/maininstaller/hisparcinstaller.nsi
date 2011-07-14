@@ -2,16 +2,15 @@
 ;SetCompressor lzma
 
 ; HM NIS Edit Wizard helper defines
-!define PRODUCT_NAME "HiSPARC Client Application"
-!define PRODUCT_VERSION "${ADMIN_VERSION}.${USER_VERSION}"
-!define PRODUCT_PUBLISHER "Nikhef"
-!define PRODUCT_WEB_SITE "http://www.hisparc.nl"
-!define PRODUCT_KEY "Software\${PRODUCT_NAME}"
-!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
-!define PRODUCT_UNINST_ROOT_KEY "HKLM"
+!define PRODUCT_NAME			"HiSPARC Client Application"
+!define PRODUCT_VERSION			"${ADMIN_VERSION}.${USER_VERSION}"
+!define PRODUCT_PUBLISHER		"Nikhef"
+!define PRODUCT_WEB_SITE		"http://www.hisparc.nl"
+!define PRODUCT_KEY				"Software\${PRODUCT_NAME}"
+!define PRODUCT_UNINST_KEY		"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+!define PRODUCT_UNINST_ROOT_KEY	"HKLM"
 
 #!addincludedir "nsisinstaller"
-
 
 !include interface2.nsh
 
@@ -31,7 +30,6 @@
 ;UninstPage uninstConfirm
 ;UninstPage instfiles
 
-
 !include variables.nsh
 
 #
@@ -39,9 +37,10 @@
 #
 !include userinput.nsh
 
-Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "..\..\releases\hisparcInstaller_v${PRODUCT_VERSION}.exe"
-InstallDir "$PROGRAMFILES\HiSPARC Client Application"
+Name		"${PRODUCT_NAME} ${PRODUCT_VERSION}"
+OutFile		"..\..\releases\hisparcInstaller_v${PRODUCT_VERSION}.exe"
+InstallDir	"$PROGRAMFILES\HiSPARC Client Application"
+
 ShowInstDetails hide
 ShowUnInstDetails hide
 
@@ -65,16 +64,16 @@ Function .onInit
   ${If} $0 == "true"
   ${OrIf} $1 == "true"
   ${OrIf} $2 == "true"
-     MessageBox MB_ICONEXCLAMATION "Deze computer draait Windows ME of lager. HiSPARC vereist Windows 2000/XP of hoger. De installatie zal nu afsluiten."
+     MessageBox MB_ICONEXCLAMATION "The PC runs an obsolete Windows version.$\nHiSPARC requires Windows XP or 7.$\nThe installation terminates."
      Quit
   ${EndIf}
 
-  # check of gebruiker administrator is.
+  # check if user has administrator rights.
   xtInfoPlugin::IsAdministrator
   Pop $0
 
   ${If} $0 == "false"
-     MessageBox MB_ICONEXCLAMATION "U bent niet als administrator ingelogd, dit is vereist voor de installatie van HiSPARC. De installatie zal nu afsluiten."
+     MessageBox MB_ICONEXCLAMATION "You have no administrator rights.$\nThe installation terminates."
      Quit
   ${EndIf}
 FunctionEnd
@@ -103,7 +102,7 @@ SectionEnd
 #SectionEnd
 
 Section -WriteRegKeys
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_KEY}" "Path" "$INSTDIR"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_KEY}" "Path"		"$INSTDIR"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_KEY}" "DisplayName" "${PRODUCT_NAME}"
 SectionEnd
 
@@ -125,25 +124,22 @@ Section -AdditionalIcons
   SetOutPath $INSTDIR
   SetShellVarContext all
   CreateDirectory "$SMPROGRAMS\HiSPARC"
-  CreateShortCut "$SMPROGRAMS\HiSPARC\StartHiSPARCSoftware.lnk" "$INSTDIR\hisparc\persistent\startstopbatch\StartUserMode.bat"
-  CreateShortCut "$SMPROGRAMS\HiSPARC\LocalDiagnosticTool.lnk" "$INSTDIR\hisparc\user\diagnostictool\run_diagnostictool.bat"
-  CreateShortCut "$SMPROGRAMS\HiSPARC\HiSPARCDAQ.lnk" "$INSTDIR\hisparc\user\hisparcdaq\run_hisparcdaq.bat"
-  CreateShortCut "$SMPROGRAMS\HiSPARC\DSPMon.lnk" "$INSTDIR\hisparc\user\dspmon\DSPMon.exe"
-  CreateShortCut "$SMPROGRAMS\HiSPARC\Uninstall.lnk" "$INSTDIR\hisparc\persistent\uninstallers\mainuninst.exe"
-  
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\StartHiSPARCSoftware.lnk" "$INSTDIR\hisparc\persistent\startstopbatch\StartUserMode.bat"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\LocalDiagnosticTool.lnk"  "$INSTDIR\hisparc\user\diagnostictool\run_diagnostictool.bat"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARCDAQ.lnk"           "$INSTDIR\hisparc\user\hisparcdaq\run_hisparcdaq.bat"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\DSPMon.lnk"               "$INSTDIR\hisparc\user\dspmon\DSPMon.exe"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Uninstall.lnk"            "$INSTDIR\hisparc\persistent\uninstallers\mainuninst.exe" 
   #Add shortcuts to the startup folder
-  SetShellVarContext all
-  #TODO: CreateShortCut "$SMSTARTUP\..." "$INSTDIR\hisparc\startupbatchfiles"
-  CreateShortCut "$SMSTARTUP\StartHiSPARCSoftware.lnk" "$INSTDIR\hisparc\persistent\startstopbatch\StartUserMode.bat"
+  CreateShortCut "$SMSTARTUP\StartHiSPARCSoftware.lnk"           "$INSTDIR\hisparc\persistent\startstopbatch\StartUp.bat"
 SectionEnd
 
 Section -Post
   WriteUninstaller "$selectedDrive:\persistent\uninstallers\mainuninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName"     "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\hisparc\persistent\uninstallers\mainuninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion"  "${PRODUCT_VERSION}"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout"    "${PRODUCT_WEB_SITE}"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher"       "${PRODUCT_PUBLISHER}"
 SectionEnd
 
 #Section -UninstallAllSoftware
@@ -156,7 +152,8 @@ Section -Reboot
   
   AccessControl::GrantOnFile "$INSTDIR" "(BU)" "FullAccess"
 
-  MessageBox MB_YESNO|MB_ICONQUESTION "Wilt u nu de computer opnieuw opstarten? Een herstart is noodzakelijk voor sommige applicaties om goed geinstalleerd te worden. Na de herstart logt Windows automatisch in met de hisparc user account." IDYES Reboot IDNO NoReboot
+  MessageBox MB_YESNO|MB_ICONQUESTION "Do you want to restart the PC?$\n\
+  On reboot Windows automatically activates the hisparc user account and DAQ." IDYES Reboot IDNO NoReboot
   
   Reboot:
      ExecWait "shutdown -r -f -t 0"

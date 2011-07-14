@@ -31,60 +31,51 @@ SectionEnd
 #
 Section -TightVNCSetup
     # register
-    # deze opties kunnen niet door een gebruiker worden overgeschreven.
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" AllowEditClients 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" AllowLoopback 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" AllowProperties 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" AllowShutdown 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" AuthRequired 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" AutoPortSelect 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" ConnectPriority 1 # niemand disconnecten
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" DisableTrayIcon 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" HTTPConnect 0 # geen java viewer
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" IdleTimeout 0 # geen timeout
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" InputsEnabled 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" LockSetting 1 # lock pc als iedereen is uitgelogd
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" LoopbackOnly 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" RemoveWallpaper 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" SocketConnect 1
-
-    # polling
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" PollUnderCursor 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" PollForeground 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" PollFullscreen 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" OnlyPollConsole 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" OnlyPollOnEvent 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" PollingCycle 300
-
-    # het wachtwoord
-    WriteRegBin HKLM "SOFTWARE\ORL\WinVNC3\Default" Password ${VNC_WACHTWOORD}
-    WriteRegBin HKLM "SOFTWARE\ORL\WinVNC3\Default" PasswordViewOnly ${VNC_WACHTWOORD}
-
-    # tightvnc specifieke settings
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" BlackScreen 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" DontSetHooks 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" DontSetDriver 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" DriverDirectAccess 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" EnableFileTransfers 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" LocalInputsDisabled 1
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" LocalInputsPriority 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" LocalInputsPriorityTime 3
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" QueryAccept 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" QueryAllowNoPass 0
-    WriteRegDWORD HKLM "SOFTWARE\ORL\WinVNC3" QuerySetting 2
-
-    WriteRegDWORD HKCU "Software\ORL\VNCHooks\Application_Prefs\WinVNC.exe" use_Deferral 1
-    WriteRegDWORD HKCU "Software\ORL\VNCHooks\Application_Prefs\WinVNC.exe" use_GetUpdateRect 1
-    WriteRegDWORD HKCU "Software\ORL\VNCHooks\Application_Prefs\WinVNC.exe" use_KeyPress 1
-    WriteRegDWORD HKCU "Software\ORL\VNCHooks\Application_Prefs\WinVNC.exe" use_LButtonUp 1
-    WriteRegDWORD HKCU "Software\ORL\VNCHooks\Application_Prefs\WinVNC.exe" use_MButtonUp 1
-    WriteRegDWORD HKCU "Software\ORL\VNCHooks\Application_Prefs\WinVNC.exe" use_RButtonUp 1
-    WriteRegDWORD HKCU "Software\ORL\VNCHooks\Application_Prefs\WinVNC.exe" use_Timer 0
-
+	StrCpy $TvncFolder "$InstallPathApplication\hisparc\admin\tightvnc"
+  
+	WriteRegStr   HKLM ${TIGHTVNCKEY}         Path                      "$TvncFolder"
+	WriteRegStr   HKLM ${TIGHTVNCKEY}         StartMenuGroup            "TightVNC"
+	WriteRegDWORD HKLM ${TVNCCOMPONENTSKEY}   "TightVNC Server"         1
+	WriteRegDWORD HKLM ${TVNCCOMPONENTSKEY}   "TightVNC Viewer"         1
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       AcceptHttpConnections     1
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       AcceptRfbConnections      1
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       AllowLoopback             0
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       AlwaysShared              0
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       BlankScreen               0
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       BlockLocalInput           0
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       BlockRemoteInput          0 
+	WriteRegBin   HKLM ${TVNCSERVERKEY}       ControlPassword           ${VNC_PASSWORD}
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       DisconnectAction          0
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       DisconnectClients         1
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       EnableFileTransfers       1
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       EnableUrlParams           1
+	WriteRegStr   HKLM ${TVNCSERVERKEY}       ExtraPorts                "" 
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       GrabTransparentWindows    1
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       HttpPort                  5800
+	WriteRegStr   HKLM ${TVNCSERVERKEY}       IpAccessControl           ""
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       LocalInputPriority        0
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       LocalInputPriorityTimeout 3
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       LogLevel                  0
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       LoopbackOnly              0
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       NeverShared               0
+	WriteRegBin   HKLM ${TVNCSERVERKEY}       Password                  ${VNC_PASSWORD} 
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       PollingInterval           1000
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       QueryAcceptOnTimeout      0
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       QueryTimeout              30
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       RemoveWallpaper           1
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       RfbPort                   5900
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       RunControlInterface       1
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       SaveLogToAllUsersPath     0
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       UseControlAuthentication  1
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       UseVncAuthentication      1
+	WriteRegStr   HKLM ${TVNCSERVERKEY}       VideoClasses              ""
+	WriteRegDWORD HKLM ${TVNCSERVERKEY}       VideoRecognitionInterval  3000
+    
     # service
-    ExecWait '"$InstallPathApplication\hisparc\admin\tightvnc\Winvnc.exe" -install'
+	StrCpy $Program "$TvncFolder\${VNC_SERVICENAME}.exe"
+	ExecWait '"$Program" -install'
 
-    #DetailPrint "TightVNC service geinstalleerd."
+    #DetailPrint "TightVNC service installed."
 SectionEnd
 
 #
@@ -100,13 +91,13 @@ SectionEnd
 Section -ODBCSetup
     ExecWait '"$InstallPathApplication\hisparc\admin\odbcconnector\Install_HiSPARC.bat"'
 
-    WriteRegStr HKLM ${ODBCREGKEY} DATABASE "buffer"
+    WriteRegStr HKLM ${ODBCREGKEY} DATABASE    "buffer"
     WriteRegStr HKLM ${ODBCREGKEY} DESCRIPTION "HiSPARC buffer"
-    WriteRegStr HKLM ${ODBCREGKEY} Driver '${ODBCDRVPATH}'
-    WriteRegStr HKLM ${ODBCREGKEY} PORT 3306
-    WriteRegStr HKLM ${ODBCREGKEY} PWD '${BUFFERPASS}'
-    WriteRegStr HKLM ${ODBCREGKEY} SERVER "${BDBHOST}"
-    WriteRegStr HKLM ${ODBCREGKEY} UID "buffer"
+    WriteRegStr HKLM ${ODBCREGKEY} Driver      '${ODBCDRVPATH}'
+    WriteRegStr HKLM ${ODBCREGKEY} PORT        3306
+    WriteRegStr HKLM ${ODBCREGKEY} PWD         '${BUFFERPASS}'
+    WriteRegStr HKLM ${ODBCREGKEY} SERVER      "${BDBHOST}"
+    WriteRegStr HKLM ${ODBCREGKEY} UID         "buffer"
 
     WriteRegStr HKLM '${ODBCDSREGKEY}' buffer '${ODBCDRV}'
 SectionEnd
@@ -132,8 +123,8 @@ Section RegisterServices
     SimpleSC::GetErrorMessage
 
     # zet de vnc service op automatisch en start de service.
-    SimpleSC::SetServiceStartType ${VNCSERVICENAME} 2
-    SimpleSC::StartService ${VNCSERVICENAME}
+    SimpleSC::SetServiceStartType ${VNC_SERVICENAME} 2
+    SimpleSC::StartService ${VNC_SERVICENAME}
     SimpleSC::GetErrorMessage
 
     # zet de nscp service op automatisch en start de service.

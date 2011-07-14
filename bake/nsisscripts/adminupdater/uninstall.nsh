@@ -15,16 +15,19 @@ Section un.UninstOpenVPN
 SectionEnd
 
 #
-# Verwijder tightvnc.
+# Remove tightvnc.
 #
 Section un.UninstTightVNC
     # stop service
     #SimpleSC::StopService "VNC Server"
-    ExecWait '"$InstallPathApplication\hisparc\admin\tightvnc\winvnc.exe" -kill -remove'
-    # delete reg keys
-    DeleteRegKey HKLM "SOFTWARE\ORL"
-    DeleteRegKey HKCU "Software\ORL"
-    # verwijder map
+	
+	StrCpy $TvncFolder "$InstallPathApplication\hisparc\admin\tightvnc"
+	StrCpy $Program "$TvncFolder\${VNC_SERVICENAME}.exe"
+	ExecWait '"$Program" -remove'
+  
+	DeleteRegKey HKLM ${TIGHTVNCKEY}
+    
+    # remove folder
     RmDir /r /REBOOTOK "$InstallPathApplication\hisparc\admin\tightvnc"
 SectionEnd
 
@@ -72,11 +75,11 @@ SectionEnd
 
 Section un.UninstallServices
   SimpleSC::StopService ${VPNSERVICENAME}
-  SimpleSC::StopService ${VNCSERVICENAME}
+  SimpleSC::StopService ${VNC_SERVICENAME}
   SimpleSC::StopService ${NSCPSERVICENAME}
 
   SimpleSC::RemoveService ${VPNSERVICENAME}
-  SimpleSC::RemoveService ${VNCSERVICENAME}
+  SimpleSC::RemoveService ${VNC_SERVICENAME}
   SimpleSC::RemoveService ${NSCPSERVICENAME}
 SectionEnd
 

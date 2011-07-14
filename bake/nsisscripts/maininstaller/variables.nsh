@@ -1,3 +1,7 @@
+#
+#	variables.nsh
+#
+
 !define CONFIGINI "$selectedDrive:\persistent\configuration\config.ini"
 #!define installerScriptPath "nsisinstaller"
 
@@ -11,16 +15,18 @@ Var HasBliksem
 Var StationPaswoord
 Var CertZip
 Var selectedDrive
+Var CpuName
 
 #
-# Windows accounts en wachtwoorden.
+# Windows accounts and passwords
 #
 !define ADMHISPARC_USERNAME "admhisparc"
 !define ADMHISPARC_PASSWORD "PLACEHOLDER"
-!define HISPARC_USERNAME "hisparc"
-!define HISPARC_PASSWORD "PLACEHOLDER"
+!define HISPARC_USERNAME    "hisparc"
+!define HISPARC_PASSWORD    "PLACEHOLDER"
 
 #
-# Register key van autologon.
+# Register key of autologon.
 #
-!define AUTOLOGONKEY "'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'"
+!define AUTOLOGONKEY	"'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'"
+!define	CPUNAMEKEY		"'System\CurrentControlSet\Control\ComputerName\ActiveComputerName'"

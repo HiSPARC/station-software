@@ -1,5 +1,5 @@
 Function userinput1
-    !insertmacro MUI_HEADER_TEXT "Stationgegevens" "Geef stationnummer, wachtwoord en certificaat op."
+    !insertmacro MUI_HEADER_TEXT "Station data" "Enter station number, password and certificate."
     loginsettings_start:
     ;Display the InstallOptions dialog
     InstallOptions::dialog "$PLUGINSDIR\userinput1.ini"
@@ -8,8 +8,7 @@ Function userinput1
     # Lees de instellingen.
     ${If} $0 == "success"
 
-        ReadINIStr $StationNummer "$PLUGINSDIR\userinput1.ini" "Field 1" "State"
-
+        ReadINIStr $StationNummer   "$PLUGINSDIR\userinput1.ini" "Field 1" "State"
         ReadINIStr $StationPaswoord "$PLUGINSDIR\userinput1.ini" "Field 2" "State"
         ### TODO: Insert password into the database
         
@@ -17,14 +16,14 @@ Function userinput1
         ReadINIStr $CertZip "$PLUGINSDIR\userinput1.ini" "Field 3" "State"
 
         ${If} $CertZip == ""
-            MessageBox MB_OK "U moet een certificaat opgeven!"
+            MessageBox MB_OK "You must enter a certificate!"
             GoTo loginsettings_start
         ${EndIf}
     ${EndIf}
 FunctionEnd
 
 Function userinput2
-    !insertmacro MUI_HEADER_TEXT "Lokale database" "Dit veld blijft meestal leeg. Voor vragen, neemt u contact op met het HiSPARC team."
+    !insertmacro MUI_HEADER_TEXT "Local database" "This field remains usually empty. Questions? Consult the HiSPARC team."
     InstallOptions::dialog "$PLUGINSDIR\userinput2.ini"
     Pop $0
 
@@ -36,21 +35,21 @@ Function userinput2
 FunctionEnd
 
 Function userinput3
-    !insertmacro MUI_HEADER_TEXT "Aangesloten detectoren" "U kunt hier de aangesloten detectoren aanvinken. Meestal is dit alleen een HiSPARC detector."
+    !insertmacro MUI_HEADER_TEXT "Connected detectors" "Tickmark the connected detectors. Usually it is only a HiSPARC detector."
     InstallOptions::dialog "$PLUGINSDIR\userinput3.ini"
     Pop $0
 
     # Lees de instellingen.
     ${If} $0 == "success"
-        ReadINIStr $HasHiSPARC "$PLUGINSDIR\userinput3.ini" "Field 2" "State"
-        ReadINIStr $HasWeerStation "$PLUGINSDIR\userinput3.ini" "Field 3" "State"
+        ReadINIStr $HasHiSPARC        "$PLUGINSDIR\userinput3.ini" "Field 2" "State"
+        ReadINIStr $HasWeerStation    "$PLUGINSDIR\userinput3.ini" "Field 3" "State"
         ReadINIStr $HasAardmagnetisch "$PLUGINSDIR\userinput3.ini" "Field 4" "State"
-        ReadINIStr $HasBliksem "$PLUGINSDIR\userinput3.ini" "Field 5" "State"
+        ReadINIStr $HasBliksem        "$PLUGINSDIR\userinput3.ini" "Field 5" "State"
     ${EndIf}
 FunctionEnd
 
 Function startinstall
-    !insertmacro MUI_HEADER_TEXT "Gereed voor installatie" ""
+    !insertmacro MUI_HEADER_TEXT "Ready for installation." ""
     ;Display the InstallOptions dialog
     InstallOptions::dialog "$PLUGINSDIR\startinstall.ini"
     Pop $0
