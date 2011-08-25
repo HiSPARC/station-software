@@ -2,3 +2,4 @@ doc/_build/*
 doc-dev/_build/*
 bake/releases/*
 hisparcspec.ini
+.DS_Store
