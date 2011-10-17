@@ -18,14 +18,14 @@ VACUUMTHRESHOLD = 1000
 lock = Lock()
 
 class StorageManager(Subject):
-    """The Storage Manager is used to access the sqlite database called storage. Prior to version 3.3.1 of SQLite you 
+    """The Storage Manager is used to access the sqlite database called storage. Prior to version 3.3.1 of SQLite you
     cannot transfer objects of SQLite, e.g. the connection or the cursor, accross threads. Therefore thread needs to use
-    its own instance of the storagemanager. Make sure to create the instance within the run()-method and not in the 
+    its own instance of the storagemanager. Make sure to create the instance within the run()-method and not in the
     constructor"""
-        
+
         storagesize = None
         lastvacuum = 0
-        
+
         def __init__(self, db_name=FILENAME):
         global lock
         self.db_name = db_name
@@ -34,7 +34,7 @@ class StorageManager(Subject):
 
         if not os.path.exists(self.db_name):
                     self.__create()
-    
+
     def setNumServer(self,numServer):
                 """numServer: the number of servers to upload to. The StorageManager needs this information to know when events
                 have been uploaded to all servers and can be removed from the storage.
@@ -46,18 +46,18 @@ class StorageManager(Subject):
                 self.allUploadedMask = 0
                 for i in xrange(0,numServer):
                         self.allUploadedMask |= 1 << i
-    
+
     def openConnection(self):
         """Opens a connection to the sql-storage. This function must be called before the other functions can be used.
-        It must be executed on the same thread on which the other functions are executed: i.e. in the run()-method of 
+        It must be executed on the same thread on which the other functions are executed: i.e. in the run()-method of
         a thread
         """
-                try: 
+                try:
                     self.db = sqlite3.connect(self.db_name)
                 except Exception, msg:
             log("StorageManager: Error opening connection: %s" % (str(msg),))
                         raise Exception("Could not connect to sqlite3 database.")
-                
+
         def __create(self):
                 """
                 Create a new database structure.
@@ -65,17 +65,17 @@ class StorageManager(Subject):
         db = sqlite3.connect(self.db_name)
                 c = db.cursor()
                 c.execute("""
-                    CREATE TABLE Event ( 
+                    CREATE TABLE Event (
                         EventID INTEGER PRIMARY KEY AUTOINCREMENT,
-                        EventData BLOB,                         
-                        UploadedTo Integer,                                                                     
+                        EventData BLOB,
+                        UploadedTo Integer,
                         DateTime TIMESTAMP
-                    );                  
+                    );
                     """
                 )
         db.commit()
                 c.close()
-        
+
         def getEventsRawSQL(self, serverID, numEvents):
                 """
                 Return numEvents that were not yet uploaded to the server identified by serverID
@@ -96,7 +96,7 @@ class StorageManager(Subject):
                         """, (serverbit, numEvents))
                 res = c.fetchall()
                 c.close()
-                self.lock.release() 
+                self.lock.release()
                 return res
 
     def getEvents(self, serverID, numEvents):
@@ -126,7 +126,7 @@ class StorageManager(Subject):
         def addEvents(self, events):
                 """
                 Insert events in the storage and notifies all observers.
-                The parameters events is a list of events. 
+                The parameters events is a list of events.
         Each event is assumed to have a datetime attribute and a data attribute.
         The data attribute will be pickled and stored.
                 The StorageManager is responsible for serializing the events.
@@ -149,13 +149,13 @@ class StorageManager(Subject):
                         except sqlite3.OperationalError, msg:
                                 res = False # return False so that events are NOT removed from buffer
                                 log("StorageManager: Error AddEvents: %s" % (str(msg),))
-                                
+
                         if StorageManager.storagesize is not None:
                                 StorageManager.storagesize += n_events
 
                         self.lock.release()
             log("Events added in %d seconds." % (time.time() - t0))
-                        
+
                         # notify the observers
                         self.update(n_events)
 
@@ -174,7 +174,7 @@ class StorageManager(Subject):
                         string_ids.append("%i" % int(ei))
                 list_id = "(" +",".join(string_ids) + ")"
                 return list_id
-        
+
         def setUploaded(self, serverID, eventIDs):
                 """
                 record in the UploadedTo-field of the event that the event was uploaded to server identified by serverID.
@@ -208,7 +208,7 @@ class StorageManager(Subject):
                         c.execute(query)
                         if StorageManager.storagesize is not None:
                                 StorageManager.storagesize -= n_remove
-                        
+
                 # Update status of events that have not yet been uploaded to all servers
         n_need_update = len(need_update)
                 if len(need_update) > 0:
@@ -232,7 +232,7 @@ class StorageManager(Subject):
         def getNumEventsServer(self, serverID):
                 """ Return the number of events that still need to be uploaded to a server identified by serverID """
                 serverbit = 1 << serverID
-                
+
                 self.lock.acquire()
                 c = self.db.cursor()
                 (qres,) = c.execute("""SELECT COUNT(*) FROM Event Where UploadedTo & ? == 0;""", (serverbit,))

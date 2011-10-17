@@ -9,12 +9,12 @@ import EventExportValues
 # A Weather event class.
 # Makes all data handling easy
 class WeatherEvent(object, Event):
-    def __init__(self, message):        
+    def __init__(self, message):
         # invoke constructor of parent class
-        Event.__init__(self)    
-        self.message = message[1]        
-                
-    def parseMessage(self):        
+        Event.__init__(self)
+        self.message = message[1]
+
+    def parseMessage(self):
         tmp = self.message.split("\t")
         t = time.strptime(tmp[0].strip(), "%Y-%m-%d %H:%M:%S")
         self.datetime = datetime.datetime(t[0], t[1], t[2], t[3], t[4], t[5])
@@ -39,13 +39,13 @@ class WeatherEvent(object, Event):
         self.heatIndex = int(float(tmp[12]))
         self.dewPoint = float(tmp[13])
         self.windChill = float(tmp[14])
-        
+
         # get all event data necessary for an upload.
-        self.export_values = EventExportValues.export_values[self.uploadCode]    
+        self.export_values = EventExportValues.export_values[self.uploadCode]
         return self.getEventData()
-        
-    #--------------------------End of __init__--------------------------#    
-    
+
+    #--------------------------End of __init__--------------------------#
+
     def __getattribute__(self, name):
         return object.__getattribute__(self, name)
 
@@ -56,15 +56,15 @@ class WeatherEvent(object, Event):
             return self.datetime.time().isoformat()
         else:
             raise AttributeError, name
-    
-    def getEventData(self):        
+
+    def getEventData(self):
         """ Get all event data necessary for an upload.
             This function parses the export_values variable declared in the EventExportValues
             and figures out what data to collect for an
             upload to the eventwarehouse. It returns a list of
             dictionaries, one for each data element.
-        """    
-        
+        """
+
         eventdata = []
         for value in self.export_values:
             eventdata.append({
@@ -73,7 +73,7 @@ class WeatherEvent(object, Event):
                 #"data": base64.b64encode(self.__getattribute__(value[2])) # data
                 "data": self.__getattribute__(value[2])
             })
-            
-        return eventdata    
 
-    #--------------------------End of getEventData--------------------------#            
+        return eventdata
+
+    #--------------------------End of getEventData--------------------------#

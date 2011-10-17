@@ -11,7 +11,7 @@ from StorageManager import StorageManager
 
 OK = 0
 WARNING = 1
-CRITICAL = 2                    
+CRITICAL = 2
 UNKNOWN = 3
 
 TIME_DIFF_INI = '../../../persistent/configuration/HisparcII.ini'
@@ -19,22 +19,22 @@ TIME_DIFF_INI = '../../../persistent/configuration/HisparcII.ini'
 class Check:
     def __init__(self):
         self.nagiosResult = NagiosResult()
-    self.nagiosResult.status_code = UNKNOWN
-            
-    def check(self, sched, config):
-        OK = 0
+        self.nagiosResult.status_code = UNKNOWN
 
-    def parse_range(self, range):
+    def check(self, sched, config):
+        pass
+
+    def parse_range(self, prange):
         """
-        Make a tuple from a range string. 'min:max' -> (min, max) 
+        Make a tuple from a range string. 'min:max' -> (min, max)
         """
         try:
-            a = range.split(':')
-            min = float(a[0])
-            max = float(a[1])
-            return (min, max)
+            a = prange.split(':')
+            mina = float(a[0])
+            maxa = float(a[1])
+            return (mina, maxa)
         except:
-            log ('Wrong arguments given! %s' %(range))
+            log ('Wrong arguments given! %s' %(prange))
             sys.exit(CRITICAL)
 
 
@@ -44,7 +44,7 @@ class TriggerRate(Check):
         Check.__init__(self)
         self.nagiosResult.serviceName = "TriggerRate"
         self.interpreter = interpreter
-                        
+
     def check(self, sched, config):
         while True:
             try:
@@ -57,12 +57,12 @@ class TriggerRate(Check):
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
-            cmin, cmax = crit    
+            cmin, cmax = crit
 
             self.triggerRateValues = self.interpreter.getTriggerRate()
             self.lastupdate = self.triggerRateValues.date
             self.trate = self.triggerRateValues.triggerRate
-                    
+
             if self.trate <= cmin or self.trate >= cmax:
                 self.nagiosResult.status_code = CRITICAL
             elif self.trate <= wmin or self.trate >= wmax:
@@ -97,7 +97,7 @@ class TriggerRate(Check):
             else:
                 #'Never updated, make dt very large'
                 dt = 1e6
-           
+
             # if last update was significantly longer than time between monitor
             # upload checks, detector is probably stalled
             interval = int(config['triggerrate_interval'])
@@ -107,7 +107,7 @@ class TriggerRate(Check):
 
             else:
                 self.nagiosResult.description = "Trigger rate: %.2f Last update: %d seconds ago" % (self.trate, dt)
-                                            
+
             yield (self.nagiosResult)
 #end TriggerRate
 
@@ -118,19 +118,17 @@ class StorageSize(Check):
         Check.__init__(self)
         self.nagiosResult.serviceName = "StorageSize"
         self.storageManager = storageManager
-        
-        
+
     def check(self, sched, config):
-        
+
 ##    """
 ##    Check de buffer size
 ##    cmin <= wmin <= OK >= wmax >= cmax
 ##    """
         if StorageManager.storagesize is None:
                 self.storageManager.getNumEvents()
-                
+
         while True:
-            
             try:
                 warnRange = config['storagesize_warn']
                 warn = self.parse_range(warnRange)
@@ -142,7 +140,7 @@ class StorageSize(Check):
 
             wmin, wmax = warn
             cmin, cmax = crit
-                    
+
             self.storageSize = StorageManager.storagesize
 
             if self.storageSize < cmin or self.storageSize > cmax:
@@ -156,10 +154,10 @@ class StorageSize(Check):
                 self.storageSize = 0
 
             self.nagiosResult.description = "Storage size: %d events" % (self.storageSize)
-            
+
             yield (self.nagiosResult)
 #end BufferSize
-            
+
 
 class EventRate(Check, Observer):
     def __init__(self):
@@ -170,7 +168,7 @@ class EventRate(Check, Observer):
         self.eventRate = 0
         self.lock = Lock()
 
-#Duplicate def found, remove?                
+#Duplicate def found, remove?
 #    def check(self):
 #       pass
 
@@ -179,7 +177,7 @@ class EventRate(Check, Observer):
         self.lock.acquire()
         self.eventCount = self.eventCount + count
         self.lock.release()
-                       
+
     def check(self, sched, config):
         isCritical = config['eventrate_crit']
 
@@ -189,7 +187,7 @@ class EventRate(Check, Observer):
             else:
                 self.timeDifference = time.time() - self.oldCountTime
                 self.oldCountTime = time.time()
-                
+
                 self.lock.acquire()
                 self.eventRate = float(self.eventCount)/float(self.timeDifference)
                 self.eventCount = 0
@@ -200,7 +198,7 @@ class EventRate(Check, Observer):
                 else:
                     self.nagiosResult.status_code = CRITICAL
                 self.nagiosResult.description = "Event rate for a period of %.2f seconds is %.2f" % (self.timeDifference,self.eventRate)
-                
+
             yield (self.nagiosResult)
 #end Event rate
 
@@ -211,7 +209,7 @@ class StorageGrowth(Check):
         self.newStorageSize = 0
         self.oldStorageSize = 0
         self.storageGrowth = 0
-        
+
         self.storageManager = storageManager
 
     def check(self, sched, config):
@@ -223,7 +221,7 @@ class StorageGrowth(Check):
             except:
                 log ("Unable to read config.ini in %s" %(self.nagiosResult.serviceName))
                 self.nagiosResult.status_code = CRITICAL
-                
+
             self.newStorageSize = StorageManager.storagesize
             self.storageGrowth = ((self.newStorageSize - self.oldStorageSize)/float(self.interval))
             self.oldStorageSize = self.newStorageSize
@@ -237,6 +235,6 @@ class StorageGrowth(Check):
 
 
             self.nagiosResult.description = "Storage growth: %f Hz" % (self.storageGrowth)
-                        
+
             yield (self.nagiosResult)
 #end Storage growth

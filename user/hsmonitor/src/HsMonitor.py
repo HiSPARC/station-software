@@ -39,7 +39,7 @@ CONFIG_INI_PATH2 = '../../../persistent/configuration/config.ini'
 
 # HsMonitor class
 class HsMonitor:
-    def __init__(self):        
+    def __init__(self):
         # setup the log mode
         hslog.setLogMode(hslog.MODE_BOTH)
 
@@ -51,37 +51,37 @@ class HsMonitor:
             hslog.log("Cannot open the config file!")
             return
         else:
-            hslog.log("Initialize variables")            
-            
+            hslog.log("Initialize variables")
+
             #list of all the threads
-            self.hsThreads = []        
+            self.hsThreads = []
         # Assume one server (datastore)
         # if the local is also specified it will be added
         self.numServers = 1
     #--------------------------End of __init__--------------------------#
-    
-    def startAll(self):        
+
+    def startAll(self):
         try:
             # create StorageManager and interpreter for bufferlistener
             sm = StorageManager()
             it = Interpreter(sm)
-    
+
             # buffer listener
             buffLis = self.createBufferListener(it)
-            
+
             if buffLis.conn:
                 self.hsThreads.append(buffLis)
-        
+
             # check scheduler
-            # get the nagios configuration section from config file 
-            nagiosConf = self.cfg.itemsdict('NagiosPush')    
-                        m = re.search('([a-z0-9]+).zip', self.cfg.get('Station', 'Certificate'))
-                        nagiosConf['machine_name'] = m.group(1)
+            # get the nagios configuration section from config file
+            nagiosConf = self.cfg.itemsdict('NagiosPush')
+            m = re.search('([a-z0-9]+).zip', self.cfg.get('Station', 'Certificate'))
+            nagiosConf['machine_name'] = m.group(1)
             checkSched = self.createCheckScheduler(it, nagiosConf)
             eventrate = checkSched.getEventRate()
             sm.addObserver(eventrate)
             self.hsThreads.append(checkSched)
-        
+
             # Uploader central
             up = self.createUploader(0, "Upload-datastore", nagiosConf)
             self.hsThreads.append(up)
@@ -103,25 +103,25 @@ class HsMonitor:
             # Set number of servers for our own StorageManager
             sm.setNumServer(self.numServers)
             sm.clearOldUploadedEvents()
-        
+
             # Start all threads
             for t in self.hsThreads:
                 t.start()
-        
+
         except Exception, msg:
             hslog.log("Error: %s" % (msg,))
-            exit(1)        
+            exit(1)
     #--------------------------End of startAll--------------------------#
-    
+
     def stopAll(self):
         # stop all threads
         for thread in self.hsThreads:
             thread.stop()
-    
+
     def createBufferListener(self, interpreter):
-        # get the information from configuration file        
-        bufferdb = {}        
-        bufferdb['host'] = self.cfg.ifgetstr('BufferDB', 'Host', 'localhost')        
+        # get the information from configuration file
+        bufferdb = {}
+        bufferdb['host'] = self.cfg.ifgetstr('BufferDB', 'Host', 'localhost')
         bufferdb['db'] = self.cfg.ifgetstr('BufferDB', 'DB', 'buffer')
         bufferdb['user'] = self.cfg.ifgetstr('BufferDB', 'Username', "buffer")
         bufferdb['password'] = self.cfg.ifgetstr('BufferDB', 'Password', "PLACEHOLDER")
@@ -130,11 +130,11 @@ class HsMonitor:
         bufferdb['keep_buffer_data'] = self.cfg.ifgetint('BufferDB', 'KeepBufferData', 0)
 
         # create an instance of BufferListener class
-        buffLis = BufferListener.BufferListener(bufferdb, interpreter)    
+        buffLis = BufferListener.BufferListener(bufferdb, interpreter)
         return buffLis
     #--------------------------End of createBufferListener--------------------------#
 
-    def createCheckScheduler(self, interpreter, nagiosConf):        
+    def createCheckScheduler(self, interpreter, nagiosConf):
         checkSched = CheckScheduler(nagiosConf, interpreter)
         return checkSched
     #--------------------------End of createCheckScheduler--------------------------#
@@ -154,12 +154,12 @@ class HsMonitor:
         up = Uploader(serverID, stationID, passw, url, nagiosConf, minwait, maxwait, minbs, maxbs)
         return up
     #--------------------------End of createUploader--------------------------#
-    
+
 # main function
 def main():
     # create a HiSparc monitor object
     hsMonitor = HsMonitor()
-    
+
     # start all threads
     hsMonitor.startAll()
 

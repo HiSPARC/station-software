@@ -25,12 +25,12 @@ MAXWAIT = 60 # maximum time to wait in seconds after a failed attempt
 
 # Python >= 2.5 has hashlib
 try:
-    from hashlib import md5 
+    from hashlib import md5
     def md5_sum(s):
         return md5(s).hexdigest()
 except:
     print "ERROR: No hashlib found. Using md5 instead."
-    import md5 
+    import md5
     def md5_sum(s):
         return md5.new(s).hexdigest()
 
@@ -46,7 +46,7 @@ class Uploader(Observer, Thread):
         self.maxBatchSize = maxBatchSize
         self.retryAfter = MINWAIT
         self.maxWait = MAXWAIT
-        
+
         # lock to protect numEvents
         self.numEventsLock = Semaphore(1)
 
@@ -82,7 +82,7 @@ class Uploader(Observer, Thread):
 
     def notify(self, count=1):
         """Notify the uploader that count events were received."""
-    
+
         if (self.isRunning):
             shouldRelease = 0
             self.numEventsLock.acquire()
@@ -90,7 +90,7 @@ class Uploader(Observer, Thread):
             oldNumEvents = self.numEvents
             self.numEvents += count
             log("Uploader %i: %i events pending" % (self.serverID, self.numEvents))
-    
+
             # calculate if uploader-thread should be unblocked
             if (self.numEvents >= self.minBatchSize and oldNumEvents < self.minBatchSize):
                 shouldRelease = 1
@@ -104,7 +104,7 @@ class Uploader(Observer, Thread):
         """This function will return the number of events that the uploader can upload now.
         The result will be between min and max batch size.
         If insufficient events are available this function will block on noEventSem"""
-    
+
         shouldBlock = False
         res = self.minBatchSize
         self.numEventsLock.acquire()
@@ -120,7 +120,7 @@ class Uploader(Observer, Thread):
             return self.minBatchSize
         else:
             return res
-    
+
     def __upload(self, elist):
         """
             Upload a list of events to the database server
@@ -128,7 +128,7 @@ class Uploader(Observer, Thread):
 
             data = dumps(elist)
             checksum = md5_sum(data)
-    
+
             params = urlencode(
                 {
                         'station_id': self.stationID,
@@ -187,7 +187,7 @@ class Uploader(Observer, Thread):
                 msg = "Error Uploader %i: %s: return code: %s" % (self.serverID, self.URL, returncode)
                 msg += "\n"
                 msg += "Uploader %i: nr of Failed Attempts: %i" %(self.serverID, nrFailedAttempts)
-                log(msg)                                
+                log(msg)
                 nr = NagiosResult(2, msg, "ServerCheck")
                 self.nagiosPush.sendToNagios(nr)
 
