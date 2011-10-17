@@ -11,7 +11,7 @@ from StorageManager import StorageManager
 
 OK = 0
 WARNING = 1
-CRITICAL = 2            		
+CRITICAL = 2                    
 UNKNOWN = 3
 
 TIME_DIFF_INI = '../../../persistent/configuration/HisparcII.ini'
@@ -19,14 +19,14 @@ TIME_DIFF_INI = '../../../persistent/configuration/HisparcII.ini'
 class Check:
     def __init__(self):
         self.nagiosResult = NagiosResult()
-	self.nagiosResult.status_code = UNKNOWN
+    self.nagiosResult.status_code = UNKNOWN
             
     def check(self, sched, config):
         OK = 0
 
     def parse_range(self, range):
         """
-        Maak een tuple van een range string. 'min:max' -> (min, max) 
+        Make a tuple from a range string. 'min:max' -> (min, max) 
         """
         try:
             a = range.split(':')
@@ -44,7 +44,7 @@ class TriggerRate(Check):
         Check.__init__(self)
         self.nagiosResult.serviceName = "TriggerRate"
         self.interpreter = interpreter
-                		
+                        
     def check(self, sched, config):
         while True:
             try:
@@ -121,7 +121,7 @@ class StorageSize(Check):
         
         
     def check(self, sched, config):
-		
+        
 ##    """
 ##    Check de buffer size
 ##    cmin <= wmin <= OK >= wmax >= cmax
@@ -130,7 +130,7 @@ class StorageSize(Check):
                 self.storageManager.getNumEvents()
                 
         while True:
-			
+            
             try:
                 warnRange = config['storagesize_warn']
                 warn = self.parse_range(warnRange)
@@ -159,7 +159,7 @@ class StorageSize(Check):
             
             yield (self.nagiosResult)
 #end BufferSize
-			
+            
 
 class EventRate(Check, Observer):
     def __init__(self):
@@ -169,9 +169,10 @@ class EventRate(Check, Observer):
         self.oldCountTime = 0
         self.eventRate = 0
         self.lock = Lock()
-                
-    def check(self):
-        pass
+
+#Duplicate def found, remove?                
+#    def check(self):
+#       pass
 
     #Add number of events
     def notify(self, count):

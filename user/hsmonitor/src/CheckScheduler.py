@@ -77,35 +77,35 @@ class Scheduler:
         # remove all threads that completed / stopped
         for tid in toremove:            
             self.jobs.pop(tid, None)
-			
+            
         toremove = []
 
 class CheckScheduler(threading.Thread):    
-	def __init__(self, config, interpreter):
-		# invoke constructor of parent class (threading)
-		threading.Thread.__init__(self)
-		self.stop_event = threading.Event()
-		
-		self.status = None
-		self.sched = Scheduler(self.status)
-		self.dicConfig = config
-		
-		# create a nagios push object		
-		self.nagiosPush  = NagiosPush(config)			
- 		self.storageManager = StorageManager()
-		self.interpreter = interpreter		
+    def __init__(self, config, interpreter):
+        # invoke constructor of parent class (threading)
+        threading.Thread.__init__(self)
+        self.stop_event = threading.Event()
+        
+        self.status = None
+        self.sched = Scheduler(self.status)
+        self.dicConfig = config
+        
+        # create a nagios push object        
+        self.nagiosPush  = NagiosPush(config)            
+         self.storageManager = StorageManager()
+        self.interpreter = interpreter        
 
-		### Event rate:
+        ### Event rate:
                 self.eventRate = EventRate()
 
-	def getEventRate(self):
-		return self.eventRate
-	
-	def stop(self):
-		self.stop_event.set()
-		
-	#--------------------------End of stop--------------------------#
-	
+    def getEventRate(self):
+        return self.eventRate
+    
+    def stop(self):
+        self.stop_event.set()
+        
+    #--------------------------End of stop--------------------------#
+    
         crashes = []
         def init_restart(self):
             """Support for restarting crashed threads"""
@@ -118,36 +118,36 @@ class CheckScheduler(threading.Thread):
                 self.crashes.append(time.time())
 
 
-	# this function is what the thread actually runs; the required name is run().
-	# The threading.Thread.start() calls threading.Thread.run(), which is always overridden.
-	def run(self):		
-		hslog.log("CheckScheduler: thread started!")
-		self.storageManager.openConnection()
-		
-		### Trigger rate:
-		triggerRate = TriggerRate(self.interpreter)   
-		TR_interval = int(self.dicConfig['triggerrate_interval'])
-		self.sched.addJob(triggerRate.check, interval = TR_interval, args = self.dicConfig)            
-		### Storage size:
-		storageSize = StorageSize(self.storageManager)
-		SS_interval = int(self.dicConfig['storagesize_interval'])
-		self.sched.addJob(storageSize.check, interval = SS_interval, args = self.dicConfig)
+    # this function is what the thread actually runs; the required name is run().
+    # The threading.Thread.start() calls threading.Thread.run(), which is always overridden.
+    def run(self):        
+        hslog.log("CheckScheduler: thread started!")
+        self.storageManager.openConnection()
+        
+        ### Trigger rate:
+        triggerRate = TriggerRate(self.interpreter)   
+        TR_interval = int(self.dicConfig['triggerrate_interval'])
+        self.sched.addJob(triggerRate.check, interval = TR_interval, args = self.dicConfig)            
+        ### Storage size:
+        storageSize = StorageSize(self.storageManager)
+        SS_interval = int(self.dicConfig['storagesize_interval'])
+        self.sched.addJob(storageSize.check, interval = SS_interval, args = self.dicConfig)
 
-		ER_interval = int(self.dicConfig['eventrate_interval'])
-		self.sched.addJob(self.eventRate.check, interval = ER_interval, args = self.dicConfig)
+        ER_interval = int(self.dicConfig['eventrate_interval'])
+        self.sched.addJob(self.eventRate.check, interval = ER_interval, args = self.dicConfig)
                 ### Storage growth:
-		storageGrowth = StorageGrowth(self.storageManager)
-		SG_interval = int(self.dicConfig['storagegrowth_interval'])
-		self.sched.addJob(storageGrowth.check, interval = SG_interval, args = self.dicConfig)   
+        storageGrowth = StorageGrowth(self.storageManager)
+        SG_interval = int(self.dicConfig['storagegrowth_interval'])
+        self.sched.addJob(storageGrowth.check, interval = SG_interval, args = self.dicConfig)   
 
-		while not self.stop_event.isSet():
-			# run all checks			
-			self.sched.schedule(self.nagiosPush, self.dicConfig)
+        while not self.stop_event.isSet():
+            # run all checks            
+            self.sched.schedule(self.nagiosPush, self.dicConfig)
 
-			try:
-				time.sleep(1)
-			except KeyboardInterrupt:
-				break
-			except:			
-				pass
-		hslog.log("CheckScheduler: thread stopped!")
+            try:
+                time.sleep(1)
+            except KeyboardInterrupt:
+                break
+            except:            
+                pass
+        hslog.log("CheckScheduler: thread stopped!")

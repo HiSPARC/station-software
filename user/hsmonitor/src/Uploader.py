@@ -1,12 +1,12 @@
 from Observer import Observer
 from StorageManager import StorageManager
 import sys
-sys.path.append("..\..\pythonshared")
+pathadd = os.path.join(os.path.dirname(__file__), '../../pythonshared')
+sys.path.append(pathadd)
 from hslog import log
 from NagiosPush import NagiosPush
 from NagiosResult import NagiosResult
 from UserExceptions import ThreadCrashError
-
 from threading import Thread
 from threading import Semaphore
 from threading import Event
@@ -35,36 +35,36 @@ except:
         return md5.new(s).hexdigest()
 
 class Uploader(Observer, Thread):
-	def __init__(self, serverID, stationID, password, URL, config, retryAfter = MINWAIT, maxWait = MAXWAIT, minBatchSize = BATCHSIZE, maxBatchSize = BATCHSIZE):
-		self.storageManager = StorageManager()
-		self.serverID = serverID
-		self.stationID = stationID
-		self.password = password
-		self.URL = URL
-		self.nagiosPush = NagiosPush(config)
-		self.minBatchSize = minBatchSize
-		self.maxBatchSize = maxBatchSize
-		self.retryAfter = MINWAIT
-		self.maxWait = MAXWAIT
-		
-		# lock to protect numEvents
-		self.numEventsLock = Semaphore(1)
+    def __init__(self, serverID, stationID, password, URL, config, retryAfter = MINWAIT, maxWait = MAXWAIT, minBatchSize = BATCHSIZE, maxBatchSize = BATCHSIZE):
+        self.storageManager = StorageManager()
+        self.serverID = serverID
+        self.stationID = stationID
+        self.password = password
+        self.URL = URL
+        self.nagiosPush = NagiosPush(config)
+        self.minBatchSize = minBatchSize
+        self.maxBatchSize = maxBatchSize
+        self.retryAfter = MINWAIT
+        self.maxWait = MAXWAIT
+        
+        # lock to protect numEvents
+        self.numEventsLock = Semaphore(1)
 
-		# Semaphore to block if the number of events drops below minBatchSize
-		self.noEventsSem = Semaphore(0)
+        # Semaphore to block if the number of events drops below minBatchSize
+        self.noEventsSem = Semaphore(0)
 
-		Thread.__init__(self)
-		self.stop_event = Event()
-		self.isRunning = False
+        Thread.__init__(self)
+        self.stop_event = Event()
+        self.isRunning = False
 
-	def setNumServer(self, numServer):
-		""" The number of servers need to be set before changing the uploadedto-status of events in the storagemanager"""
-		self.storageManager.setNumServer(numServer)
+    def setNumServer(self, numServer):
+        """ The number of servers need to be set before changing the uploadedto-status of events in the storagemanager"""
+        self.storageManager.setNumServer(numServer)
 
-	def stop(self):
-		self.stop_event.set()
-		# release semaphore
-		self.noEventsSem.release()
+    def stop(self):
+        self.stop_event.set()
+        # release semaphore
+        self.noEventsSem.release()
 
         crashes = []
         def init_restart(self):
@@ -80,120 +80,119 @@ class Uploader(Observer, Thread):
                 Thread.__init__(self)
                 self.crashes.append(time.time())
 
-	def notify(self, count=1):
-		"""Notify the uploader that count events were received."""
-	
-		if (self.isRunning):
-			shouldRelease = 0
-			self.numEventsLock.acquire()
-
-			oldNumEvents = self.numEvents
-			self.numEvents += count
-			log("Uploader %i: %i events pending" % (self.serverID, self.numEvents))
-	
-			# calculate if uploader-thread should be unblocked
-			if (self.numEvents >= self.minBatchSize and oldNumEvents < self.minBatchSize):
-				shouldRelease = 1
-
-			self.numEventsLock.release()
-
-			if (shouldRelease):
-				self.noEventsSem.release()
-
-	def __getNrEventsToUpload(self):
-		"""This function will return the number of events that the uploader can upload now.
-		The result will be between min and max batch size.
-		If insufficient events are available this function will block on noEventSem"""
-	
-		shouldBlock = False
-		res = self.minBatchSize
-		self.numEventsLock.acquire()
-		res = min(self.numEvents, self.maxBatchSize)
-		if (res < self.minBatchSize):
-			shouldBlock = True
-		self.numEventsLock.release()
-
-		if shouldBlock:
-			log("Uploader %i blocks: too few events" % (self.serverID,))
-			self.noEventsSem.acquire()
-			log("Uploader %i unblocks" % (self.serverID,))
-			return self.minBatchSize
-		else:
-			return res
-	
-	def __upload(self, elist):
-		"""
-    		Upload a list of events to the database server
-		"""
-
-    		data = dumps(elist)
-    		checksum = md5_sum(data)
+    def notify(self, count=1):
+        """Notify the uploader that count events were received."""
     
-    		params = urlencode(
-        		{
-            			'station_id': self.stationID,
-	            		'password': self.password,
-        	    		'data': data,
-            			'checksum': checksum,
-			}
-    		)
+        if (self.isRunning):
+            shouldRelease = 0
+            self.numEventsLock.acquire()
 
-		# Open the connection and send our data. Exceptions are catched explicitly
-    		# to make sure we understand the implications of errors.
-    		try:
-        		f = urlopen(self.URL, params, timeout=30)
-		except (URLError, HTTPError), msg:
-        		# For example: connection refused or internal server error
-        		returncode = str(msg)
-    		except Exception, msg:
-        		returncode = 'Uncatched exception occured in function ' \
-                     		'__upload: %s' % str(msg)
-    		else:
-        		returncode = f.read()
+            oldNumEvents = self.numEvents
+            self.numEvents += count
+            log("Uploader %i: %i events pending" % (self.serverID, self.numEvents))
+    
+            # calculate if uploader-thread should be unblocked
+            if (self.numEvents >= self.minBatchSize and oldNumEvents < self.minBatchSize):
+                shouldRelease = 1
 
-    		return returncode
+            self.numEventsLock.release()
 
-	def run(self):
-		log("Uploader %i: thread started for %s" % (self.serverID, self.URL))
+            if (shouldRelease):
+                self.noEventsSem.release()
 
-		# Initialize storage manager
-		self.storageManager.openConnection()
+    def __getNrEventsToUpload(self):
+        """This function will return the number of events that the uploader can upload now.
+        The result will be between min and max batch size.
+        If insufficient events are available this function will block on noEventSem"""
+    
+        shouldBlock = False
+        res = self.minBatchSize
+        self.numEventsLock.acquire()
+        res = min(self.numEvents, self.maxBatchSize)
+        if (res < self.minBatchSize):
+            shouldBlock = True
+        self.numEventsLock.release()
 
-		# number of events that have been received
+        if shouldBlock:
+            log("Uploader %i blocks: too few events" % (self.serverID,))
+            self.noEventsSem.acquire()
+            log("Uploader %i unblocks" % (self.serverID,))
+            return self.minBatchSize
+        else:
+            return res
+    
+    def __upload(self, elist):
+        """
+            Upload a list of events to the database server
+        """
+
+            data = dumps(elist)
+            checksum = md5_sum(data)
+    
+            params = urlencode(
+                {
+                        'station_id': self.stationID,
+                        'password': self.password,
+                        'data': data,
+                        'checksum': checksum,
+            }
+            )
+
+        # Open the connection and send our data. Exceptions are catched explicitly
+            # to make sure we understand the implications of errors.
+            try:
+                f = urlopen(self.URL, params, timeout=30)
+        except (URLError, HTTPError), msg:
+                # For example: connection refused or internal server error
+                returncode = str(msg)
+            except Exception, msg:
+                returncode = 'Uncatched exception occured in function ' \
+                             '__upload: %s' % str(msg)
+            else:
+                returncode = f.read()
+
+            return returncode
+
+    def run(self):
+        log("Uploader %i: thread started for %s" % (self.serverID, self.URL))
+
+        # Initialize storage manager
+        self.storageManager.openConnection()
+
+        # number of events that have been received
                 log("Getting number of events to upload")
-		self.numEvents = self.storageManager.getNumEventsServer(self.serverID)
-		log("Uploader %i: %i events in storage" % (self.serverID, self.numEvents))
+        self.numEvents = self.storageManager.getNumEventsServer(self.serverID)
+        log("Uploader %i: %i events in storage" % (self.serverID, self.numEvents))
 
-		self.isRunning = True
+        self.isRunning = True
 
-		nrFailedAttempts = 0
-		while not self.stop_event.isSet():
-			bsize = self.__getNrEventsToUpload()
+        nrFailedAttempts = 0
+        while not self.stop_event.isSet():
+            bsize = self.__getNrEventsToUpload()
 
-			(elist, eidlist) = self.storageManager.getEvents(self.serverID, bsize)
-			returncode = self.__upload(elist)
-			if returncode == '100':
-				log("Uploader %i: %d events uploaded to %s." % (self.serverID, bsize, self.URL))
+            (elist, eidlist) = self.storageManager.getEvents(self.serverID, bsize)
+            returncode = self.__upload(elist)
+            if returncode == '100':
+                log("Uploader %i: %d events uploaded to %s." % (self.serverID, bsize, self.URL))
 
-				nrFailedAttempts = 0
+                nrFailedAttempts = 0
 
-				# record succesfull upload in storagemanager
-				self.storageManager.setUploaded(self.serverID, eidlist)
-				# reduce counter
-				self.numEventsLock.acquire()
-				self.numEvents -= bsize
-				self.numEventsLock.release()
-			else:
-				msg = "Error Uploader %i: %s: return code: %s" % (self.serverID, self.URL, returncode)
-				msg += "\n"
-				msg += "Uploader %i: nr of Failed Attempts: %i" %(self.serverID, nrFailedAttempts)
-				log(msg)								
-				nr = NagiosResult(2, msg, "ServerCheck")
-				self.nagiosPush.sendToNagios(nr)
+                # record succesfull upload in storagemanager
+                self.storageManager.setUploaded(self.serverID, eidlist)
+                # reduce counter
+                self.numEventsLock.acquire()
+                self.numEvents -= bsize
+                self.numEventsLock.release()
+            else:
+                msg = "Error Uploader %i: %s: return code: %s" % (self.serverID, self.URL, returncode)
+                msg += "\n"
+                msg += "Uploader %i: nr of Failed Attempts: %i" %(self.serverID, nrFailedAttempts)
+                log(msg)                                
+                nr = NagiosResult(2, msg, "ServerCheck")
+                self.nagiosPush.sendToNagios(nr)
 
-				sleeptime = min(2 ** nrFailedAttempts * self.retryAfter, self.maxWait)
-				log("Uploader %i: Sleeping for %f seconds." %(self.serverID, sleeptime))
-				sleep(sleeptime)
-				nrFailedAttempts += 1
-		log("Uploader %i: thread stopped!" % (self.serverID,))
-
+                sleeptime = min(2 ** nrFailedAttempts * self.retryAfter, self.maxWait)
+                log("Uploader %i: Sleeping for %f seconds." %(self.serverID, sleeptime))
+                sleep(sleeptime)
+                nrFailedAttempts += 1
+        log("Uploader %i: thread stopped!" % (self.serverID,))
