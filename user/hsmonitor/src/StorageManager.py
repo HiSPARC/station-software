@@ -8,8 +8,6 @@ import time
 
 from Subject import Subject
 import sys
-pathadd = os.path.join(os.path.dirname(__file__), '../../pythonshared')
-sys.path.append(pathadd)
 from hslog import log
 
 FILENAME = "../../../persistent/data/hsmonitor/Storage.db"

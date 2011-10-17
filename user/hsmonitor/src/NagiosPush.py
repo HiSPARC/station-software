@@ -1,8 +1,6 @@
 import subprocess
 from Check import *
 import sys
-pathadd = os.path.join(os.path.dirname(__file__), '../../pythonshared')
-sys.path.append(pathadd)
 from hslog import log
 
 class NagiosPush:

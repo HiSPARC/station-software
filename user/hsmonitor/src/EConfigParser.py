@@ -1,7 +1,5 @@
 from ConfigParser import ConfigParser
 import sys
-pathadd = os.path.join(os.path.dirname(__file__), '../../pythonshared')
-sys.path.append(pathadd)
 import hslog
 
 class EConfigParser(ConfigParser):

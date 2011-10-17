@@ -20,10 +20,6 @@ __date__ = "$16-sep-2009"
 import os, sys
 import re
 import time
-
-pathadd = os.path.join(os.path.dirname(__file__), '../../pythonshared')
-sys.path.append(pathadd)
-
 import hslog
 from EConfigParser import EConfigParser
 import BufferListener
