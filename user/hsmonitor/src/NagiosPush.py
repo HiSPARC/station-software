@@ -13,7 +13,7 @@ class NagiosPush:
         reportMessage = {}
         reportMessage['reportCode'] = nagiosResult.status_code          # Report code to send to Nagios
         reportMessage['textMessage']= nagiosResult.description          # Message string to send to Nagios
-        reportMessage['send_nscaPath'] = "..\\data\\send_nsca_win32\\"  # Path to the send_nsca.exe
+        reportMessage['send_nscaPath'] = "../data/send_nsca_win32/"     # Path to the send_nsca.exe
         reportMessage['nagiosServer'] = self.host                       # Nagios server Ip address
         reportMessage['serverPort'] = self.port                         # server port
         reportMessage['hostComputer'] = self.machine_name               # On nagios server
