@@ -1,8 +1,6 @@
 from Observer import Observer
 from StorageManager import StorageManager
 import sys
-pathadd = os.path.join(os.path.dirname(__file__), '../../pythonshared')
-sys.path.append(pathadd)
 from hslog import log
 from NagiosPush import NagiosPush
 from NagiosResult import NagiosResult
