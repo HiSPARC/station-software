@@ -2,12 +2,10 @@ import sqlite3
 import sys
 import os
 from threading import Lock
-from cPickle import dumps
-from cPickle import loads
+from cPickle import dumps, loads
 import time
 
 from Subject import Subject
-import sys
 from hslog import log
 
 FILENAME = "../../../persistent/data/hsmonitor/Storage.db"
@@ -16,9 +14,9 @@ VACUUMTHRESHOLD = 1000
 lock = Lock()
 
 class StorageManager(Subject):
-    """The Storage Manager is used to access the sqlite database called storage. Prior to version 3.3.1 of SQLite you
-    cannot transfer objects of SQLite, e.g. the connection or the cursor, accross threads. Therefore thread needs to use
-    its own instance of the storagemanager. Make sure to create the instance within the run()-method and not in the
+    """The StorageManager is used to access the sqlite database called storage. Prior to version 3.3.1 of SQLite you
+    cannot transfer objects of SQLite, e.g. the connection or the cursor, across threads. Therefore thread needs to use
+    its own instance of the StorageManager. Make sure to create the instance within the run()-method and not in the
     constructor"""
 
     storagesize = None
@@ -33,7 +31,7 @@ class StorageManager(Subject):
         if not os.path.exists(self.db_name):
             self.__create()
 
-    def setNumServer(self,numServer):
+    def setNumServer(self, numServer):
         """numServer: the number of servers to upload to. The StorageManager needs this information to know when events
         have been uploaded to all servers and can be removed from the storage.
         """
@@ -48,7 +46,7 @@ class StorageManager(Subject):
     def openConnection(self):
         """Opens a connection to the sql-storage. This function must be called before the other functions can be used.
         It must be executed on the same thread on which the other functions are executed: i.e. in the run()-method of
-        a thread
+        a thread.
         """
         try:
             self.db = sqlite3.connect(self.db_name)
@@ -102,7 +100,7 @@ class StorageManager(Subject):
         Return numEvents that were not yet uploaded to the server identified by serverID
         The result is a tuple: the first element is a list containing the data attribute of the events that were inserted.
         the second element is a list with the corresponding event ids in the storage
-                """
+        """
         raw_results = self.getEventsRawSQL(serverID, numEvents)
         elist = list()
         eidlist = list()
@@ -176,7 +174,7 @@ class StorageManager(Subject):
     def setUploaded(self, serverID, eventIDs):
         """
         Record in the UploadedTo-field of the event that the event was uploaded to server identified by serverID.
-        If the event is uploaded to all servers, remove the event
+        If the event is uploaded to all servers, remove the event.
         """
         serverbit = 1 << serverID
         self.lock.acquire()

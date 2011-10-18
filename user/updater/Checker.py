@@ -9,11 +9,11 @@ import sys
 from Downloader import Downloader
 from Tkinter import *
 
-sys.path.append("\user\pythonshared")
+sys.path.append("/user/pythonshared")
 from hslog import *
 import checkFiles
 
-PERSISTENT_INI = '\persistent\configuration\config.ini'
+PERSISTENT_INI = '/persistent/configuration/config.ini'
 CONFIG_INI = 'config.ini'
 DISPLAY_GUI_MESSAGES = True
 
@@ -83,7 +83,7 @@ class Checker:
 		updates['mustUpdate'] = mustUpdate
 		
 		virtualDrive = self.config.get('Station', 'VirtualDrive')
-		location = "%s:\persistent\downloads" % virtualDrive
+		location = "%s:/persistent/downloads" % virtualDrive
 
 		if (mustUpdate & self.UPDATE_ADMIN_MODE):
 			adminURL = updateDict['urlAdmin'][0]
@@ -106,7 +106,7 @@ class Checker:
 			log('User update is available called: %s' % userFile)
 			#print 'User update is available called: %s' % userFile
 			#Run the update to install it --> first call a batch file so that Python can be closed. 
-			os.system('\\user\\updater\\runUserUpdate.bat %s' % userFile)
+			os.system('/user/updater/runUserUpdate.bat %s' % userFile)
 
 		return updates
 

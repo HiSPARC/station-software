@@ -92,11 +92,11 @@ class CheckScheduler(threading.Thread):
 
         # create a nagios push object
         self.nagiosPush  = NagiosPush(config)
-         self.storageManager = StorageManager()
+        self.storageManager = StorageManager()
         self.interpreter = interpreter
 
         ### Event rate:
-                self.eventRate = EventRate()
+        self.eventRate = EventRate()
 
     def getEventRate(self):
         return self.eventRate

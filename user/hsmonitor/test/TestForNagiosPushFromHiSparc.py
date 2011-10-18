@@ -8,8 +8,8 @@ __author__="thevinh"
 __date__ ="$16-sep-2009"
 
 import os, sys, cmd
-sys.path.append("..\..\pythonshared")
-sys.path.append("..\src")
+sys.path.append("../../pythonshared")
+sys.path.append("../src")
 import hslog
 from EConfigParser import EConfigParser
 import BufferListener
@@ -19,7 +19,7 @@ from StorageManager import StorageManager
 from Uploader import Uploader
 
 # Default configuration file path
-CONFIG_INI_PATH1 = '..\data\config.ini'
+CONFIG_INI_PATH1 = '../data/config.ini'
 CONFIG_INI_PATH2 = '../../../persistent/configuration/config.ini'
 
 NUMSERVERS = 2 # TODO
