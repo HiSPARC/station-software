@@ -5,9 +5,7 @@ from hslog import log
 from NagiosPush import NagiosPush
 from NagiosResult import NagiosResult
 from UserExceptions import ThreadCrashError
-from threading import Thread
-from threading import Semaphore
-from threading import Event
+from threading import Thread, Semaphore, Event
 from time import sleep
 from cPickle import dumps
 from urllib import urlencode
@@ -124,32 +122,32 @@ class Uploader(Observer, Thread):
             Upload a list of events to the database server
         """
 
-            data = dumps(elist)
-            checksum = md5_sum(data)
+        data = dumps(elist)
+        checksum = md5_sum(data)
 
-            params = urlencode(
-                {
-                        'station_id': self.stationID,
-                        'password': self.password,
-                        'data': data,
-                        'checksum': checksum,
+        params = urlencode(
+            {
+                'station_id': self.stationID,
+                'password': self.password,
+                'data': data,
+                'checksum': checksum,
             }
             )
 
         # Open the connection and send our data. Exceptions are catched explicitly
-            # to make sure we understand the implications of errors.
-            try:
-                f = urlopen(self.URL, params, timeout=30)
+        # to make sure we understand the implications of errors.
+        try:
+            f = urlopen(self.URL, params, timeout=30)
         except (URLError, HTTPError), msg:
-                # For example: connection refused or internal server error
-                returncode = str(msg)
-            except Exception, msg:
-                returncode = 'Uncatched exception occured in function ' \
-                             '__upload: %s' % str(msg)
-            else:
-                returncode = f.read()
+            # For example: connection refused or internal server error
+            returncode = str(msg)
+        except Exception, msg:
+            returncode = 'Uncatched exception occured in function ' \
+                        '__upload: %s' % str(msg)
+        else:
+            returncode = f.read()
 
-            return returncode
+        return returncode
 
     def run(self):
         log("Uploader %i: thread started for %s" % (self.serverID, self.URL))
@@ -158,7 +156,7 @@ class Uploader(Observer, Thread):
         self.storageManager.openConnection()
 
         # number of events that have been received
-                log("Getting number of events to upload")
+        log("Getting number of events to upload")
         self.numEvents = self.storageManager.getNumEventsServer(self.serverID)
         log("Uploader %i: %i events in storage" % (self.serverID, self.numEvents))
 
