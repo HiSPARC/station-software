@@ -31,7 +31,9 @@ except:
         return md5.new(s).hexdigest()
 
 class Uploader(Observer, Thread):
-    def __init__(self, serverID, stationID, password, URL, config, retryAfter = MINWAIT, maxWait = MAXWAIT, minBatchSize = BATCHSIZE, maxBatchSize = BATCHSIZE):
+    def __init__(self, serverID, stationID, password, URL, config,
+                 retryAfter = MINWAIT, maxWait = MAXWAIT,
+                 minBatchSize = BATCHSIZE, maxBatchSize = BATCHSIZE):
         self.storageManager = StorageManager()
         self.serverID = serverID
         self.stationID = stationID
@@ -54,7 +56,12 @@ class Uploader(Observer, Thread):
         self.isRunning = False
 
     def setNumServer(self, numServer):
-        """ The number of servers need to be set before changing the uploadedto-status of events in the storagemanager"""
+        """Sets the number of servers to upload to.
+        
+        Need to be set before changing the UploadedTo-status
+        of events in the StorageManager.
+        
+        """
         self.storageManager.setNumServer(numServer)
 
     def stop(self):
@@ -62,19 +69,20 @@ class Uploader(Observer, Thread):
         # release semaphore
         self.noEventsSem.release()
 
-        crashes = []
-        def init_restart(self):
-            """Support for restarting crashed threads"""
+    crashes = []
+    
+    def init_restart(self):
+        """Support for restarting crashed threads."""
 
-            if len(self.crashes) > 3 and time.time() - self.crashes[-3] < 60.:
-                raise ThreadCrashError("Thread has crashed three times in "
-                                       "less than a minute")
-            else:
-                # FIXME correctly work out that super stuff.  I think that
-                # the superclasses should both use super, but ...?
-                #super(Uploader, self).__init__()
-                Thread.__init__(self)
-                self.crashes.append(time.time())
+        if len(self.crashes) > 3 and time.time() - self.crashes[-3] < 60.:
+            raise ThreadCrashError("Thread has crashed three times in "
+                                   "less than a minute")
+        else:
+            # FIXME correctly work out that super stuff.  I think that
+            # the superclasses should both use super, but ...?
+            #super(Uploader, self).__init__()
+            Thread.__init__(self)
+            self.crashes.append(time.time())
 
     def notify(self, count=1):
         """Notify the uploader that count events were received."""
@@ -85,10 +93,12 @@ class Uploader(Observer, Thread):
 
             oldNumEvents = self.numEvents
             self.numEvents += count
-            log("Uploader %i: %i events pending" % (self.serverID, self.numEvents))
+            log("Uploader %i: %i events pending" %
+                (self.serverID, self.numEvents))
 
             # calculate if uploader-thread should be unblocked
-            if (self.numEvents >= self.minBatchSize and oldNumEvents < self.minBatchSize):
+            if (self.numEvents >= self.minBatchSize and
+                oldNumEvents < self.minBatchSize):
                 shouldRelease = 1
 
             self.numEventsLock.release()
@@ -97,12 +107,15 @@ class Uploader(Observer, Thread):
                 self.noEventsSem.release()
 
     def __getNrEventsToUpload(self):
-        """This function will return the number of events that the uploader can upload now.
-        The result will be between min and max batch size.
-        If insufficient events are available this function will block on noEventSem"""
+        """Gives the number of events that the Uploader can upload now.
+        
+        The result will be between min and max batch size. If insufficient
+        events are available this function will block on noEventSem.
+        
+        """
 
         shouldBlock = False
-        res = self.minBatchSize
+        res = self.minBatchSize #Remove this? It is overwritten 2 lines later.
         self.numEventsLock.acquire()
         res = min(self.numEvents, self.maxBatchSize)
         if (res < self.minBatchSize):
@@ -110,32 +123,26 @@ class Uploader(Observer, Thread):
         self.numEventsLock.release()
 
         if shouldBlock:
-            log("Uploader %i blocks: too few events" % (self.serverID,))
+            log("Uploader %i blocks: too few events" % (self.serverID))
             self.noEventsSem.acquire()
-            log("Uploader %i unblocks" % (self.serverID,))
+            log("Uploader %i unblocks" % (self.serverID))
             return self.minBatchSize
         else:
             return res
 
     def __upload(self, elist):
-        """
-            Upload a list of events to the database server
-        """
+        """Upload a list of events to the database server."""
 
         data = dumps(elist)
         checksum = md5_sum(data)
 
-        params = urlencode(
-            {
-                'station_id': self.stationID,
-                'password': self.password,
-                'data': data,
-                'checksum': checksum,
-            }
-            )
+        params = urlencode({'station_id': self.stationID,
+                            'password': self.password,
+                            'data': data,
+                            'checksum': checksum})
 
-        # Open the connection and send our data. Exceptions are catched explicitly
-        # to make sure we understand the implications of errors.
+        # Open the connection and send our data. Exceptions are catched
+        # explicitly to make sure we understand the implications of errors.
         try:
             f = urlopen(self.URL, params, timeout=30)
         except (URLError, HTTPError), msg:
@@ -143,7 +150,7 @@ class Uploader(Observer, Thread):
             returncode = str(msg)
         except Exception, msg:
             returncode = 'Uncatched exception occured in function ' \
-                        '__upload: %s' % str(msg)
+                         '__upload: %s' % str(msg)
         else:
             returncode = f.read()
 
@@ -158,7 +165,8 @@ class Uploader(Observer, Thread):
         # number of events that have been received
         log("Getting number of events to upload")
         self.numEvents = self.storageManager.getNumEventsServer(self.serverID)
-        log("Uploader %i: %i events in storage" % (self.serverID, self.numEvents))
+        log("Uploader %i: %i events in storage" %
+            (self.serverID, self.numEvents))
 
         self.isRunning = True
 
@@ -166,10 +174,12 @@ class Uploader(Observer, Thread):
         while not self.stop_event.isSet():
             bsize = self.__getNrEventsToUpload()
 
-            (elist, eidlist) = self.storageManager.getEvents(self.serverID, bsize)
+            (elist, eidlist) = self.storageManager.getEvents(self.serverID,
+                                                             bsize)
             returncode = self.__upload(elist)
             if returncode == '100':
-                log("Uploader %i: %d events uploaded to %s." % (self.serverID, bsize, self.URL))
+                log("Uploader %i: %d events uploaded to %s." %
+                    (self.serverID, bsize, self.URL))
 
                 nrFailedAttempts = 0
 
@@ -180,15 +190,18 @@ class Uploader(Observer, Thread):
                 self.numEvents -= bsize
                 self.numEventsLock.release()
             else:
-                msg = "Error Uploader %i: %s: return code: %s" % (self.serverID, self.URL, returncode)
-                msg += "\n"
-                msg += "Uploader %i: nr of Failed Attempts: %i" %(self.serverID, nrFailedAttempts)
+                msg = "Error Uploader %i: %s: return code: %s\n" % \
+                      (self.serverID, self.URL, returncode)
+                msg += "Uploader %i: nr of Failed Attempts: %i" % \
+                       (self.serverID, nrFailedAttempts)
                 log(msg)
                 nr = NagiosResult(2, msg, "ServerCheck")
                 self.nagiosPush.sendToNagios(nr)
 
-                sleeptime = min(2 ** nrFailedAttempts * self.retryAfter, self.maxWait)
-                log("Uploader %i: Sleeping for %f seconds." %(self.serverID, sleeptime))
+                sleeptime = min(2 ** nrFailedAttempts * self.retryAfter,
+                                self.maxWait)
+                log("Uploader %i: Sleeping for %f seconds." %
+                    (self.serverID, sleeptime))
                 sleep(sleeptime)
                 nrFailedAttempts += 1
         log("Uploader %i: thread stopped!" % (self.serverID,))
