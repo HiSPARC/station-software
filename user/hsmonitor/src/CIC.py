@@ -1,7 +1,4 @@
-"""
-    Process HiSPARC messages from a buffer.
-    This module processes the CIC event message
-"""
+"""Process the CIC event message from a buffer."""
 
 __author__="thevinh"
 __date__ ="$17-sep-2009"
@@ -16,16 +13,12 @@ import EventExportValues
 
 class CIC(HiSparc2Event):
     def __init__(self, message):
-        """ Initialization
-            Proceed to unpack the message.
-        """
+        """Proceed to unpack the message."""
         # invoke constructor of parent class
         HiSparc2Event.__init__(self, message)
 
         # init the trigger rate attribute
         self.eventrate = 0
-
-    #--------------------------End of __init__--------------------------#
 
     def parseMessage(self):
         # get database flags
@@ -40,18 +33,18 @@ class CIC(HiSparc2Event):
 
         return self.getEventData()
 
-    #--------------------------End of parseMessage--------------------------#
-
     def unpackMessage(self):
-        """ Unpack a buffer message
-            This routine unpacks a buffer message written by the LabVIEW DAQ
-            software version 3.0 and above. Version 2.1.1 doesn't use a version
-            identifier in the message. By including one, we can account for
-            different message formats.
+        """Unpack a buffer message.
+        
+        This routine unpacks a buffer message written by the LabVIEW DAQ
+        software version 3.0 and above. Version 2.1.1 doesn't use a version
+        identifier in the message. By including one, we can account for
+        different message formats.
 
-            Hopefully, this code is cleaner and thus easier to understand than
-            the legacy code. However, you'll always have to be careful with the
-            format strings.
+        Hopefully, this code is cleaner and thus easier to understand than
+        the legacy code. However, you'll always have to be careful with the
+        format strings.
+        
         """
 
         # Initialize sequential reading mode
@@ -63,7 +56,10 @@ class CIC(HiSparc2Event):
         self.nanoseconds, self.time_delta, self.trigger_pattern = \
         self.unpackSeqMessage('>2BBfBH5BH3L')
 
-        # Try to handle NaNs for eventrate. These are handled differently from platform to platform (i.e. MSVC libraries are screwed). This platform-dependent fix is not needed in later versions of python. So, drop this in the near future!
+        # Try to handle NaNs for eventrate. These are handled differently from
+        # platform to platform (i.e. MSVC libraries are screwed). This 
+        # platform-dependent fix is not needed in later versions of python.
+        # So, drop this in the near future!
         if str(self.eventrate) in ['-1.#IND', '1.#INF']:
             self.eventrate = 0
 
@@ -97,21 +93,21 @@ class CIC(HiSparc2Event):
             self.slv_tr1 = compress(self.unpack_trace(slv_tr1))
             self.slv_tr2 = compress(self.unpack_trace(slv_tr2))
 
-    #--------------------------End of unpackMessage--------------------------#
-
     def unpack_trace(self, raw_trace):
-        """ Unpack a trace
-            Traces are stored in a funny way. We have a 12-bit ADC, so two
-            datapoints can (and are) stored in 3 bytes. This function unravels
-            traces again.
+        """Unpack a trace.
+        
+        Traces are stored in a funny way. We have a 12-bit ADC, so two
+        datapoints can (and are) stored in 3 bytes. This function unravels
+        traces again.
 
-            DF: I'm wondering: does the LabVIEW program work hard to accomplish
-            this? If so, why do we do this in the first place? The factor 1.5
-            in storage space is hardly worth it, especially considering the
-            fact that this is only used in the temporary buffer.
+        DF: I'm wondering: does the LabVIEW program work hard to accomplish
+        this? If so, why do we do this in the first place? The factor 1.5
+        in storage space is hardly worth it, especially considering the
+        fact that this is only used in the temporary buffer.
 
-            DF: This is legacy code. I've never tried to understand it and will
-            certainly not touch it until I do.
+        DF: This is legacy code. I've never tried to understand it and will
+        certainly not touch it until I do.
+        
         """
 
         n = len(raw_trace)
@@ -128,5 +124,3 @@ class CIC(HiSparc2Event):
             trace_str += str(i) + ","
 
         return trace_str
-
-    #--------------------------End of unpack_trace--------------------------#    
