@@ -1,7 +1,4 @@
-"""
-    Process HiSPARC messages from a buffer.
-    This module processes the CMP event message
-"""
+"""Process the CMP event message from a buffer."""
 
 __author__="thevinh"
 __date__ ="$17-sep-2009"
@@ -11,17 +8,15 @@ from HiSparc2Event import HiSparc2Event
 
 class CMP(HiSparc2Event):
     def __init__(self, message):
-        """ Initialization
-            Proceed to unpack the message.
-        """
+        """Proceed to unpack the message."""
         # invoke constructor of parent class
         HiSparc2Event.__init__(self, message)
 
-    #--------------------------End of __init__--------------------------#
-
     def unpackMessage(self):
-        """ Unpack a comparator message
-            This routine unpacks a comparator message from the buffer database
+        """Unpack a comparator message.
+        
+        This routine unpacks a comparator message from the buffer database.
+        
         """
         # Initialize sequential reading mode
         self.unpackSeqMessage()
@@ -40,5 +35,3 @@ class CMP(HiSparc2Event):
             # Make sure we have something intelligible, while also raising
             # a red flag.
             self.datetime = datetime.datetime(1900, 1, 1, 0, 0, 0)
-
-    #--------------------------End of unpackMessage--------------------------#    
