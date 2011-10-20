@@ -13,5 +13,3 @@ class Subject:
     def update(self, count=1):
         for o in self.observers:
             o.notify(count)
-
-
