@@ -6,11 +6,11 @@ import base64
 from Event import Event
 import EventExportValues
 
-# A Weather event class.
-# Makes all data handling easy
 class WeatherEvent(object, Event):
+    """A Weather event class to makes all data handling easy."""
+
     def __init__(self, message):
-        # invoke constructor of parent class
+        """Invoke constructor of parent class."""
         Event.__init__(self)
         self.message = message[1]
 
@@ -40,11 +40,9 @@ class WeatherEvent(object, Event):
         self.dewPoint = float(tmp[13])
         self.windChill = float(tmp[14])
 
-        # get all event data necessary for an upload.
+        # Get all event data necessary for an upload.
         self.export_values = EventExportValues.export_values[self.uploadCode]
         return self.getEventData()
-
-    #--------------------------End of __init__--------------------------#
 
     def __getattribute__(self, name):
         return object.__getattribute__(self, name)
@@ -59,21 +57,19 @@ class WeatherEvent(object, Event):
 
     def getEventData(self):
         """ Get all event data necessary for an upload.
-            This function parses the export_values variable declared in the EventExportValues
-            and figures out what data to collect for an
-            upload to the eventwarehouse. It returns a list of
-            dictionaries, one for each data element.
+        
+        This function parses the export_values variable declared in the
+        EventExportValues and figures out what data to collect for an upload to
+        the eventwarehouse. It returns a list of dictionaries, one for each
+        data element.
+        
         """
 
         eventdata = []
         for value in self.export_values:
-            eventdata.append({
-                "calculated":value[0], # Calculated data
-                "data_uploadcode":value[1], # data_uploadcode
-                #"data": base64.b64encode(self.__getattribute__(value[2])) # data
-                "data": self.__getattribute__(value[2])
-            })
+            eventdata.append({"calculated": value[0],
+                              "data_uploadcode": value[1],
+                              "data": self.__getattribute__(value[2])})
+                              #"data": base64.b64encode(self.__getattribute__(value[2]))
 
         return eventdata
-
-    #--------------------------End of getEventData--------------------------#
