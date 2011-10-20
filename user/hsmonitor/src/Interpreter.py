@@ -66,9 +66,12 @@ class Interpreter:
         return self.triggerRate
 
     def parseMessages(self, messages):
-        """This function unpacks messages, creates events, retrieves relevant
+        """
+        
+        This function unpacks messages, creates events, retrieves relevant
         data from the events and returns it as an elaborate data object which
         can be serialized for transfer via an HTTP POST request.
+        
         """
 
         self.eventlist = []
