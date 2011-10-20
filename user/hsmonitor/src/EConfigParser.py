@@ -11,7 +11,8 @@ class EConfigParser(ConfigParser):
         if self.has_option(section, option):
             return type(self.get(section, option))
         else:
-            hslog.log("ConfigParser: option %s.%s not specified, using default: %s" % (section, option, str(default)))
+            hslog.log("ConfigParser: option %s.%s not specified, using default: %s" %
+                      (section, option, str(default)))
             return default
 
     def ifgetint(self, section, option, default):
