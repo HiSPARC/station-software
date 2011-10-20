@@ -1,7 +1,4 @@
-"""
-    Process HiSPARC messages from a buffer.
-    This module processes the CFG event message
-"""
+"""Process the CFG event message from a buffer."""
 
 __author__="thevinh"
 __date__ ="$17-sep-2009"
@@ -11,18 +8,16 @@ from HiSparc2Event import HiSparc2Event
 
 class CFG(HiSparc2Event):
     def __init__(self, message):
-        """ Initialization
-            Proceed to unpack the message.
-        """
+        """Proceed to unpack the message."""
         # invoke constructor of parent class
         HiSparc2Event.__init__(self, message)
 
-    #--------------------------End of __init__--------------------------#
-
     def unpackMessage(self):
-        """ Unpack a configuration message
-            This routine unpacks the configuration messages which are written
-            to the buffer every time the LabVIEW DAQ software enters DAQ mode.
+        """Unpack a configuration message.
+        
+        This routine unpacks the configuration messages which are written
+        to the buffer every time the LabVIEW DAQ software enters DAQ mode.
+        
         """
         # Initialize sequential reading mode
         self.unpackSeqMessage()
@@ -95,7 +90,3 @@ class CFG(HiSparc2Event):
         self.cfg_slv_ch1_comp_gain, self.cfg_slv_ch1_comp_offset, \
         self.cfg_slv_ch2_comp_gain, self.cfg_slv_ch2_comp_offset = \
         self.unpackSeqMessage('>13dB8B2B8d')
-
-    #--------------------------End of unpackMessage--------------------------#
-if __name__ == '__main__':
-    print 'Hello World'
