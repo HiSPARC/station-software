@@ -1,8 +1,9 @@
-"""
-    The BufferListener class is a thread that periodically polls the MySQL-buffer database.
-    When events are available they are immediately fetched from the database and passed on to the Interpreter.
-    The Interpreter processes the binary messages and creates Events from it.
-    The Events are passed on to the StorageManager.
+"""The BufferListener periodically polls the MySQL-buffer database.
+
+When events are available they are immediately fetched from the database and
+passed on to the Interpreter. The Interpreter processes the binary messages and
+creates Events from it. The Events are passed on to the StorageManager.
+
 """
 
 __author__="thevinh"
@@ -31,32 +32,29 @@ class BufferListener(threading.Thread):
         # make a connection to buffer DB
         self.conn = self.getDBConnection(self.config)
 
-    #--------------------------End of __init__--------------------------#
-
     def stop(self):
         self.stop_event.set()
 
-    #--------------------------End of stop--------------------------#
-
     crashes = []
+
     def init_restart(self):
         """Support for restarting crashed threads"""
 
         if len(self.crashes) > 3 and time.time() - self.crashes[-3] < 60.:
-            raise ThreadCrashError("Thread has crashed three times in "
-                                       "less than a minute")
+            raise ThreadCrashError('Thread has crashed three times in '
+                                   'less than a minute')
         else:
             super(BufferListener, self).__init__()
             self.crashes.append(time.time())
 
-
-    # this function is what the thread actually runs; the required name is run().
-    # The threading.Thread.start() calls threading.Thread.run(), which is always overridden.
+    # This function is what the thread actually runs. The required name is
+    # run(). The threading.Thread.start() calls threading.Thread.run(), which
+    # is always overridden.
     def run(self):
         self.interpreter.openStorage()
-        hslog.log("BufferListener: thread started")
+        hslog.log("BufferListener: Thread started")
         while not self.stop_event.isSet():
-            # DF: Unfortunately, not reconnecting results in stale connections, :-(
+            # DF: Unfortunately, not reconnecting results in stale connections
             self.conn = self.getDBConnection(self.config)
             # select new events from buffer and pass them to the Interpreter
             # get unprocessed events
@@ -69,9 +67,7 @@ class BufferListener(threading.Thread):
                     self.clearBufferMessages(event_ids)
             # wait for a polling interval
             time.sleep(int(self.config['poll_interval']))
-        hslog.log("BufferListener: thread stopped!")
-
-    #--------------------------End of run--------------------------#
+        hslog.log("BufferListener: Thread stopped!")
 
     def getDBConnection(self, dbdict):
         # get the connection to Buffer database
@@ -85,7 +81,6 @@ class BufferListener(threading.Thread):
             hslog.log("BufferListener: Connected to the buffer database!")
 
         return conn
-    #--------------------------End of getDBConnection--------------------------#
 
     def getMessageCount(self):
         # get the number of event messages
@@ -97,12 +92,12 @@ class BufferListener(threading.Thread):
         count = cursor.fetchone()[0]
         hslog.log("BufferListener: Done.")
         return count
-    #--------------------------End of getMessageCount--------------------------#
 
     def getBufferMessages(self):
         # get messages from Buffer database
         cursor = self.conn.cursor()
-        sql = "SELECT message_type_id, message, message_id FROM message ORDER BY message_id DESC LIMIT %d" % int(self.config['poll_limit'])
+        sql = "SELECT message_type_id, message, message_id FROM message ORDER "\
+              "BY message_id DESC LIMIT %d" % int(self.config['poll_limit'])
         hslog.log("BufferListener: Executing SQL: %s" % sql)
         cursor.execute(sql)
         hslog.log("BufferListener: Fetching SQL results...")
@@ -110,7 +105,6 @@ class BufferListener(threading.Thread):
         hslog.log("BufferListener: Selected %d messages." % len(messages))
         cursor.close()
         return messages
-    #--------------------------End of getBufferMessages--------------------------#
 
     def clearBufferMessages(self, message_ids):
         # clear the parsed messages
@@ -129,4 +123,3 @@ class BufferListener(threading.Thread):
         self.conn.commit()
         hslog.log("BufferListener: Done.")
         return len(message_ids)
-    #--------------------------End of clearBufferMessages--------------------------#
