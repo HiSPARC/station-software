@@ -25,19 +25,15 @@ class Check:
         pass
 
     def parse_range(self, prange):
-        """
-        Make a tuple from a range string. 'min:max' -> (min, max)
-        """
+        """Make a tuple from a range string. 'min:max' -> (min, max)"""
         try:
             a = prange.split(':')
             mina = float(a[0])
             maxa = float(a[1])
             return (mina, maxa)
         except:
-            log ('Wrong arguments given! %s' %(prange))
+            log('Wrong arguments given! %s' % (prange,))
             sys.exit(CRITICAL)
-
-
 
 class TriggerRate(Check):
     def __init__(self, interpreter):
@@ -53,7 +49,8 @@ class TriggerRate(Check):
                 critRange = config['triggerrate_crit']
                 crit = self.parse_range(critRange)
             except:
-                log ("Unable to read config.ini in %s" %(self.nagiosResult.serviceName))
+                log ("Unable to read config.ini in %s" % 
+                     (self.nagiosResult.serviceName,))
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
@@ -102,16 +99,16 @@ class TriggerRate(Check):
             # upload checks, detector is probably stalled
             interval = int(config['triggerrate_interval'])
             if abs(dt) > (2 * interval):
-                self.nagiosResult.description = "No recent triggers. Trigger rate: %.2f Last update: %d seconds ago" % (self.trate, dt)
+                self.nagiosResult.description = "No recent triggers. Trigger rate:" \
+                                                "%.2f Last update: %d seconds ago" % \
+                                                (self.trate, dt)
                 self.nagiosResult.status_code = CRITICAL
 
             else:
-                self.nagiosResult.description = "Trigger rate: %.2f Last update: %d seconds ago" % (self.trate, dt)
+                self.nagiosResult.description = "Trigger rate: %.2f Last update:" \
+                                                " %d seconds ago" % (self.trate, dt)
 
             yield (self.nagiosResult)
-#end TriggerRate
-
-
 
 class StorageSize(Check):
     def __init__(self,storageManager):
@@ -120,11 +117,12 @@ class StorageSize(Check):
         self.storageManager = storageManager
 
     def check(self, sched, config):
-
-##    """
-##    Check de buffer size
-##    cmin <= wmin <= OK >= wmax >= cmax
-##    """
+        """Check the buffer size.
+        
+        The acceptable range is between the warn an crit range.
+        cmin <= wmin <= OK >= wmax >= cmax.
+        
+        """
         if StorageManager.storagesize is None:
                 self.storageManager.getNumEvents()
 
@@ -135,7 +133,8 @@ class StorageSize(Check):
                 critRange = config['storagesize_crit']
                 crit = self.parse_range(critRange)
             except:
-                log ("Unable to read config.ini in %s" %(self.nagiosResult.serviceName))
+                log("Unable to read config.ini in %s" %
+                    (self.nagiosResult.serviceName,))
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
@@ -153,11 +152,10 @@ class StorageSize(Check):
             if not self.storageSize:
                 self.storageSize = 0
 
-            self.nagiosResult.description = "Storage size: %d events" % (self.storageSize)
+            self.nagiosResult.description = "Storage size: %d events" % \
+                                            (self.storageSize,)
 
             yield (self.nagiosResult)
-#end BufferSize
-
 
 class EventRate(Check, Observer):
     def __init__(self):
@@ -167,10 +165,6 @@ class EventRate(Check, Observer):
         self.oldCountTime = 0
         self.eventRate = 0
         self.lock = Lock()
-
-#Duplicate def found, remove?
-#    def check(self):
-#       pass
 
     #Add number of events
     def notify(self, count):
@@ -187,7 +181,6 @@ class EventRate(Check, Observer):
             else:
                 self.timeDifference = time.time() - self.oldCountTime
                 self.oldCountTime = time.time()
-
                 self.lock.acquire()
                 self.eventRate = float(self.eventCount)/float(self.timeDifference)
                 self.eventCount = 0
@@ -197,10 +190,11 @@ class EventRate(Check, Observer):
                     self.nagiosResult.status_code = OK
                 else:
                     self.nagiosResult.status_code = CRITICAL
-                self.nagiosResult.description = "Event rate for a period of %.2f seconds is %.2f" % (self.timeDifference,self.eventRate)
+                self.nagiosResult.description = "Event rate for a period of " \
+                                                "%.2f seconds is %.2f" % \
+                                                (self.timeDifference, self.eventRate)
 
             yield (self.nagiosResult)
-#end Event rate
 
 class StorageGrowth(Check):
     def __init__(self,storageManager):
@@ -209,7 +203,6 @@ class StorageGrowth(Check):
         self.newStorageSize = 0
         self.oldStorageSize = 0
         self.storageGrowth = 0
-
         self.storageManager = storageManager
 
     def check(self, sched, config):
@@ -219,11 +212,13 @@ class StorageGrowth(Check):
                 warn = float(config['storagegrowth_warn'])
                 crit = float(config['storagegrowth_crit'])
             except:
-                log ("Unable to read config.ini in %s" %(self.nagiosResult.serviceName))
+                log("Unable to read config.ini in %s" % 
+                    (self.nagiosResult.serviceName,))
                 self.nagiosResult.status_code = CRITICAL
 
             self.newStorageSize = StorageManager.storagesize
-            self.storageGrowth = ((self.newStorageSize - self.oldStorageSize)/float(self.interval))
+            self.storageGrowth = ((self.newStorageSize - self.oldStorageSize) /
+                                  float(self.interval))
             self.oldStorageSize = self.newStorageSize
 
             if self.storageGrowth < warn:
@@ -234,7 +229,7 @@ class StorageGrowth(Check):
                 self.nagiosResult.status_code = CRITICAL
 
 
-            self.nagiosResult.description = "Storage growth: %f Hz" % (self.storageGrowth)
+            self.nagiosResult.description = "Storage growth: %f Hz" % \
+                                            (self.storageGrowth)
 
             yield (self.nagiosResult)
-#end Storage growth
