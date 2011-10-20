@@ -20,15 +20,13 @@ class NagiosPush:
         reportMessage['serviceName'] = nagiosResult.serviceName     # Service name on Nagios server
 
         send_nsca_command = "echo %s,%s,%s,%s | %ssend_nsca -H %s -p %d -c %ssend_nsca.cfg -d ," % \
-                                                 (reportMessage['hostComputer'],reportMessage['serviceName'], \
-                                                  reportMessage['reportCode'],reportMessage['textMessage'], \
-                                                  reportMessage['send_nscaPath'],reportMessage['nagiosServer'], \
-                                                  reportMessage['serverPort'], reportMessage['send_nscaPath'])
+                            (reportMessage['hostComputer'], reportMessage['serviceName'],
+                            reportMessage['reportCode'], reportMessage['textMessage'],
+                            reportMessage['send_nscaPath'], reportMessage['nagiosServer'],
+                            reportMessage['serverPort'], reportMessage['send_nscaPath'])
         v = subprocess.Popen(send_nsca_command, shell=True, stdout=subprocess.PIPE)
         v.wait()
         res = v.communicate()[0]
-        log ("Check: %s: Status code: %i, Status description: %s \n\t %s" % (nagiosResult.serviceName, nagiosResult.status_code, nagiosResult.description, res))
-
-
-
-
+        log ("Check: %s: Status code: %i, Status description: %s \n\t %s" %
+             (nagiosResult.serviceName, nagiosResult.status_code,
+             nagiosResult.description, res))
