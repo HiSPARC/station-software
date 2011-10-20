@@ -70,7 +70,7 @@ class BufferListener(threading.Thread):
         hslog.log("BufferListener: Thread stopped!")
 
     def getDBConnection(self, dbdict):
-        # get the connection to Buffer database
+        """Get the connection to Buffer database"""
         try:
             conn = connect(host = dbdict['host'], user = dbdict['user'],
                            passwd = dbdict['password'], db = dbdict['db'])
@@ -83,7 +83,7 @@ class BufferListener(threading.Thread):
         return conn
 
     def getMessageCount(self):
-        # get the number of event messages
+        """Get the number of event messages"""
         cursor = self.conn.cursor()
         sql = "SELECT COUNT(*) FROM message"
         hslog.log("BufferListener: Executing SQL: %s" % sql)
@@ -94,7 +94,7 @@ class BufferListener(threading.Thread):
         return count
 
     def getBufferMessages(self):
-        # get messages from Buffer database
+        """Get messages from Buffer database"""
         cursor = self.conn.cursor()
         sql = "SELECT message_type_id, message, message_id FROM message ORDER "\
               "BY message_id DESC LIMIT %d" % int(self.config['poll_limit'])
@@ -107,7 +107,7 @@ class BufferListener(threading.Thread):
         return messages
 
     def clearBufferMessages(self, message_ids):
-        # clear the parsed messages
+        """Clear the parsed messages"""
         if len(message_ids) < 1:
             return 0
         cursor = self.conn.cursor()
