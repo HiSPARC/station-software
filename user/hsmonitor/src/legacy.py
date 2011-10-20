@@ -4,12 +4,11 @@ import random
 from zlib import compress
 
 def unpack_legacy_message(self):
-    """Unpack a legacy buffer message
+    """Unpack a legacy buffer message.
 
-    This routine unpacks a buffer message written by the LabVIEW DAQ
-    software version 2.1.1 and below. Versions 2.2 and above use a version
-    identifier in the message. This way, we can account for different
-    message formats.
+    This routine unpacks a buffer message written by the LabVIEW DAQ software
+    version 2.1.1 and below. Versions 2.2 and above use a version identifier in
+    the message. This way, we can account for different message formats.
 
     """
     self.blob = self.message
@@ -43,14 +42,12 @@ def unpack_legacy_message(self):
     # Year
     self.year = struct.unpack(">H", self.blob[9:11])[0]
     # date-time object
-    self.datetime = datetime.datetime(
-                                        self.year,
-                                        self.month,
-                                        self.day,
-                                        self.hour,
-                                        self.minute,
-                                        self.second
-                                    )
+    self.datetime = datetime.datetime(self.year,
+                                      self.month,
+                                      self.day,
+                                      self.hour,
+                                      self.minute,
+                                      self.second)
     # Get the nanoseconds
     self.nanoseconds = struct.unpack(">I", self.blob[11:15])[0] + random.randrange(1,9000)
     # Trigger time of Slave relative to Master in ns
