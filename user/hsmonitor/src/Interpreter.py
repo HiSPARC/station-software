@@ -1,7 +1,8 @@
-"""
-    Process HiSPARC messages from a buffer.
-    This module processes binary messages from a HiSPARC station buffer and creates Events from them.
-    The Events are passed on to the StorageManager.
+"""Process HiSPARC messages from a buffer.
+
+This module processes binary messages from a HiSPARC station buffer and
+creates Events from them. The Events are passed on to the StorageManager.
+
 """
 
 __author__="thevinh"
@@ -17,12 +18,11 @@ from WeatherEvent import WeatherEvent
 from StorageManager import *
 
 # create a dictionary to store all type_codes of events
-event_type_codes =  {    '1': 'CIC',
-                        '2': 'ERR',
-                        '3': 'CFG',
-                        '4': 'CMP',
-                        '16': 'WTR'
-                    }
+event_type_codes = {'1': 'CIC',
+                    '2': 'ERR',
+                    '3': 'CFG',
+                    '4': 'CMP',
+                    '16': 'WTR'}
 
 class TriggerRateHolder:
     def __init__(self, triggerRate, date):
@@ -35,8 +35,6 @@ class Interpreter:
         # init variables here if needed
         self.storageManager = storageManager
         self.triggerRate = TriggerRateHolder(0,0)
-
-    #--------------------------End of __init__--------------------------#
 
     def openStorage(self):
         self.storageManager.openConnection()
@@ -61,8 +59,6 @@ class Interpreter:
         event.data = event.parseMessage()
         return event
 
-    #--------------------------End of createEvent--------------------------#
-
     def setTriggerRate(self, triggerRate):
         self.triggerRate = triggerRate
 
@@ -70,10 +66,9 @@ class Interpreter:
         return self.triggerRate
 
     def parseMessages(self, messages):
-        """
-            This function unpacks messages, creates events, retrieves relevant data from the events and
-            returns it as an elaborate data object which can be serialized for
-            transfer via an HTTP POST request.
+        """This function unpacks messages, creates events, retrieves relevant
+        data from the events and returns it as an elaborate data object which
+        can be serialized for transfer via an HTTP POST request.
         """
 
         self.eventlist = []
@@ -99,13 +94,11 @@ class Interpreter:
                 # create the event header
                 # new server uses datetime, old uses date and time
                 # for compatibility, include both
-                header = {
-                    'eventtype_uploadcode': event.uploadCode,
-                    'datetime': event.datetime,
-                    'date': event.datetime.date().isoformat(),
-                    'time': event.datetime.time().isoformat(),
-                    'nanoseconds': event.nanoseconds,
-                }
+                header = {'eventtype_uploadcode': event.uploadCode,
+                          'datetime': event.datetime,
+                          'date': event.datetime.date().isoformat(),
+                          'time': event.datetime.time().isoformat(),
+                          'nanoseconds': event.nanoseconds}
 
                 # store the trigger rate variable, only for the newest event
                 if eventcode == 'CIC' and firsttime:
@@ -135,6 +128,3 @@ class Interpreter:
             return self.discard_event_ids
 
         return self.event_ids
-
-    #--------------------------End of parseMessages--------------------------#
-
