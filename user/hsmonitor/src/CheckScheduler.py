@@ -13,14 +13,13 @@ class ScheduledJob:
         self.jobfunc = jobfunc
         self.interval = interval
         self.args = args
-        self.laatste_run = 0
+        self.last_run = 0
 
 class Scheduler:
     def __init__(self, status):
         self.jobs = {}
         self.jobcounter = 0
         self.current_tid = 0
-
         self.status = status
 
     def addJob(self, job, interval, args=None):
@@ -39,34 +38,32 @@ class Scheduler:
     def schedule(self, nagiosPush, config):
         toremove = []
         tostart = []
-        tijdnu = time.time()
+        timeCurrent = time.time()
 
         # Go through all tasks
         for tid, schedjob in self.jobs.iteritems():
             self.current_tid = tid
-            verschil = tijdnu - schedjob.laatste_run
+            timeDifference = timeCurrent - schedjob.last_run
 
-            if verschil >= schedjob.interval:
-                    schedjob.laatste_run = tijdnu
+            if timeDifference >= schedjob.interval:
+                schedjob.last_run = timeCurrent
 
-                    try:
-                            returnValues = schedjob.job.next()
+                try:
+                    returnValues = schedjob.job.next()
+                    nagiosPush.sendToNagios(returnValues)
 
-                            nagiosPush.sendToNagios(returnValues)
+                except StopIteration:
+                    hslog.log('JOB STOPPED!')
+                    toremove.append(tid)
+                    new_interval = None
 
-                    except StopIteration:
-                            hslog.log('JOB STOPPED!')
-                            toremove.append(tid)
-                            new_interval = None
-
-                    except Exception, msg:
-                            hslog.log('Uncatched exception in job: %s. ' \
-                                         'Restarting...' % msg)
-                            #hslog.log(traceback.format_exc())
-
-                            new_interval = None
-                            toremove.append(tid)
-                            tostart.append(tid)
+                except Exception, msg:
+                    hslog.log('Uncatched exception in job: %s. '
+                              'Restarting...' % msg)
+                    #hslog.log(traceback.format_exc())
+                    toremove.append(tid)
+                    tostart.append(tid)
+                    new_interval = None
 
         # restart new threads
         for tid in tostart:
@@ -74,6 +71,7 @@ class Scheduler:
             self.addJob(j.jobfunc, j.interval, j.args)
 
         tostart = []
+        
         # remove all threads that completed / stopped
         for tid in toremove:
             self.jobs.pop(tid, None)
@@ -104,21 +102,20 @@ class CheckScheduler(threading.Thread):
     def stop(self):
         self.stop_event.set()
 
-    #--------------------------End of stop--------------------------#
+    crashes = []
+    
+    def init_restart(self):
+        """Support for restarting crashed threads"""
 
-        crashes = []
-        def init_restart(self):
-            """Support for restarting crashed threads"""
-
-            if len(self.crashes) > 3 and time.time() - self.crashes[-3] < 60.:
-                raise ThreadCrashError("Thread has crashed three times in "
-                                       "less than a minute")
-            else:
-                super(CheckScheduler, self).__init__()
-                self.crashes.append(time.time())
+        if len(self.crashes) > 3 and time.time() - self.crashes[-3] < 60.:
+            raise ThreadCrashError("Thread has crashed three times in "
+                                   "less than a minute")
+        else:
+            super(CheckScheduler, self).__init__()
+            self.crashes.append(time.time())
 
 
-    # this function is what the thread actually runs; the required name is run().
+    # This function is what the thread actually runs; the required name is run().
     # The threading.Thread.start() calls threading.Thread.run(), which is always overridden.
     def run(self):
         hslog.log("CheckScheduler: thread started!")
