@@ -53,13 +53,13 @@ class Scheduler:
                     nagiosPush.sendToNagios(returnValues)
 
                 except StopIteration:
-                    hslog.log('JOB STOPPED!')
+                    hslog.log("CheckScheduler: JOB STOPPED!")
                     toremove.append(tid)
                     new_interval = None
 
                 except Exception, msg:
-                    hslog.log('Uncatched exception in job: %s. '
-                              'Restarting...' % msg)
+                    hslog.log("CheckScheduler: Uncatched exception in job: %s."
+                              "Restarting..." % msg)
                     #hslog.log(traceback.format_exc())
                     toremove.append(tid)
                     tostart.append(tid)
@@ -118,24 +118,28 @@ class CheckScheduler(threading.Thread):
     # This function is what the thread actually runs; the required name is run().
     # The threading.Thread.start() calls threading.Thread.run(), which is always overridden.
     def run(self):
-        hslog.log("CheckScheduler: thread started!")
+        hslog.log("CheckScheduler: Thread started!")
         self.storageManager.openConnection()
 
         ### Trigger rate:
         triggerRate = TriggerRate(self.interpreter)
         TR_interval = int(self.dicConfig['triggerrate_interval'])
-        self.sched.addJob(triggerRate.check, interval = TR_interval, args = self.dicConfig)
+        self.sched.addJob(triggerRate.check, interval=TR_interval,
+                          args=self.dicConfig)
         ### Storage size:
         storageSize = StorageSize(self.storageManager)
         SS_interval = int(self.dicConfig['storagesize_interval'])
-        self.sched.addJob(storageSize.check, interval = SS_interval, args = self.dicConfig)
-
+        self.sched.addJob(storageSize.check, interval=SS_interval,
+                          args=self.dicConfig)
+        ### Event rate:
         ER_interval = int(self.dicConfig['eventrate_interval'])
-        self.sched.addJob(self.eventRate.check, interval = ER_interval, args = self.dicConfig)
-                ### Storage growth:
+        self.sched.addJob(self.eventRate.check, interval=ER_interval,
+                          args=self.dicConfig)
+        ### Storage growth:
         storageGrowth = StorageGrowth(self.storageManager)
         SG_interval = int(self.dicConfig['storagegrowth_interval'])
-        self.sched.addJob(storageGrowth.check, interval = SG_interval, args = self.dicConfig)
+        self.sched.addJob(storageGrowth.check, interval=SG_interval,
+                          args=self.dicConfig)
 
         while not self.stop_event.isSet():
             # run all checks
@@ -147,4 +151,4 @@ class CheckScheduler(threading.Thread):
                 break
             except:
                 pass
-        hslog.log("CheckScheduler: thread stopped!")
+        hslog.log("CheckScheduler: Thread stopped!")
