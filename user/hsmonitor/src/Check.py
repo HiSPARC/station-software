@@ -32,7 +32,7 @@ class Check:
             maxa = float(a[1])
             return (mina, maxa)
         except:
-            log('Wrong arguments given! %s' % (prange,))
+            log("Check: Wrong arguments given! %s" % (prange,))
             sys.exit(CRITICAL)
 
 class TriggerRate(Check):
@@ -49,8 +49,8 @@ class TriggerRate(Check):
                 critRange = config['triggerrate_crit']
                 crit = self.parse_range(critRange)
             except:
-                log ("Unable to read config.ini in %s" % 
-                     (self.nagiosResult.serviceName,))
+                log("Check: Unable to read config.ini in %s" % 
+                    (self.nagiosResult.serviceName,))
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
@@ -71,7 +71,7 @@ class TriggerRate(Check):
                 t = time.strptime(str(self.lastupdate), '%Y-%m-%d %H:%M:%S')
 
                 # Timestamp is in GPS time.  Naively treat it as a local
-                # time stamp, then subtract the LabVIEW-determined offset
+                # timestamp, then subtract the LabVIEW-determined offset
                 # between pc clock time (local time) and GPS time.
 
                 # Read offset from file
@@ -81,13 +81,12 @@ class TriggerRate(Check):
                         key, value = line.split('=')
                         d[key] = value
 
-                # Naively calculate timestamp and adjust for pc / gps
-                # offset
+                # Naively calculate timestamp and adjust for pc / gps offset
                 t = time.mktime(t)
                 try:
                     t += int(d['time_difference'])
                 except TypeError:
-                    # offset is not yet determined
+                    # Offset is not yet determined
                     pass
                 # Calculate time difference between trigger and 'now'
                 dt = time.time() - t
@@ -95,7 +94,7 @@ class TriggerRate(Check):
                 #'Never updated, make dt very large'
                 dt = 1e6
 
-            # if last update was significantly longer than time between monitor
+            # If last update was significantly longer than time between monitor
             # upload checks, detector is probably stalled
             interval = int(config['triggerrate_interval'])
             if abs(dt) > (2 * interval):
@@ -133,7 +132,7 @@ class StorageSize(Check):
                 critRange = config['storagesize_crit']
                 crit = self.parse_range(critRange)
             except:
-                log("Unable to read config.ini in %s" %
+                log("Check: Unable to read config.ini in %s" %
                     (self.nagiosResult.serviceName,))
                 self.nagiosResult.status_code = CRITICAL
 
@@ -212,7 +211,7 @@ class StorageGrowth(Check):
                 warn = float(config['storagegrowth_warn'])
                 crit = float(config['storagegrowth_crit'])
             except:
-                log("Unable to read config.ini in %s" % 
+                log("Check: Unable to read config.ini in %s" % 
                     (self.nagiosResult.serviceName,))
                 self.nagiosResult.status_code = CRITICAL
 
