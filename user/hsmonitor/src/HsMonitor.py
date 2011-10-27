@@ -9,12 +9,18 @@ DF: Unfortunately, I think the UML model of this system is not entirely correct.
     As a result of this, we have four (!) instances of a numServers variable,
     which *all* need to have the exact same value and thus need to be updated
     when there is a change in the number of uploaders.
+    
+ADL: If the src folder will be removed and all .py files moved to a higher level
+     All relative paths should be checked for accuracy. Do a find for '..', and
+     check on a case-by-case basis.
+     Check how the HsMonitor is started, what is the 'working directory'?
 """
 
 __author__ = "thevinh"
 __date__ = "$16-sep-2009"
 
-import os, sys
+import os
+import sys
 import re
 import time
 import hslog
@@ -40,10 +46,10 @@ class HsMonitor:
             self.cfg = EConfigParser()
             self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2])
         except:
-            hslog.log("Cannot open the config file!")
+            hslog.log("HsMonitor: Cannot open the config file!")
             return
         else:
-            hslog.log("Initialize variables")
+            hslog.log("HsMonitor: Initialize variables.")
 
             # List of all the threads
             self.hsThreads = []
@@ -52,13 +58,14 @@ class HsMonitor:
         self.numServers = 1
 
     def startAll(self):
+        """Setup and start all threads."""
         try:
             # Create StorageManager and Interpreter for BufferListener
             storMan = StorageManager()
-            it = Interpreter(storMan)
+            interpr = Interpreter(storMan)
 
             # Create BufferListener
-            buffLis = self.createBufferListener(it)
+            buffLis = self.createBufferListener(interpr)
 
             if buffLis.conn:
                 self.hsThreads.append(buffLis)
@@ -66,10 +73,10 @@ class HsMonitor:
             # Check scheduler
             # Get the nagios configuration section from config file
             nagiosConf = self.cfg.itemsdict('NagiosPush')
-            m = re.search('([a-z0-9]+).zip',
+            machine = re.search('([a-z0-9]+).zip',
                           self.cfg.get('Station', 'Certificate'))
-            nagiosConf['machine_name'] = m.group(1)
-            checkSched = self.createCheckScheduler(it, nagiosConf)
+            nagiosConf['machine_name'] = machine.group(1)
+            checkSched = self.createCheckScheduler(interpr, nagiosConf)
             eventRate = checkSched.getEventRate()
             storMan.addObserver(eventRate)
             self.hsThreads.append(checkSched)
@@ -89,8 +96,9 @@ class HsMonitor:
                 up.setNumServer(self.numServers)
                 up2.setNumServer(self.numServers)
             except Exception, msg:
-                hslog.log("Error while parsing local server: %s" % (msg,))
-                hslog.log("Will not upload to local server!")
+                hslog.log("HsMonitor: Error while parsing local server: %s." %
+                          (msg,))
+                hslog.log("HsMonitor: Will not upload to local server!")
 
             # Set number of servers for our own StorageManager
             storMan.setNumServer(self.numServers)
@@ -101,7 +109,7 @@ class HsMonitor:
                 thread.start()
 
         except Exception, msg:
-            hslog.log("Error: %s" % (msg,))
+            hslog.log("Error HsMonitor: %s" % (msg,))
             exit(1)
 
     def stopAll(self):
@@ -139,8 +147,8 @@ class HsMonitor:
         minbs = self.cfg.ifgetint(section_name, "MinBatchSize", 50)
         maxbs = self.cfg.ifgetint(section_name, "MaxBatchSize", 50)
         if (minbs > maxbs):
-            hslog.log('Warning: maximum batch size must be more than minimum '
-                      'batch size. Setting maximum=minimum.')
+            hslog.log("Warning HsMonitor: Maximum batch size must be more than "
+                      "minimum batch size. Setting maximum=minimum.")
             maxbs = minbs
         minwait = self.cfg.ifgetfloat(section_name, "MinWait", 1.0)
         maxwait = self.cfg.ifgetfloat(section_name, "MaxWait", 60.0)
@@ -162,15 +170,17 @@ def main():
             time.sleep(10)
             for thread in hsMonitor.hsThreads:
                 if not thread.is_alive():
-                    hslog.log("Thread %s died, restarting" % thread.name)
+                    hslog.log("HsMonitor: Thread %s died, restarting." %
+                              thread.name)
                     thread.init_restart()
                     thread.start()
-                    hslog.log("Thread %s restarted." % thread.name)
+                    hslog.log("HsMonitor: Thread %s restarted." % thread.name)
     except ThreadCrashError, exc:
         hslog.log(exc)
-        hslog.log("Thread %s keeps crashing, shutting down." % thread.name)
+        hslog.log("HsMonitor: Thread %s keeps crashing, shutting down." %
+                  thread.name)
     except KeyboardInterrupt:
-        hslog.log("Interrupted by keyboard, closing down.")
+        hslog.log("HsMonitor: Interrupted by keyboard, closing down.")
 
     # Close down everything
     hsMonitor.stopAll()
