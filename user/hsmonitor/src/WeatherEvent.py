@@ -56,7 +56,7 @@ class WeatherEvent(object, Event):
             raise AttributeError, name
 
     def getEventData(self):
-        """ Get all event data necessary for an upload.
+        """Get all event data necessary for an upload.
         
         This function parses the export_values variable declared in the
         EventExportValues and figures out what data to collect for an upload to
