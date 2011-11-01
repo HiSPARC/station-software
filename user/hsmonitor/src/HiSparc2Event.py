@@ -1,7 +1,8 @@
 """Process HiSPARC messages from a buffer.
 
 This module processes messages from buffer database and gets out all available
-data. This data is stored in a data which can then be uploaded to the eventwarehouse.
+data. This data is stored in a data which can then be uploaded to the
+eventwarehouse.
 
 """
 
@@ -39,9 +40,10 @@ class HiSparc2Event(object, Event):
     def getEventData(self):
         """Get all event data necessary for an upload.
         
-        This function parses the export_values variable declared in the EventExportValues
-        and figures out what data to collect for an upload to the eventwarehouse.
-        It returns a list of dictionaries, one for each data element.
+        This function parses the export_values variable declared in the
+        EventExportValues and figures out what data to collect for an upload to
+        the eventwarehouse. It returns a list of dictionaries, one for each data
+        element.
         
         """
 
