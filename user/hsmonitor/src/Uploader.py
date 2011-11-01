@@ -16,7 +16,7 @@ import time
 # use BUI's trick to stop a thread
 BATCHSIZE = 100
 MINWAIT = 1 # minimum time to wait in seconds after a failed attempt
-            # the waiting time will be double for each failed attempt
+            # the waiting time will be doubled for each failed attempt
 MAXWAIT = 60 # maximum time to wait in seconds after a failed attempt
 
 # Python >= 2.5 has hashlib
@@ -93,7 +93,7 @@ class Uploader(Observer, Thread):
 
             oldNumEvents = self.numEvents
             self.numEvents += count
-            log("Uploader %i: %i events pending" %
+            log("Uploader %i: %i events pending." %
                 (self.serverID, self.numEvents))
 
             # calculate if uploader-thread should be unblocked
@@ -106,7 +106,7 @@ class Uploader(Observer, Thread):
             if (shouldRelease):
                 self.noEventsSem.release()
 
-    def __getNrEventsToUpload(self):
+    def __getNumEventsToUpload(self):
         """Gives the number of events that the Uploader can upload now.
         
         The result will be between min and max batch size. If insufficient
@@ -115,7 +115,6 @@ class Uploader(Observer, Thread):
         """
 
         shouldBlock = False
-        res = self.minBatchSize #Remove this? It is overwritten 2 lines later.
         self.numEventsLock.acquire()
         res = min(self.numEvents, self.maxBatchSize)
         if (res < self.minBatchSize):
@@ -123,9 +122,9 @@ class Uploader(Observer, Thread):
         self.numEventsLock.release()
 
         if shouldBlock:
-            log("Uploader %i blocks: too few events" % (self.serverID))
+            log("Uploader %i: Blocked: Too few events" % self.serverID)
             self.noEventsSem.acquire()
-            log("Uploader %i unblocks" % (self.serverID))
+            log("Uploader %i: Unblocked" % self.serverID)
             return self.minBatchSize
         else:
             return res
@@ -141,6 +140,9 @@ class Uploader(Observer, Thread):
                             'data': data,
                             'checksum': checksum})
 
+        # ADL: Something here causes the double events.
+        # Check what happens in case of timeout.
+        
         # Open the connection and send our data. Exceptions are catched
         # explicitly to make sure we understand the implications of errors.
         try:
@@ -157,22 +159,22 @@ class Uploader(Observer, Thread):
         return returncode
 
     def run(self):
-        log("Uploader %i: thread started for %s" % (self.serverID, self.URL))
+        log("Uploader %i: Thread started for %s." % (self.serverID, self.URL))
 
         # Initialize storage manager
         self.storageManager.openConnection()
 
-        # number of events that have been received
-        log("Getting number of events to upload")
+        # Number of events that have been received
+        log("Uploader %i: Getting number of events to upload." % self.serverID)
         self.numEvents = self.storageManager.getNumEventsServer(self.serverID)
-        log("Uploader %i: %i events in storage" %
+        log("Uploader %i: %i events in storage." %
             (self.serverID, self.numEvents))
 
         self.isRunning = True
 
-        nrFailedAttempts = 0
+        numFailedAttempts = 0
         while not self.stop_event.isSet():
-            bsize = self.__getNrEventsToUpload()
+            bsize = self.__getNumEventsToUpload()
 
             (elist, eidlist) = self.storageManager.getEvents(self.serverID,
                                                              bsize)
@@ -181,27 +183,30 @@ class Uploader(Observer, Thread):
                 log("Uploader %i: %d events uploaded to %s." %
                     (self.serverID, bsize, self.URL))
 
-                nrFailedAttempts = 0
+                numFailedAttempts = 0
 
-                # record succesfull upload in storagemanager
+                # Record succesfull upload in storagemanager
                 self.storageManager.setUploaded(self.serverID, eidlist)
-                # reduce counter
+                # Reduce counter
                 self.numEventsLock.acquire()
                 self.numEvents -= bsize
                 self.numEventsLock.release()
             else:
-                msg = "Error Uploader %i: %s: return code: %s\n" % \
-                      (self.serverID, self.URL, returncode)
-                msg += "Uploader %i: nr of Failed Attempts: %i" % \
-                       (self.serverID, nrFailedAttempts)
-                log(msg)
-                nr = NagiosResult(2, msg, "ServerCheck")
-                self.nagiosPush.sendToNagios(nr)
+                numFailedAttempts += 1
 
-                sleeptime = min(2 ** nrFailedAttempts * self.retryAfter,
+                msg1 = "Error Uploader %i: %s: Return code: %s." % \
+                      (self.serverID, self.URL, returncode)
+                log(msg1)
+                msg2 = "Error Uploader %i: %d events attempted to upload, " \
+                       "number of failed attempts: %i." % \
+                       (self.serverID, bsize, numFailedAttempts)
+                log(msg2)
+                msg3 = msg1+"\n"+msg2
+                nr = NagiosResult(2, msg3, "ServerCheck")
+                self.nagiosPush.sendToNagios(nr)
+                sleeptime = min(2 ** numFailedAttempts * self.retryAfter,
                                 self.maxWait)
                 log("Uploader %i: Sleeping for %f seconds." %
                     (self.serverID, sleeptime))
                 sleep(sleeptime)
-                nrFailedAttempts += 1
-        log("Uploader %i: thread stopped!" % (self.serverID,))
+        log("Uploader %i: Thread stopped!" % self.serverID)
