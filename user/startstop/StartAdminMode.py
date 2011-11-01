@@ -19,7 +19,7 @@ def start():
 		elif resTightVNC==1:
 			log('Status:stopped')
 		else:
-			log ('The service was not found!')
+			log('The service was not found!')
 	except:
 		log('An exception was generated while starting TightVNC:'  + str(sys.exc_info()[1]))
 	
@@ -35,7 +35,7 @@ def start():
 		elif resNagios==1:
 			log('Status:stopped')
 		else:
-			log ('The service was not found!')
+			log('The service was not found!')
 	except:
 		log('An exception was generated while starting the Nagios Service:' + str(sys.exc_info()[1]))
 
@@ -50,7 +50,7 @@ def start():
 		elif resOpenVpn==1:
 			log('Status:stopped')
 		else:
-			log ('The service was not found!')
+			log('The service was not found!')
 	except:
 		log('An exception was generated while starting the OpenVPN Service:' + str(sys.exc_info()[1]))
 
