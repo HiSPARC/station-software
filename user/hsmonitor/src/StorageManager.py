@@ -37,8 +37,8 @@ class StorageManager(Subject):
     def setNumServer(self, numServer):
         """Sets the number of servers to upload to.
 
-        The StorageManager needs this information to know when events
-        have been uploaded to all servers and can be removed from the storage.
+        The StorageManager needs this information to know when events have been
+        uploaded to all servers and can be removed from the storage.
 
         """
         self.numServer = numServer
@@ -60,7 +60,7 @@ class StorageManager(Subject):
         try:
             self.db = sqlite3.connect(self.db_name)
         except Exception, msg:
-            log("StorageManager: Error opening connection: %s" % (str(msg),))
+            log("StorageManager: Error opening connection: %s." % (str(msg),))
             raise Exception("Could not connect to sqlite3 database.")
 
     def __create(self):
@@ -74,8 +74,7 @@ class StorageManager(Subject):
             UploadedTo Integer,
             DateTime TIMESTAMP
             );
-            """
-            )
+            """)
         db.commit()
         c.close()
 
@@ -91,10 +90,10 @@ class StorageManager(Subject):
         ssize = StorageManager.storagesize
         if (ssize is not None and ssize < VACUUMTHRESHOLD and
             time.time() - StorageManager.lastvacuum > 100000):
-                log("Starting VACUUM operation...")
+                log("StorageManager: Starting VACUUM operation...")
                 c.execute("VACUUM")
                 StorageManager.lastvacuum = time.time()
-                log("VACUUM finished.")
+                log("StorageManager: VACUUM finished.")
         c.execute("""
                 SELECT * FROM Event WHERE (UploadedTo & ?) == 0 LIMIT ?;
                 """, (serverbit, numEvents))
@@ -106,9 +105,9 @@ class StorageManager(Subject):
     def getEvents(self, serverID, numEvents):
         """Return numEvents not yet uploaded to the server identified by serverID.
         
-        The result is a tuple: the first element is a list containing the
-        data attribute of the events that were inserted,
-        the second element is a list with the corresponding event ids in the storage.
+        The result is a tuple: the first element is a list containing the data
+        attribute of the events that were inserted, the second element is a list
+        with the corresponding event ids in the storage.
         
         """
         raw_results = self.getEventsRawSQL(serverID, numEvents)
@@ -141,9 +140,9 @@ class StorageManager(Subject):
         res = True
         n_events = len(events)
         if n_events > 0:
-            log("StorageManager: adding %d parsed events into Storage" %(n_events,))
+            log("StorageManager: Adding %d parsed events into Storage." % (n_events,))
             self.lock.acquire()
-            log("Acquired lock.")
+            log("StorageManager: Acquired lock.")
             t0 = time.time()
 
             c = self.db.cursor()
@@ -160,7 +159,7 @@ class StorageManager(Subject):
                 StorageManager.storagesize += n_events
 
             self.lock.release()
-            log("Events added in %d seconds." % (time.time() - t0))
+            log("StorageManager: Events added in %d seconds." % (time.time() - t0))
 
             # notify the observers
             self.update(n_events)
@@ -278,12 +277,12 @@ class StorageManager(Subject):
         self.openConnection()
         c = self.db.cursor()
 
-        log("Deleting old events which have already been uploaded to all "
-            "currently specified servers")
+        log("StorageManager: Deleting old events which have already been"
+            "uploaded to all currently specified servers.")
         sql = "SELECT COUNT(*) FROM Event WHERE UploadedTo & ? = ?"
         args = (self.allUploadedMask, self.allUploadedMask)
         c.execute(sql, args)
-        log("Deleting %d events." % c.fetchone()[0])
+        log("StorageManager: Deleting %d events." % c.fetchone()[0])
 
         sql = "DELETE FROM Event WHERE UploadedTo & ? = ?"
         args = (self.allUploadedMask, self.allUploadedMask)
