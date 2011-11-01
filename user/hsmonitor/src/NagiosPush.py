@@ -12,7 +12,7 @@ class NagiosPush:
     def sendToNagios(self, nagiosResult):
         reportMessage = {}
         reportMessage['reportCode'] = nagiosResult.status_code      # Report code to send to Nagios
-        reportMessage['textMessage']= nagiosResult.description      # Message string to send to Nagios
+        reportMessage['textMessage'] = nagiosResult.description     # Message string to send to Nagios
         reportMessage['send_nscaPath'] = "../data/send_nsca_win32/" # Path to the send_nsca.exe
         reportMessage['nagiosServer'] = self.host                   # Nagios server Ip address
         reportMessage['serverPort'] = self.port                     # server port
@@ -27,6 +27,6 @@ class NagiosPush:
         v = subprocess.Popen(send_nsca_command, shell=True, stdout=subprocess.PIPE)
         v.wait()
         res = v.communicate()[0]
-        log ("Check: %s: Status code: %i, Status description: %s \n\t %s" %
-             (nagiosResult.serviceName, nagiosResult.status_code,
+        log("Check %s: Status code: %i, Status description: %s.\n\t %s." %
+            (nagiosResult.serviceName, nagiosResult.status_code,
              nagiosResult.description, res))
