@@ -4,26 +4,21 @@ from definitions import *
 import logging
 logger = logging.getLogger("diagnostics")
 
-help_message = """
+help_message = """Welcome to the HiSPARC Diagnostic Tool.
 
-
-Welcome to the HiSPARC Diagnostic Tool.
-
-This tool is now performing some system checks and will display a summary
-at the end of this screen.  If you have any problems with the VPN
-connection, please click on the `Write VPN config' button, reboot your
-computer and rerun this tool.
+This tool is now performing some system checks and will display a summary at the
+end of this screen. If you have any problems with the VPN connection, please
+click on the `Write VPN config' button, reboot the computer and rerun this tool.
 
 If you continue to have problems with any of these checks, please contact
-HiSPARC at info@hisparc.nl.  It will be helpful if you include the
-contents of this screen (copy, paste should work for any decent mailer).
+HiSPARC at info@hisparc.nl. It will be helpful if you include the contents of
+this screen (copy, paste should work for any decent mailer).
 
-Please, refrain from embedding text or screenshots in Microsoft Word
-documents.  Simply including text and graphics inside your message or as an
-attachment will enable us to more quickly assess the situation.
+Please, refrain from embedding text or screenshots in Microsoft Word documents.
+Simply including text and graphics inside your message or as an attachment will
+enable us to more quickly assess the situation.
 
 Thank you!
-
 
 """
 
