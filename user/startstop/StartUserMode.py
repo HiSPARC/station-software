@@ -2,7 +2,7 @@ from startStop import *
 from hslog import *
 import sys
 import time
-path='%s:' %os.getenv("HISPARC_DRIVE")
+path = '%s:' % os.getenv("HISPARC_DRIVE")
 
 import ConfigParser
 import os
@@ -29,8 +29,8 @@ def start():
 		mySqlHandler=StartStop()
 		mySqlHandler.exeName='mysqld.exe'
 		mySqlHandler.ShowWindow=win32con.SW_HIDE
-		mySqlHandler.command="%s\\user\\mysql\\bin\\mysqld.exe" %path
-		mySqlHandler.currentDirectory="%s\\user\\mysql\\bin" %path
+		mySqlHandler.command="%s\\user\\mysql\\bin\\mysqld.exe" % path
+		mySqlHandler.currentDirectory="%s\\user\\mysql\\bin" % path
 		mySqlHandler.title='MySQL server'
 		resMySql=mySqlHandler.startProcess()
 		if resMySql==0:
@@ -38,7 +38,7 @@ def start():
 		elif resMySql==1:
 			log('Status:stopped')
 		else:
-			log ('An exception was generated!')
+			log('An exception was generated!')
 	except:
 		log('An exception was generated while starting MySQL:' + str(sys.exc_info()[1]))
 	
@@ -48,7 +48,7 @@ def start():
                     log('Starting LabView...')
                     labViewHandler=StartStop()
                     labViewHandler.exeName='hisparcdaq.exe'
-                    labViewHandler.currentDirectory="%s\\user\\hisparcdaq" %path
+                    labViewHandler.currentDirectory="%s\\user\\hisparcdaq" % path
                     labViewHandler.command="%s\\user\\hisparcdaq\\hisparcdaq.exe" %path
                     resLabView=labViewHandler.startProcess()
                     if resLabView==0:
@@ -56,7 +56,7 @@ def start():
                     elif resLabView==1:
                             log('Status:stopped')
                     else:
-                            log ('An exception was generated!')
+                            log('An exception was generated!')
                 else:
                     log('HiSPARC detector disabled...')
         except:
@@ -68,15 +68,15 @@ def start():
                     log('Starting LabView weather...')
                     labViewHandler=StartStop()
                     labViewHandler.exeName='hisparcweather.exe'
-                    labViewHandler.currentDirectory="%s\\user\\hisparcweather" %path
-                    labViewHandler.command="%s\\user\\hisparcweather\\hisparcweather.exe" %path
+                    labViewHandler.currentDirectory="%s\\user\\hisparcweather" % path
+                    labViewHandler.command="%s\\user\\hisparcweather\\hisparcweather.exe" % path
                     resLabView=labViewHandler.startProcess()
                     if resLabView==0:
                             log('Status:running')
                     elif resLabView==1:
                             log('Status:stopped')
                     else:
-                            log ('An exception was generated!')
+                            log('An exception was generated!')
                 else:
                     log('HiSPARC weather station disabled...')
         except:
@@ -91,7 +91,7 @@ def start():
 		hsMonitorHandler=CMDStartStop()
 		hsMonitorHandler.exeName='python.exe'
 		hsMonitorHandler.title='HISPARC MONITOR: hsmonitor'
-		hsMonitorHandler.currentDirectory="%s\user\hsmonitor\src" %path
+		hsMonitorHandler.currentDirectory="%s\user\hsmonitor\src" % path
 		hsMonitorHandler.command="%s\user\python\python.exe HsMonitor.py" % path
 		resHSMonitor=hsMonitorHandler.startProcess()
 		if resHSMonitor==0:
@@ -99,7 +99,7 @@ def start():
 		elif resHSMonitor==1:
 			log('Status:stopped')
 		else:
-			log ('An exception was generated')
+			log('An exception was generated')
 
 	except:
 		log('An exception was generated while starting HSMonitor:' + str(sys.exc_info()[1]))
@@ -109,7 +109,7 @@ def start():
 		updaterHandler=CMDStartStop()
 		updaterHandler.exeName='python.exe'
 		updaterHandler.title='HISPARC Updater: updater'
-		updaterHandler.currentDirectory="%s\\user\\updater" %path
+		updaterHandler.currentDirectory="%s\\user\\updater" % path
 		updaterHandler.command="%s\\user\\python\\python.exe Update.py" % path
 		resUpdater=updaterHandler.startProcess()
 		if resUpdater==0:
@@ -117,7 +117,7 @@ def start():
 		elif resHSMonitor==1:
 			log('Status:stopped')
 		else:
-			log ('An exception was generated')
+			log('An exception was generated')
 		
 	except:
 		log('An exception was generated while starting the Updater:' + str(sys.exc_info()[1]))
