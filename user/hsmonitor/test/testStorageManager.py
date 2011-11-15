@@ -10,11 +10,11 @@ class Event:
         self.datetime = datetime
 
 observer_calls = 0
+
 class Obs(Observer):
     def notify(self, count):
 	    global observer_calls
 	    observer_calls += count
-        
 
 class TestStorageManager(unittest.TestCase):
 

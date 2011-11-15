@@ -13,9 +13,9 @@ class TestBufferListener(unittest.TestCase):
 		self.dbdict['user'] = "buffer"
 		self.dbdict['password'] = "PLACEHOLDER"
 		self.dbdict['db'] = "buffer"
-		self.dbdict['poll_interval']=5
-		self.dbdict['poll_limit']=100
-		self.dbdict['keep_buffer_data']=0
+		self.dbdict['poll_interval'] = 5
+		self.dbdict['poll_limit'] = 100
+		self.dbdict['keep_buffer_data'] = 0
 		
 		# setup storagemanager
 		self.sm = StorageManager(2)
