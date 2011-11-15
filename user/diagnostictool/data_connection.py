@@ -1,9 +1,9 @@
 from definitions import *
 import settings
 from diagnosticcheck import DiagnosticCheck
-
 from urllib2 import urlopen, URLError, HTTPError
 import logging
+
 logger = logging.getLogger("data_connection")
 
 class Check(DiagnosticCheck):
