@@ -12,20 +12,13 @@ import win32gui
 from hslog import *
 from ctypes import c_ulong, byref, windll
 
-CONFIG_INI = "\\user\\hsmonitor\\data\\config.ini"
+CONFIG_INI = "/user/hsmonitor/data/config.ini"
 
-# RETURN VALUES. 
 OK = 0
 WARNING = 1
 CRITICAL = 2
 
-
 localhost = gethostbyname("127.0.0.1") 
-
-#..........................................................................
-#Checking Buffer connection
-#..........................................................................
-
 
 def checkBufferdb(warn=None, crit=None):
     if warn:
@@ -39,18 +32,14 @@ def checkBufferdb(warn=None, crit=None):
         config.read(CONFIG_INI)
         host = config.get('BufferDB', 'Host')
         user = config.get('BufferDB', 'Username')
-        pwd  = config.get('BufferDB', 'Password')
-        db   = config.get('BufferDB', 'DB')    
+        pwd = config.get('BufferDB', 'Password')
+        db = config.get('BufferDB', 'DB')    
     except:
         print 'Could not read config.ini file!'
         return CRITICAL
     
     try:
-        dbcon = MySQLdb.connect( host=host,
-                                 user=user,
-                                 passwd=pwd,
-                                 db=db
-                                )
+        dbcon = MySQLdb.connect(host=host, user=user, passwd=pwd, db=db)
     except MySQLdb.OperationalError, (errid, errmsg):
         print '%s (Error %d)' % (errmsg, errid)
         return CRITICAL
@@ -70,16 +59,12 @@ def checkBufferdb(warn=None, crit=None):
             return WARNING
     return OK
 
-#..........................................................................
-#Checking check_lvusage
-#..........................................................................
-	
 def check_lvusage(warn, crit):
     """
-	Check the memory using Labview and also immediately give the cpu time. 
+	Check the memory using Labview and also immediately give the cpu time.
+	
     """
     w = wmi.WMI()
-    
     wmin, wmax = warn
     cmin, cmax = crit
     LABVIEW_CAPTIONS = ['hisparcdaq.exe', 'HISPAR~1.EXE']
@@ -99,6 +84,6 @@ def check_lvusage(warn, crit):
             else:
                 return OK
 
-    # Het proces draait niet.
+    # The process is not running.
     print 'Labview is not running'
     return CRITICAL
