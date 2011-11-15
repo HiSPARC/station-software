@@ -8,7 +8,6 @@ __author__="thevinh"
 __date__ ="$16-sep-2009"
 
 import os, sys, cmd
-sys.path.append("../../pythonshared")
 sys.path.append("../src")
 import hslog
 from EConfigParser import EConfigParser
@@ -23,7 +22,7 @@ CONFIG_INI_PATH1 = '../data/config.ini'
 CONFIG_INI_PATH2 = '../../../persistent/configuration/config.ini'
 
 NUMSERVERS = 2 # TODO
-# HsMonitor class
+
 class HsMonitor:
 	def __init__(self):		
 		# setup the log mode
@@ -44,9 +43,6 @@ class HsMonitor:
 		# Assume one server (eventwarehouse)
 		# if the local is also specified it will be added
 		self.numServers = 1
-			
-	#--------------------------End of __init__--------------------------#
-	
 	
 	def createBufferListener(self, interpreter):
 		# get the information from configuration file		
@@ -68,8 +64,6 @@ class HsMonitor:
 		# TODO better error handling
 			
 		return buffLis
-		
-	#--------------------------End of createBufferListener--------------------------#
 
 	def createCheckScheduler(self, interpreter):		
 		# get the nagios configuration section from config file 
@@ -78,8 +72,6 @@ class HsMonitor:
 		checkSched = CheckScheduler(nagiosConf, interpreter)		
 		
 		return checkSched
-	
-	#--------------------------End of createCheckScheduler--------------------------#
 
 	def createUploader(self, serverID, section_name, numServers):
 		# TODO create default values if parameter doesn't exist
@@ -93,11 +85,10 @@ class HsMonitor:
 		minwait = self.cfg.ifgetfloat(section_name, "MinWait", 1.0)
 		maxwait = self.cfg.ifgetfloat(section_name, "MaxWait", 60.0)
 
-		up = Uploader(serverID, numServers, stationID, passw, url, minwait, maxwait, minbs, maxbs)
+		up = Uploader(serverID, numServers, stationID, passw, url,
+					  minwait, maxwait, minbs, maxbs)
 		return up
-	#--------------------------End of createCheckScheduler--------------------------#
-	
-# main function
+
 def main():
 	# create a HiSparc monitor object
 	hsMonitor = HsMonitor()
@@ -127,7 +118,6 @@ def main():
 	it = Interpreter(sm)
 	checkSched = hsMonitor.createCheckScheduler(it)
 	checkSched.run()
-		
-#--------------------------Main--------------------------#
+
 if __name__ == '__main__':
 	main()
