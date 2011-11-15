@@ -3,7 +3,6 @@ import re
 import sys
 import checkFiles
 
-sys.path.append("\user\pythonshared")
 from hslog import *
 
 class Downloader():
@@ -30,6 +29,7 @@ class Downloader():
 
 
 #Main function:
+#ADL: This links to an old version?
 #URL = 'http://www.hisparc.nl/drupal/files/HiSPARC%20Software%20Installatie%20V1-0.pdf'
 
 #downloader = Downloader()
