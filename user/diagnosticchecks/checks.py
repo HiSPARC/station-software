@@ -27,7 +27,7 @@ def checkBufferdb(warn=None, crit=None):
         cmin, cmax = crit
     
     config = ConfigParser.ConfigParser()
-	
+
     try:
         config.read(CONFIG_INI)
         host = config.get('BufferDB', 'Host')
@@ -61,14 +61,14 @@ def checkBufferdb(warn=None, crit=None):
 
 def check_lvusage(warn, crit):
     """
-	Check the memory using Labview and also immediately give the cpu time.
-	
+    Check the memory using Labview and also immediately give the cpu time.
+
     """
     w = wmi.WMI()
     wmin, wmax = warn
     cmin, cmax = crit
     LABVIEW_CAPTIONS = ['hisparcdaq.exe', 'HISPAR~1.EXE']
-	
+
     for p in w.Win32_Process():
         if p.Name in LABVIEW_CAPTIONS:
             mem = float(p.WorkingSetSize) / (1024 * 1024.0)
