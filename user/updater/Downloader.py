@@ -6,27 +6,23 @@ import checkFiles
 from hslog import *
 
 class Downloader():
-	def downloadUpdate(self, location, URL):
-		m = re.search('\/([^\/]*)\/?$', URL)
-		if m:
-			fileName = m.group(1)
-		else:
-			log('URL to download is not valid') 
-			return 'NULL'
-		
-		if (location[-1] == '/') | (location[-1] == '^\\'):
-			fileLocation = '%s%s' % (location, fileName)
-		else:
-			fileLocation = '%s/%s' % (location, fileName)
-
-		if not(checkFiles.checkIfEqualFileExists(location, fileName)):
-			urlretrieve(URL, fileLocation)
-			log('File downloaded!')
-		else:
-			log('File already exist!')
-
-		return fileLocation
-
+    def downloadUpdate(self, location, URL):
+        m = re.search('\/([^\/]*)\/?$', URL)
+        if m:
+            fileName = m.group(1)
+        else:
+            log('URL to download is not valid') 
+            return 'NULL'
+        if (location[-1] == '/') | (location[-1] == '^\\'):
+            fileLocation = '%s%s' % (location, fileName)
+        else:
+            fileLocation = '%s/%s' % (location, fileName)
+        if not(checkFiles.checkIfEqualFileExists(location, fileName)):
+            urlretrieve(URL, fileLocation)
+            log('File downloaded!')
+        else:
+            log('File already exist!')
+        return fileLocation
 
 #Main function:
 #ADL: This links to an old version?
