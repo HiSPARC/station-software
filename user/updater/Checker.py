@@ -11,16 +11,12 @@ import checkFiles
 PERSISTENT_INI = '/persistent/configuration/config.ini'
 CONFIG_INI = 'config.ini'
 DISPLAY_GUI_MESSAGES = True
-
-class OurOpener(urllib2.OpenerDirector):
-    pass
-
+UPDATE_USER_MODE = 1
+UPDATE_ADMIN_MODE = 2
+    
 class Checker:
     #Internal handle to the database cursor
     config = ConfigParser.ConfigParser()
-    dbHandle = 0
-    UPDATE_USER_MODE = 1
-    UPDATE_ADMIN_MODE = 2
 
     def __init__(self):
         self.config.read([CONFIG_INI, PERSISTENT_INI])
@@ -35,21 +31,15 @@ class Checker:
         params = urlencode({'admin_version': currentAdmin,
                             'user_version': currentUser,
                             'station_id': stationname})
-
-        #urllib2.urlopen('%s?%s' % (server, params))
-
         updateInfo = ''
         proxy_support = urllib2.ProxyHandler()
         auth_handler = urllib2.HTTPBasicAuthHandler()
-        auth_handler.add_password(realm='HiSPARC restricted',
-                                  uri=server,
-                                  user='dummy',
-                                  passwd='dummy')
+        auth_handler.add_password(realm='HiSPARC restricted', uri=server,
+                                  user='dummy', passwd='dummy')
         opener = urllib2.build_opener(auth_handler, proxy_support)
         # ...and install it globally so it can be used with urlopen.
-        urllib2.install_opener(opener)     
-        url = '%s?%s' % (server, params)
-        connection = urllib2.urlopen(url)
+        urllib2.install_opener(opener)
+        connection = urllib2.urlopen(server, params)
         updateInfo = connection.read()
         print updateInfo
         connection.close()
@@ -65,7 +55,8 @@ class Checker:
 
     def parseAnswerServer(self, updateInfo):
         updateDict = parse_qs(updateInfo, strict_parsing=True)
-        #updateDict has: mustUpdate, urlUser, newVersionUser, urlAdmin, newVersionAdmin
+        #updateDict has: mustUpdate, urlUser, newVersionUser, urlAdmin,
+        #                newVersionAdmin
         downloader = Downloader()
         updates = dict() #updates has: mustUpdate, userFile, adminFile
         
@@ -75,7 +66,7 @@ class Checker:
         virtualDrive = self.config.get('Station', 'VirtualDrive')
         location = "%s:/persistent/downloads" % virtualDrive
 
-        if (mustUpdate & self.UPDATE_ADMIN_MODE):
+        if (mustUpdate & UPDATE_ADMIN_MODE):
             adminURL = updateDict['urlAdmin'][0]
             print adminURL
             adminFile = downloader.downloadUpdate(location, adminURL)
@@ -90,7 +81,7 @@ class Checker:
                         "to reboot and install it!").pack(padx=150, pady=100)
                 root.mainloop()
 
-        elif (mustUpdate & self.UPDATE_USER_MODE):
+        elif (mustUpdate & UPDATE_USER_MODE):
             userURL = updateDict['urlUser'][0]
             userFile = downloader.downloadUpdate(location, userURL)
             updates['userFile'] = userFile
