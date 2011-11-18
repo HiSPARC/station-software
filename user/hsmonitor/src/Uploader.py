@@ -137,8 +137,7 @@ class Uploader(Observer, Thread):
 
         params = urlencode({'station_id': self.stationID,
                             'password': self.password,
-                            'data': data,
-                            'checksum': checksum})
+                            'data': data, 'checksum': checksum})
 
         # ADL: Something here causes the double events.
         # Check what happens in case of timeout.
