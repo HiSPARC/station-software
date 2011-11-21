@@ -30,7 +30,8 @@ class Updater:
             currentVersionAdmin = self.config.get('Version', 'CurrentAdmin')
             location = "%s:/persistent/downloads" % (virtualDrive)
             
-            found, fileFound = checkFiles.checkIfNewerFileExists(location, ADMINUPDATE_NAME, int(currentVersionAdmin))
+            found, fileFound = checkFiles.checkIfNewerFileExists(location,
+            	ADMINUPDATE_NAME, int(currentVersionAdmin))
             
             print "found is %s" % found
             if found:
