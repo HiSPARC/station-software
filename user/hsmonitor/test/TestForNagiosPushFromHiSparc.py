@@ -9,7 +9,7 @@ __author__="thevinh"
 __date__ ="$16-sep-2009"
 
 import os, sys, cmd
-sys.path.append("../src")
+sys.path.append("..")
 import hslog
 from EConfigParser import EConfigParser
 import BufferListener

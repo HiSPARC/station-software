@@ -1,5 +1,5 @@
 import sys
-sys.path.append("../src")
+sys.path.append("..")
 import unittest
 from Interpreter import Interpreter
 from StorageManager import StorageManager
