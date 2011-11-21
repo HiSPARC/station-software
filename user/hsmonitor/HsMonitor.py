@@ -10,10 +10,7 @@ DF: Unfortunately, I think the UML model of this system is not entirely correct.
     which *all* need to have the exact same value and thus need to be updated
     when there is a change in the number of uploaders.
     
-ADL: If the src folder will be removed and all .py files moved to a higher level
-     All relative paths should be checked for accuracy. Do a find for '..', and
-     check on a case-by-case basis.
-     Check how the HsMonitor is started, what is the 'working directory'?
+ADL: Check how the HsMonitor is started, what is the 'working directory'?
 """
 
 __author__ = "thevinh"
@@ -33,8 +30,8 @@ from Uploader import Uploader
 from UserExceptions import ThreadCrashError
 
 # Default configuration file path
-CONFIG_INI_PATH1 = '../data/config.ini'
-CONFIG_INI_PATH2 = '../../../persistent/configuration/config.ini'
+CONFIG_INI_PATH1 = 'data/config.ini'
+CONFIG_INI_PATH2 = '../../persistent/configuration/config.ini'
 
 class HsMonitor:
     def __init__(self):

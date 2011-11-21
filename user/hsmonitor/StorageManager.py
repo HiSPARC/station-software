@@ -8,7 +8,7 @@ import time
 from Subject import Subject
 from hslog import log
 
-FILENAME = "../../../persistent/data/hsmonitor/Storage.db"
+FILENAME = "../../persistent/data/hsmonitor/Storage.db"
 VACUUMTHRESHOLD = 1000
 
 lock = Lock()
