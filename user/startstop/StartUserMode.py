@@ -91,7 +91,7 @@ def start():
         hsMonitorHandler = CMDStartStop()
         hsMonitorHandler.exeName = 'python.exe'
         hsMonitorHandler.title = 'HISPARC MONITOR: hsmonitor'
-        hsMonitorHandler.currentDirectory = "%s/user/hsmonitor/src" % PATH
+        hsMonitorHandler.currentDirectory = "%s/user/hsmonitor" % PATH
         hsMonitorHandler.command = "%s/user/python/python.exe HsMonitor.py" % PATH
         resHSMonitor = hsMonitorHandler.startProcess()
         if resHSMonitor == 0:
