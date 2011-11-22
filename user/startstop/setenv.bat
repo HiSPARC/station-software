@@ -17,6 +17,8 @@
   :: append semicolon to %PYTHONPATH% if and only if it already exists
   if not "%PYTHONPATH%"=="" set PYTHONPATH=%PYTHONPATH%;
 
+  :: ADL: Change all Hisparc_drive reference to 'C:\Program Files\Hisparc\'?
+  ::      Get (possibly changed) path from the Windows registry.
   set PYTHONPATH=%PYTHONPATH%%HISPARC_DRIVE%:\user\pythonshared
 
   subst %HISPARC_DRIVE%: "%HISPARC_ROOT%" > NUL
