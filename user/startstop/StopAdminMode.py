@@ -1,5 +1,5 @@
 from startStop import *
-from hslog import *
+from hslog import log, setLogMode, MODE_BOTH
 
 def stop():
     setLogMode(MODE_BOTH)

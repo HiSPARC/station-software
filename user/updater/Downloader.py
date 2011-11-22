@@ -3,7 +3,7 @@ import re
 import sys
 import checkFiles
 
-from hslog import *
+from hslog import log
 
 class Downloader():
     def downloadUpdate(self, location, URL):

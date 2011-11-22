@@ -18,11 +18,7 @@ from WeatherEvent import WeatherEvent
 from StorageManager import *
 
 # create a dictionary to store all type_codes of events
-event_type_codes = {'1': 'CIC',
-                    '2': 'ERR',
-                    '3': 'CFG',
-                    '4': 'CMP',
-                    '16': 'WTR'}
+event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP', '16': 'WTR'}
 
 class TriggerRateHolder:
     def __init__(self, triggerRate, date):

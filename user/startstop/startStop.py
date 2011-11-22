@@ -2,7 +2,7 @@ import os
 import wmi
 import win32con
 import win32gui
-from hslog import *
+from hslog import log
 from ctypes import c_ulong, byref, windll
 
 RUNNING = 0

@@ -6,7 +6,7 @@ import os
 import sys
 import checkFiles
 
-from hslog import *
+from hslog import log, setLogMode, MODE_BOTH
 
 CONFIG_INI = 'config.ini'
 PERSISTENT_INI = '/persistent/configuration/config.ini'

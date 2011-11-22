@@ -63,4 +63,3 @@ def setLogMode(mode):
         raise Exception("incorrect log mode!")
     logMode = mode;
     lock.release()
-

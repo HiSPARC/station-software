@@ -1,6 +1,6 @@
 import subprocess
 import wmi
-from socket import*
+from socket import *
 import time
 import win32service
 import win32serviceutil
@@ -9,7 +9,6 @@ import os
 import ConfigParser
 import MySQLdb
 import win32gui
-from hslog import *
 from ctypes import c_ulong, byref, windll
 
 CONFIG_INI = "/user/hsmonitor/data/config.ini"

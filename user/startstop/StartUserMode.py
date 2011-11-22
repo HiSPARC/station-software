@@ -1,10 +1,11 @@
-from startStop import *
-from hslog import *
 import sys
 import time
 import ConfigParser
 import os
 import glob
+
+from startStop import *
+from hslog import log, setLogMode, MODE_BOTH
 
 PATH = "%s:" % os.getenv("HISPARC_DRIVE")
 

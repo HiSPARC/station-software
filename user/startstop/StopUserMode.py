@@ -1,5 +1,5 @@
 from startStop import *
-from hslog import *
+from hslog import log, setLogMode, MODE_BOTH
 from ctypes import c_ulong, byref, windll
 
 PATH = "%s:" %os.getenv("HISPARC_DRIVE")

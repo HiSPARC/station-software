@@ -5,7 +5,7 @@ from cgi import parse_qs
 import sys
 from Downloader import Downloader
 from Tkinter import *
-from hslog import *
+from hslog import log
 import checkFiles
 
 PERSISTENT_INI = '/persistent/configuration/config.ini'
