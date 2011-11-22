@@ -20,9 +20,9 @@ import os
 import sys
 import re
 import time
-import hslog
+from hslog import log, setLogMode, MODE_BOTH
 from EConfigParser import EConfigParser
-import BufferListener
+from BufferListener import BufferListener
 from Interpreter import Interpreter
 from CheckScheduler import CheckScheduler
 from StorageManager import StorageManager
@@ -36,17 +36,17 @@ CONFIG_INI_PATH2 = '../../persistent/configuration/config.ini'
 class HsMonitor:
     def __init__(self):
         # Setup the log mode
-        hslog.setLogMode(hslog.MODE_BOTH)
+        setLogMode(MODE_BOTH)
 
         # Read the configuration file
         try:
             self.cfg = EConfigParser()
             self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2])
         except:
-            hslog.log("HsMonitor: Cannot open the config file!")
+            log("HsMonitor: Cannot open the config file!")
             return
         else:
-            hslog.log("HsMonitor: Initialize variables.")
+            log("HsMonitor: Initialize variables.")
 
             # List of all the threads
             self.hsThreads = []
@@ -93,9 +93,8 @@ class HsMonitor:
                 up.setNumServer(self.numServers)
                 up2.setNumServer(self.numServers)
             except Exception, msg:
-                hslog.log("HsMonitor: Error while parsing local server: %s." %
-                          (msg,))
-                hslog.log("HsMonitor: Will not upload to local server!")
+                log("HsMonitor: Error while parsing local server: %s." % msg)
+                log("HsMonitor: Will not upload to local server!")
 
             # Set number of servers for our own StorageManager
             storMan.setNumServer(self.numServers)
@@ -106,7 +105,7 @@ class HsMonitor:
                 thread.start()
 
         except Exception, msg:
-            hslog.log("Error HsMonitor: %s" % (msg,))
+            log("Error HsMonitor: %s" % msg)
             exit(1)
 
     def stopAll(self):
@@ -130,7 +129,7 @@ class HsMonitor:
                                                          'KeepBufferData', 0)
 
         # Create an instance of BufferListener class
-        buffLis = BufferListener.BufferListener(bufferdb, interpreter)
+        buffLis = BufferListener(bufferdb, interpreter)
         return buffLis
 
     def createCheckScheduler(self, interpreter, nagiosConf):
@@ -144,8 +143,8 @@ class HsMonitor:
         minbs = self.cfg.ifgetint(section_name, "MinBatchSize", 50)
         maxbs = self.cfg.ifgetint(section_name, "MaxBatchSize", 50)
         if (minbs > maxbs):
-            hslog.log("Warning HsMonitor: Maximum batch size must be more than "
-                      "minimum batch size. Setting maximum=minimum.")
+            log("Warning HsMonitor: Maximum batch size must be more than "
+                "minimum batch size. Setting maximum=minimum.")
             maxbs = minbs
         minwait = self.cfg.ifgetfloat(section_name, "MinWait", 1.0)
         maxwait = self.cfg.ifgetfloat(section_name, "MaxWait", 60.0)
@@ -167,17 +166,15 @@ def main():
             time.sleep(10)
             for thread in hsMonitor.hsThreads:
                 if not thread.is_alive():
-                    hslog.log("HsMonitor: Thread %s died, restarting." %
-                              thread.name)
+                    log("HsMonitor: Thread %s died, restarting." % thread.name)
                     thread.init_restart()
                     thread.start()
-                    hslog.log("HsMonitor: Thread %s restarted." % thread.name)
+                    log("HsMonitor: Thread %s restarted." % thread.name)
     except ThreadCrashError, exc:
-        hslog.log(exc)
-        hslog.log("HsMonitor: Thread %s keeps crashing, shutting down." %
-                  thread.name)
+        log(exc)
+        log("HsMonitor: Thread %s keeps crashing, shutting down." % thread.name)
     except KeyboardInterrupt:
-        hslog.log("HsMonitor: Interrupted by keyboard, closing down.")
+        log("HsMonitor: Interrupted by keyboard, closing down.")
 
     # Close down everything
     hsMonitor.stopAll()

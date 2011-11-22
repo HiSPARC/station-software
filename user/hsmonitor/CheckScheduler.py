@@ -1,7 +1,7 @@
 import time
 import traceback
 import threading
-import hslog
+from hslog import log
 from Check import *
 from NagiosPush import NagiosPush
 from StorageManager import StorageManager
@@ -53,14 +53,14 @@ class Scheduler:
                     nagiosPush.sendToNagios(returnValues)
 
                 except StopIteration:
-                    hslog.log("CheckScheduler: JOB STOPPED!")
+                    log("CheckScheduler: JOB STOPPED!")
                     toremove.append(tid)
                     new_interval = None
 
                 except Exception, msg:
-                    hslog.log("CheckScheduler: Uncatched exception in job: %s."
+                    log("CheckScheduler: Uncatched exception in job: %s."
                               "Restarting..." % msg)
-                    #hslog.log(traceback.format_exc())
+                    #log(traceback.format_exc())
                     toremove.append(tid)
                     tostart.append(tid)
                     new_interval = None
@@ -118,7 +118,7 @@ class CheckScheduler(threading.Thread):
     # This function is what the thread actually runs; the required name is run().
     # The threading.Thread.start() calls threading.Thread.run(), which is always overridden.
     def run(self):
-        hslog.log("CheckScheduler: Thread started!")
+        log("CheckScheduler: Thread started!")
         self.storageManager.openConnection()
 
         ### Trigger rate:
@@ -151,4 +151,4 @@ class CheckScheduler(threading.Thread):
                 break
             except:
                 pass
-        hslog.log("CheckScheduler: Thread stopped!")
+        log("CheckScheduler: Thread stopped!")

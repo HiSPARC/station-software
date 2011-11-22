@@ -10,7 +10,7 @@ __date__ ="$16-sep-2009"
 
 import os, sys, cmd
 sys.path.append("..")
-import hslog
+from hslog import log, setLogMode, MODE_PRINT
 from EConfigParser import EConfigParser
 import BufferListener
 from Interpreter import Interpreter
@@ -27,17 +27,17 @@ NUMSERVERS = 2 # TODO
 class HsMonitor:
     def __init__(self):
         # setup the log mode
-        hslog.setLogMode(hslog.MODE_PRINT)
+        setLogMode(MODE_PRINT)
 
         # read the configuration file
         try:
             self.cfg = EConfigParser()
             self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2])
         except:
-            hslog.log("Cannot open the config file!")
+            log("Cannot open the config file!")
             return
         else:
-            hslog.log("Initilize variables")
+            log("Initilize variables")
 
             #list of all the threads
             self.hsThreads = []
@@ -60,7 +60,7 @@ class HsMonitor:
         buffLis = BufferListener.BufferListener(bufferdb, interpreter)
 
         if not buffLis:
-            hslog.log("Cannot connect to the buffer database!")
+            log("Cannot connect to the buffer database!")
             return None
         # TODO better error handling
 

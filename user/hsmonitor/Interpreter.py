@@ -9,7 +9,7 @@ __author__="thevinh"
 __date__ ="$16-sep-2009"
 
 import time
-import hslog
+from hslog import log
 from CIC import CIC
 from ERR import ERR
 from CFG import CFG
@@ -52,8 +52,8 @@ class Interpreter:
         elif eventcode == 'WTR':
             event = WeatherEvent(message)
         else:
-            hslog.log("Interpreter: Unknown message type %s (%d)." %
-                      eventcode, self.type_id)
+            log("Interpreter: Unknown message type %s (%d)." %
+                eventcode, self.type_id)
             return None
 
         event.uploadCode = eventcode
@@ -80,7 +80,7 @@ class Interpreter:
         self.discard_event_ids = []
         # this variable stores the trigger rate of the recent event
         trigger_rate = TriggerRateHolder(0, 0)
-        hslog.log("Interpreter: Parsing %d messages." % len(messages))
+        log("Interpreter: Parsing %d messages." % len(messages))
 
         firsttime = True
         for message in messages:
@@ -113,8 +113,8 @@ class Interpreter:
             except Exception, (errormsg):
                 # add parsed event_id into the list of event_ids
                 self.discard_event_ids.append(message[2])
-                hslog.log("Interpreter: Event exception (discarding event): %s."
-                          % errormsg)
+                log("Interpreter: Event exception (discarding event): %s." %
+                    errormsg)
             else:
                 # add parsed event into the list of events
                 self.eventlist.append({'header': header, 'datalist': event.data})
