@@ -3,7 +3,13 @@ from Check import *
 import sys
 sys.path.append("..\..\pythonshared")
 from hslog import log
+import time
 
+TIMEOUT = 10
+
+class TimeoutException(Exception):
+    pass
+    
 class NagiosPush:        
     def __init__(self, config):        
 	self.host = config["host"]
@@ -26,9 +32,19 @@ class NagiosPush:
                                                   reportMessage['send_nscaPath'],reportMessage['nagiosServer'], \
                                                   reportMessage['serverPort'], reportMessage['send_nscaPath'])
         v = subprocess.Popen(send_nsca_command, shell=True, stdout=subprocess.PIPE)
-        v.wait()
-	res = v.communicate()[0]
-	log ("Check: %s: Status code: %i, Status description: %s \n\t %s" % (nagiosResult.serviceName, nagiosResult.status_code, nagiosResult.description, res))
+        t0 = time.time()
+        try:
+            while v.poll() is None:
+                elapsed_time = time.time() - t0
+                if elapsed_time >= TIMEOUT:
+                    raise TimeoutException("Process won't quit!")
+                time.sleep(1)
+        except TimeoutException:
+            v.kill()
+            res = "send_nsca_command failed"
+        else:
+            res = v.communicate()[0]
+        log ("Check: %s: Status code: %i, Status description: %s \n\t %s" % (nagiosResult.serviceName, nagiosResult.status_code, nagiosResult.description, res))
         
 
 
