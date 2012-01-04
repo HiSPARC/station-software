@@ -1,8 +1,7 @@
 import time
-import traceback
 import threading
 from hslog import log
-from Check import *
+from Check import EventRate, StorageGrowth, StorageSize, TriggerRate
 from NagiosPush import NagiosPush
 from StorageManager import StorageManager
 from UserExceptions import ThreadCrashError
@@ -55,15 +54,12 @@ class Scheduler:
                 except StopIteration:
                     log("CheckScheduler: JOB STOPPED!")
                     toremove.append(tid)
-                    new_interval = None
 
                 except Exception, msg:
                     log("CheckScheduler: Uncatched exception in job: %s."
                               "Restarting..." % msg)
-                    #log(traceback.format_exc())
                     toremove.append(tid)
                     tostart.append(tid)
-                    new_interval = None
 
         # restart new threads
         for tid in tostart:
