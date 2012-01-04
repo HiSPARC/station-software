@@ -1,8 +1,9 @@
-from startStop import *
+import os
+from startStop import StartStop, CMDStartStop
 from hslog import log, setLogMode, MODE_BOTH
-from ctypes import c_ulong, byref, windll
+import win32con
 
-PATH = "%s:" %os.getenv("HISPARC_DRIVE")
+PATH = "%s" %os.getenv("HISPARC_ROOT")
 
 def stop():
     setLogMode(MODE_BOTH)
@@ -26,7 +27,7 @@ def stop():
         log('An exception was generated while stopping LabView!')
 
     try:
-        #stop LabView
+        #stop LabView Weather
         log('Stopping LabView Weather...')
         labViewHandler = StartStop()
         labViewHandler.exeName = 'hisparcweather.exe'
@@ -80,7 +81,6 @@ def stop():
         log('An exception was generated while stopping HSMonitor!')
     
     try:
-        
         #stop Updater
         log('Stopping Updater...')
         updaterHandler = CMDStartStop()
@@ -98,7 +98,5 @@ def stop():
             log('An exception was generated')
     except:
         log('An exception was generated while stopping the Updater!')
-        
-
 
 stop()
