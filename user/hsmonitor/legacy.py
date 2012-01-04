@@ -29,7 +29,7 @@ def unpack_legacy_message(self):
     self.Ndev = struct.unpack("B", self.blob[1:2])[0]
     # Number of bytes per trace
     self.N = struct.unpack(">H", self.blob[2:4])[0]
-	# Time and Date
+    # Time and Date
     self.second = struct.unpack("B", self.blob[4:5])[0]
     self.minute = struct.unpack("B", self.blob[5:6])[0]
     self.hour = struct.unpack("B", self.blob[6:7])[0]
@@ -45,8 +45,8 @@ def unpack_legacy_message(self):
                                       self.minute,
                                       self.second)
     # Nanoseconds
-    self.nanoseconds = struct.unpack(">I", self.blob[11:15])[0] +
-                                     random.randrange(1,9000)
+    self.nanoseconds = struct.unpack(">I", self.blob[11:15])[0] + \
+                       random.randrange(1,9000)
     # Trigger time of Slave relative to Master in ns
     self.SLVtime = struct.unpack(">i", self.blob[15:19])[0]
     # Trigger pattern
