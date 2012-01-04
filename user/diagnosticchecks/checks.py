@@ -1,7 +1,6 @@
 import subprocess
 import wmi
-from socket import *
-import time
+from socket import gethostbyname
 import win32service
 import win32serviceutil
 import win32com.client
@@ -12,6 +11,7 @@ import win32gui
 from ctypes import c_ulong, byref, windll
 
 CONFIG_INI = "/user/hsmonitor/data/config.ini"
+#ADL: Make absolute path, os.getenv, HiSPARC_ROOT..
 
 OK = 0
 WARNING = 1
