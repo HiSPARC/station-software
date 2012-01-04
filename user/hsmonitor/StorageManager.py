@@ -140,7 +140,8 @@ class StorageManager(Subject):
         res = True
         n_events = len(events)
         if n_events > 0:
-            log("StorageManager: Adding %d parsed events into Storage." % (n_events,))
+            log("StorageManager: Adding %d parsed events into Storage." %
+                n_events)
             self.lock.acquire()
             log("StorageManager: Acquired lock.")
             t0 = time.time()
@@ -148,20 +149,22 @@ class StorageManager(Subject):
             c = self.db.cursor()
             query = """INSERT INTO Event (EventData, UploadedTo, DateTime) VALUES (?,0,?)"""
             try:
-                c.executemany(query, ((dumps(event), event['header']['datetime']) for event in events))
+                c.executemany(query, ((dumps(event), event['header']['datetime'])
+                                      for event in events))
                 self.db.commit()
                 c.close()
             except sqlite3.OperationalError, msg:
-                res = False # return False so that events are NOT removed from buffer
+                res = False # Prevent events from being removed from buffer
                 log("StorageManager: Error AddEvents: %s" % (str(msg),))
 
             if StorageManager.storagesize is not None:
                 StorageManager.storagesize += n_events
 
             self.lock.release()
-            log("StorageManager: Events added in %d seconds." % (time.time() - t0))
+            log("StorageManager: Events added in %d seconds." %
+                (time.time() - t0))
 
-            # notify the observers
+            # Notify the observers
             self.update(n_events)
 
             return res
