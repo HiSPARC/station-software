@@ -1,8 +1,6 @@
 import sys
 import os
 import time
-import random
-import calendar
 from Observer import Observer
 from threading import Lock
 from hslog import log
@@ -98,15 +96,15 @@ class TriggerRate(Check):
             # upload checks, detector is probably stalled
             interval = int(config['triggerrate_interval'])
             if abs(dt) > (2 * interval):
-                self.nagiosResult.description = "No recent triggers. Trigger rate:" \
-                                                "%.2f Last update: %d seconds ago" % \
-                                                (self.trate, dt)
+                self.nagiosResult.description = ("No recent triggers. "
+                                                 "Trigger rate: %.2f. Last "
+                                                 "update: %d seconds ago" %
+                                                 (self.trate, dt))
                 self.nagiosResult.status_code = CRITICAL
-
             else:
-                self.nagiosResult.description = "Trigger rate: %.2f Last update:" \
-                                                " %d seconds ago" % (self.trate, dt)
-
+                self.nagiosResult.description = ("Trigger rate: %.2f. Last "
+                                                 "update: %d seconds ago" %
+                                                 (self.trate, dt))
             yield (self.nagiosResult)
 
 class StorageSize(Check):
@@ -189,10 +187,10 @@ class EventRate(Check, Observer):
                     self.nagiosResult.status_code = OK
                 else:
                     self.nagiosResult.status_code = CRITICAL
-                self.nagiosResult.description = "Event rate for a period of " \
-                                                "%.2f seconds is %.2f" % \
-                                                (self.timeDifference, self.eventRate)
-
+                self.nagiosResult.description = ("Event rate for a period of "
+                                                 "%.2f seconds is %.2f" %
+                                                 (self.timeDifference,
+                                                  self.eventRate))
             yield (self.nagiosResult)
 
 class StorageGrowth(Check):
@@ -219,16 +217,12 @@ class StorageGrowth(Check):
             self.storageGrowth = ((self.newStorageSize - self.oldStorageSize) /
                                   float(self.interval))
             self.oldStorageSize = self.newStorageSize
-
             if self.storageGrowth < warn:
                 self.nagiosResult.status_code = OK
             elif self.storageGrowth < crit:
                 self.nagiosResult.status_code = WARNING
             else:
                 self.nagiosResult.status_code = CRITICAL
-
-
-            self.nagiosResult.description = "Storage growth: %f Hz" % \
-                                            (self.storageGrowth)
-
+            self.nagiosResult.description = ("Storage growth: %f Hz" %
+                                             self.storageGrowth)
             yield (self.nagiosResult)
