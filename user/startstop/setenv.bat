@@ -2,25 +2,26 @@
 
 :main
 
-  :: store current directory and change to directory of this batch file
+  :: Store current directory and change to directory of this batch file
   pushd "%~dp0"
 
-  :: go two directories up, to the root of the directory
+  :: Go two directories up, to the root of the directory
   cd ..\..
 
-  :: global environment variables, that we assume everybody has
+  :: Global environment variables, that we assume everybody has
   set HISPARC_ROOT=%CD%
 
   :: sets %HISPARC_DRIVE%
   :: set HISPARC_DRIVE=Z
 
-  :: append semicolon to %PYTHONPATH% if and only if it already exists
+  :: Append semicolon to %PYTHONPATH% if and only if it already exists
   if not "%PYTHONPATH%"=="" set PYTHONPATH=%PYTHONPATH%;
 
   :: ADL: Change all HISPARC_DRIVE references to the current working dir
   ::      or to the path stored in the Windows registry
   set PYTHONPATH=%PYTHONPATH%%HISPARC_ROOT%\user\pythonshared
 
+  :: Create virtual drive
   :: subst %HISPARC_DRIVE%: "%HISPARC_ROOT%" > NUL
 
   :: The python-windows bindings assume that the files in the
@@ -38,5 +39,5 @@
   ::     dll's and manifests and we now add the python directory to the path.
   set path=%path%;%HISPARC_ROOT%\user\python
 
-  :: go back to original current directory
+  :: Go back to original current directory
   popd
