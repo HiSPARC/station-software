@@ -8,8 +8,8 @@ from Tkinter import *
 from hslog import log
 import checkFiles
 
-PERSISTENT_INI = '/persistent/configuration/config.ini'
 CONFIG_INI = 'config.ini'
+PERSISTENT_INI = '/persistent/configuration/config.ini'
 DISPLAY_GUI_MESSAGES = True
 UPDATE_USER_MODE = 1
 UPDATE_ADMIN_MODE = 2
