@@ -4,10 +4,11 @@ import ConfigParser
 import os
 import glob
 
-from startStop import *
+from startStop import StartStop, CMDStartStop
 from hslog import log, setLogMode, MODE_BOTH
+import win32con
 
-PATH = "%s:" % os.getenv("HISPARC_DRIVE")
+PATH = "%s" % os.getenv("HISPARC_ROOT")
 
 def start():
     setLogMode(MODE_BOTH)
@@ -113,7 +114,7 @@ def start():
         updaterHandler.title = 'HISPARC Updater: updater'
         updaterHandler.currentDirectory = "%s/user/updater" % PATH
         updaterHandler.command = "%s/user/python/python.exe Update.py" % PATH
-        resUpdater=updaterHandler.startProcess()
+        resUpdater = updaterHandler.startProcess()
         if resUpdater == 0:
             log('Status:running')
         elif resHSMonitor == 1:
