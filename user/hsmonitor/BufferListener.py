@@ -96,8 +96,8 @@ class BufferListener(threading.Thread):
     def getBufferMessages(self):
         """Get messages from Buffer database"""
         cursor = self.conn.cursor()
-        sql = "SELECT message_type_id, message, message_id FROM message ORDER "\
-              "BY message_id DESC LIMIT %d" % int(self.config['poll_limit'])
+        sql = ("SELECT message_type_id, message, message_id FROM message ORDER "
+               "BY message_id DESC LIMIT %d" % int(self.config['poll_limit']))
         log("BufferListener: Executing SQL: %s" % sql)
         cursor.execute(sql)
         log("BufferListener: Fetching SQL results...")
