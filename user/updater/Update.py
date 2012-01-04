@@ -14,14 +14,19 @@ ADMINUPDATE_NAME = "adminUpdater"
 
 class Updater:
     config = ConfigParser.ConfigParser()
-    timeBetweenChecks = 0 #The amount of time in seconds between update checks
-    timeStartCheckInterval = 0 #Start time of the interval in which checks may be performed on a day(in seconds) e.g. 0 is midnight, 7200 is 2am
-    timeStopCheckInterval = 0 #End time of the interval in which checks may be performed on a day(in seconds) e.g. 0 is midnight, 7200 is 2am
-    checkerInitialDelay = 0 #Bool with if there is an initial delay
+    timeBetweenChecks = 0 # (in seconds)
+    # Start time of the interval in which checks may be performed on a 
+    # day (in seconds) e.g. 0 is midnight, 7200 is 2am
+    timeStartCheckInterval = 0
+    # End time of the interval in which checks may be performed on a
+    # day (in seconds) e.g. 0 is midnight, 7200 is 2am
+    timeStopCheckInterval = 0
+    checkerInitialDelay = 0 # Bool with if there is an initial delay
     scheduler = sched.scheduler(time.time, time.sleep)
     checker = Checker()
 
-    # checks if there is already an update to install in admin mode and if the user is in admin mode
+    # Check if there is already an update to install in admin mode and if the
+    # user is in admin mode
     def checkIfUpdateToInstall(self):
         print "is admin: %s" % checkFiles.checkIfAdmin()
         
@@ -35,18 +40,21 @@ class Updater:
             
             print "found is %s" % found
             if found:
-                os.system('/user/updater/runAdminUpdate.bat /persistent/downloads/%s' % fileFound)
+                os.system('/user/updater/runAdminUpdate.bat '
+                          '/persistent/downloads/%s' % fileFound)
     
     
     def calculateInitialDelay(self):
         if self.checkerInitialDelay == 1:
-            #Calculate the time now and the time it is be today at four and at noon
+            #Calculate the time now
+            #..and the time it is be today at four and at noon
             now = int(time.time())
             last_midnight = now - (now % 86400)
             today_at_starttime = last_midnight + self.timeStartCheckInterval
             today_at_stoptime = last_midnight + self.timeStopCheckInterval
 
-            #Check if you are allowed to update already (in the interval between starttime and stoptime)
+            #Check if you are allowed to update already
+            #(in the interval between starttime and stoptime)
             if ((today_at_starttime < now) & (now < today_at_stoptime)):
                 today_random_moment = random.randint(now, today_at_stoptime)
                 return today_random_moment - now
