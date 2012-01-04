@@ -2,7 +2,7 @@
 
 import datetime
 import time
-import base64
+#import base64
 from Event import Event
 import EventExportValues
 
@@ -70,6 +70,6 @@ class WeatherEvent(object, Event):
             eventdata.append({"calculated": value[0],
                               "data_uploadcode": value[1],
                               "data": self.__getattribute__(value[2])})
-                              #"data": base64.b64encode(self.__getattribute__(value[2]))
+                            #"data": base64.b64encode(self.__getattribute__(value[2]))
 
         return eventdata
