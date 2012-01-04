@@ -1,6 +1,6 @@
-===PYTHON=== (fixme: change to steps for python 2.5)
+===PYTHON=== (fixme: change to steps for python 2.7.1)
 
-How to set up a python installation for distribution with the Hisparc updater and installer:
+How to set up a python installation for distribution with the HiSPARC updater and installer:
 
 Under Windows, it is not trivial to install Python to a directory without changing any system-wide settings. It is theoretically possible, but all the installers of Python modules depend on the Windows Registry to find the appropriate Python installation.
 
@@ -83,15 +83,15 @@ Seems not needed
 
 ===MONITOR===
 
-* in /user/persistent/configuration/hsmonitor/config.ini, changed settings to match buffer.sql:
+x in /user/persistent/configuration/hsmonitor/config.ini, changed settings to match buffer.sql:
     Username=buffer
     Password=PLACEHOLDER
-    
-* moved all files in /src in the original distribution to /user/hsmonitor; removed backup copies and log files
 
-* changed in all .py files:
-  * "../data/config.ini" to "../../persistent/configuration/hsmonitor/config.ini" (for now, might change)
-  * "../data/stats.db" to "../../persistent/data/hsmonitor/stats.db"
+x moved all files in /src in the original distribution to /user/hsmonitor; removed backup copies and log files
+
+x changed in all .py files:
+  x "../data/config.ini" to "../../persistent/configuration/hsmonitor/config.ini" (for now, might change)
+  x "../data/stats.db" to "../../persistent/data/hsmonitor/stats.db"
   
 * todo: 
   * make up how station_id and password is put in the buffer db
