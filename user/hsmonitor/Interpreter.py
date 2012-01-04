@@ -8,14 +8,13 @@ creates Events from them. The Events are passed on to the StorageManager.
 __author__="thevinh"
 __date__ ="$16-sep-2009"
 
-import time
 from hslog import log
 from CIC import CIC
 from ERR import ERR
 from CFG import CFG
 from CMP import CMP
 from WeatherEvent import WeatherEvent
-from StorageManager import *
+#from StorageManager import *
 
 # create a dictionary to store all type_codes of events
 event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP', '16': 'WTR'}
@@ -83,14 +82,11 @@ class Interpreter:
             try:
                 # get the event message code
                 eventcode = event_type_codes['%d' % message[0]]
-
                 # create an event object
                 event = self.createEvent(eventcode, message)
-
                 # skip processing event if it is None
                 if event is None:
                     continue
-
                 # create the event header
                 # new server uses datetime, old uses date and time
                 # for compatibility, include both
@@ -113,7 +109,8 @@ class Interpreter:
                     errormsg)
             else:
                 # add parsed event into the list of events
-                self.eventlist.append({'header': header, 'datalist': event.data})
+                self.eventlist.append({'header': header,
+                                       'datalist': event.data})
                 # add parsed event_id into the list of event_ids
                 self.event_ids.append(message[2])
 
