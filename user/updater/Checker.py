@@ -1,12 +1,14 @@
+import os
+import sys
 import ConfigParser
 from urllib import urlencode
 import urllib2
 from cgi import parse_qs
-import sys
-from Downloader import Downloader
-from Tkinter import *
-from hslog import log
+from Tkinter import Message, Tk
+
 import checkFiles
+from hslog import log, SEVERITY_CRITICAL
+from Downloader import Downloader
 
 CONFIG_INI = 'config.ini'
 PERSISTENT_INI = '/persistent/configuration/config.ini'
@@ -31,7 +33,6 @@ class Checker:
         params = urlencode({'admin_version': currentAdmin,
                             'user_version': currentUser,
                             'station_id': stationname})
-        updateInfo = ''
         proxy_support = urllib2.ProxyHandler()
         auth_handler = urllib2.HTTPBasicAuthHandler()
         auth_handler.add_password(realm='HiSPARC restricted', uri=server,
@@ -75,7 +76,7 @@ class Checker:
             
             if DISPLAY_GUI_MESSAGES and not(checkFiles.checkIfAdmin()):
                 root = Tk()
-                root.title('HiSparc')
+                root.title('HiSPARC')
                 Message(root, anchor='s', text="Update is available requiring "
                         "administrator rights!\nPlease ask your administrator "
                         "to reboot and install it!").pack(padx=150, pady=100)

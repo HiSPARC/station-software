@@ -1,5 +1,3 @@
-from Observer import Observer
-
 class Subject:
     def __init__(self):
         self.observers = []

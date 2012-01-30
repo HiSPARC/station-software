@@ -1,6 +1,5 @@
 from urllib import urlretrieve
 import re
-import sys
 import checkFiles
 
 from hslog import log

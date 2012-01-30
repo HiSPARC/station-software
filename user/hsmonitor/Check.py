@@ -1,8 +1,8 @@
 import sys
-import os
 import time
-from Observer import Observer
 from threading import Lock
+
+from Observer import Observer
 from hslog import log
 from NagiosResult import NagiosResult
 from StorageManager import StorageManager

@@ -1,12 +1,13 @@
 import ConfigParser
-from Checker import Checker
-import sched, datetime, time
+import sched
+import time
 import random
 import os
 import sys
-import checkFiles
 
-from hslog import log, setLogMode, MODE_BOTH
+import checkFiles
+from Checker import Checker
+from hslog import log, setLogMode, MODE_BOTH, SEVERITY_CRITICAL
 
 CONFIG_INI = 'config.ini'
 PERSISTENT_INI = '/persistent/configuration/config.ini'

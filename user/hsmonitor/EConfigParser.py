@@ -1,5 +1,4 @@
 from ConfigParser import ConfigParser
-import sys
 from hslog import log
 
 class EConfigParser(ConfigParser):
@@ -25,7 +24,8 @@ class EConfigParser(ConfigParser):
         return self.ifget(section, option, float, default)
 
     def itemsdict(self, section):
-        # convert a config list to dictionary variable -> need to use small letters in the names
+        # convert a config list to dictionary variable
+        # (need to use small letters in the names)
         result = {}
         for key, value in self.items(section):
             result[key] = value

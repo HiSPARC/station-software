@@ -1,14 +1,7 @@
-import subprocess
 import wmi
-from socket import gethostbyname
-import win32service
-import win32serviceutil
-import win32com.client
-import os
-import ConfigParser
 import MySQLdb
-import win32gui
-from ctypes import c_ulong, byref, windll
+from socket import gethostbyname
+import ConfigParser
 
 CONFIG_INI = "/user/hsmonitor/data/config.ini"
 #ADL: Make absolute path, os.getenv, HiSPARC_ROOT..
@@ -70,8 +63,8 @@ def check_lvusage(warn, crit):
 
     for p in w.Win32_Process():
         if p.Name in LABVIEW_CAPTIONS:
-            mem = float(p.WorkingSetSize) / (1024 * 1024.0)
-            cpu = (float(p.UserModeTime) + float(p.KernelModeTime)) / 10000000.0
+            mem = float(p.WorkingSetSize) / (1024. * 1024.)
+            cpu = (float(p.UserModeTime) + float(p.KernelModeTime)) / 1e7
             
             print 'Memory usage: %.1f Mb' % mem
             print 'CPU time: %.2fs' % cpu

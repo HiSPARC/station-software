@@ -16,10 +16,9 @@ ADL: Check how the HsMonitor is started, what is the 'working directory'?
 __author__ = "thevinh"
 __date__ = "$16-sep-2009"
 
-import os
-import sys
 import re
-import time
+from time import sleep
+
 from hslog import log, setLogMode, MODE_BOTH
 from EConfigParser import EConfigParser
 from BufferListener import BufferListener
@@ -163,7 +162,7 @@ def main():
     # Periodically check for crashed threads, and restart them if necessary
     try:
         while True:
-            time.sleep(10)
+            sleep(10)
             for thread in hsMonitor.hsThreads:
                 if not thread.is_alive():
                     log("HsMonitor: Thread %s died, restarting." % thread.name)

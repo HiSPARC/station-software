@@ -1,9 +1,8 @@
-import sqlite3
-import sys
 import os
+import sqlite3
 from threading import Lock
 from cPickle import dumps, loads
-import time
+from time import time
 
 from Subject import Subject
 from hslog import log
@@ -60,7 +59,7 @@ class StorageManager(Subject):
         try:
             self.db = sqlite3.connect(self.db_name)
         except Exception, msg:
-            log("StorageManager: Error opening connection: %s." % (str(msg),))
+            log("StorageManager: Error opening connection: %s." % str(msg))
             raise Exception("Could not connect to sqlite3 database.")
 
     def __create(self):
@@ -89,14 +88,14 @@ class StorageManager(Subject):
         c = self.db.cursor()
         ssize = StorageManager.storagesize
         if (ssize is not None and ssize < VACUUMTHRESHOLD and
-            time.time() - StorageManager.lastvacuum > 100000):
+            time() - StorageManager.lastvacuum > 100000):
                 log("StorageManager: Starting VACUUM operation...")
                 c.execute("VACUUM")
-                StorageManager.lastvacuum = time.time()
+                StorageManager.lastvacuum = time()
                 log("StorageManager: VACUUM finished.")
         c.execute("""
-                SELECT * FROM Event WHERE (UploadedTo & ?) == 0 LIMIT ?;
-                """, (serverbit, numEvents))
+                  SELECT * FROM Event WHERE (UploadedTo & ?) == 0 LIMIT ?;
+                  """, (serverbit, numEvents))
         res = c.fetchall()
         c.close()
         self.lock.release()
@@ -122,7 +121,7 @@ class StorageManager(Subject):
     def getEvent(self, serverID):
         """Return tuple consisting of (event,id)"""
         raw_results = self.getEventsRawSQL(serverID, 1)
-        if len(raw_results) > 0:
+        if len(raw_results):
             (id, blob, uploadedto, datetime) = raw_results[0]
             return (loads(str(blob)), id)
         else:
@@ -139,30 +138,30 @@ class StorageManager(Subject):
         """
         res = True
         n_events = len(events)
-        if n_events > 0:
+        if n_events:
             log("StorageManager: Adding %d parsed events into Storage." %
                 n_events)
             self.lock.acquire()
             log("StorageManager: Acquired lock.")
-            t0 = time.time()
+            t0 = time()
 
             c = self.db.cursor()
             query = """INSERT INTO Event (EventData, UploadedTo, DateTime) VALUES (?,0,?)"""
             try:
-                c.executemany(query, ((dumps(event), event['header']['datetime'])
+                c.executemany(query, ((dumps(event),
+                                       event['header']['datetime'])
                                       for event in events))
                 self.db.commit()
                 c.close()
             except sqlite3.OperationalError, msg:
                 res = False # Prevent events from being removed from buffer
-                log("StorageManager: Error AddEvents: %s" % (str(msg),))
+                log("StorageManager: Error AddEvents: %s" % str(msg))
 
             if StorageManager.storagesize is not None:
                 StorageManager.storagesize += n_events
 
             self.lock.release()
-            log("StorageManager: Events added in %d seconds." %
-                (time.time() - t0))
+            log("StorageManager: Events added in %d seconds." % (time() - t0))
 
             # Notify the observers
             self.update(n_events)

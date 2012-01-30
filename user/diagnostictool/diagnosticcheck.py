@@ -1,4 +1,4 @@
-from definitions import *
+from definitions import status
 
 class DiagnosticCheck:
     status = status.HASNT_RUN
@@ -9,7 +9,7 @@ class DiagnosticCheck:
     def run(self):
         self.status = self._check()
         if self.status is None:
-            self.message = "Unknown failure.  Please report."
+            self.message = "Unknown failure. Please report."
             self.status = status.FAIL
 
     def __str__(self):

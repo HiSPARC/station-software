@@ -1,6 +1,6 @@
-import sys
-import time
+from time import sleep, time
 from subprocess import Popen, PIPE
+
 from hslog import log
 
 TIMEOUT = 10
@@ -36,13 +36,13 @@ class NagiosPush:
                               reportMessage['send_nscaPath']))
 
         v = Popen(send_nsca_command, shell=True, stdout=PIPE)
-        t0 = time.time()
+        t0 = time()
         try:
             while v.poll() is None:
-                elapsed_time = time.time() - t0
+                elapsed_time = time() - t0
                 if elapsed_time >= TIMEOUT:
                     raise TimeoutException("Process won't quit!")
-                time.sleep(1)
+                sleep(1)
         except TimeoutException:
             v.kill()
             res = "send_nsca_command failed"

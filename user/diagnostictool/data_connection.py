@@ -1,8 +1,9 @@
-from definitions import *
-import settings
-from diagnosticcheck import DiagnosticCheck
 from urllib2 import urlopen, URLError, HTTPError
 import logging
+
+from diagnosticcheck import DiagnosticCheck
+from settings import DATA_URL
+from definitions import status
 
 logger = logging.getLogger("data_connection")
 
@@ -17,9 +18,9 @@ class Check(DiagnosticCheck):
     name = "Data connection"
 
     def _check(self):
-        logger.debug("Trying to connect to %s" % settings.DATA_URL)
+        logger.debug("Trying to connect to %s" % DATA_URL)
         try:
-            answer = urlopen(settings.DATA_URL, timeout=10).read()
+            answer = urlopen(DATA_URL, timeout=10).read()
         except (URLError, HTTPError), exc:
             self.message = "Failed during connection attempt: %s" % exc
             return status.FAIL

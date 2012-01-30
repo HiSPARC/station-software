@@ -2,13 +2,9 @@ import Tkinter
 import threading
 import Queue
 import logging
-import os
-import shutil
-import datetime
 
 from main import run_checks
 from write_vpn_config import write_config
-
 
 class GUI(Tkinter.Frame):
     def __init__(self, queue, master=None):
@@ -20,17 +16,13 @@ class GUI(Tkinter.Frame):
 
     def create_widgets(self):
         self.scrollbar = Tkinter.Scrollbar(self, orient='vertical')
-        self.text = Tkinter.Text(self, width=80, height=25,
-                                 state='disabled',
+        self.text = Tkinter.Text(self, width=80, height=25, state='disabled',
                                  yscrollcommand=self.scrollbar.set)
         self.scrollbar['command'] = self.text.yview
-
         self.write_vpn_button = Tkinter.Button(self,
                                                command=self.write_vpn_config,
                                                text="Write VPN Config")
-        self.quit_button = Tkinter.Button(self, command=self.quit,
-                                          text="Quit")
-
+        self.quit_button = Tkinter.Button(self, command=self.quit, text="Quit")
         self.text.grid(row=0, columnspan=2)
         self.scrollbar.grid(row=0, column=2, sticky='ns')
         self.write_vpn_button.grid(row=1, sticky='w')

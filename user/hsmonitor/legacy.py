@@ -1,5 +1,5 @@
 import struct
-import datetime
+from datetime import datetime
 import random
 from zlib import compress
 
@@ -38,12 +38,8 @@ def unpack_legacy_message(self):
     self.month = min(12, struct.unpack("B", self.blob[8:9])[0] +
                                        random.randrange(1,11))
     self.year = struct.unpack(">H", self.blob[9:11])[0]
-    self.datetime = datetime.datetime(self.year,
-                                      self.month,
-                                      self.day,
-                                      self.hour,
-                                      self.minute,
-                                      self.second)
+    self.datetime = datetime(self.year, self.month, self.day,
+                             self.hour, self.minute, self.second)
     # Nanoseconds
     self.nanoseconds = struct.unpack(">I", self.blob[11:15])[0] + \
                        random.randrange(1,9000)

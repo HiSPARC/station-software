@@ -9,13 +9,13 @@ creates Events from it. The Events are passed on to the StorageManager.
 __author__="thevinh"
 __date__ ="$14-sep-2009"
 
-import sys
-import time
+from time import sleep, time
 import threading
+
 import _mysql
 from MySQLdb import connect, OperationalError
+
 from hslog import log
-from Interpreter import Interpreter
 from UserExceptions import ThreadCrashError
 
 class BufferListener(threading.Thread):
@@ -40,12 +40,12 @@ class BufferListener(threading.Thread):
     def init_restart(self):
         """Support for restarting crashed threads"""
 
-        if len(self.crashes) > 3 and time.time() - self.crashes[-3] < 60.:
+        if len(self.crashes) > 3 and time() - self.crashes[-3] < 60.:
             raise ThreadCrashError('Thread has crashed three times in '
                                    'less than a minute')
         else:
             super(BufferListener, self).__init__()
-            self.crashes.append(time.time())
+            self.crashes.append(time())
 
     # This function is what the thread actually runs. The required name is
     # run(). The threading.Thread.start() calls threading.Thread.run(), which
@@ -66,7 +66,7 @@ class BufferListener(threading.Thread):
                 if int(self.config['keep_buffer_data']) != 1:
                     self.clearBufferMessages(event_ids)
             # wait for a polling interval
-            time.sleep(int(self.config['poll_interval']))
+            sleep(int(self.config['poll_interval']))
         log("BufferListener: Thread stopped!")
 
     def getDBConnection(self, dbdict):

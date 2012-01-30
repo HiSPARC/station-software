@@ -14,7 +14,6 @@ from ERR import ERR
 from CFG import CFG
 from CMP import CMP
 from WeatherEvent import WeatherEvent
-#from StorageManager import *
 
 # create a dictionary to store all type_codes of events
 event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP', '16': 'WTR'}
@@ -121,7 +120,7 @@ class Interpreter:
         # add all parsed events into the Storage
         res = self.storageManager.addEvents(self.eventlist)
         # clear the event id list if events cannot be stored in Storage DB
-        if res != True:
+        if not res:
             self.event_ids = []
             return self.discard_event_ids
 

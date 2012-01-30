@@ -1,9 +1,9 @@
-import os
 import wmi
 import win32con
 import win32gui
-from hslog import log
 from ctypes import c_ulong, byref, windll
+
+from hslog import log
 
 RUNNING = 0
 STOPPED = 1
@@ -72,7 +72,7 @@ class StartStop:
         process = self.wmiObj.Win32_Process(name=self.exeName)
         if process != []:
             if self.command != '':
-                for iterator in range(1,3):
+                for i in range(1,3):
                     if result == RUNNING:
                         result = self.askStopProcess()
                         return result #ADL: Should this not be behind if?

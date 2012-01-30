@@ -3,7 +3,8 @@
 __author__="thevinh"
 __date__ ="$17-sep-2009"
 
-import datetime
+from datetime import datetime
+
 from HiSparc2Event import HiSparc2Event
 
 class CMP(HiSparc2Event):
@@ -27,11 +28,10 @@ class CMP(HiSparc2Event):
         self.cmp_count_over_threshold = self.unpackSeqMessage('>2B5BHL2BL')
 
         try:
-            self.datetime = datetime.datetime(gps_year, gps_month, gps_day,
-                                              gps_hour, gps_minute,
-                                              gps_second)
+            self.datetime = datetime(gps_year, gps_month, gps_day,
+                                     gps_hour, gps_minute, gps_second)
         except ValueError:
             # In some version of DAQ/FPGA, GPS timestamps are zeroed out.
             # Make sure we have something intelligible, while also raising
             # a red flag.
-            self.datetime = datetime.datetime(1900, 1, 1, 0, 0, 0)
+            self.datetime = datetime(1900, 1, 1, 0, 0, 0)

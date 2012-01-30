@@ -4,7 +4,7 @@ __author__="thevinh"
 __date__ ="$17-sep-2009"
 
 import struct
-import datetime
+from datetime import datetime
 from zlib import compress
 
 from HiSparc2Event import HiSparc2Event
@@ -66,8 +66,8 @@ class CIC(HiSparc2Event):
         # Only bits 0-19 are defined, zero the rest to make sure
         self.trigger_pattern &= 2**20-1
 
-        self.datetime = datetime.datetime(gps_year, gps_month, gps_day,
-                                          gps_hour, gps_minute, gps_second)
+        self.datetime = datetime(gps_year, gps_month, gps_day,
+                                 gps_hour, gps_minute, gps_second)
 
         # Length of a single trace
         l = self.length / 2

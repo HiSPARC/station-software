@@ -3,10 +3,10 @@ import time
 import ConfigParser
 import os
 import glob
+import win32con
 
 from startStop import StartStop, CMDStartStop
 from hslog import log, setLogMode, MODE_BOTH
-import win32con
 
 PATH = "%s" % os.getenv("HISPARC_ROOT")
 

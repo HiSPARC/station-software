@@ -3,7 +3,8 @@
 __author__="thevinh"
 __date__ ="$17-sep-2009"
 
-import datetime
+from datetime import datetime
+
 from HiSparc2Event import HiSparc2Event
 
 class CFG(HiSparc2Event):
@@ -28,8 +29,8 @@ class CFG(HiSparc2Event):
         self.cfg_gps_altitude = self.unpackSeqMessage('>2B5BH3d')
         #self.cfg_gps_altitude = self.unpackSeqMessage('>BBBBBBBHddd')
 
-        self.datetime = datetime.datetime(gps_year, gps_month, gps_day,
-                                          gps_hour, gps_minute, gps_second)
+        self.datetime = datetime(gps_year, gps_month, gps_day,
+                                 gps_hour, gps_minute, gps_second)
         self.nanoseconds = 0
 
         self.cfg_mas_version, = self.unpackSeqMessage('LVstring')

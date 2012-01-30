@@ -1,16 +1,15 @@
+from time import sleep, time
+from cPickle import dumps
+from urllib import urlencode
+from urllib2 import urlopen, HTTPError, URLError
+from threading import Thread, Semaphore, Event
+
 from Observer import Observer
 from StorageManager import StorageManager
-import sys
 from hslog import log
 from NagiosPush import NagiosPush
 from NagiosResult import NagiosResult
 from UserExceptions import ThreadCrashError
-from threading import Thread, Semaphore, Event
-from time import sleep
-from cPickle import dumps
-from urllib import urlencode
-from urllib2 import urlopen, HTTPError, URLError
-import time
 
 # TODO add observer
 # use BUI's trick to stop a thread
@@ -74,7 +73,7 @@ class Uploader(Observer, Thread):
     def init_restart(self):
         """Support for restarting crashed threads."""
 
-        if len(self.crashes) > 3 and time.time() - self.crashes[-3] < 60.:
+        if len(self.crashes) > 3 and time() - self.crashes[-3] < 60.:
             raise ThreadCrashError("Thread has crashed three times in "
                                    "less than a minute")
         else:
@@ -82,7 +81,7 @@ class Uploader(Observer, Thread):
             # the superclasses should both use super, but ...?
             #super(Uploader, self).__init__()
             Thread.__init__(self)
-            self.crashes.append(time.time())
+            self.crashes.append(time())
 
     def notify(self, count=1):
         """Notify the uploader that count events were received."""

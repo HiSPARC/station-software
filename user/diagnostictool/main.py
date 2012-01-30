@@ -1,7 +1,8 @@
-import settings
-from definitions import *
-
 import logging
+
+import settings
+from definitions import status
+
 logger = logging.getLogger("diagnostics")
 
 help_message = """Welcome to the HiSPARC Diagnostic Tool.
@@ -21,7 +22,6 @@ enable us to more quickly assess the situation.
 Thank you!
 
 """
-
 
 def run_checks():
     logger.info(help_message)
