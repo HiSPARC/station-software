@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import datetime
+from datetime import datetime
 import time
 #import base64
 
@@ -18,7 +18,7 @@ class WeatherEvent(object, Event):
     def parseMessage(self):
         tmp = self.message.split("\t")
         t = time.strptime(tmp[0].strip(), "%Y-%m-%d %H:%M:%S")
-        self.datetime = datetime.datetime(t[0], t[1], t[2], t[3], t[4], t[5])
+        self.datetime = datetime(t[0], t[1], t[2], t[3], t[4], t[5])
         self.nanoseconds = 0 # Weather is not accurate enough
         self.second = self.datetime.second
         self.minute = self.datetime.minute
