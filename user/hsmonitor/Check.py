@@ -14,6 +14,7 @@ UNKNOWN = 3
 
 TIME_DIFF_INI = '../../persistent/configuration/HisparcII.ini'
 
+
 class Check:
     def __init__(self):
         self.nagiosResult = NagiosResult()
@@ -33,6 +34,7 @@ class Check:
             log("Check: Wrong arguments given! %s" % (prange,))
             sys.exit(CRITICAL)
 
+
 class TriggerRate(Check):
     def __init__(self, interpreter):
         Check.__init__(self)
@@ -47,7 +49,7 @@ class TriggerRate(Check):
                 critRange = config['triggerrate_crit']
                 crit = self.parse_range(critRange)
             except:
-                log("Check: Unable to read config.ini in %s" % 
+                log("Check: Unable to read config.ini in %s" %
                     (self.nagiosResult.serviceName,))
                 self.nagiosResult.status_code = CRITICAL
 
@@ -107,18 +109,19 @@ class TriggerRate(Check):
                                                  (self.trate, dt))
             yield (self.nagiosResult)
 
+
 class StorageSize(Check):
-    def __init__(self,storageManager):
+    def __init__(self, storageManager):
         Check.__init__(self)
         self.nagiosResult.serviceName = "StorageSize"
         self.storageManager = storageManager
 
     def check(self, sched, config):
         """Check the buffer size.
-        
+
         The acceptable range is between the warn an crit range.
         cmin <= wmin <= OK >= wmax >= cmax.
-        
+
         """
         if StorageManager.storagesize is None:
                 self.storageManager.getNumEvents()
@@ -154,6 +157,7 @@ class StorageSize(Check):
 
             yield (self.nagiosResult)
 
+
 class EventRate(Check, Observer):
     def __init__(self):
         Check.__init__(self)
@@ -179,7 +183,8 @@ class EventRate(Check, Observer):
                 self.timeDifference = time.time() - self.oldCountTime
                 self.oldCountTime = time.time()
                 self.lock.acquire()
-                self.eventRate = float(self.eventCount)/float(self.timeDifference)
+                self.eventRate = (float(self.eventCount) /
+                                  float(self.timeDifference))
                 self.eventCount = 0
                 self.lock.release()
 
@@ -193,8 +198,9 @@ class EventRate(Check, Observer):
                                                   self.eventRate))
             yield (self.nagiosResult)
 
+
 class StorageGrowth(Check):
-    def __init__(self,storageManager):
+    def __init__(self, storageManager):
         Check.__init__(self)
         self.nagiosResult.serviceName = "StorageGrowth"
         self.newStorageSize = 0
@@ -209,7 +215,7 @@ class StorageGrowth(Check):
                 warn = float(config['storagegrowth_warn'])
                 crit = float(config['storagegrowth_crit'])
             except:
-                log("Check: Unable to read config.ini in %s" % 
+                log("Check: Unable to read config.ini in %s" %
                     (self.nagiosResult.serviceName,))
                 self.nagiosResult.status_code = CRITICAL
 

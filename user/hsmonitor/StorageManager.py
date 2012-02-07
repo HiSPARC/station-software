@@ -12,13 +12,14 @@ VACUUMTHRESHOLD = 1000
 
 lock = Lock()
 
+
 class StorageManager(Subject):
     """The StorageManager is used to access the SQLite database called storage.
-    
-    Prior to version 3.3.1 of SQLite you cannot transfer objects of SQLite, e.g.
-    the connection or the cursor, across threads. Therefore thread needs to use
-    its own instance of the StorageManager. Make sure to create the instance
-    within the run()-method and not in the constructor.
+
+    Prior to version 3.3.1 of SQLite you cannot transfer objects of SQLite,
+    e.g. the connection or the cursor, across threads. Therefore thread needs
+    to use its own instance of the StorageManager. Make sure to create the
+    instance within the run()-method and not in the constructor.
 
     """
     storagesize = None
@@ -45,16 +46,16 @@ class StorageManager(Subject):
         # all 1's for servers that have been uploaded to.
         # For example with 2 servers, allUploadedMask is 0b11 (3).
         self.allUploadedMask = 0
-        for i in xrange(0,numServer):
+        for i in xrange(0, numServer):
             self.allUploadedMask |= 1 << i
 
     def openConnection(self):
         """Opens a connection to the sql-storage.
-        
+
         This function must be called before the other functions can be used.
         It must be executed on the same thread on which the other functions
         are executed: i.e. in the run()-method of a thread.
-        
+
         """
         try:
             self.db = sqlite3.connect(self.db_name)
@@ -78,10 +79,10 @@ class StorageManager(Subject):
         c.close()
 
     def getEventsRawSQL(self, serverID, numEvents):
-        """Return numEvents not yet uploaded to the server identified by serverID.
-        
+        """Return numEvents not yet uploaded to serverID.
+
         Return the output from SQL (so with status and id, do you need this?).
-        
+
         """
         serverbit = 1 << serverID
         self.lock.acquire()
@@ -102,12 +103,12 @@ class StorageManager(Subject):
         return res
 
     def getEvents(self, serverID, numEvents):
-        """Return numEvents not yet uploaded to the server identified by serverID.
-        
+        """Return numEvents not yet uploaded to serverID.
+
         The result is a tuple: the first element is a list containing the data
-        attribute of the events that were inserted, the second element is a list
-        with the corresponding event ids in the storage.
-        
+        attribute of the events that were inserted, the second element is a
+        list with the corresponding event ids in the storage.
+
         """
         raw_results = self.getEventsRawSQL(serverID, numEvents)
         elist = list()
@@ -129,12 +130,12 @@ class StorageManager(Subject):
 
     def addEvents(self, events):
         """Insert events in the storage and notifies all observers.
-        
-        The parameters events is a list of events.
-        Each event is assumed to have a datetime attribute and a data attribute.
-        The data attribute will be pickled and stored.
-        The StorageManager is responsible for serializing the events.
-        
+
+        The parameters events is a list of events. Each event is assumed to
+        have a datetime attribute and a data attribute. The data attribute will
+        be pickled and stored. The StorageManager is responsible for
+        serializing the events.
+
         """
         res = True
         n_events = len(events)
@@ -146,7 +147,8 @@ class StorageManager(Subject):
             t0 = time()
 
             c = self.db.cursor()
-            query = """INSERT INTO Event (EventData, UploadedTo, DateTime) VALUES (?,0,?)"""
+            query = ("INSERT INTO Event (EventData, UploadedTo, DateTime) "
+                     "VALUES (?,0,?)")
             try:
                 c.executemany(query, ((dumps(event),
                                        event['header']['datetime'])
@@ -154,7 +156,7 @@ class StorageManager(Subject):
                 self.db.commit()
                 c.close()
             except sqlite3.OperationalError, msg:
-                res = False # Prevent events from being removed from buffer
+                res = False  # Prevent events from being removed from buffer
                 log("StorageManager: Error AddEvents: %s" % str(msg))
 
             if StorageManager.storagesize is not None:
@@ -175,29 +177,31 @@ class StorageManager(Subject):
 
     def __IDList2String(self, IDs):
         """Helper function that transforms a list of integers to a string.
-        
+
         Example: '(1,3,4,5)'.
-        
+
         """
         string_ids = []
         for ei in IDs:
             string_ids.append("%i" % int(ei))
-        list_id = "(" +",".join(string_ids) + ")"
+        list_id = "(" + ",".join(string_ids) + ")"
         return list_id
 
     def setUploaded(self, serverID, eventIDs):
-        """Set UploadedTo-field of event to the serverID to which it was uploaded.
-        
-        If the event is uploaded to all servers, remove the event.
-        
+        """Set UploadedTo-field to the serverID to which it was uploaded.
+
+        This sets the UploadedTo-field of the event to the serverID to which
+        it was uploaded. If the event is uploaded to all servers, the event
+        will be removed.
+
         """
         serverbit = 1 << serverID
         self.lock.acquire()
         c = self.db.cursor()
 
         # First get the UploadedTo status from the db
-        query = """SELECT EventID, UploadedTo from Event Where EventID IN %s;""" % \
-                self.__IDList2String(eventIDs)
+        query = ("SELECT EventID, UploadedTo from Event Where EventID IN %s;" %
+                 self.__IDList2String(eventIDs))
         c.execute(query)
 
         # Split the result in events whose status needs to be updated and the
@@ -223,11 +227,11 @@ class StorageManager(Subject):
             if StorageManager.storagesize is not None:
                 StorageManager.storagesize -= n_remove
 
-        # Update status of events that have not yet been uploaded to all servers
+        # Update status of events that havn't yet been uploaded to all servers
         n_need_update = len(need_update)
         if len(need_update) > 0:
-            query = """UPDATE Event Set UploadedTo = UploadedTo | ? WHERE EventId in %s;""" % \
-                    self.__IDList2String(need_update)
+            query = ("UPDATE Event Set UploadedTo = UploadedTo | ? WHERE "
+                     "EventId in %s;" % self.__IDList2String(need_update))
             log("StorageManager: %d events updated in Storage" % n_need_update)
             c.execute(query, (serverbit,))
 
@@ -250,7 +254,8 @@ class StorageManager(Subject):
 
         self.lock.acquire()
         c = self.db.cursor()
-        (qres,) = c.execute("""SELECT COUNT(*) FROM Event Where UploadedTo & ? == 0;""", (serverbit,))
+        (qres,) = c.execute("SELECT COUNT(*) FROM Event Where UploadedTo & ? "
+                            "== 0;", (serverbit,))
         (res,) = qres
         c.close()
         self.lock.release()
@@ -279,7 +284,7 @@ class StorageManager(Subject):
         self.openConnection()
         c = self.db.cursor()
 
-        log("StorageManager: Deleting old events which have already been"
+        log("StorageManager: Deleting old events which have already been "
             "uploaded to all currently specified servers.")
         sql = "SELECT COUNT(*) FROM Event WHERE UploadedTo & ? = ?"
         args = (self.allUploadedMask, self.allUploadedMask)

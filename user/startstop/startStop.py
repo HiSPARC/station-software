@@ -9,6 +9,7 @@ RUNNING = 0
 STOPPED = 1
 EXCEPTION = 2
 
+
 class StartStop:
     exeName = ''
     ShowWindow = win32con.SW_SHOWMINIMIZED
@@ -72,10 +73,10 @@ class StartStop:
         process = self.wmiObj.Win32_Process(name=self.exeName)
         if process != []:
             if self.command != '':
-                for i in range(1,3):
+                for i in range(1, 3):
                     if result == RUNNING:
                         result = self.askStopProcess()
-                        return result #ADL: Should this not be behind if?
+                        return result  #ADL: Should this not be behind if?
                 result = self.killProcess()
             else:
                 result = self.killProcess()
@@ -128,7 +129,8 @@ class CMDStartStop(StartStop):
         w = win32gui.FindWindow(None, self.title)
         if w != 0:
             result = RUNNING
-            win32gui.SetWindowText(w, self.title + ' (shutdown in progress...)')
+            win32gui.SetWindowText(w, self.title +
+                                   ' (shutdown in progress...)')
             dword = c_ulong()
             tid = windll.user32.GetWindowThreadProcessId(w, byref(dword))
             pid = dword.value

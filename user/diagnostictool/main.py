@@ -7,9 +7,10 @@ logger = logging.getLogger("diagnostics")
 
 help_message = """Welcome to the HiSPARC Diagnostic Tool.
 
-This tool is now performing some system checks and will display a summary at the
-end of this screen. If you have any problems with the VPN connection, please
-click on the `Write VPN config' button, reboot the computer and rerun this tool.
+This tool is now performing some system checks and will display a summary at
+the end of this screen. If you have any problems with the VPN connection,
+please click on the `Write VPN config' button, reboot the computer and rerun
+this tool.
 
 If you continue to have problems with any of these checks, please contact
 HiSPARC at info@hisparc.nl. It will be helpful if you include the contents of
@@ -22,6 +23,7 @@ enable us to more quickly assess the situation.
 Thank you!
 
 """
+
 
 def run_checks():
     logger.info(help_message)

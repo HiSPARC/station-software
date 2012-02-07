@@ -13,16 +13,17 @@ CONFIG_INI = 'config.ini'
 PERSISTENT_INI = '/persistent/configuration/config.ini'
 ADMINUPDATE_NAME = "adminUpdater"
 
+
 class Updater:
     config = ConfigParser.ConfigParser()
-    timeBetweenChecks = 0 # (in seconds)
-    # Start time of the interval in which checks may be performed on a 
+    timeBetweenChecks = 0  # (in seconds)
+    # Start time of the interval in which checks may be performed on a
     # day (in seconds) e.g. 0 is midnight, 7200 is 2am
     timeStartCheckInterval = 0
     # End time of the interval in which checks may be performed on a
     # day (in seconds) e.g. 0 is midnight, 7200 is 2am
     timeStopCheckInterval = 0
-    checkerInitialDelay = 0 # Bool with if there is an initial delay
+    checkerInitialDelay = 0  # Bool with if there is an initial delay
     scheduler = sched.scheduler(time.time, time.sleep)
     checker = Checker()
 
@@ -30,21 +31,20 @@ class Updater:
     # user is in admin mode
     def checkIfUpdateToInstall(self):
         print "is admin: %s" % checkFiles.checkIfAdmin()
-        
+
         if checkFiles.checkIfAdmin():
-            virtualDrive = self.config.get('Station', 'VirtualDrive') 
+            virtualDrive = self.config.get('Station', 'VirtualDrive')
             currentVersionAdmin = self.config.get('Version', 'CurrentAdmin')
             location = "%s:/persistent/downloads" % (virtualDrive)
-            
+
             found, fileFound = checkFiles.checkIfNewerFileExists(location,
-            	ADMINUPDATE_NAME, int(currentVersionAdmin))
-            
+                ADMINUPDATE_NAME, int(currentVersionAdmin))
+
             print "found is %s" % found
             if found:
                 os.system('/user/updater/runAdminUpdate.bat '
                           '/persistent/downloads/%s' % fileFound)
-    
-    
+
     def calculateInitialDelay(self):
         if self.checkerInitialDelay == 1:
             #Calculate the time now
@@ -67,18 +67,18 @@ class Updater:
                 return tomorrow_random_moment - now
         else:
             return 0
-    
+
     def performOneUpdateCheck(self):
         delay = self.calculateInitialDelay()
         self.scheduler.enter(delay, 1, self.checker.checkForUpdates, '')
         self.scheduler.run()
-        
+
     def performContinuousCheck(self):
         while (True):
             self.scheduler.enter(self.timeBetweenChecks, 1,
                                  self.checker.checkForUpdates, '')
             self.scheduler.run()
-    
+
     def __init__(self):
         self.config.read([CONFIG_INI, PERSISTENT_INI])
         self.timeBetweenChecks = int(self.config.get('Update',
@@ -102,6 +102,6 @@ except:
     log("Updating failed due to %s, restart the checker!" %
         str(sys.exc_info()[1]), severity=SEVERITY_CRITICAL)
     exit
-    
+
 #updates = checker.checkForUpdates()
 #updates = dict with { 'mustUpdate', 'adminFile', 'userFile'}

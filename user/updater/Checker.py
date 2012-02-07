@@ -15,14 +15,15 @@ PERSISTENT_INI = '/persistent/configuration/config.ini'
 DISPLAY_GUI_MESSAGES = True
 UPDATE_USER_MODE = 1
 UPDATE_ADMIN_MODE = 2
-    
+
+
 class Checker:
     #Internal handle to the database cursor
     config = ConfigParser.ConfigParser()
 
     def __init__(self):
         self.config.read([CONFIG_INI, PERSISTENT_INI])
-        
+
     def requestCheckFromServer(self):
         server = self.config.get('Update', 'UpdateURL')
         stationname = self.config.get('Station', 'Nummer')
@@ -44,14 +45,14 @@ class Checker:
         updateInfo = connection.read()
         print updateInfo
         connection.close()
-            
+
         #except (urllib2.URLError, urllib2.HTTPError), msg:
         #    # For example: connection refused or internal server error
         #    returncode = str(msg)
         #except Exception, msg:
         #    returncode = 'Uncatched exception occured in function ' \
         #                 'upload_event_list: %s' % str(msg)
-        
+
         return updateInfo
 
     def parseAnswerServer(self, updateInfo):
@@ -59,11 +60,11 @@ class Checker:
         #updateDict has: mustUpdate, urlUser, newVersionUser, urlAdmin,
         #                newVersionAdmin
         downloader = Downloader()
-        updates = dict() #updates has: mustUpdate, userFile, adminFile
-        
+        updates = dict()  # updates has: mustUpdate, userFile, adminFile
+
         mustUpdate = int(updateDict['mustUpdate'][0])
         updates['mustUpdate'] = mustUpdate
-        
+
         virtualDrive = self.config.get('Station', 'VirtualDrive')
         location = "%s:/persistent/downloads" % virtualDrive
 
@@ -73,7 +74,7 @@ class Checker:
             adminFile = downloader.downloadUpdate(location, adminURL)
             updates['adminFile'] = adminFile
             log('Administrator update is available called: %s' % adminFile)
-            
+
             if DISPLAY_GUI_MESSAGES and not(checkFiles.checkIfAdmin()):
                 root = Tk()
                 root.title('HiSPARC')
@@ -88,11 +89,11 @@ class Checker:
             updates['userFile'] = userFile
             log('User update is available called: %s' % userFile)
             #Run the update to install it.
-            #first call a batch file so that Python can be closed. 
+            #First call a batch file so that Python can be closed.
             os.system('/user/updater/runUserUpdate.bat %s' % userFile)
 
         return updates
-    
+
     def checkForUpdates(self):
         try:
             updateInfo = self.requestCheckFromServer()

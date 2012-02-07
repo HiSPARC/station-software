@@ -5,9 +5,11 @@ from hslog import log
 
 TIMEOUT = 10
 
+
 class TimeoutException(Exception):
     pass
-       
+
+
 class NagiosPush:
     def __init__(self, config):
         self.host = config["host"]
@@ -16,13 +18,13 @@ class NagiosPush:
 
     def sendToNagios(self, nagiosResult):
         reportMessage = {}
-        reportMessage['reportCode'] = nagiosResult.status_code # Report code
-        reportMessage['textMessage'] = nagiosResult.description # Message string
-        reportMessage['send_nscaPath'] = "data/send_nsca_win32/" # Path to .exe
-        reportMessage['nagiosServer'] = self.host # Server IP
-        reportMessage['serverPort'] = self.port # Server port
-        reportMessage['hostComputer'] = self.machine_name # On nagios server
-        reportMessage['serviceName'] = nagiosResult.serviceName # Service name
+        reportMessage['reportCode'] = nagiosResult.status_code
+        reportMessage['textMessage'] = nagiosResult.description
+        reportMessage['send_nscaPath'] = "data/send_nsca_win32/"
+        reportMessage['nagiosServer'] = self.host  # Server IP
+        reportMessage['serverPort'] = self.port
+        reportMessage['hostComputer'] = self.machine_name  # On Nagios server
+        reportMessage['serviceName'] = nagiosResult.serviceName
 
         send_nsca_command = ("echo %s,%s,%s,%s | %ssend_nsca -H %s -p %d -c "
                              "%ssend_nsca.cfg -d ," %

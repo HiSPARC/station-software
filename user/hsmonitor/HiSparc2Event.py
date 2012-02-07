@@ -12,13 +12,14 @@ import base64
 from Event import Event
 import EventExportValues
 
+
 class HiSparc2Event(object, Event):
     def __init__(self, message):
         """Determines message type from the argument.
-        
+
         Check if this might be a legacy message.
         Proceed to unpack the message.
-        
+
         """
 
         # invoke constructor of parent class
@@ -40,12 +41,12 @@ class HiSparc2Event(object, Event):
 
     def getEventData(self):
         """Get all event data necessary for an upload.
-        
+
         This function parses the export_values variable declared in the
         EventExportValues and figures out what data to collect for an upload to
-        the eventwarehouse. It returns a list of dictionaries, one for each data
-        element.
-        
+        the eventwarehouse. It returns a list of dictionaries, one for each
+        data element.
+
         """
 
         eventdata = []
@@ -69,20 +70,20 @@ class HiSparc2Event(object, Event):
                 # blobvalues are base64-decoded.
                 data = base64.b64encode(data)
 
-            eventdata.append({"calculated" : is_calculated,
-                              "data_uploadcode" : data_uploadcode,
-                              "data" : data})
+            eventdata.append({"calculated": is_calculated,
+                              "data_uploadcode": data_uploadcode,
+                              "data": data})
 
         return eventdata
 
     def unpackSeqMessage(self, fmt=None):
         """Sequentially unpack message with a format.
-        
+
         This method is used to read from the same buffer multiple times,
         sequentially. A private variable will keep track of the current offset.
         This is more convenient than keeping track of it yourself multiple
         times, or hardcoding offsets.
-        
+
         """
         if not fmt:
             # This is an initialization call
@@ -98,7 +99,8 @@ class HiSparc2Event(object, Event):
         # For debugging, keeping track of trailing bytes
         #print len(self.message[self._struct_offset:]), struct.calcsize(fmt)
 
-        data = struct.unpack_from(fmt, self.message, offset=self._struct_offset)
+        data = struct.unpack_from(fmt, self.message,
+                                  offset=self._struct_offset)
         self._struct_offset += struct.calcsize(fmt)
 
         return data

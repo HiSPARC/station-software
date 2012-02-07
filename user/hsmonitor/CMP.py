@@ -1,11 +1,12 @@
 """Process the CMP event message from a buffer."""
 
-__author__="thevinh"
-__date__ ="$17-sep-2009"
+__author__ = "thevinh"
+__date__ = "$17-sep-2009"
 
 from datetime import datetime
 
 from HiSparc2Event import HiSparc2Event
+
 
 class CMP(HiSparc2Event):
     def __init__(self, message):
@@ -15,9 +16,9 @@ class CMP(HiSparc2Event):
 
     def unpackMessage(self):
         """Unpack a comparator message.
-        
+
         This routine unpacks a comparator message from the buffer database.
-        
+
         """
         # Initialize sequential reading mode
         self.unpackSeqMessage()

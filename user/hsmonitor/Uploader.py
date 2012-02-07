@@ -14,9 +14,9 @@ from UserExceptions import ThreadCrashError
 # TODO add observer
 # use BUI's trick to stop a thread
 BATCHSIZE = 100
-MINWAIT = 1 # minimum time to wait in seconds after a failed attempt
-            # the waiting time will be doubled for each failed attempt
-MAXWAIT = 60 # maximum time to wait in seconds after a failed attempt
+MINWAIT = 1  # minimum time to wait in seconds after a failed attempt
+             # the waiting time will be doubled for each failed attempt
+MAXWAIT = 60  # maximum time to wait in seconds after a failed attempt
 
 # Python >= 2.5 has hashlib
 try:
@@ -29,10 +29,11 @@ except:
     def md5_sum(s):
         return md5.new(s).hexdigest()
 
+
 class Uploader(Observer, Thread):
     def __init__(self, serverID, stationID, password, URL, config,
-                 retryAfter = MINWAIT, maxWait = MAXWAIT,
-                 minBatchSize = BATCHSIZE, maxBatchSize = BATCHSIZE):
+                 retryAfter=MINWAIT, maxWait=MAXWAIT,
+                 minBatchSize=BATCHSIZE, maxBatchSize=BATCHSIZE):
         self.storageManager = StorageManager()
         self.serverID = serverID
         self.stationID = stationID
@@ -56,10 +57,10 @@ class Uploader(Observer, Thread):
 
     def setNumServer(self, numServer):
         """Sets the number of servers to upload to.
-        
+
         Need to be set before changing the UploadedTo-status
         of events in the StorageManager.
-        
+
         """
         self.storageManager.setNumServer(numServer)
 
@@ -69,7 +70,7 @@ class Uploader(Observer, Thread):
         self.noEventsSem.release()
 
     crashes = []
-    
+
     def init_restart(self):
         """Support for restarting crashed threads."""
 
@@ -107,10 +108,10 @@ class Uploader(Observer, Thread):
 
     def __getNumEventsToUpload(self):
         """Gives the number of events that the Uploader can upload now.
-        
+
         The result will be between min and max batch size. If insufficient
         events are available this function will block on noEventSem.
-        
+
         """
 
         shouldBlock = False
@@ -140,7 +141,7 @@ class Uploader(Observer, Thread):
 
         # ADL: Something here causes the double events.
         # Check what happens in case of timeout.
-        
+
         # Open the connection and send our data. Exceptions are catched
         # explicitly to make sure we understand the implications of errors.
         try:
@@ -199,7 +200,7 @@ class Uploader(Observer, Thread):
                        "number of failed attempts: %i." % \
                        (self.serverID, bsize, numFailedAttempts)
                 log(msg2)
-                msg3 = msg1+"\n"+msg2
+                msg3 = msg1 + "\n" + msg2
                 nr = NagiosResult(2, msg3, "ServerCheck")
                 self.nagiosPush.sendToNagios(nr)
                 sleeptime = min(2 ** numFailedAttempts * self.retryAfter,

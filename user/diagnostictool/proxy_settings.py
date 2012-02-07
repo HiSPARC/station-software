@@ -8,6 +8,7 @@ from diagnosticcheck import DiagnosticCheck
 
 logger = logging.getLogger("proxy")
 
+
 class Check(DiagnosticCheck):
     """Run proxy settings diagnostics
 
@@ -22,7 +23,8 @@ class Check(DiagnosticCheck):
         pythoncom.CoInitialize()
         r = wmi.WMI(namespace="DEFAULT").StdRegProv
         hDefKey = _winreg.HKEY_CURRENT_USER
-        sSubKeyName = "SOFTWARE/Microsoft/Windows/CurrentVersion/Internet Settings"
+        sSubKeyName = ("SOFTWARE/Microsoft/Windows/CurrentVersion/"
+                       "Internet Settings")
         enabled = r.GetDWORDValue(hDefKey, sSubKeyName, 'ProxyEnable')[1]
         server = r.GetStringValue(hDefKey, sSubKeyName, 'ProxyServer')[1]
 

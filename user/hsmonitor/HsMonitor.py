@@ -1,15 +1,15 @@
 """The main HiSPARC monitor process, it creates other objects and threads.
 
-DF: Unfortunately, I think the UML model of this system is not entirely correct.
-    For example, this creates several instances of our StorageManager class.
-    It has its own class, that's good, but I think it should also have just one
-    instance. At the moment, there are three instances: the HsMonitor one, which
-    doubles as an instance for the BufferListener and which contains the
-    observers, and one for each uploader, which handle the actual data storage.
-    As a result of this, we have four (!) instances of a numServers variable,
-    which *all* need to have the exact same value and thus need to be updated
-    when there is a change in the number of uploaders.
-    
+DF: Unfortunately, I think the UML model of this system is not entirely
+    correct. For example, this creates several instances of our StorageManager
+    class. It has its own class, that's good, but I think it should also have
+    just one instance. At the moment, there are three instances: the HsMonitor
+    one, which doubles as an instance for the BufferListener and which contains
+    the observers, and one for each uploader, which handle the actual data
+    storage. As a result of this, we have four (!) instances of a numServers
+    variable, which *all* need to have the exact same value and thus need to be
+    updated when there is a change in the number of uploaders.
+
 ADL: Check how the HsMonitor is started, what is the 'working directory'?
 """
 
@@ -31,6 +31,7 @@ from UserExceptions import ThreadCrashError
 # Default configuration file path
 CONFIG_INI_PATH1 = 'data/config.ini'
 CONFIG_INI_PATH2 = '../../persistent/configuration/config.ini'
+
 
 class HsMonitor:
     def __init__(self):
@@ -70,7 +71,7 @@ class HsMonitor:
             # Get the nagios configuration section from config file
             nagiosConf = self.cfg.itemsdict('NagiosPush')
             machine = re.search('([a-z0-9]+).zip',
-                          self.cfg.get('Station', 'Certificate'))
+                                self.cfg.get('Station', 'Certificate'))
             nagiosConf['machine_name'] = machine.group(1)
             checkSched = self.createCheckScheduler(interpr, nagiosConf)
             eventRate = checkSched.getEventRate()
@@ -152,6 +153,7 @@ class HsMonitor:
                       minwait, maxwait, minbs, maxbs)
         return up
 
+
 def main():
     # Create a HiSparc monitor object
     hsMonitor = HsMonitor()
@@ -171,7 +173,8 @@ def main():
                     log("HsMonitor: Thread %s restarted." % thread.name)
     except ThreadCrashError, exc:
         log(exc)
-        log("HsMonitor: Thread %s keeps crashing, shutting down." % thread.name)
+        log("HsMonitor: Thread %s keeps crashing, shutting down." %
+            thread.name)
     except KeyboardInterrupt:
         log("HsMonitor: Interrupted by keyboard, closing down.")
 

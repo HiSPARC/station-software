@@ -6,6 +6,7 @@ import logging
 from main import run_checks
 from write_vpn_config import write_config
 
+
 class GUI(Tkinter.Frame):
     def __init__(self, queue, master=None):
         self.queue = queue
@@ -45,6 +46,7 @@ class GUI(Tkinter.Frame):
 
     def write_vpn_config(self):
         write_config()
+
 
 class MyHandler(logging.Handler):
     def __init__(self, queue):

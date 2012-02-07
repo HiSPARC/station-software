@@ -2,6 +2,7 @@ import sys
 from startStop import StartStop
 from hslog import log, setLogMode, MODE_BOTH
 
+
 def start():
     setLogMode(MODE_BOTH)
     log('\nStarting Admin-Mode applications...')

@@ -3,9 +3,10 @@ import sys
 from startStop import StartStop
 from hslog import log, setLogMode, MODE_BOTH
 
+
 def stop():
     setLogMode(MODE_BOTH)
-    log('\nStopping Admin-Mode applications...')    
+    log('\nStopping Admin-Mode applications...')
 
     try:
         #stop TightVNC
@@ -20,7 +21,7 @@ def stop():
         else:
             log('The service was not found!')
     except:
-        log('An exception was generated while stopping TightVNC:' + 
+        log('An exception was generated while stopping TightVNC:' +
             str(sys.exc_info()[1]))
 
     try:
@@ -54,5 +55,5 @@ def stop():
     except:
         log('An exception was generated while stopping OpenVPN Service:' +
             str(sys.exc_info()[1]))
-    
+
 stop()

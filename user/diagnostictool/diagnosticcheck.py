@@ -1,5 +1,6 @@
 from definitions import status
 
+
 class DiagnosticCheck:
     status = status.HASNT_RUN
     results = None

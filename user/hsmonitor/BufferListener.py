@@ -6,8 +6,8 @@ creates Events from it. The Events are passed on to the StorageManager.
 
 """
 
-__author__="thevinh"
-__date__ ="$14-sep-2009"
+__author__ = "thevinh"
+__date__ = "$14-sep-2009"
 
 from time import sleep, time
 import threading
@@ -17,6 +17,7 @@ from MySQLdb import connect, OperationalError
 
 from hslog import log
 from UserExceptions import ThreadCrashError
+
 
 class BufferListener(threading.Thread):
     # the instantiation operation
@@ -72,8 +73,8 @@ class BufferListener(threading.Thread):
     def getDBConnection(self, dbdict):
         """Get the connection to Buffer database"""
         try:
-            conn = connect(host = dbdict['host'], user = dbdict['user'],
-                           passwd = dbdict['password'], db = dbdict['db'])
+            conn = connect(host=dbdict['host'], user=dbdict['user'],
+                           passwd=dbdict['password'], db=dbdict['db'])
         except OperationalError, (msg_id, msg):
             log('BufferListener: Error: %d: %s' % (msg_id, msg))
             conn = None
@@ -96,8 +97,9 @@ class BufferListener(threading.Thread):
     def getBufferMessages(self):
         """Get messages from Buffer database"""
         cursor = self.conn.cursor()
-        sql = ("SELECT message_type_id, message, message_id FROM message ORDER "
-               "BY message_id DESC LIMIT %d" % int(self.config['poll_limit']))
+        sql = ("SELECT message_type_id, message, message_id FROM message "
+               "ORDER BY message_id DESC LIMIT %d" %
+               int(self.config['poll_limit']))
         log("BufferListener: Executing SQL: %s" % sql)
         cursor.execute(sql)
         log("BufferListener: Fetching SQL results...")

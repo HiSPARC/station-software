@@ -1,11 +1,12 @@
 """Process the CFG event message from a buffer."""
 
-__author__="thevinh"
-__date__ ="$17-sep-2009"
+__author__ = "thevinh"
+__date__ = "$17-sep-2009"
 
 from datetime import datetime
 
 from HiSparc2Event import HiSparc2Event
+
 
 class CFG(HiSparc2Event):
     def __init__(self, message):
@@ -15,10 +16,10 @@ class CFG(HiSparc2Event):
 
     def unpackMessage(self):
         """Unpack a configuration message.
-        
+
         This routine unpacks the configuration messages which are written
         to the buffer every time the LabVIEW DAQ software enters DAQ mode.
-        
+
         """
         # Initialize sequential reading mode
         self.unpackSeqMessage()

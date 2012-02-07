@@ -1,7 +1,7 @@
 """Process the CIC event message from a buffer."""
 
-__author__="thevinh"
-__date__ ="$17-sep-2009"
+__author__ = "thevinh"
+__date__ = "$17-sep-2009"
 
 import struct
 from datetime import datetime
@@ -10,6 +10,7 @@ from zlib import compress
 from HiSparc2Event import HiSparc2Event
 from legacy import unpack_legacy_message
 import EventExportValues
+
 
 class CIC(HiSparc2Event):
     def __init__(self, message):
@@ -35,7 +36,7 @@ class CIC(HiSparc2Event):
 
     def unpackMessage(self):
         """Unpack a buffer message.
-        
+
         This routine unpacks a buffer message written by the LabVIEW DAQ
         software version 3.0 and above. Version 2.1.1 doesn't use a version
         identifier in the message. By including one, we can account for
@@ -44,7 +45,7 @@ class CIC(HiSparc2Event):
         Hopefully, this code is cleaner and thus easier to understand than
         the legacy code. However, you'll always have to be careful with the
         format strings.
-        
+
         """
 
         # Initialize sequential reading mode
@@ -57,14 +58,14 @@ class CIC(HiSparc2Event):
         self.unpackSeqMessage('>2BBfBH5BH3L')
 
         # Try to handle NaNs for eventrate. These are handled differently from
-        # platform to platform (i.e. MSVC libraries are screwed). This 
-        # platform-dependent fix is not needed in later versions of python.
+        # platform to platform (i.e. MSVC libraries are screwed). This
+        # platform-dependent fix is not needed in later versions of Python.
         # So, drop this in the near future!
         if str(self.eventrate) in ['-1.#IND', '1.#INF']:
             self.eventrate = 0
 
         # Only bits 0-19 are defined, zero the rest to make sure
-        self.trigger_pattern &= 2**20-1
+        self.trigger_pattern &= 2 ** 20 - 1
 
         self.datetime = datetime(gps_year, gps_month, gps_day,
                                  gps_hour, gps_minute, gps_second)
@@ -95,7 +96,7 @@ class CIC(HiSparc2Event):
 
     def unpack_trace(self, raw_trace):
         """Unpack a trace.
-        
+
         Traces are stored in a funny way. We have a 12-bit ADC, so two
         datapoints can (and are) stored in 3 bytes. This function unravels
         traces again.
@@ -107,18 +108,18 @@ class CIC(HiSparc2Event):
 
         DF: This is legacy code. I've never tried to understand it and will
         certainly not touch it until I do.
-        
+
         """
 
         n = len(raw_trace)
-        if n%3 != 0:
+        if n % 3 != 0:
             #return None
             raise Exception("Blob length is not divisible by 3!")
         a = struct.unpack("%dB" % (n), raw_trace)
         trace = []
-        for i in xrange(0,n,3):
-            trace.append((a[i]<<4) + ((a[i+1] & 240)>>4))
-            trace.append(((a[i+1] & 15)<<8) + a[i+2])
+        for i in xrange(0, n, 3):
+            trace.append((a[i] << 4) + ((a[i + 1] & 240) >> 4))
+            trace.append(((a[i + 1] & 15) << 8) + a[i + 2])
         trace_str = ""
         for i in trace:
             trace_str += str(i) + ","

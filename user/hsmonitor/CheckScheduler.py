@@ -7,6 +7,7 @@ from NagiosPush import NagiosPush
 from StorageManager import StorageManager
 from UserExceptions import ThreadCrashError
 
+
 class ScheduledJob:
     def __init__(self, job, jobfunc, interval, args):
         self.job = job
@@ -14,6 +15,7 @@ class ScheduledJob:
         self.interval = interval
         self.args = args
         self.last_run = 0
+
 
 class Scheduler:
     def __init__(self, status):
@@ -68,12 +70,13 @@ class Scheduler:
             self.addJob(j.jobfunc, j.interval, j.args)
 
         tostart = []
-        
+
         # remove all threads that completed / stopped
         for tid in toremove:
             self.jobs.pop(tid, None)
 
         toremove = []
+
 
 class CheckScheduler(threading.Thread):
     def __init__(self, config, interpreter):
@@ -86,7 +89,7 @@ class CheckScheduler(threading.Thread):
         self.dicConfig = config
 
         # create a nagios push object
-        self.nagiosPush  = NagiosPush(config)
+        self.nagiosPush = NagiosPush(config)
         self.storageManager = StorageManager()
         self.interpreter = interpreter
 
@@ -100,7 +103,7 @@ class CheckScheduler(threading.Thread):
         self.stop_event.set()
 
     crashes = []
-    
+
     def init_restart(self):
         """Support for restarting crashed threads"""
 
@@ -111,9 +114,9 @@ class CheckScheduler(threading.Thread):
             super(CheckScheduler, self).__init__()
             self.crashes.append(time.time())
 
-
-    # This function is what the thread actually runs; the required name is run().
-    # The threading.Thread.start() calls threading.Thread.run(), which is always overridden.
+    # This is what the thread actually runs; the required name is run().
+    # The threading.Thread.start() calls threading.Thread.run(),
+    # which is always overridden.
     def run(self):
         log("CheckScheduler: Thread started!")
         self.storageManager.openConnection()

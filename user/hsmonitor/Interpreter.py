@@ -5,8 +5,8 @@ creates Events from them. The Events are passed on to the StorageManager.
 
 """
 
-__author__="thevinh"
-__date__ ="$16-sep-2009"
+__author__ = "thevinh"
+__date__ = "$16-sep-2009"
 
 from hslog import log
 from CIC import CIC
@@ -16,19 +16,22 @@ from CMP import CMP
 from WeatherEvent import WeatherEvent
 
 # create a dictionary to store all type_codes of events
-event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP', '16': 'WTR'}
+event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP',
+                    '16': 'WTR'}
+
 
 class TriggerRateHolder:
     def __init__(self, triggerRate, date):
         self.triggerRate = triggerRate
         self.date = date
 
+
 class Interpreter:
     # the instantiation operation
     def __init__(self, storageManager):
         # init variables here if needed
         self.storageManager = storageManager
-        self.triggerRate = TriggerRateHolder(0,0)
+        self.triggerRate = TriggerRateHolder(0, 0)
 
     def openStorage(self):
         self.storageManager.openConnection()
@@ -62,11 +65,11 @@ class Interpreter:
 
     def parseMessages(self, messages):
         """
-        
+
         This function unpacks messages, creates events, retrieves relevant
         data from the events and returns it as an elaborate data object which
         can be serialized for transfer via an HTTP POST request.
-        
+
         """
 
         self.eventlist = []

@@ -7,6 +7,7 @@ from proxy_settings import Check
 
 logger = logging.getLogger("write_vpn_config")
 
+
 def write_config():
     proxy_settings = Check()
     proxy_settings.run()

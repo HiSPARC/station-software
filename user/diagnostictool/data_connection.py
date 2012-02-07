@@ -7,6 +7,7 @@ from definitions import status
 
 logger = logging.getLogger("data_connection")
 
+
 class Check(DiagnosticCheck):
     """Run data connection diagnostics
 

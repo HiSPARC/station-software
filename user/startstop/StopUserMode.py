@@ -4,7 +4,8 @@ import win32con
 from startStop import StartStop, CMDStartStop
 from hslog import log, setLogMode, MODE_BOTH
 
-PATH = "%s" %os.getenv("HISPARC_ROOT")
+PATH = "%s" % os.getenv("HISPARC_ROOT")
+
 
 def stop():
     setLogMode(MODE_BOTH)
@@ -42,7 +43,7 @@ def stop():
             log('An exception was generated!')
     except:
         log('An exception was generated while stopping LabView Weather!')
-    
+
     try:
         #stop mySql
         log('Stopping MySQL...')
@@ -61,7 +62,7 @@ def stop():
             log('An exception was generated!')
     except:
         log('An exception was generated while stopping MySQL!')
-    
+
     try:
         #stop HSMonitor
         log('Stopping HSMonitor...')
@@ -80,7 +81,7 @@ def stop():
             log('An exception was generated')
     except:
         log('An exception was generated while stopping HSMonitor!')
-    
+
     try:
         #stop Updater
         log('Stopping Updater...')

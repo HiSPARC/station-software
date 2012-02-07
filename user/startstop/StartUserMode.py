@@ -10,12 +10,13 @@ from hslog import log, setLogMode, MODE_BOTH
 
 PATH = "%s" % os.getenv("HISPARC_ROOT")
 
+
 def start():
     setLogMode(MODE_BOTH)
     log('\nStarting User-Mode applications...')
     c = ConfigParser.ConfigParser()
     c.read(os.path.join(PATH, "/persistent/configuration/config.ini"))
-    
+
     try:
         #start mySql
         log('Starting MySQL...')
@@ -41,7 +42,7 @@ def start():
     except:
         log('An exception was generated while starting MySQL:' +
             str(sys.exc_info()[1]))
-    
+
     try:
         #start LabView
         if c.getboolean('Detector', 'enabled'):
@@ -70,7 +71,8 @@ def start():
             labViewHandler = StartStop()
             labViewHandler.exeName = 'hisparcweather.exe'
             labViewHandler.currentDirectory = "%s/user/hisparcweather" % PATH
-            labViewHandler.command = "%s/user/hisparcweather/hisparcweather.exe" % PATH
+            labViewHandler.command = ("%s/user/hisparcweather/"
+                                      "hisparcweather.exe" % PATH)
             resLabView = labViewHandler.startProcess()
             if resLabView == 0:
                 log('Status:running')
@@ -94,7 +96,8 @@ def start():
         hsMonitorHandler.exeName = 'python.exe'
         hsMonitorHandler.title = 'HISPARC MONITOR: hsmonitor'
         hsMonitorHandler.currentDirectory = "%s/user/hsmonitor" % PATH
-        hsMonitorHandler.command = "%s/user/python/python.exe HsMonitor.py" % PATH
+        hsMonitorHandler.command = ("%s/user/python/python.exe "
+                                    "HsMonitor.py" % PATH)
         resHSMonitor = hsMonitorHandler.startProcess()
         if resHSMonitor == 0:
             log('Status:running')
@@ -102,10 +105,10 @@ def start():
             log('Status:stopped')
         else:
             log('An exception was generated')
-
     except:
         log('An exception was generated while starting HSMonitor:' +
             str(sys.exc_info()[1]))
+
     try:
         #start updater
         log('Starting Updater...')
@@ -121,7 +124,6 @@ def start():
             log('Status:stopped')
         else:
             log('An exception was generated')
-        
     except:
         log('An exception was generated while starting the Updater:' +
             str(sys.exc_info()[1]))

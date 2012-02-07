@@ -10,14 +10,15 @@ OK = 0
 WARNING = 1
 CRITICAL = 2
 
-localhost = gethostbyname("127.0.0.1") 
+localhost = gethostbyname("127.0.0.1")
+
 
 def checkBufferdb(warn=None, crit=None):
     if warn:
         wmin, wmax = warn
     if crit:
         cmin, cmax = crit
-    
+
     config = ConfigParser.ConfigParser()
 
     try:
@@ -25,11 +26,11 @@ def checkBufferdb(warn=None, crit=None):
         host = config.get('BufferDB', 'Host')
         user = config.get('BufferDB', 'Username')
         pwd = config.get('BufferDB', 'Password')
-        db = config.get('BufferDB', 'DB')    
+        db = config.get('BufferDB', 'DB')
     except:
         print 'Could not read config.ini file!'
         return CRITICAL
-    
+
     try:
         dbcon = MySQLdb.connect(host=host, user=user, passwd=pwd, db=db)
     except MySQLdb.OperationalError, (errid, errmsg):
@@ -51,6 +52,7 @@ def checkBufferdb(warn=None, crit=None):
             return WARNING
     return OK
 
+
 def check_lvusage(warn, crit):
     """
     Check the memory using Labview and also immediately give the cpu time.
@@ -65,10 +67,10 @@ def check_lvusage(warn, crit):
         if p.Name in LABVIEW_CAPTIONS:
             mem = float(p.WorkingSetSize) / (1024. * 1024.)
             cpu = (float(p.UserModeTime) + float(p.KernelModeTime)) / 1e7
-            
+
             print 'Memory usage: %.1f Mb' % mem
             print 'CPU time: %.2fs' % cpu
-            
+
             if mem < cmin or mem > cmax:
                 return CRITICAL
             elif mem < wmin or mem > wmax:

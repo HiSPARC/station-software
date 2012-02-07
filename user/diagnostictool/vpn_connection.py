@@ -9,6 +9,7 @@ from diagnosticcheck import DiagnosticCheck
 
 logger = logging.getLogger("vpn")
 
+
 class Check(DiagnosticCheck):
     """Run vpn connection diagnostics
 

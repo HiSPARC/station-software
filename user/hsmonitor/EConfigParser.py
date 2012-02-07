@@ -1,11 +1,13 @@
 from ConfigParser import ConfigParser
 from hslog import log
 
+
 class EConfigParser(ConfigParser):
     # extend the Config parser to make parsing easier
     def __init__(self):
         ConfigParser.__init__(self)
 
+    #ADL: what does the type argument do?
     def ifget(self, section, option, type, default):
         if self.has_option(section, option):
             return type(self.get(section, option))
