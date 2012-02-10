@@ -1,8 +1,5 @@
 """Process the CIC event message from a buffer."""
 
-__author__ = "thevinh"
-__date__ = "$17-sep-2009"
-
 import struct
 from datetime import datetime
 from zlib import compress

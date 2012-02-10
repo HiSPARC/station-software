@@ -114,17 +114,17 @@ class StorageManager(Subject):
         elist = list()
         eidlist = list()
         for r in raw_results:
-            (id, blob, uploadedto, datetime) = r
+            (eid, blob, unused_uploadedto, unused_datetime) = r
             elist.append(loads(str(blob)))
-            eidlist.append(id)
+            eidlist.append(eid)
         return (elist, eidlist)
 
     def getEvent(self, serverID):
         """Return tuple consisting of (event,id)"""
         raw_results = self.getEventsRawSQL(serverID, 1)
         if len(raw_results):
-            (id, blob, uploadedto, datetime) = raw_results[0]
-            return (loads(str(blob)), id)
+            (eid, blob, unused_uploadedto, unused_datetime) = raw_results[0]
+            return (loads(str(blob)), eid)
         else:
             return None
 
@@ -220,8 +220,8 @@ class StorageManager(Subject):
         # Remove events that have been uploaded to all servers
         n_remove = len(need_remove)
         if n_remove > 0:
-            query = """DELETE from Event WHERE EventID in %s;""" % \
-                    self.__IDList2String(need_remove)
+            query = ("""DELETE from Event WHERE EventID in %s;""" %
+                     self.__IDList2String(need_remove))
             log("StorageManager: %d events removed from Storage" % n_remove)
             c.execute(query)
             if StorageManager.storagesize is not None:

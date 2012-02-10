@@ -50,8 +50,8 @@ class Checker:
         #    # For example: connection refused or internal server error
         #    returncode = str(msg)
         #except Exception, msg:
-        #    returncode = 'Uncatched exception occured in function ' \
-        #                 'upload_event_list: %s' % str(msg)
+        #    returncode = ('Uncatched exception occured in function '
+        #                  'upload_event_list: %s' % str(msg))
 
         return updateInfo
 

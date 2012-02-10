@@ -5,9 +5,6 @@ This process creates other objects and threads.
 
 """
 
-__author__="thevinh"
-__date__ ="$16-sep-2009"
-
 import os, sys, cmd
 sys.path.append("..")
 from hslog import log, setLogMode, MODE_PRINT

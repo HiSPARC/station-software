@@ -150,8 +150,8 @@ class Uploader(Observer, Thread):
             # For example: connection refused or internal server error
             returncode = str(msg)
         except Exception, msg:
-            returncode = 'Uncatched exception occured in function ' \
-                         '__upload: %s' % str(msg)
+            returncode = ('Uncatched exception occured in function '
+                          '__upload: %s' % str(msg))
         else:
             returncode = f.read()
 
@@ -193,12 +193,12 @@ class Uploader(Observer, Thread):
             else:
                 numFailedAttempts += 1
 
-                msg1 = "Error Uploader %i: %s: Return code: %s." % \
-                      (self.serverID, self.URL, returncode)
+                msg1 = ("Error Uploader %i: %s: Return code: %s." %
+                        (self.serverID, self.URL, returncode))
                 log(msg1)
-                msg2 = "Error Uploader %i: %d events attempted to upload, " \
-                       "number of failed attempts: %i." % \
-                       (self.serverID, bsize, numFailedAttempts)
+                msg2 = ("Error Uploader %i: %d events attempted to upload, "
+                        "number of failed attempts: %i." %
+                        (self.serverID, bsize, numFailedAttempts))
                 log(msg2)
                 msg3 = msg1 + "\n" + msg2
                 nr = NagiosResult(2, msg3, "ServerCheck")

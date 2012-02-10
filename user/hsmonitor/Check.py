@@ -152,8 +152,8 @@ class StorageSize(Check):
             if not self.storageSize:
                 self.storageSize = 0
 
-            self.nagiosResult.description = "Storage size: %d events" % \
-                                            (self.storageSize,)
+            self.nagiosResult.description = ("Storage size: %d events" %
+                                             self.storageSize)
 
             yield (self.nagiosResult)
 

@@ -13,9 +13,6 @@ DF: Unfortunately, I think the UML model of this system is not entirely
 ADL: Check how the HsMonitor is started, what is the 'working directory'?
 """
 
-__author__ = "thevinh"
-__date__ = "$16-sep-2009"
-
 import re
 from time import sleep
 

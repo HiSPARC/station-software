@@ -1,8 +1,5 @@
 """Process the CFG event message from a buffer."""
 
-__author__ = "thevinh"
-__date__ = "$17-sep-2009"
-
 from datetime import datetime
 
 from HiSparc2Event import HiSparc2Event

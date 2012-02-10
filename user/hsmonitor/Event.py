@@ -1,8 +1,5 @@
 """This module creates types of Events that are specified by the subclasses."""
 
-__author__ = "thevinh"
-__date__ = "$16-sep-2009"
-
 
 class Event():
     # The instantiation operation

@@ -5,9 +5,6 @@ creates Events from them. The Events are passed on to the StorageManager.
 
 """
 
-__author__ = "thevinh"
-__date__ = "$16-sep-2009"
-
 from hslog import log
 from CIC import CIC
 from ERR import ERR

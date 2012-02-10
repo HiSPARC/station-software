@@ -6,9 +6,6 @@ creates Events from it. The Events are passed on to the StorageManager.
 
 """
 
-__author__ = "thevinh"
-__date__ = "$14-sep-2009"
-
 from time import sleep, time
 import threading
 
