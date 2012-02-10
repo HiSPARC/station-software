@@ -25,7 +25,7 @@ class StartStop:
     def spawnProcess(self):
         startup = self.wmiObj.Win32_ProcessStartup.new(
             ShowWindow=self.ShowWindow, Title=self.title)
-        pid, res = self.wmiObj.Win32_Process.Create(
+        unused_pid, res = self.wmiObj.Win32_Process.Create(
             CommandLine=self.command, CurrentDirectory=self.currentDirectory,
             ProcessStartupInformation=startup)
         if res == 0 or res == 10:
@@ -76,7 +76,7 @@ class StartStop:
                 for i in range(1, 3):
                     if result == RUNNING:
                         result = self.askStopProcess()
-                        return result  #ADL: Should this not be behind if?
+                        return result  # ADL: Should this not be behind if?
                 result = self.killProcess()
             else:
                 result = self.killProcess()
@@ -87,7 +87,7 @@ class StartStop:
     def askStopProcess(self):
         startup = self.wmiObj.Win32_ProcessStartup.new(
             ShowWindow=win32con.SW_HIDE)
-        pid, res = self.wmiObj.Win32_Process.Create(
+        unused_pid, res = self.wmiObj.Win32_Process.Create(
             CommandLine=self.command, CurrentDirectory=self.currentDirectory,
             ProcessStartupInformation=startup)
         if res == 0 or res == 10:
