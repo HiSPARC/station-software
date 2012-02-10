@@ -10,6 +10,7 @@ import checkFiles
 from hslog import log, SEVERITY_CRITICAL
 from Downloader import Downloader
 
+PATH = "%s" % os.getenv("HISPARC_ROOT")
 CONFIG_INI = 'config.ini'
 PERSISTENT_INI = '/persistent/configuration/config.ini'
 DISPLAY_GUI_MESSAGES = True
@@ -65,8 +66,7 @@ class Checker:
         mustUpdate = int(updateDict['mustUpdate'][0])
         updates['mustUpdate'] = mustUpdate
 
-        virtualDrive = self.config.get('Station', 'VirtualDrive')
-        location = "%s:/persistent/downloads" % virtualDrive
+        location = "%s/persistent/downloads" % PATH
 
         if (mustUpdate & UPDATE_ADMIN_MODE):
             adminURL = updateDict['urlAdmin'][0]

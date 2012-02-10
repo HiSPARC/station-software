@@ -15,10 +15,10 @@ def checkIfAdmin():
 
 # Parses something_v19.exe to 19, and something_v20.124.exe to (20, 124).
 def parseVersion(filename):
-    mo = re.search("_v(\d+)(\.(\d+))?\.exe$", filename)
+    mo = re.search("_v(\d+)\.(\d+)?\.exe$", filename)
     if mo:
-        return (mo.group(3) == None) and int(mo.group(1)) or (int(mo.group(1)),
-                                                              int(mo.group(3)))
+        return mo.group(2) == None and int(mo.group(1)) or (int(mo.group(1)),
+                                                            int(mo.group(2)))
 
 
 def checkIfNewerFileExists(location, searchName, currentVersion):

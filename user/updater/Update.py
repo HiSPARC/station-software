@@ -9,6 +9,7 @@ import checkFiles
 from Checker import Checker
 from hslog import log, setLogMode, MODE_BOTH, SEVERITY_CRITICAL
 
+PATH = "%s" % os.getenv("HISPARC_ROOT")
 CONFIG_INI = 'config.ini'
 PERSISTENT_INI = '/persistent/configuration/config.ini'
 ADMINUPDATE_NAME = "adminUpdater"
@@ -33,9 +34,8 @@ class Updater:
         print "is admin: %s" % checkFiles.checkIfAdmin()
 
         if checkFiles.checkIfAdmin():
-            virtualDrive = self.config.get('Station', 'VirtualDrive')
             currentVersionAdmin = self.config.get('Version', 'CurrentAdmin')
-            location = "%s:/persistent/downloads" % (virtualDrive)
+            location = "%s/persistent/downloads" % PATH
 
             found, fileFound = checkFiles.checkIfNewerFileExists(location,
                 ADMINUPDATE_NAME, int(currentVersionAdmin))
