@@ -7,10 +7,9 @@ class EConfigParser(ConfigParser):
     def __init__(self):
         ConfigParser.__init__(self)
 
-    #ADL: what does the type argument do?
-    def ifget(self, section, option, type, default):
+    def ifget(self, section, option, dtype, default):
         if self.has_option(section, option):
-            return type(self.get(section, option))
+            return dtype(self.get(section, option))
         else:
             log("ConfigParser: option %s.%s not specified, using default: %s" %
                 (section, option, str(default)))
