@@ -94,9 +94,8 @@ class StorageManager(Subject):
                 c.execute("VACUUM")
                 StorageManager.lastvacuum = time()
                 log("StorageManager: VACUUM finished.")
-        c.execute("""
-                  SELECT * FROM Event WHERE (UploadedTo & ?) == 0 LIMIT ?;
-                  """, (serverbit, numEvents))
+        c.execute("SELECT * FROM Event WHERE (UploadedTo & ?) == 0 LIMIT ?;",
+                  (serverbit, numEvents))
         res = c.fetchall()
         c.close()
         self.lock.release()
@@ -178,14 +177,10 @@ class StorageManager(Subject):
     def __IDList2String(self, IDs):
         """Helper function that transforms a list of integers to a string.
 
-        Example: '(1,3,4,5)'.
+        Example: [1,3,4,5] -> '(1,3,4,5)'.
 
         """
-        string_ids = []
-        for ei in IDs:
-            string_ids.append("%i" % int(ei))
-        list_id = "(" + ",".join(string_ids) + ")"
-        return list_id
+        return "(%s)" % ",".join(["%i" % int(ID) for ID in IDs])
 
     def setUploaded(self, serverID, eventIDs):
         """Set UploadedTo-field to the serverID to which it was uploaded.

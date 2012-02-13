@@ -152,7 +152,7 @@ class HsMonitor:
 
 
 def main():
-    # Create a HiSparc monitor object
+    # Create a HiSPARC monitor object
     hsMonitor = HsMonitor()
 
     # Start all threads

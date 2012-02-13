@@ -21,6 +21,7 @@ CONFIG_INI_PATH2 = '../../../persistent/configuration/config.ini'
 
 NUMSERVERS = 2 # TODO
 
+
 class HsMonitor:
     def __init__(self):
         # setup the log mode
