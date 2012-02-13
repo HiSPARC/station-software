@@ -28,7 +28,7 @@ class StartStop:
         unused_pid, res = self.wmiObj.Win32_Process.Create(
             CommandLine=self.command, CurrentDirectory=self.currentDirectory,
             ProcessStartupInformation=startup)
-        if res == 0 or res == 10:
+        if res in [0, 10]:
             result = RUNNING
         else:
             raise Exception("Win32_Process.Create exception: error code %d" %
