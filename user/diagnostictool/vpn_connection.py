@@ -1,13 +1,14 @@
-from definitions import *
-import settings
-from diagnosticcheck import DiagnosticCheck
-
 import pythoncom
 import wmi
 import os
 import re
 import logging
+
+from definitions import status
+from diagnosticcheck import DiagnosticCheck
+
 logger = logging.getLogger("vpn")
+
 
 class Check(DiagnosticCheck):
     """Run vpn connection diagnostics

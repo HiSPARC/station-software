@@ -27,9 +27,9 @@
   :: call setenv and create virtual drive
   call "%~dp0setenv.bat"
   
-  :: go to virtual drive and application directory
+  :: go to HiSPARC root and application directory
   
-  pushd %HISPARC_DRIVE%:%HISPARC_RUNMANUAL_PATH%
+  pushd %HISPARC_ROOT%%HISPARC_RUNMANUAL_PATH%
 
   if "%HISPARC_RUNMANUAL_CMD:~-3%"==".py" (
     call :python %*
