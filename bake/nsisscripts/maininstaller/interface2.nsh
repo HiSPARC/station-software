@@ -1,3 +1,8 @@
+#
+#	interface2.nsh ------
+#	MUI2: NSIS Modern User Interface 2.0
+#
+
 !include "MUI2.nsh"
 
 ; MUI Settings
@@ -9,7 +14,7 @@
 !define MUI_ABORTWARNING
 
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_DIRECTORY
+#!insertmacro MUI_PAGE_DIRECTORY	Fixed installation path!
 Page custom userinput1   "" ": Settings"
 Page custom userinput2   "" ": Local Database Settings"
 Page custom userinput3   "" ": Sensors"
@@ -24,7 +29,6 @@ Page custom startinstall "" ": Ready for installation"
 !insertmacro MUI_UNPAGE_FINISH
 
 ; Language files
-;!insertmacro MUI_LANGUAGE "Dutch"
 !insertmacro MUI_LANGUAGE "English"
 
 ; MUI end ------

@@ -1,97 +1,118 @@
 #
-# Verwijder openvpn
+#	uninstaller.nsh ------
+#	Create the admin uninstaller.
+#
+Function un.onInit
+  DetailPrint "admin-un.onInit"
+  
+  InitPluginsDir
+  
+  # check if user has administrator rights
+  xtInfoPlugin::IsAdministrator
+  Pop $0
+  ${If} $0 == "false"
+    MessageBox MB_ICONEXCLAMATION "You have no administrator rights!$\nAdmin-Uninstallation aborted."
+	Quit
+  ${EndIf}
+FunctionEnd
+
+#
+# Remove OpenVPN
 #
 Section un.UninstOpenVPN
-    # stop service
-    #SimpleSC::StopService "OpenVPN Service"
-    ExecWait '"$InstallPathApplication\hisparc\admin\openvpn\bin\openvpnserv.exe" -remove'
-    # delete reg keys
-    DeleteRegKey HKLM "SOFTWARE\OpenVPN"
-
-    # verwijder alle tap devices
-    ExecWait '"$InstallPathApplication\hisparc\admin\openvpn\bin\tapinstall.exe" remove tap0901'
-    # verwijder map
-    RmDir /r /REBOOTOK "$InstallPathApplication\hisparc\admin\openvpn"
+  DetailPrint "admin-un.UninstOpenVPN"
+  
+  # remove service
+  ExecWait '"$AdminDir\openvpn\bin\openvpnserv.exe" -remove'
+  # delete reg keys
+  DeleteRegKey HKLM ${OPENVPN_KEY}
+  # remove the tap devices
+  ExecWait '"$AdminDir\openvpn\bin\tapinstall.exe" remove tap0901'
+  # remove the folder
+  RMDir /r /REBOOTOK "$AdminDir\openvpn"
 SectionEnd
 
 #
-# Remove tightvnc.
+# Remove TightVNC.
 #
 Section un.UninstTightVNC
-    # stop service
-    #SimpleSC::StopService "VNC Server"
+  DetailPrint "admin-un.UninstTightVNC"
 	
-	StrCpy $TvncFolder "$InstallPathApplication\hisparc\admin\tightvnc"
-	StrCpy $Program "$TvncFolder\${VNC_SERVICENAME}.exe"
-	ExecWait '"$Program" -remove'
-  
-	DeleteRegKey HKLM ${TIGHTVNCKEY}
-    
-    # remove folder
-    RmDir /r /REBOOTOK "$InstallPathApplication\hisparc\admin\tightvnc"
+  # remove service
+  StrCpy $TvncFolder "$AdminDir\tightvnc"
+  StrCpy $Program "$TvncFolder\${VNC_SERVICENAME}.exe"
+  ExecWait '"$Program" -remove'
+  # delete reg keys
+  DeleteRegKey HKLM ${TIGHTVNCKEY}   
+  # remove the folder
+  RMDir /r /REBOOTOK "$AdminDir\tightvnc"
 SectionEnd
 
 #
-# verwijder nscp
+# Remove nscp (NAGIOS)
 #
 Section un.UninstNscp
-    ExecWait '"$InstallPathApplication\hisparc\admin\nsclientpp\NSClient++.exe" /stop'
-    ExecWait '"$InstallPathApplication\hisparc\admin\nsclientpp\NSClient++.exe" /uninstall'
-
-    RmDir /r /REBOOTOK "$InstallPathApplication\hisparc\admin\nsclientpp"
+  DetailPrint "admin-un.UninstNscp"
+  
+  ExecWait '"$AdminDir\nsclientpp\NSClient++.exe" /stop'
+  ExecWait '"$AdminDir\nsclientpp\NSClient++.exe" /uninstall'
+  RMDir /r /REBOOTOK "$AdminDir\nsclientpp"
 SectionEnd
 
 #
-# Verwijder ODBC
+# Remove ODBC
 #
 Section un.UninstODBC
-    DeleteRegKey HKLM ${ODBCREGKEY}
-    DeleteRegValue HKLM "${ODBCDSREGKEY}" "buffer"
-
-    ExecWait '"$InstallPathApplication\hisparc\admin\odbcconnector\Uninstall_HiSPARC.bat"'
-    
-    #MessageBox MB_OK "Removing : $InstallPathApplication\hisparc\admin\odbcconnector"
-
-    RmDir /r /REBOOTOK "$InstallPathApplication\hisparc\admin\odbcconnector"
+  DetailPrint "admin-un.UninstODBC"
+  
+  DeleteRegKey   HKLM ${ODBCREGKEY}
+  DeleteRegValue HKLM "${ODBCDSREGKEY}" "buffer"
+  ExecWait '"$AdminDir\odbcconnector\Uninstall_HiSPARC.bat"'
+  RMDir /r /REBOOTOK "$AdminDir\odbcconnector"
 SectionEnd
 
+#
+# Remove National Instruments Runtime machine.
+#
 Section un.UninstNIRuntime
-    MessageBox MB_YESNO|MB_ICONQUESTION "Wilt u National Instruments Runtime Environment ook verwijderen?" IDYES Remove IDNO Keep
-    Remove:
-       ExecWait "$NIDIR\Shared\NIUninstaller\uninst.exe /qb /x all"
-       RmDir /r /REBOOTOK "$NIDIR"
-    Keep:
+  DetailPrint "admin-un.UninstNIRuntime"
+  
+  MessageBox MB_YESNO|MB_ICONQUESTION "Do you also want to remove the NI Runtime Environment?" IDYES Remove IDNO Keep
+Remove:
+  ReadRegStr $NIdir HKLM "SOFTWARE\National Instruments\Common\Installer\" "NIDIR"
+  ExecWait "$NIdir\Shared\NIUninstaller\uninst.exe /qb /x all"
+  RMDir /r /REBOOTOK "$NIdir"
+Keep:
 SectionEnd
 
 #
 # Remove the entire admin folder.
 #
 Section un.UninstProgs
-    # delete de hele map
-    
-    #MessageBox MB_OK "Removed: $InstallPathApplication\hisparc\admin"
-    RmDir /r /REBOOTOK "$InstallPathApplication\hisparc\admin"
+  DetailPrint "admin-un.UninstProgs"
+  
+  # remove the entire admin folder
+  RMDir /r /REBOOTOK "$AdminDir"
 SectionEnd
 
+#
+# Stop and remove services from the service list.
+#
 Section un.UninstallServices
-  SimpleSC::StopService ${VPNSERVICENAME}
+  DetailPrint "admin-un.UninstallServices"
+  
+  SimpleSC::StopService ${VPN_SERVICENAME}
   SimpleSC::StopService ${VNC_SERVICENAME}
-  SimpleSC::StopService ${NSCPSERVICENAME}
+  SimpleSC::StopService ${NSCP_SERVICENAME}
 
-  SimpleSC::RemoveService ${VPNSERVICENAME}
+  SimpleSC::RemoveService ${VPN_SERVICENAME}
   SimpleSC::RemoveService ${VNC_SERVICENAME}
-  SimpleSC::RemoveService ${NSCPSERVICENAME}
+  SimpleSC::RemoveService ${NSCP_SERVICENAME}
 SectionEnd
-
-#
-# Deze functie wordt bij het opstarten van de uninstaller uitgevoerd.
-#
-Function un.onInit
-  #MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
-  #Abort
-FunctionEnd
 
 Section un.Uninstall
-  Delete "$InstallPathApplication\hisparc\persistent\uninstallers\adminuninst.exe"
+  DetailPrint "admin-un.Uninstall"
+  
+  Delete "$HisparcDir\persistent\uninstallers\adminuninst.exe"
   SetAutoClose true
 SectionEnd

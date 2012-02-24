@@ -1,9 +1,7 @@
 class userInput():
-	ADMIN = 0
-	USER = 1
 	
 	def __init__(self):
-		return
+		pass
 	
 	def getVersion(self, type):
 		version = ""

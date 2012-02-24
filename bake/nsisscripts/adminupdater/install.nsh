@@ -1,134 +1,171 @@
 #
-# Install openvpn.
+#	install.nsh ------
+#	Admin installer.
+#
+
+#
+# Check existance of executables.
+# On error, exit.
+#
+Section -CheckExecutables
+  DetailPrint "admin-CheckExecutables"
+  
+  ${DirState} $AdminDir $Result
+  ${If} $Result < 0
+	MessageBox MB_ICONEXCLAMATION "FATAL: Folder $AdminDir does not exist!$\nAdmin-Installation aborted."
+	Quit
+  ${Endif}
+  
+  StrCpy $FileName "$AdminDir\openvpn\bin\tapinstall.exe"
+  Call fileExists
+  StrCpy $FileName "$AdminDir\openvpn\bin\openvpnserv.exe"
+  Call fileExists
+  StrCpy $FileName "$AdminDir\tightvnc\${VNC_SERVICENAME}.exe"
+  Call fileExists
+  StrCpy $FileName "$AdminDir\nsclientpp\NSClient++.exe"
+  Call fileExists
+  StrCpy $FileName "$AdminDir\odbcconnector\Install_HiSPARC.bat"
+  Call fileExists
+  StrCpy $FileName "$AdminDir\niruntimeinstaller\setup.exe"
+  Call fileExists
+  StrCpy $FileName "$AdminDir\ftdi_drivers\dpinst.exe"
+  Call fileExists
+SectionEnd
+
+#
+# Install OpenVPN.
 #
 Section -OpenVPNSetup
-    # register
-    WriteRegStr HKLM "SOFTWARE\OpenVPN" "" "$InstallPathApplication\hisparc\admin"
-    WriteRegStr HKLM "SOFTWARE\OpenVPN" config_dir "$InstallPathApplication\hisparc\admin\OpenVPN\config"
-    WriteRegStr HKLM "SOFTWARE\OpenVPN" config_ext "ovpn"
-    WriteRegStr HKLM "SOFTWARE\OpenVPN" exe_path "$InstallPathApplication\hisparc\admin\OpenVPN\bin\openvpn.exe"
-    WriteRegStr HKLM "SOFTWARE\OpenVPN" log_append "0"
-    WriteRegStr HKLM "SOFTWARE\OpenVPN" log_dir "$InstallPathApplication\hisparc\admin\OpenVPN\log"
-    WriteRegStr HKLM "SOFTWARE\OpenVPN" priority "NORMAL_PRIORITY_CLASS"
-
-    # installeer tap driver
-    ExecWait '"$InstallPathApplication\hisparc\admin\openvpn\bin\tapinstall.exe" install "$InstallPathApplication\hisparc\admin\openvpn\driver\oemWin2k.inf" tap0901'
-
-    # service
-    ExecWait '"$InstallPathApplication\hisparc\admin\openvpn\bin\openvpnserv.exe" -install'
+  DetailPrint "admin-OpenVPNSetup"
+  
+  # register
+  WriteRegStr HKLM ${OPENVPN_KEY} ""         "$AdminDir"
+  WriteRegStr HKLM ${OPENVPN_KEY} config_dir "$AdminDir\OpenVPN\config"
+  WriteRegStr HKLM ${OPENVPN_KEY} config_ext "ovpn"
+  WriteRegStr HKLM ${OPENVPN_KEY} exe_path   "$AdminDir\OpenVPN\bin\openvpn.exe"
+  WriteRegStr HKLM ${OPENVPN_KEY} log_append "0"
+  WriteRegStr HKLM ${OPENVPN_KEY} log_dir    "$AdminDir\OpenVPN\log"
+  WriteRegStr HKLM ${OPENVPN_KEY} priority   "NORMAL_PRIORITY_CLASS"
+  # install tap driver
+  ExecWait '"$AdminDir\openvpn\bin\tapinstall.exe" install "$AdminDir\openvpn\driver\oemWin2k.inf" tap0901'
+  # service
+  ExecWait '"$AdminDir\openvpn\bin\openvpnserv.exe" -install'
+  # unzip certificate zip
+  nsisunz::UnzipToLog "$CertZip" "$AdminDir\openvpn\config"
 SectionEnd
 
 #
-# login gegevens.
-#
-Section -LoginGegevens
-    # unzip certificaat zip
-    nsisunz::UnzipToLog "$CertZip" "${InstallationDirectory}\openvpn\config"
-SectionEnd
-
-#
-# Install tightvnc.
+# Install TightVNC.
 #
 Section -TightVNCSetup
-    # register
-	StrCpy $TvncFolder "$InstallPathApplication\hisparc\admin\tightvnc"
+  DetailPrint "admin-TightVNCSetup"
   
-	WriteRegStr   HKLM ${TIGHTVNCKEY}         Path                      "$TvncFolder"
-	WriteRegStr   HKLM ${TIGHTVNCKEY}         StartMenuGroup            "TightVNC"
-	WriteRegDWORD HKLM ${TVNCCOMPONENTSKEY}   "TightVNC Server"         1
-	WriteRegDWORD HKLM ${TVNCCOMPONENTSKEY}   "TightVNC Viewer"         1
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       AcceptHttpConnections     1
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       AcceptRfbConnections      1
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       AllowLoopback             0
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       AlwaysShared              0
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       BlankScreen               0
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       BlockLocalInput           0
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       BlockRemoteInput          0 
-	WriteRegBin   HKLM ${TVNCSERVERKEY}       ControlPassword           ${VNC_PASSWORD}
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       DisconnectAction          0
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       DisconnectClients         1
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       EnableFileTransfers       1
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       EnableUrlParams           1
-	WriteRegStr   HKLM ${TVNCSERVERKEY}       ExtraPorts                "" 
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       GrabTransparentWindows    1
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       HttpPort                  5800
-	WriteRegStr   HKLM ${TVNCSERVERKEY}       IpAccessControl           ""
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       LocalInputPriority        0
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       LocalInputPriorityTimeout 3
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       LogLevel                  0
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       LoopbackOnly              0
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       NeverShared               0
-	WriteRegBin   HKLM ${TVNCSERVERKEY}       Password                  ${VNC_PASSWORD} 
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       PollingInterval           1000
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       QueryAcceptOnTimeout      0
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       QueryTimeout              30
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       RemoveWallpaper           1
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       RfbPort                   5900
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       RunControlInterface       1
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       SaveLogToAllUsersPath     0
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       UseControlAuthentication  1
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       UseVncAuthentication      1
-	WriteRegStr   HKLM ${TVNCSERVERKEY}       VideoClasses              ""
-	WriteRegDWORD HKLM ${TVNCSERVERKEY}       VideoRecognitionInterval  3000
-    
-    # service
-	StrCpy $Program "$TvncFolder\${VNC_SERVICENAME}.exe"
-	ExecWait '"$Program" -install'
-
-    #DetailPrint "TightVNC service installed."
+  # register
+  StrCpy $TvncFolder "$AdminDir\tightvnc"
+  WriteRegStr   HKLM ${TIGHTVNC_KEY}         Path                      "$TvncFolder"
+  WriteRegStr   HKLM ${TIGHTVNC_KEY}         StartMenuGroup            "TightVNC"
+  WriteRegDWORD HKLM ${TVNCCOMPONENTS_KEY}   "TightVNC Server"         1
+  WriteRegDWORD HKLM ${TVNCCOMPONENTS_KEY}   "TightVNC Viewer"         1
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       AcceptHttpConnections     1
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       AcceptRfbConnections      1
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       AllowLoopback             0
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       AlwaysShared              0
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       BlankScreen               0
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       BlockLocalInput           0
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       BlockRemoteInput          0 
+  WriteRegBin   HKLM ${TVNCSERVER_KEY}       ControlPassword           ${VNC_PASSWORD}
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       DisconnectAction          0
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       DisconnectClients         1
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       EnableFileTransfers       1
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       EnableUrlParams           1
+  WriteRegStr   HKLM ${TVNCSERVER_KEY}       ExtraPorts                "" 
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       GrabTransparentWindows    1
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       HttpPort                  5800
+  WriteRegStr   HKLM ${TVNCSERVER_KEY}       IpAccessControl           ""
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       LocalInputPriority        0
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       LocalInputPriorityTimeout 3
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       LogLevel                  0
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       LoopbackOnly              0
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       NeverShared               0
+  WriteRegBin   HKLM ${TVNCSERVER_KEY}       Password                  ${VNC_PASSWORD} 
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       PollingInterval           1000
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       QueryAcceptOnTimeout      0
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       QueryTimeout              30
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       RemoveWallpaper           1
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       RfbPort                   5900
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       RunControlInterface       1
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       SaveLogToAllUsersPath     0
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       UseControlAuthentication  1
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       UseVncAuthentication      1
+  WriteRegStr   HKLM ${TVNCSERVER_KEY}       VideoClasses              ""
+  WriteRegDWORD HKLM ${TVNCSERVER_KEY}       VideoRecognitionInterval  3000
+  # service
+  StrCpy $Program "$TvncFolder\${VNC_SERVICENAME}.exe"
+  ExecWait '"$Program" -install -silent'
 SectionEnd
 
 #
-# installeer nsclient++
+# Install nsclient++ (NAGIOS)
 #
 Section -NscpSetup
-    ExecWait '"$InstallPathApplication\hisparc\admin\nsclientpp\NSClient++.exe" /install'
+  DetailPrint "admin-NscpSetup"
+  
+  ExecWait '"$AdminDir\nsclientpp\NSClient++.exe" /install'
 SectionEnd
 
 #
-# Installeer ODBC.
+# Install ODBC.
 #
 Section -ODBCSetup
-    ExecWait '"$InstallPathApplication\hisparc\admin\odbcconnector\Install_HiSPARC.bat"'
+  DetailPrint "admin-ODBCSetup"
 
-    WriteRegStr HKLM ${ODBCREGKEY} DATABASE    "buffer"
-    WriteRegStr HKLM ${ODBCREGKEY} DESCRIPTION "HiSPARC buffer"
-    WriteRegStr HKLM ${ODBCREGKEY} Driver      '${ODBCDRVPATH}'
-    WriteRegStr HKLM ${ODBCREGKEY} PORT        3306
-    WriteRegStr HKLM ${ODBCREGKEY} PWD         '${BUFFERPASS}'
-    WriteRegStr HKLM ${ODBCREGKEY} SERVER      "${BDBHOST}"
-    WriteRegStr HKLM ${ODBCREGKEY} UID         "buffer"
-
-    WriteRegStr HKLM '${ODBCDSREGKEY}' buffer '${ODBCDRV}'
+  # install
+  ExecWait '"$AdminDir\odbcconnector\Install_HiSPARC.bat"'
+  # register
+  WriteRegStr HKLM ${ODBCREGKEY}     DATABASE    "buffer"
+  WriteRegStr HKLM ${ODBCREGKEY}     DESCRIPTION "HiSPARC buffer"
+  WriteRegStr HKLM ${ODBCREGKEY}     Driver      '${ODBCDRVPATH}'
+  WriteRegStr HKLM ${ODBCREGKEY}     PORT        3306
+  WriteRegStr HKLM ${ODBCREGKEY}     PWD         '${BUFFERPASS}'
+  WriteRegStr HKLM ${ODBCREGKEY}     SERVER      "${BDBHOST}"
+  WriteRegStr HKLM ${ODBCREGKEY}     UID         "buffer"
+  WriteRegStr HKLM '${ODBCDSREGKEY}' buffer      '${ODBCDRV}'
 SectionEnd
 
+#
+# Install LabVIEW
+#
 Section -LabviewRuntimeSetup
-  ExecWait "$InstallPathApplication\hisparc\admin\niruntimeinstaller\setup.exe hisparcspec.ini /acceptlicenses yes /r:n /q"
+  DetailPrint "admin-LabviewRuntimeSetup"
+  
+  ExecWait "$AdminDir\niruntimeinstaller\setup.exe hisparcspec.ini /acceptlicenses yes /r:n /q"
 SectionEnd
 
 #
 # Install FTDI USB drivers
 #
 Section -FTDIDrivers
-    ExecWait "$InstallPathApplication\hisparc\admin\ftdi_drivers\dpinst.exe /q"
+  DetailPrint "admin-FTDIDrivers"
+  
+  ExecWait "$AdminDir\ftdi_drivers\dpinst.exe /q"
 SectionEnd
 
 #
-# Post install page die de services start.
+# Post install page. Stratup the services
 #
 Section RegisterServices
-    # zet de vpn service op automatisch en start de service.
-    SimpleSC::SetServiceStartType ${VPNSERVICENAME} 2
-    SimpleSC::StartService ${VPNSERVICENAME}
-    SimpleSC::GetErrorMessage
-
-    # zet de vnc service op automatisch en start de service.
-    SimpleSC::SetServiceStartType ${VNC_SERVICENAME} 2
-    SimpleSC::StartService ${VNC_SERVICENAME}
-    SimpleSC::GetErrorMessage
-
-    # zet de nscp service op automatisch en start de service.
-    SimpleSC::SetServiceStartType ${NSCPSERVICENAME} 2
-    SimpleSC::StartService ${NSCPSERVICENAME}
-    SimpleSC::GetErrorMessage
+  DetailPrint "admin-RegisterServices"
+  
+  # Put the OpenVPN service to automatic and start it.
+  SimpleSC::SetServiceStartType ${VPN_SERVICENAME} 2
+  SimpleSC::StartService        ${VPN_SERVICENAME}
+  SimpleSC::GetErrorMessage
+  # Put the TightVNC service to automatic and start it.
+  SimpleSC::SetServiceStartType ${VNC_SERVICENAME} 2
+  SimpleSC::StartService        ${VNC_SERVICENAME}
+  SimpleSC::GetErrorMessage
+  # Put the nscp service to automatic and start it.
+  SimpleSC::SetServiceStartType ${NSCP_SERVICENAME} 2
+  SimpleSC::StartService        ${NSCP_SERVICENAME}
+  SimpleSC::GetErrorMessage
 SectionEnd

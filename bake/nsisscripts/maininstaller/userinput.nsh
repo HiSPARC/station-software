@@ -1,3 +1,8 @@
+#
+#	userinput.nsh ------
+#	The Page functions.
+#
+
 Function userinput1
     !insertmacro MUI_HEADER_TEXT "Station data" "Enter station number, password and certificate."
     loginsettings_start:
@@ -5,14 +10,13 @@ Function userinput1
     InstallOptions::dialog "$PLUGINSDIR\userinput1.ini"
     Pop $0
     
-    # Lees de instellingen.
+    # Read the settings
     ${If} $0 == "success"
 
-        ReadINIStr $StationNummer   "$PLUGINSDIR\userinput1.ini" "Field 1" "State"
-        ReadINIStr $StationPaswoord "$PLUGINSDIR\userinput1.ini" "Field 2" "State"
-        ### TODO: Insert password into the database
+        ReadINIStr $StationNumber   "$PLUGINSDIR\userinput1.ini" "Field 1" "State"
+        ReadINIStr $StationPassword "$PLUGINSDIR\userinput1.ini" "Field 2" "State"
         
-        # certificaat
+        # certificate
         ReadINIStr $CertZip "$PLUGINSDIR\userinput1.ini" "Field 3" "State"
 
         ${If} $CertZip == ""
@@ -27,9 +31,9 @@ Function userinput2
     InstallOptions::dialog "$PLUGINSDIR\userinput2.ini"
     Pop $0
 
-    # Lees de instellingen.
+    # Read the settings
     ${If} $0 == "success"
-          # lokale db
+          # local database
           ReadINIStr $LDBHost "$PLUGINSDIR\userinput2.ini" "Field 1" "State"
     ${EndIf}
 FunctionEnd
@@ -39,12 +43,12 @@ Function userinput3
     InstallOptions::dialog "$PLUGINSDIR\userinput3.ini"
     Pop $0
 
-    # Lees de instellingen.
+    # Read the settings
     ${If} $0 == "success"
         ReadINIStr $HasHiSPARC        "$PLUGINSDIR\userinput3.ini" "Field 2" "State"
-        ReadINIStr $HasWeerStation    "$PLUGINSDIR\userinput3.ini" "Field 3" "State"
-        ReadINIStr $HasAardmagnetisch "$PLUGINSDIR\userinput3.ini" "Field 4" "State"
-        ReadINIStr $HasBliksem        "$PLUGINSDIR\userinput3.ini" "Field 5" "State"
+        ReadINIStr $HasWeatherStation "$PLUGINSDIR\userinput3.ini" "Field 3" "State"
+        ReadINIStr $HasEarthMagnetic  "$PLUGINSDIR\userinput3.ini" "Field 4" "State"
+        ReadINIStr $HasLightning      "$PLUGINSDIR\userinput3.ini" "Field 5" "State"
     ${EndIf}
 FunctionEnd
 
