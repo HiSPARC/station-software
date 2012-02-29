@@ -1,0 +1,807 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Rebuilding the Development Tree &mdash; Detector Software Developer Documentation 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Detector Software Developer Documentation 1.0 documentation" href="index.html" />
+    <link rel="prev" title="Setting up a Development Environment" href="setup-development.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="setup-development.html" title="Setting up a Development Environment"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Detector Software Developer Documentation 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rebuilding-the-development-tree">
+<h1>Rebuilding the Development Tree<a class="headerlink" href="#rebuilding-the-development-tree" title="Permalink to this headline">¶</a></h1>
+<p>This is a complete log of building the development environment from
+scratch.  Lots of third-party packages need to be installed and included
+in the installer tree.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>Do not use these instructions</strong>.  You don&#8217;t need to follow
+these instructions to start building a package.  This is only
+needed when you need to recreate the whole tree <em>from scratch</em>.
+It is mostly useful as a reference when one wants to update a
+package or two with newer versions.</p>
+</div>
+<div class="section" id="bazaar-a-distributed-version-control-system-dvcs">
+<h2>Bazaar (a Distributed Version Control System (DVCS))<a class="headerlink" href="#bazaar-a-distributed-version-control-system-dvcs" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://bazaar.canonical.com/">http://bazaar.canonical.com/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">2.3.1 (Standalone)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://wiki.bazaar.canonical.com/WindowsDownloads">http://wiki.bazaar.canonical.com/WindowsDownloads</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://launchpad.net/bzr/2.3/2.3.1/+download/bzr-2.3.1-1-setup.exe">http://launchpad.net/bzr/2.3/2.3.1/+download/bzr-2.3.1-1-setup.exe</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Download and run the installer</li>
+<li><strong>Select Components:</strong> <em>A typical installation</em> with <em>Windows Shell
+Extensions (TortoiseBZR) enabled</em></li>
+</ol>
+</div>
+<div class="section" id="hisparc-software-checkout">
+<h2>HiSPARC Software Checkout<a class="headerlink" href="#hisparc-software-checkout" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Direct Link:</th><td class="field-body">sftp://&lt;user&gt;&#64;login.nikhef.nl/project/hisparc/bzr/windows-development/trunk/</td>
+</tr>
+</tbody>
+</table>
+<p>Steps:</p>
+<ol class="arabic simple">
+<li><strong>What would you like to do?:</strong> <em>Get project source from elsewhere</em>
+-&gt; <em>Checkout</em></li>
+<li><em>Branch source:</em> sftp://&lt;user&gt;&#64;login.nikhef.nl/project/hisparc/bzr/windows-development/trunk/</li>
+<li><em>Local directory where the working tree will be created:</em> Use a
+directory of your choice.  Suggestion: <tt class="docutils literal"><span class="pre">My</span> <span class="pre">Documents/HiSPARC/trunk</span></tt></li>
+<li>Click <em>OK</em>.  You will be asked for your <tt class="docutils literal"><span class="pre">login.nikhef.nl</span></tt> account
+password several times.</li>
+<li>Copy <tt class="docutils literal"><span class="pre">\persistent\configuration\startup_settings_example.bat</span></tt> to
+<tt class="docutils literal"><span class="pre">\persistent\configuration\startup_settings.bat</span></tt> and edit to your
+personal taste</li>
+<li>You can now run <tt class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></tt> if you want to start a command
+terminal with a HiSPARC detector pc environment</li>
+</ol>
+</div>
+<div class="section" id="notepad-a-source-code-editor-optional">
+<h2>Notepad++ (a Source Code Editor) (Optional)<a class="headerlink" href="#notepad-a-source-code-editor-optional" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://notepad-plus-plus.org/">http://notepad-plus-plus.org/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">5.8.5 (Installer)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://notepad-plus-plus.org/downloads">http://notepad-plus-plus.org/downloads</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://download.tuxfamily.org/notepadplus/5.8.5/npp.5.8.5.Installer.exe">http://download.tuxfamily.org/notepadplus/5.8.5/npp.5.8.5.Installer.exe</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic">
+<li><p class="first">Download and run the installer</p>
+</li>
+<li><p class="first">All defaults are ok</p>
+</li>
+<li><p class="first">Navigate to a Python source file and double-click on it.</p>
+</li>
+<li><p class="first"><strong>Windows cannot open this file:</strong> <em>Select the program from a list</em></p>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Choose the program you want to use to open the file:</strong> Select Notepad++ and click <em>Open</em>.  If Notepad++ is not in the list, click <em>Browse</em></dt>
+<dd><ol class="first last arabic simple">
+<li>Navigate to <tt class="docutils literal"><span class="pre">Notepad++/notepad++</span></tt> and click <em>Open</em></li>
+<li>Select Notepad++ and click <em>Open</em></li>
+</ol>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="labview-run-time-engine">
+<h2>LabVIEW Run-Time Engine<a class="headerlink" href="#labview-run-time-engine" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://www.ni.com/">http://www.ni.com/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">8.2.1 (Standard download)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://joule.ni.com/nidu/cds/view/p/id/550/lang/en">http://joule.ni.com/nidu/cds/view/p/id/550/lang/en</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://lumen.ni.com/nicif/US/GB_NIDU/content.xhtml?du=http://joule.ni.com/nidu/cds/view/p/id/550/lang/en_US">http://lumen.ni.com/nicif/US/GB_NIDU/content.xhtml?du=http://joule.ni.com/nidu/cds/view/p/id/550/lang/en_US</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Complete the registration procedure or log in</li>
+<li>Download and run the executable (which is a <em>WinZip Self-Extractor</em>)</li>
+<li><strong>WinZip Self-Extractor:</strong> Uncheck <em>When done unzipping open
+``.\setup.exe``</em> and click <em>Unzip</em></li>
+<li>When finished unzipping, click <em>Close</em></li>
+<li>Copy <tt class="docutils literal"><span class="pre">c:\National</span> <span class="pre">Instruments</span> <span class="pre">Downloads\LabVIEW</span> <span class="pre">8.2.1\Runtime</span>
+<span class="pre">Engine</span></tt> to <tt class="docutils literal"><span class="pre">\admin</span></tt></li>
+<li>Rename the <tt class="docutils literal"><span class="pre">\admin\Runtime</span> <span class="pre">Engine</span></tt> folder to
+<tt class="docutils literal"><span class="pre">\admin\niruntimeinstaller</span></tt></li>
+<li>Copy <tt class="docutils literal"><span class="pre">\admin\niruntimeinstaller\Bin\silent_install.txt</span></tt> to
+<tt class="docutils literal"><span class="pre">\admin\niruntimeinstaller</span></tt> and rename to <tt class="docutils literal"><span class="pre">hisparcspec.ini</span></tt></li>
+<li>Edit <tt class="docutils literal"><span class="pre">hisparcspec.ini</span></tt> and enter user information (serial number)</li>
+</ol>
+</div>
+<div class="section" id="mysql-community-server-a-database-server">
+<h2>MySQL Community Server (a Database Server)<a class="headerlink" href="#mysql-community-server-a-database-server" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://www.mysql.com/">http://www.mysql.com/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">5.1.53 (x86, 32-bit, ZIP Archive, noinstall)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://www.mysql.com/downloads/mysql/">http://www.mysql.com/downloads/mysql/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://www.mysql.com/get/Downloads/MySQL-5.1/mysql-noinstall-5.1.53-win32.zip/from/http://mirror.leaseweb.com/mysql/">http://www.mysql.com/get/Downloads/MySQL-5.1/mysql-noinstall-5.1.53-win32.zip/from/http://mirror.leaseweb.com/mysql/</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic">
+<li><p class="first">Unzip to <tt class="docutils literal"><span class="pre">\user</span></tt> and rename the <tt class="docutils literal"><span class="pre">mysql-5.1.53-win32</span></tt> folder to
+<tt class="docutils literal"><span class="pre">mysql</span></tt></p>
+</li>
+<li><p class="first">Copy <tt class="docutils literal"><span class="pre">\user\mysql\my-medium.ini</span></tt> to <tt class="docutils literal"><span class="pre">\user\mysql\my.ini</span></tt></p>
+</li>
+<li><dl class="first docutils">
+<dt>Edit the <tt class="docutils literal"><span class="pre">my.ini</span></tt> file:</dt>
+<dd><ol class="first last arabic">
+<li><p class="first"><strong>Section [mysqld]:</strong> add <tt class="docutils literal"><span class="pre">basedir=&quot;/user/mysql/&quot;</span></tt></p>
+</li>
+<li><p class="first"><strong>Section [mysqld]:</strong> add <tt class="docutils literal"><span class="pre">datadir=/persistent/data/mysql/&quot;</span></tt></p>
+</li>
+<li><p class="first"><strong>Section [mysqld]:</strong> remove comments from following lines:</p>
+<div class="highlight-python"><pre>innodb_buffer_pool_size
+innodb_additional_mem_pool_size
+innodb_log_file_size=10M
+innodb_log_buffer_size
+innodb_flush_log_at_trx_commit
+innodb_lock_wait_timeout</pre>
+</div>
+</li>
+<li><p class="first">Especially mind the 10M parameter to <tt class="docutils literal"><span class="pre">innodb_log_file_size</span></tt>, or
+MySQL will crash on startup.</p>
+</li>
+</ol>
+</dd>
+</dl>
+</li>
+<li><p class="first">Create the <tt class="docutils literal"><span class="pre">\persistent\data</span></tt> folder</p>
+</li>
+<li><p class="first">Move the <tt class="docutils literal"><span class="pre">\user\mysql\data</span></tt> folder to <tt class="docutils literal"><span class="pre">\persistent\data</span></tt> and
+rename to <tt class="docutils literal"><span class="pre">mysql</span></tt> (you now have a <tt class="docutils literal"><span class="pre">\persistent\data\mysql</span></tt>
+folder)</p>
+</li>
+<li><p class="first">Run <tt class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></tt>, navigate to <tt class="docutils literal"><span class="pre">\user\mysql\bin</span></tt> and run
+<tt class="docutils literal"><span class="pre">mysqld</span> <span class="pre">--console</span></tt> and keep this window open (this is the <em>MySQL
+Server Console</em>)</p>
+</li>
+<li><p class="first">Run <tt class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></tt>, navigate to <tt class="docutils literal"><span class="pre">\user\mysql\bin</span></tt> and run
+<tt class="docutils literal"><span class="pre">mysql</span> <span class="pre">-u</span> <span class="pre">root</span></tt> and do:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">DROP</span> <span class="pre">USER</span> <span class="pre">'';</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">DROP</span> <span class="pre">USER</span> <span class="pre">''&#64;localhost;</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">SET</span> <span class="pre">PASSWORD</span> <span class="pre">FOR</span> <span class="pre">root&#64;localhost</span> <span class="pre">=</span> <span class="pre">PASSWORD('&lt;rootpassword&gt;');</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">SET</span> <span class="pre">PASSWORD</span> <span class="pre">FOR</span> <span class="pre">root&#64;127.0.0.1</span> <span class="pre">=</span> <span class="pre">PASSWORD('&lt;rootpassword&gt;');</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">DROP</span> <span class="pre">DATABASE</span> <span class="pre">test;</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">QUIT;</span></tt></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p class="first">Run <tt class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></tt>, navigate to <tt class="docutils literal"><span class="pre">\user\mysql\bin</span></tt> and run
+<tt class="docutils literal"><span class="pre">mysql</span> <span class="pre">-u</span> <span class="pre">root</span> <span class="pre">-p</span> <span class="pre">&lt;</span> <span class="pre">\buffer.sql</span></tt> and give the root password when
+prompted</p>
+</li>
+<li><p class="first">In the <em>MySQL Server Console</em> window, press <tt class="docutils literal"><span class="pre">Control-C</span></tt> to
+correctly shutdown the server</p>
+</li>
+<li><p class="first">In the <tt class="docutils literal"><span class="pre">\persistent\data\mysql</span></tt> folder delete the <tt class="docutils literal"><span class="pre">mysql-bin.*</span></tt>
+files and any <tt class="docutils literal"><span class="pre">*.pid</span></tt> and <tt class="docutils literal"><span class="pre">*.err</span></tt> files if they exist from
+previous runs of the server</p>
+</li>
+</ol>
+</div>
+<div class="section" id="mysql-odbc-driver">
+<h2>MySQL ODBC Driver<a class="headerlink" href="#mysql-odbc-driver" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://www.mysql.com/">http://www.mysql.com/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">5.1.8 (x86, 32-bit, ZIP Archive, noinstall)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://dev.mysql.com/downloads/connector/odbc/">http://dev.mysql.com/downloads/connector/odbc/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://dev.mysql.com/get/Downloads/Connector-ODBC/5.1/mysql-connector-odbc-noinstall-5.1.8-win32.zip/from/http://ftp.gwdg.de/pub/misc/mysql/">http://dev.mysql.com/get/Downloads/Connector-ODBC/5.1/mysql-connector-odbc-noinstall-5.1.8-win32.zip/from/http://ftp.gwdg.de/pub/misc/mysql/</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Unzip to <tt class="docutils literal"><span class="pre">\admin</span></tt> and rename the
+<tt class="docutils literal"><span class="pre">mysql-connector-odbc-noinstall-5.1.8-win32</span></tt> folder to
+<tt class="docutils literal"><span class="pre">odbcconnector</span></tt></li>
+</ol>
+</div>
+<div class="section" id="openvpn">
+<h2>OpenVPN<a class="headerlink" href="#openvpn" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://openvpn.net/">http://openvpn.net/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">2.1.4</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://openvpn.net/index.php/open-source/downloads.html">http://openvpn.net/index.php/open-source/downloads.html</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://swupdate.openvpn.net/community/releases/openvpn-2.1.4-install.exe">http://swupdate.openvpn.net/community/releases/openvpn-2.1.4-install.exe</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Download and run the installer</li>
+<li>Copy the <tt class="docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\OpenVPN</span></tt> folder to <tt class="docutils literal"><span class="pre">\admin</span></tt> and rename
+to <tt class="docutils literal"><span class="pre">openvpn</span></tt></li>
+</ol>
+</div>
+<div class="section" id="tightvnc">
+<h2>TightVNC<a class="headerlink" href="#tightvnc" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://www.tightvnc.com/">http://www.tightvnc.com/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">1.3.10 (Complete set, no installer)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://www.tightvnc.com/download-old.php">http://www.tightvnc.com/download-old.php</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://www.tightvnc.com/download/1.3.10/tightvnc-1.3.10_x86.zip">http://www.tightvnc.com/download/1.3.10/tightvnc-1.3.10_x86.zip</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Create a <tt class="docutils literal"><span class="pre">\admin\tightvnc</span></tt> folder and unzip the download to this
+folder</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There is a new major version which would solve a lot of
+VNC-related problems.  It would be very nice to include that in
+an update.  That will be our very first admin update, however...</p>
+</div>
+</div>
+<div class="section" id="windows-driver-kit-wdk">
+<h2>Windows Driver Kit (WDK)<a class="headerlink" href="#windows-driver-kit-wdk" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://msdn.microsoft.com/en-us/windows/hardware/gg487428">http://msdn.microsoft.com/en-us/windows/hardware/gg487428</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">7.1.0</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://www.microsoft.com/downloads/en/details.aspx?displaylang=en&amp;FamilyID=36a2630f-5d56-43b5-b996-7633f2ec14ff">http://www.microsoft.com/downloads/en/details.aspx?displaylang=en&amp;FamilyID=36a2630f-5d56-43b5-b996-7633f2ec14ff</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://www.microsoft.com/downloads/info.aspx?na=41&amp;SrcFamilyId=36A2630F-5D56-43B5-B996-7633F2EC14FF&amp;SrcDisplayLang=en&amp;u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f4%2fA%2f2%2f4A25C7D5-EFBE-4182-B6A9-AE6850409A78%2fGRMWDK_EN_7600_1.ISO">http://www.microsoft.com/downloads/info.aspx?na=41&amp;SrcFamilyId=36A2630F-5D56-43B5-B996-7633F2EC14FF&amp;SrcDisplayLang=en&amp;u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f4%2fA%2f2%2f4A25C7D5-EFBE-4182-B6A9-AE6850409A78%2fGRMWDK_EN_7600_1.ISO</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Microsoft recommends that you download the ISO, burn it, and then
+insert it in your drive.  Alternatively, attach it to a virtual
+machine, or something similar.</li>
+<li>Install the <em>Tools</em> package.</li>
+</ol>
+<p>This is needed for installing the FTDI drivers.</p>
+</div>
+<div class="section" id="ftdi-drivers-communication-with-electronics-box-usb-chip">
+<h2>FTDI Drivers (Communication with Electronics Box USB Chip)<a class="headerlink" href="#ftdi-drivers-communication-with-electronics-box-usb-chip" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://www.ftdichip.com/">http://www.ftdichip.com/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">2.08.08 (CDM, x86 32-bit)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://www.ftdichip.com/Drivers/VCP.htm">http://www.ftdichip.com/Drivers/VCP.htm</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://www.ftdichip.com/Drivers/CDM/CDM20808.zip">http://www.ftdichip.com/Drivers/CDM/CDM20808.zip</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Unpack the zip file.</li>
+<li>Move the <tt class="docutils literal"><span class="pre">CDM20814_WHQL_Certified</span></tt> folder to <tt class="docutils literal"><span class="pre">\admin</span></tt>.</li>
+<li>Rename the folder to <tt class="docutils literal"><span class="pre">ftdi_drivers</span></tt>.</li>
+<li>Copy
+<tt class="docutils literal"><span class="pre">C:\WinDDK\7600.16385.1\redist\DIFx\dpinst\EngMui\x86\dpinst.exe</span></tt> to
+<tt class="docutils literal"><span class="pre">\admin\ftdi_drivers</span></tt>.</li>
+<li>Copy <tt class="docutils literal"><span class="pre">\admin\ftdi_drivers\i386\ftd2xx.dll</span></tt> to <tt class="docutils literal"><span class="pre">\user\hisparcdaq</span></tt>.</li>
+</ol>
+</div>
+<div class="section" id="gps-monitor-dspmon">
+<h2>GPS Monitor (DSPMON)<a class="headerlink" href="#gps-monitor-dspmon" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://www.trimble.com/timing/resolution-t.aspx">http://www.trimble.com/timing/resolution-t.aspx</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">1.46</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://www.trimble.com/timing/resolution-t.aspx?dtID=support">http://www.trimble.com/timing/resolution-t.aspx?dtID=support</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://trl.trimble.com/dscgi/ds.py/Get/File-366495/DSPMon_V1-46.exe">http://trl.trimble.com/dscgi/ds.py/Get/File-366495/DSPMon_V1-46.exe</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Create folder <tt class="docutils literal"><span class="pre">\user\dspmon</span></tt>.</li>
+<li>Copy <tt class="docutils literal"><span class="pre">DSPMon_V1-46.exe</span></tt> to <tt class="docutils literal"><span class="pre">\user\dspmon</span></tt>.</li>
+<li>Rename file to <tt class="docutils literal"><span class="pre">DSPMon.exe</span></tt>.</li>
+</ol>
+</div>
+<div class="section" id="nagios-send-passive-check-results-nsca-client">
+<h2>Nagios: Send Passive Check Results (NSCA Client)<a class="headerlink" href="#nagios-send-passive-check-results-nsca-client" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://exchange.nagios.org/directory/Addons/Passive-Checks/NSCA-Win32-Client/details">http://exchange.nagios.org/directory/Addons/Passive-Checks/NSCA-Win32-Client/details</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">Unknown</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://exchange.nagios.org/components/com_mtree/attachment.php?link_id=550&amp;cf_id=29">http://exchange.nagios.org/components/com_mtree/attachment.php?link_id=550&amp;cf_id=29</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Unpack zip file.</li>
+<li>Copy <tt class="docutils literal"><span class="pre">send_nsca_win32_bin</span></tt> folder to <tt class="docutils literal"><span class="pre">\user\hsmonitor\data</span></tt>.</li>
+<li>Rename folder to <tt class="docutils literal"><span class="pre">send_nsca_win32</span></tt>.</li>
+<li>Edit <tt class="docutils literal"><span class="pre">\user\hsmonitor\data\send_nsca_win32\send_nsca.cfg</span></tt>: change
+<tt class="docutils literal"><span class="pre">encryption_method=1</span></tt> to <tt class="docutils literal"><span class="pre">encryption_method=0</span></tt>.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">I&#8217;d really like to change this to something better.  Still, it is
+not as bad as it seems since everything is sent over the VPN.</p>
+</div>
+</div>
+<div class="section" id="nagios-client-nsclient">
+<h2>Nagios: Client (NSClient++)<a class="headerlink" href="#nagios-client-nsclient" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://nsclient.org/nscp/">http://nsclient.org/nscp/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">0.3.8</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://nsclient.org/nscp/downloads">http://nsclient.org/nscp/downloads</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://files.nsclient.org/x-0.3.x/NSClient%2B%2B-0.3.8-Win32.zip">http://files.nsclient.org/x-0.3.x/NSClient%2B%2B-0.3.8-Win32.zip</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Unpack zip file.</li>
+<li>Enter <tt class="docutils literal"><span class="pre">NSClient++-0.3.8-Win32</span></tt> folder.</li>
+<li>Copy everything, <em>except</em> <tt class="docutils literal"><span class="pre">scripts</span></tt> <em>folder and</em> <tt class="docutils literal"><span class="pre">nsci.ini</span></tt> <em>file</em>, to
+<tt class="docutils literal"><span class="pre">\admin\nsclientpp</span></tt>.</li>
+</ol>
+</div>
+<div class="section" id="nullsoft-scriptable-install-system-nsis">
+<h2>Nullsoft Scriptable Install System (NSIS)<a class="headerlink" href="#nullsoft-scriptable-install-system-nsis" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://nsis.sourceforge.net/">http://nsis.sourceforge.net/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">2.46</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://nsis.sourceforge.net/Download">http://nsis.sourceforge.net/Download</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://prdownloads.sourceforge.net/nsis/nsis-2.46-setup.exe?download">http://prdownloads.sourceforge.net/nsis/nsis-2.46-setup.exe?download</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Run .exe file.</li>
+<li>Perform a <em>Full</em> installation.</li>
+<li>Copy <tt class="docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\NSIS</span></tt> to <tt class="docutils literal"><span class="pre">\bake</span></tt>.</li>
+<li>Rename <tt class="docutils literal"><span class="pre">NSIS</span></tt> folder to <tt class="docutils literal"><span class="pre">nsis</span></tt>.</li>
+</ol>
+</div>
+<div class="section" id="nsis-unzip-plugin-nsisunz">
+<h2>NSIS Unzip plugin (Nsisunz)<a class="headerlink" href="#nsis-unzip-plugin-nsisunz" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://nsis.sourceforge.net/Nsisunz_plug-in">http://nsis.sourceforge.net/Nsisunz_plug-in</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">June 22, 2007</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://saivert.com/nsis/nsisunz.7z">http://saivert.com/nsis/nsisunz.7z</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Open archive.</li>
+<li>Copy <tt class="docutils literal"><span class="pre">Release/nsisunz.dll</span></tt> to <tt class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></tt>.</li>
+</ol>
+</div>
+<div class="section" id="nsis-xtinfoplugin">
+<h2>NSIS XtInfoPlugin<a class="headerlink" href="#nsis-xtinfoplugin" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://nsis.sourceforge.net/XtInfoPlugin_plug-in">http://nsis.sourceforge.net/XtInfoPlugin_plug-in</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">1.0.0.2</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://nsis.sourceforge.net/mediawiki/images/1/1d/XtInfoPlugin_v_1.0.0.2.zip">http://nsis.sourceforge.net/mediawiki/images/1/1d/XtInfoPlugin_v_1.0.0.2.zip</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Open archive.</li>
+<li>Copy <tt class="docutils literal"><span class="pre">xtInfoPlugin\xtInfoPlugin.dll</span></tt> to <tt class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></tt>.</li>
+</ol>
+</div>
+<div class="section" id="nsis-simple-service-plugin-simplesc">
+<h2>NSIS Simple Service Plugin (SimpleSC)<a class="headerlink" href="#nsis-simple-service-plugin-simplesc" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://nsis.sourceforge.net/NSIS_Simple_Service_Plugin">http://nsis.sourceforge.net/NSIS_Simple_Service_Plugin</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">1.29</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://nsis.sourceforge.net/mediawiki/images/e/ed/NSIS_Simple_Service_Plugin_1.29.zip">http://nsis.sourceforge.net/mediawiki/images/e/ed/NSIS_Simple_Service_Plugin_1.29.zip</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Open archive.</li>
+<li>Copy <tt class="docutils literal"><span class="pre">SimpleSC.dll</span></tt> to <tt class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></tt>.</li>
+</ol>
+</div>
+<div class="section" id="nsis-simple-firewall-plugin-simplefc">
+<h2>NSIS Simple Firewall Plugin (SimpleFC)<a class="headerlink" href="#nsis-simple-firewall-plugin-simplefc" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://nsis.sourceforge.net/NSIS_Simple_Firewall_Plugin">http://nsis.sourceforge.net/NSIS_Simple_Firewall_Plugin</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">1.18</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://nsis.sourceforge.net/mediawiki/images/6/67/NSIS_Simple_Firewall_Plugin_1.18.zip">http://nsis.sourceforge.net/mediawiki/images/6/67/NSIS_Simple_Firewall_Plugin_1.18.zip</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Open archive.</li>
+<li>Copy <tt class="docutils literal"><span class="pre">SimpleFC.dll</span></tt> to <tt class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></tt>.</li>
+</ol>
+</div>
+<div class="section" id="nsis-access-control-plugin">
+<h2>NSIS Access Control Plugin<a class="headerlink" href="#nsis-access-control-plugin" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://nsis.sourceforge.net/AccessControl_plug-in">http://nsis.sourceforge.net/AccessControl_plug-in</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">January 23, 2008</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://nsis.sourceforge.net/mediawiki/images/4/4a/AccessControl.zip">http://nsis.sourceforge.net/mediawiki/images/4/4a/AccessControl.zip</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Open archive.</li>
+<li>Copy <tt class="docutils literal"><span class="pre">AccessControl\Plugins\*.dll</span></tt> to <tt class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></tt>.</li>
+</ol>
+</div>
+<div class="section" id="python">
+<h2>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://python.org/">http://python.org/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">2.7.1</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://www.python.org/download/">http://www.python.org/download/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://www.python.org/ftp/python/2.7.1/python-2.7.1.msi">http://www.python.org/ftp/python/2.7.1/python-2.7.1.msi</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Install <em>Just for me</em> (this makes it easier to redistribute the
+package).</li>
+</ol>
+</div>
+<div class="section" id="python-for-windows-extensions-pywin32">
+<h2>Python for Windows Extensions (pywin32)<a class="headerlink" href="#python-for-windows-extensions-pywin32" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://sourceforge.net/projects/pywin32/">http://sourceforge.net/projects/pywin32/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">Build 216</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://sourceforge.net/projects/pywin32/files/pywin32/">http://sourceforge.net/projects/pywin32/files/pywin32/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://sourceforge.net/projects/pywin32/files/pywin32/Build216/pywin32-216.win32-py2.7.exe/download">http://sourceforge.net/projects/pywin32/files/pywin32/Build216/pywin32-216.win32-py2.7.exe/download</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Default installation.</li>
+</ol>
+</div>
+<div class="section" id="windows-management-instrumentation-for-python-python-wmi">
+<h2>Windows Management Instrumentation for Python (Python-WMI)<a class="headerlink" href="#windows-management-instrumentation-for-python-python-wmi" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://timgolden.me.uk/python/wmi/index.html">http://timgolden.me.uk/python/wmi/index.html</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">1.4.6</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://timgolden.me.uk/python/wmi/index.html#where-do-i-get-it">http://timgolden.me.uk/python/wmi/index.html#where-do-i-get-it</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://timgolden.me.uk/python/downloads/WMI-1.4.6.win32.exe">http://timgolden.me.uk/python/downloads/WMI-1.4.6.win32.exe</a></td>
+</tr>
+</tbody>
+</table>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Default installation.</li>
+</ol>
+</div>
+<div class="section" id="mysql-for-python-mysqldb">
+<h2>MySQL for Python (MySQLdb)<a class="headerlink" href="#mysql-for-python-mysqldb" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">http://www.lfd.uci.edu/~gohlke/pythonlibs/</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">1.2.3</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">http://www.lfd.uci.edu/~gohlke/pythonlibs/</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Since I don&#8217;t own Microsoft Visual Studio, I can&#8217;t compile the
+MySQL extension module myself.  If you <em>do</em> own MSVC, you might
+be able to compile and run the official package from
+<a class="reference external" href="http://pypi.python.org/pypi/MySQL-python/">http://pypi.python.org/pypi/MySQL-python/</a>.</p>
+</div>
+<p>Installation steps:</p>
+<ol class="arabic simple">
+<li>Default installation.</li>
+</ol>
+</div>
+<div class="section" id="finishing-python-installation">
+<h2>Finishing Python Installation<a class="headerlink" href="#finishing-python-installation" title="Permalink to this headline">¶</a></h2>
+<p>Steps:</p>
+<ol class="arabic simple">
+<li>Copy <tt class="docutils literal"><span class="pre">C:\Python27</span></tt> to <tt class="docutils literal"><span class="pre">\user</span></tt>.</li>
+<li>Rename <tt class="docutils literal"><span class="pre">Python27</span></tt> folder to <tt class="docutils literal"><span class="pre">python</span></tt>.</li>
+</ol>
+<p>Unfortunately, the world of Windows is complex.  The world of Windows
+compilers is even more complex.  You can&#8217;t use binaries (executables or
+DLLs) from different compilers or even compiler versions together.  For
+instance, you can&#8217;t import a Python module containing compiled code when
+it is compiled with a different compiler than Python itself.  Since
+Windows installations commonly don&#8217;t <em>have</em> a compiler, this can be a pain
+and breaks installers.  What&#8217;s more: compile code with Microsoft Visual
+C++ and install it on a machine <em>without</em> Microsoft Visual C++ and it may
+not work out of the box.  For instance, try this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">_tkinter</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">ImportError: DLL load failed</span>: <span class="n">This application has failed to start</span>
+<span class="go">because the application configuration is incorrect. Reinstalling the</span>
+<span class="go">application may fix this problem.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">win32api</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">ImportError: DLL load failed</span>: <span class="n">The specified module could not be found.</span>
+</pre></div>
+</div>
+<p>This not only happens with Tkinter and PyWin32, but also with several
+other packages that are used by the HiSPARC software.  Just trying to
+import _tkinter is an easy check to see if things are ok.  For Python
+2.7.1, the error can be resolved by installing the Microsoft Visual C++
+2008 Redistributable package.  Don&#8217;t try another version, it won&#8217;t work.
+Alternatively, you can fix the python installation by copying a few files
+around.  This is much easier to do.</p>
+<p>Steps (continued):</p>
+<ol class="arabic simple">
+<li>Copy <tt class="docutils literal"><span class="pre">msvcr90.dll</span></tt> and <tt class="docutils literal"><span class="pre">Microsoft.VC90.CRT.manifest</span></tt> to
+<tt class="docutils literal"><span class="pre">\user\python\DDLs</span></tt>.</li>
+<li>Copy contents of <tt class="docutils literal"><span class="pre">\user\python\Lib\site-packages\pywin32_system32</span></tt> to
+<tt class="docutils literal"><span class="pre">\user\python</span></tt>.</li>
+</ol>
+<p>Now try:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">_tkinter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">win32api</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Rebuilding the Development Tree</a><ul>
+<li><a class="reference internal" href="#bazaar-a-distributed-version-control-system-dvcs">Bazaar (a Distributed Version Control System (DVCS))</a></li>
+<li><a class="reference internal" href="#hisparc-software-checkout">HiSPARC Software Checkout</a></li>
+<li><a class="reference internal" href="#notepad-a-source-code-editor-optional">Notepad++ (a Source Code Editor) (Optional)</a></li>
+<li><a class="reference internal" href="#labview-run-time-engine">LabVIEW Run-Time Engine</a></li>
+<li><a class="reference internal" href="#mysql-community-server-a-database-server">MySQL Community Server (a Database Server)</a></li>
+<li><a class="reference internal" href="#mysql-odbc-driver">MySQL ODBC Driver</a></li>
+<li><a class="reference internal" href="#openvpn">OpenVPN</a></li>
+<li><a class="reference internal" href="#tightvnc">TightVNC</a></li>
+<li><a class="reference internal" href="#windows-driver-kit-wdk">Windows Driver Kit (WDK)</a></li>
+<li><a class="reference internal" href="#ftdi-drivers-communication-with-electronics-box-usb-chip">FTDI Drivers (Communication with Electronics Box USB Chip)</a></li>
+<li><a class="reference internal" href="#gps-monitor-dspmon">GPS Monitor (DSPMON)</a></li>
+<li><a class="reference internal" href="#nagios-send-passive-check-results-nsca-client">Nagios: Send Passive Check Results (NSCA Client)</a></li>
+<li><a class="reference internal" href="#nagios-client-nsclient">Nagios: Client (NSClient++)</a></li>
+<li><a class="reference internal" href="#nullsoft-scriptable-install-system-nsis">Nullsoft Scriptable Install System (NSIS)</a></li>
+<li><a class="reference internal" href="#nsis-unzip-plugin-nsisunz">NSIS Unzip plugin (Nsisunz)</a></li>
+<li><a class="reference internal" href="#nsis-xtinfoplugin">NSIS XtInfoPlugin</a></li>
+<li><a class="reference internal" href="#nsis-simple-service-plugin-simplesc">NSIS Simple Service Plugin (SimpleSC)</a></li>
+<li><a class="reference internal" href="#nsis-simple-firewall-plugin-simplefc">NSIS Simple Firewall Plugin (SimpleFC)</a></li>
+<li><a class="reference internal" href="#nsis-access-control-plugin">NSIS Access Control Plugin</a></li>
+<li><a class="reference internal" href="#python">Python</a></li>
+<li><a class="reference internal" href="#python-for-windows-extensions-pywin32">Python for Windows Extensions (pywin32)</a></li>
+<li><a class="reference internal" href="#windows-management-instrumentation-for-python-python-wmi">Windows Management Instrumentation for Python (Python-WMI)</a></li>
+<li><a class="reference internal" href="#mysql-for-python-mysqldb">MySQL for Python (MySQLdb)</a></li>
+<li><a class="reference internal" href="#finishing-python-installation">Finishing Python Installation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="setup-development.html"
+                        title="previous chapter">Setting up a Development Environment</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/rebuild-tree.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="setup-development.html" title="Setting up a Development Environment"
+             >previous</a> |</li>
+        <li><a href="index.html">Detector Software Developer Documentation 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, David Fokkema.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>
