@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configuratie van de HiSPARC software &mdash; HiSPARC software 3.8 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="HiSPARC software 3.8 documentation" href="index.html" />
+    <link rel="prev" title="Installatie van de HiSPARC software" href="software-installatie.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="software-installatie.html" title="Installatie van de HiSPARC software"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">HiSPARC software 3.8 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="configuratie-van-de-hisparc-software">
+<h1>Configuratie van de HiSPARC software<a class="headerlink" href="#configuratie-van-de-hisparc-software" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hisparc-data-acquisitie">
+<h2>HiSPARC data acquisitie<a class="headerlink" href="#hisparc-data-acquisitie" title="Permalink to this headline">¶</a></h2>
+<p>Zodra de HiSPARC data acquisitie software opstart, zal hij vragen in
+welke modus dat moet gebeuren.  Kies hier <em>Expert Mode</em>.  Zodra de
+software vraagt om het invullen van het wachtwoord klikt u gewoon op <em>Ok</em>.</p>
+<div class="section" id="basisinstellingen">
+<h3>Basisinstellingen<a class="headerlink" href="#basisinstellingen" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Als de HiSPARC kastjes nog niet zijn aangesloten, dan kunt u
+dat nu doen.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Zorgt u ervoor dat bij het aansluiten van de kastjes op de pc de
+kastjes <strong>uit</strong> staan.  Dus eerst de USB kabels aansluiten, dan pas de
+voedingen.  Dit voorkomt een zeer storend probleem waarbij de kastjes
+al periodiek data verzenden naar de computer en Windows denkt dat het
+dan wel om een muis moet gaan.  Gevolg: de data van het kastje
+geïnterpreteerd als muis doet de muiscursor willekeurig over het scherm
+springen terwijl er van alles wordt opengeklikt of gesleept.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Elke keer als u een instelling wijzigt wordt deze pas
+doorgevoerd wanneer u op <em>Apply Settings</em> klikt.  <em>Voor u dat doet,
+verandert er dus helemaal niets</em>.  Wanneer u wilt dat de instellingen
+behouden blijven na een herstart van het programma, klikt u op <em>Save
+settings</em>.</p>
+</div>
+<p>Het belangrijkste op dit moment is om de interne ADC&#8217;s in te regelen,
+anders zullen de kastjes alleen maar ruis lijken te geven.  Ga hiervoor
+naar de <em>ADC alignment</em> tab en klik op <em>Start Alignment</em>.  Zodra het
+proces klaar is (dit kan enige minuten duren) bevestigd u het opslaan van
+de nieuwe instellingen.</p>
+<p>Het volgende (dat vaak vergeten wordt) is om het stationnummer goed in te
+vullen.  Ga hiervoor naar de <em>Expert Settings</em> tab en vul bij <em>Detector
+Number</em> uw stationnummer in.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Het kan verleidelijk zijn bij <em>Password</em> het stationwachtwoord
+in te vullen.  Dit is echter <strong>niet</strong> hetzelfde veld.  Het wachtwoord
+dat u hier kunt invullen mag geheel willekeurig zijn en is hetgeen
+gevraagd wordt bij het opstarten van <em>Expert Mode</em>.  In de meeste
+gevallen kunt u dit gewoon leeg laten.</p>
+</div>
+</div>
+<div class="section" id="calibratie-van-de-detector">
+<h3>Calibratie van de detector<a class="headerlink" href="#calibratie-van-de-detector" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Als de detectoren nog niet zijn aangesloten, kunt u dat nu doen.</p>
+</div>
+<p>Het is nu van belang de detectoren zelf in te regelen.  Hiervoor moet u de
+juiste hoogspanning kiezen om op de fotobuizen te zetten.  Om dit te doen
+hebben we een korte procedure opgesteld:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Volg eerst de <em>volledige</em> procedure, inclusief het verhogen van
+de spanningen op de fotobuizen, voordat u resultaat verwacht.  Bij
+spanningen onder de 700 V ziet u gewoonlijk geen enkel signaal.  Maar
+volg de procedure nauwgezet en begin bij 300 V.</p>
+</div>
+<ul class="simple">
+<li>Stel op de <em>Events / Settings</em> tab op het <em>Thresholds</em> tabje alle
+thresholds (drempelwaarden) in op -250 mV (voor de <em>Low</em> thresholds) en
+-300 mV (voor de <em>High</em> thresholds).</li>
+<li>Stel dan op het <em>Photomultiplier</em> tabje alle hoogspanningen in op 300 V.</li>
+<li>Ga naar de <em>Statistics (Trace &amp; Trigger)</em> tab en kijk naar de <em>Last
+second</em> waarden in het <em>Singles</em> venster.  Daarin staat het aantal
+pulsen per seconde dat over de drempelwaardes ging.  Dat wil zeggen: bij
+<em>Channel 1 - low</em> staat het aantal pulsen per seconde dat de fotobuis
+van detector 1 zag die sterker waren dan -250 mV <a class="footnote-reference" href="#drempels" id="id1">[2]</a>.</li>
+<li>Voor een nauwkeurige bepaling van het gemiddelde aantal pulsen per
+seconde gebruikt u de timer functie in het midden van het scherm,
+onderaan.  U kijkt dan ook bij de singles in de laatste kolom, <em>Average
+per second</em>.</li>
+<li>Verhoog de spanningen op de fotobuizen nu zodanig dat bij alle <em>low
+thresholds</em> waarden staan tussen de 50 en de 60 (55), en bij alle <em>high
+thresholds</em> waarden tussen de 30 en de 40 (35).  Als de gemeten waarden
+te <em>laag</em> zijn, dan <em>verhoogt</em> u de spanningen en omgekeerd.  Maakt u
+bij het verhogen van de spanningen nooit grotere stappen dan 50 V om
+zeker te zijn dat de fotobuis niet beschadigd.</li>
+</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/singles.png"><img alt="_images/singles.png" src="_images/singles.png" /></a>
+<p class="caption">Het aantal pulsen per seconde dat over de drempelwaarden gaat
+(singles).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Fotobuizen verschillen sterk van elkaar aangezien assemblage
+grotendeels een handmatig proces is.  De spanningen op de fotobuizen
+zijn vaak in de orde van 700 tot 1000 V.  Een gevoelige buis, die al
+bij 700 V goed werkt, kan gemakkelijk beschadigd raken wanneer hier
+1000 V op wordt gezet.  Weest u dus altijd voorzichtig en begin bij 300
+V en verhoog de spanningen nooit in grotere stappen dan 50 V.</p>
+</div>
+</div>
+</div>
+<div class="section" id="gps-module">
+<h2>GPS module<a class="headerlink" href="#gps-module" title="Permalink to this headline">¶</a></h2>
+<p>Het HiSPARC <em>Master</em> kastje heeft een ingebouwde GPS module.  De
+instellingen van de GPS worden in het kastje opgeslagen.  Het is
+belangrijk om vóór gebruik de instellingen te controleren.  Verder moet
+de GPS een zogenoemde <em>self survey</em> uitvoeren om de positie vast te leggen
+zodat het mogelijk is de GPS als zeer nauwkeurig tijdinstrument te
+gebruiken <a class="footnote-reference" href="#gpsmode" id="id2">[1]</a>.</p>
+<p>Om het GPS monitor programma (<em>DSPMon</em>) te starten gaat u naar <em>Start -&gt;
+All Programs -&gt; HiSPARC -&gt; DSPMon</em>.  Waarschijnlijk staan na opstarten in
+alle tekstvelden een vraagteken en zijn alle indicatielampjes grijs.
+Rechts onderin het venster kunt u rechts-klikken op <em>No Com Port</em> en een
+com-poort selecteren.  Er is er slechts één bij die werkt.</p>
+<p>Controleert u eerst alle instellingen van de GPS en zorg ervoor dat ze
+nauwkeurig overeenkomen met de volgende screenshots.  Mocht u een
+instelling moeten veranderen, druk dan op de bijbehorende <em>Set</em> knop.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In het verleden werkten we met UTC tijd.  Helaas introduceert
+UTC af en toe schrikkelseconden en is de tijd daardoor niet altijd
+eenduidig.  Voorts start de GPS module altijd op in GPS-tijd, om na een
+minuut over te schakelen naar UTC.  Daarom gebruiken we nu GPS-tijd.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Let op: er komen soms meerdere <em>Set</em> knoppen per venster voor.</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/screenshot-gps-receiver.png"><img alt="_images/screenshot-gps-receiver.png" src="_images/screenshot-gps-receiver.png" /></a>
+<p class="caption">In dit venster stelt u de opties in voor de GPS ontvanger.  De
+belangrijkste optie is hier de <em>Receiver Mode</em>.</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/screenshot-gps-timing.png"><img alt="_images/screenshot-gps-timing.png" src="_images/screenshot-gps-timing.png" /></a>
+<p class="caption">In dit venster stelt u de tijdsinstellingen in.  Het is zeer belangrijk
+om hier goed te controleren dat u <em>GPS</em> meet, en geen <em>UTC</em>-tijd.</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/screenshot-gps-survey.png"><img alt="_images/screenshot-gps-survey.png" src="_images/screenshot-gps-survey.png" /></a>
+<p class="caption">In dit venster zorgt u er voor dat de <em>self survey</em> lang genoeg duurt
+(één dag).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In het verleden hadden we de lengte van de self survey ingesteld
+op één uur, maar het blijkt dat we de nauwkeurigheid van een dag nodig
+hebben.</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/screenshot-gps-position.png"><img alt="_images/screenshot-gps-position.png" src="_images/screenshot-gps-position.png" /></a>
+<p class="caption">Dit venster kan gebruikt worden om een eerste schatting van de positie
+in te vullen, maar let hier mee op dat deze niet wordt vastgezet als
+definitieve positie.  Het is veiliger om deze instellingen leeg te
+houden en de GPS zelf zijn positie te laten bepalen.</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/screenshot-gps-options.png"><img alt="_images/screenshot-gps-options.png" src="_images/screenshot-gps-options.png" /></a>
+<p class="caption">De GPS kent vele opties waarvan een aantal door de HiSPARC software
+worden gebruikt.  Controleert u deze vinkjes goed.</p>
+</div>
+</div>
+<div class="section" id="data-acquisitie-modus">
+<h2>Data acquisitie modus<a class="headerlink" href="#data-acquisitie-modus" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">U kunt de detector pas in gebruik nemen wanneer <em>alle</em>
+voorgaande procedures correct zijn uitgevoerd.</p>
+</div>
+<p>De definitieve instellingen voor <em>alle</em> HiSPARC detectorstations zijn
+als volgt.</p>
+<div class="section" id="time-window-instellingen">
+<h3>Time window instellingen<a class="headerlink" href="#time-window-instellingen" title="Permalink to this headline">¶</a></h3>
+<p>Op de <em>Events / Settings</em> tab, klik op het tabje <em>Time Window</em>.  Als het
+goed is zijn de instellingen niet veranderd en staan ze nog als volgt:</p>
+<ul class="simple">
+<li>Precoincidence time: 1 us</li>
+<li>Coincidence time: 1,5 us</li>
+<li>Post coincidence time: 3,5 us</li>
+</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/time-window.png"><img alt="_images/time-window.png" src="_images/time-window.png" /></a>
+<p class="caption">De instellingen voor het coïncidentie tijdvenster.</p>
+</div>
+</div>
+<div class="section" id="opstelling-met-twee-detectoren">
+<h3>Opstelling met twee detectoren<a class="headerlink" href="#opstelling-met-twee-detectoren" title="Permalink to this headline">¶</a></h3>
+<p>De instellingen voor stations met twee detectoren zijn als volgt:</p>
+<ul class="simple">
+<li>Threshold Low (alle kanalen): -30 mV</li>
+<li>Threshold High (alle kanalen): -70 mV</li>
+<li>Trigger: <em>2 low</em> <strong>AND</strong> <em>Don&#8217;t use high threshold</em> <strong>AND</strong> <em>Don&#8217;t use
+external trigger</em></li>
+</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/trigger-two-detectors.jpg"><img alt="_images/trigger-two-detectors.jpg" src="_images/trigger-two-detectors.jpg" /></a>
+<p class="caption">De triggerinstellingen voor een detectorstation met twee detectoren.</p>
+</div>
+</div>
+<div class="section" id="opstelling-met-vier-detectoren">
+<h3>Opstelling met vier detectoren<a class="headerlink" href="#opstelling-met-vier-detectoren" title="Permalink to this headline">¶</a></h3>
+<p>De instellingen voor stations met vier detectoren zijn als volgt:</p>
+<ul class="simple">
+<li>Threshold Low (alle kanalen): -30 mV</li>
+<li>Threshold High (alle kanalen): -70 mV</li>
+<li>Trigger: <em>3 low</em> <strong>OR</strong> <em>2 high</em> <strong>AND</strong> <em>Don&#8217;t use external trigger</em></li>
+</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/trigger-four-detectors.jpg"><img alt="_images/trigger-four-detectors.jpg" src="_images/trigger-four-detectors.jpg" /></a>
+<p class="caption">De triggerinstellingen voor een detectorstation met vier detectoren.</p>
+</div>
+</div>
+<div class="section" id="automatisch-opstarten-in-daq-modus">
+<h3>Automatisch opstarten in DAQ modus<a class="headerlink" href="#automatisch-opstarten-in-daq-modus" title="Permalink to this headline">¶</a></h3>
+<p>Iedere keer als het programma is opgestart kunt u op de knop <em>Start DAQ
+mode</em> klikken om over te gaan naar de data acquisitie modus.  <em>Alleen dan
+wordt er daadwerkelijk data naar het Nikhef gestuurd!</em></p>
+<p>Om er voor te zorgen dat de detector na elke reboot automatisch opstart in
+de data acquisitie modus gaat u naar de <em>Expert Settings</em> tab en vinkt
+u <em>Start in DAQ mode</em> aan.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Het is aan te bevelen de werking van de pc te testen door de pc
+nu opnieuw op te starten.  Als hij automatisch inlogt, het HiSPARC
+DAQ programma start en automatisch overgaat naar de DAQ modus, is het
+meeste werk gedaan.  Controleert u alstublieft in Nagios
+(<a class="reference internal" href="hardware-installatie.html#nagios-doc"><em>Monitor en controle</em></a>) of uw detectorstation volledig functioneert.  Het
+kan ongeveer twintig minuten duren voordat Nagios volledig geupdate is.</p>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="gpsmode" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>Meestal wordt een GPS gebruikt om zo nauwkeurig mogelijk de
+<em>positie</em> van de GPS te bepalen, ten behoeve van navigatie.  Wij willen
+echter zo nauwkeurig mogelijk de <em>tijd</em> van een HiSPARC event
+bepalen.  De positie beschouwen we hier als vast.  Het detectorstation
+verandert immers niet van plaats.  In deze zogeheten <em>Overdetermined
+clock mode</em> kan de GPS nauwkeurigheden bereiken in de orde van 15 ns.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="drempels" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[2]</a></td><td>De pulsen die de fotobuis (photomultiplier of PMT) afgeeft
+zijn negatief; het gaat hier immers om een stroom van elektronen.  Een
+<em>kleine</em> puls kan dan bijvoorbeeld -30 mV zijn, terwijl een <em>grote</em>
+puls bijvoorbeeld -500 mV kan zijn.  Als een drempel van -70 mV is
+ingesteld, dan zal de elektronica <em>wel</em> reageren op een puls van -100
+mV, maar <em>niet</em> op een puls van -50 mV.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configuratie van de HiSPARC software</a><ul>
+<li><a class="reference internal" href="#hisparc-data-acquisitie">HiSPARC data acquisitie</a><ul>
+<li><a class="reference internal" href="#basisinstellingen">Basisinstellingen</a></li>
+<li><a class="reference internal" href="#calibratie-van-de-detector">Calibratie van de detector</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gps-module">GPS module</a></li>
+<li><a class="reference internal" href="#data-acquisitie-modus">Data acquisitie modus</a><ul>
+<li><a class="reference internal" href="#time-window-instellingen">Time window instellingen</a></li>
+<li><a class="reference internal" href="#opstelling-met-twee-detectoren">Opstelling met twee detectoren</a></li>
+<li><a class="reference internal" href="#opstelling-met-vier-detectoren">Opstelling met vier detectoren</a></li>
+<li><a class="reference internal" href="#automatisch-opstarten-in-daq-modus">Automatisch opstarten in DAQ modus</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="software-installatie.html"
+                        title="previous chapter">Installatie van de HiSPARC software</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/configuratie.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="software-installatie.html" title="Installatie van de HiSPARC software"
+             >previous</a> |</li>
+        <li><a href="index.html">HiSPARC software 3.8 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009-2011, HiSPARC.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>
