@@ -4,6 +4,10 @@ doc-dev/_build/*
 bake/releases/*
 hisparcspec.ini
 
+# Python
+*.pyc
+*.pyo
+
 # Eclipse
 .pydevproject
 .metadata
