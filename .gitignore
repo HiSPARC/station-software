@@ -1,5 +1,16 @@
+# Specific
 doc/_build/*
 doc-dev/_build/*
 bake/releases/*
 hisparcspec.ini
-.DS_Store
+
+# Eclipse
+.pydevproject
+.metadata
+.project
+
+# OS generated files
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
