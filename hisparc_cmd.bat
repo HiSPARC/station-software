@@ -1,7 +1,7 @@
 @echo off
 
 :: set up environment variables
-call "%~dps0"\user\startstop\setenv.bat
+call "%~dp0"/user/startstop/setenv.bat
 
 :: change to HiSPARC root path
 cd /d %HISPARC_ROOT%
