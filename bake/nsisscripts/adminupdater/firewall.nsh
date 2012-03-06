@@ -1,6 +1,6 @@
 #
-#	firewall.nsh ------
-#	Set the relevant ports open.
+#   firewall.nsh ------
+#   Set the relevant ports open.
 #
 
 Section -FirewallRules

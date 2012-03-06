@@ -1,7 +1,7 @@
 #
-#	HiSPARC user installer
-#	R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#	Latest Revision: Oct 2011
+#   HiSPARC user installer
+#   R.Hart@nikhef.nl, NIKHEF, Amsterdam
+#   Latest Revision: Oct 2011
 #
 
 !include FileFunc.nsh
@@ -14,15 +14,15 @@ SetCompressor lzma
 
 RequestExecutionLevel user
 
-Var	HisparcDir
-Var	UserDir
-Var	ConfigFile
-Var	Result
-Var	FileName
+Var HisparcDir
+Var UserDir
+Var ConfigFile
+Var Result
+Var FileName
 
-Name		"HiSPARC ${HS_USER_UNPACKER} ${USER_VERSION}"
-OutFile		"${HISPARC_NSIS_RELEASE_DIR}\${HS_USER_UNPACKER}_v${USER_VERSION}.exe"
-InstallDir	"$UserDir"
+Name        "HiSPARC ${HS_USER_UNPACKER} ${USER_VERSION}"
+OutFile     "${HISPARC_NSIS_RELEASE_DIR}\${HS_USER_UNPACKER}_v${USER_VERSION}.exe"
+InstallDir  "$UserDir"
 
 ShowInstDetails   show
 ShowUninstDetails show
@@ -38,8 +38,8 @@ Function .onInit
   StrCmp $HisparcDir "" nopath
   ${DirState} $HisparcDir $Result
   ${If} $Result < 0
-	MessageBox MB_ICONEXCLAMATION "FATAL: Folder $HisparcDir does not exist!$\nUser-Installation aborted."
-	Quit
+    MessageBox MB_ICONEXCLAMATION "FATAL: Folder $HisparcDir does not exist!$\nUser-Installation aborted."
+    Quit
   ${Endif}
   DetailPrint "HisparcDir: $HisparcDir"
   
@@ -47,7 +47,7 @@ Function .onInit
   StrCpy $ConfigFile "$HisparcDir\persistent\configuration\config.ini"
   
   StrCpy $FileName $ConfigFile
-  Call fileExists	# check if configfile exists
+  Call fileExists   # check if configfile exists
 
   Return
   
@@ -76,8 +76,8 @@ Section -InstallProgs
   
   ${DirState} $UserDir $Result
   ${If} $Result < 0
-	MessageBox MB_ICONEXCLAMATION "FATAL: Folder $UserDir does not exist!$\nUser-Installation aborted."
-	Quit
+    MessageBox MB_ICONEXCLAMATION "FATAL: Folder $UserDir does not exist!$\nUser-Installation aborted."
+    Quit
   ${Endif}
 SectionEnd
 

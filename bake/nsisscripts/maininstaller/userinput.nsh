@@ -1,6 +1,6 @@
 #
-#	userinput.nsh ------
-#	The Page functions.
+#   userinput.nsh ------
+#   The Page functions.
 #
 
 Function userinput1

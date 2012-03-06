@@ -1,6 +1,6 @@
 #
-#	uninstaller.nsh ------
-#	Create the admin uninstaller.
+#   uninstaller.nsh ------
+#   Create the admin uninstaller.
 #
 Function un.onInit
   DetailPrint "admin-un.onInit"
@@ -12,7 +12,7 @@ Function un.onInit
   Pop $0
   ${If} $0 == "false"
     MessageBox MB_ICONEXCLAMATION "You have no administrator rights!$\nAdmin-Uninstallation aborted."
-	Quit
+    Quit
   ${EndIf}
 FunctionEnd
 
@@ -37,7 +37,7 @@ SectionEnd
 #
 Section un.UninstTightVNC
   DetailPrint "admin-un.UninstTightVNC"
-	
+
   # remove service
   StrCpy $TvncFolder "$AdminDir\tightvnc"
   StrCpy $Program "$TvncFolder\${VNC_SERVICENAME}.exe"

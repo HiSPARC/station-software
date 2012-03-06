@@ -1,6 +1,6 @@
 #
-#	interface.nsh
-#	MUI: NSIS Modern User Interface 1.67
+#   interface.nsh ------
+#   MUI: NSIS Modern User Interface 1.67
 #
 
 !include "MUI.nsh"

@@ -1,7 +1,7 @@
 #
-#	HiSPARC main installer
-#	R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#	Latest Revision: Oct 2011
+#   HiSPARC main installer
+#   R.Hart@nikhef.nl, NIKHEF, Amsterdam
+#   Latest Revision: Oct 2011
 #
 
 !include "FileFunc.nsh"
@@ -9,22 +9,22 @@
 
 SetCompressor lzma
 
-!define	PROC				32		# 32 bits (x86) version only
+!define PROC                32      # 32 bits (x86) version only
 
-!define HISPARC_VERSION		"${ADMIN_VERSION}.${USER_VERSION}"
+!define HISPARC_VERSION     "${ADMIN_VERSION}.${USER_VERSION}"
 
 !include ..\hs_def.nsh
 !include interface2.nsh
 !include variables.nsh
 !include userinput.nsh
 
-Name		"${HISPARC_NAME} ${HISPARC_VERSION}"
-OutFile		"${HISPARC_NSIS_RELEASE_DIR}\hisparcInstaller_v${HISPARC_VERSION}.exe"
-InstallDir	"$PROGRAMFILES\${HISPARC_NAME}"
+Name        "${HISPARC_NAME} ${HISPARC_VERSION}"
+OutFile     "${HISPARC_NSIS_RELEASE_DIR}\hisparcInstaller_v${HISPARC_VERSION}.exe"
+InstallDir  "$PROGRAMFILES\${HISPARC_NAME}"
 
-LangString	lsWrongVersion ${LANG_ENGLISH} "HiSPARC runs only on Windows XP or 7."
-LangString	lsNoAdmin      ${LANG_ENGLISH} "You have no administrator rights."
-LangString	lsWrongProc    ${LANG_ENGLISH} "This distribution is for ${PROC} bits computers only."
+LangString  lsWrongVersion ${LANG_ENGLISH} "HiSPARC runs only on Windows XP or 7."
+LangString  lsNoAdmin      ${LANG_ENGLISH} "You have no administrator rights."
+LangString  lsWrongProc    ${LANG_ENGLISH} "This distribution is for ${PROC} bits computers only."
 
 ShowInstDetails   show
 ShowUninstDetails show
@@ -97,13 +97,13 @@ Section -SetMainVariables
   
   StrCpy $HisparcDir "$INSTDIR\hisparc"
   StrCpy $ConfigFile "$HisparcDir\persistent\configuration\config.ini"
-  CreateDirectory	 "$HisparcDir"
-  DetailPrint		 "HisparcDir: $HisparcDir"
+  CreateDirectory    "$HisparcDir"
+  DetailPrint        "HisparcDir: $HisparcDir"
   
   ${DirState} $HisparcDir $Result
   ${If} $Result < 0
-	MessageBox MB_ICONEXCLAMATION "FATAL: cannot create $HisparcDir !$\nMAIN-Installation aborted."
-	Quit
+    MessageBox MB_ICONEXCLAMATION "FATAL: cannot create $HisparcDir !$\nMAIN-Installation aborted."
+    Quit
   ${Endif}
 SectionEnd
 
@@ -156,12 +156,12 @@ SectionEnd
 #
 Section -WriteRegKeys
   DetailPrint "WriteRegKeys"
-  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_PATH}		       $HisparcDir
+  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_PATH}            $HisparcDir
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_VOLATILE_PATH}   $HisparcDir
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_DISPLAY_NAME}    "${HISPARC_NAME}"
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HISPARC_VERSION} "${HISPARC_VERSION}"
-  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_ADMIN_VERSION}   ""	# set by the admin installer
-  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_USER_VERSION}    ""	# set by the user installer
+  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_ADMIN_VERSION}   ""   # set by the admin installer
+  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_USER_VERSION}    ""   # set by the user installer
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_STATION_NUMBER}  $StationNumber
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_HISPARC}     $HasHiSPARC
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_WEATHER}     $HasWeatherStation

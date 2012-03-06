@@ -1,7 +1,7 @@
 #
-#	uninstaller.nsh ------
-#	Create the main uninstaller.
-#	R.Hart@nikhef.nl, NIKHEF, Amsterdam
+#   uninstaller.nsh ------
+#   Create the main uninstaller.
+#   R.Hart@nikhef.nl, NIKHEF, Amsterdam
 #
 
 Function un.onInit
@@ -21,8 +21,8 @@ Function un.onInit
   
   ${DirState} $HisparcDir $Result
   ${If} $Result < 0
-	MessageBox MB_ICONEXCLAMATION "Folder $\"$HisparcDir$\" does not exist!$\nUninstallation canceled."
-	Quit
+    MessageBox MB_ICONEXCLAMATION "Folder $\"$HisparcDir$\" does not exist!$\nUninstallation canceled."
+    Quit
   ${Endif}
 
   GetFullPathName $INSTDIR $INSTDIR\..\..\..
@@ -32,7 +32,7 @@ Notremove:
 Remove:
   ExecWait "$HisparcDir\persistent\startstopbatch\StopAdminMode.bat" $Result
   Return
-	 
+
 nohomedir:
   MessageBox MB_ICONEXCLAMATION "Registry entry $\"${REG_PATH}$\" not set or defined!$\nUninstallation canceled."
   Quit

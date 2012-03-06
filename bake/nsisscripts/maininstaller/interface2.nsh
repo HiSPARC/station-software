@@ -1,20 +1,20 @@
 #
-#	interface2.nsh ------
-#	MUI2: NSIS Modern User Interface 2.0
+#   interface2.nsh ------
+#   MUI2: NSIS Modern User Interface 2.0
 #
 
 !include "MUI2.nsh"
 
 ; MUI Settings
-!define MUI_ICON						hisparc.ico
+!define MUI_ICON                        hisparc.ico
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP			header.bmp
-!define MUI_WELCOMEFINISHPAGE_BITMAP	welcome.bmp
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP	welcome.bmp
+!define MUI_HEADERIMAGE_BITMAP          header.bmp
+!define MUI_WELCOMEFINISHPAGE_BITMAP    welcome.bmp
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP  welcome.bmp
 !define MUI_ABORTWARNING
 
 !insertmacro MUI_PAGE_WELCOME
-#!insertmacro MUI_PAGE_DIRECTORY	Fixed installation path!
+#!insertmacro MUI_PAGE_DIRECTORY    Fixed installation path!
 Page custom userinput1   "" ": Settings"
 Page custom userinput2   "" ": Local Database Settings"
 Page custom userinput3   "" ": Sensors"

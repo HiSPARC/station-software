@@ -1,6 +1,6 @@
 #
-#	install.nsh ------
-#	Admin installer.
+#   install.nsh ------
+#   Admin installer.
 #
 
 #
@@ -12,8 +12,8 @@ Section -CheckExecutables
   
   ${DirState} $AdminDir $Result
   ${If} $Result < 0
-	MessageBox MB_ICONEXCLAMATION "FATAL: Folder $AdminDir does not exist!$\nAdmin-Installation aborted."
-	Quit
+    MessageBox MB_ICONEXCLAMATION "FATAL: Folder $AdminDir does not exist!$\nAdmin-Installation aborted."
+    Quit
   ${Endif}
   
   StrCpy $FileName "$AdminDir\openvpn\bin\tapinstall.exe"
