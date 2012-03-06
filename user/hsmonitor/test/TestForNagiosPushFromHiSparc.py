@@ -19,7 +19,7 @@ from Uploader import Uploader
 CONFIG_INI_PATH1 = '../data/config.ini'
 CONFIG_INI_PATH2 = '../../../persistent/configuration/config.ini'
 
-NUMSERVERS = 2 # TODO
+NUMSERVERS = 2  # TODO
 
 
 class HsMonitor:
@@ -52,7 +52,8 @@ class HsMonitor:
         bufferdb['password'] = self.cfg.get('BufferDB', 'Password')
         bufferdb['poll_interval'] = self.cfg.get('BufferDB', 'Poll_Interval')
         bufferdb['poll_limit'] = self.cfg.get('BufferDB', 'Poll_Limit')
-        bufferdb['keep_buffer_data'] = self.cfg.get('BufferDB', 'KeepBufferData')
+        bufferdb['keep_buffer_data'] = self.cfg.get('BufferDB',
+                                                    'KeepBufferData')
 
         # create an instance of BufferListener class
         buffLis = BufferListener.BufferListener(bufferdb, interpreter)
@@ -78,12 +79,13 @@ class HsMonitor:
         minbs = self.cfg.ifgetint(section_name, "MinBatchSize", 50)
         maxbs = self.cfg.ifgetint(section_name, "MaxBatchSize", 50)
         if (minbs > maxbs):
-            raise Exception("Minimum batch size must be less than maximum batch size")
+            raise Exception("Minimum batch size must be less than maximum")
         minwait = self.cfg.ifgetfloat(section_name, "MinWait", 1.0)
         maxwait = self.cfg.ifgetfloat(section_name, "MaxWait", 60.0)
         up = Uploader(serverID, numServers, stationID, passw, url,
                       minwait, maxwait, minbs, maxbs)
         return up
+
 
 def main():
     # create a HiSparc monitor object
@@ -114,6 +116,7 @@ def main():
     it = Interpreter(sm)
     checkSched = hsMonitor.createCheckScheduler(it)
     checkSched.run()
+
 
 if __name__ == '__main__':
     main()
