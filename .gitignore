@@ -12,6 +12,7 @@ hisparcspec.ini
 .pydevproject
 .metadata
 .project
+.settings
 
 # OS generated files
 .DS_Store*
