@@ -1,14 +1,20 @@
+#
+#   startStop.py ------
+#   Start, stop and check the necessary processes and services for HiSPARC.
+#
+
 import wmi
 import win32con
 import win32gui
+
+from hslog  import log
 from ctypes import c_ulong, byref, windll
 
-from hslog import log
-
-RUNNING = 0
-STOPPED = 1
-EXCEPTION = 2
-
+RUNNING       = 0
+STOPPED       = 1
+EXCEPTION     = 2
+DISABLED      = 4
+NOT_INSTALLED = 8
 
 class StartStop:
     exeName = ''
@@ -107,6 +113,27 @@ class StartStop:
                 raise Exception(": error code %d" % res)
         else:
             result = EXCEPTION
+        
+        return result
+
+    def probeProcess(self):
+        process = self.wmiObj.Win32_Process(name=self.exeName)
+        if process != []:
+            result = RUNNING
+        else:
+            result = STOPPED
+        return result
+
+    def probeService(self):
+        service = self.wmiObj.Win32_Service(Name=self.serviceName)
+        if service != []:
+            service = self.wmiObj.Win32_Service(Name=self.serviceName, State="Running")
+            if service != []:
+                result = RUNNING
+            else:
+                result = STOPPED
+        else:
+            result = NOT_INSTALLED
         return result
 
 
@@ -150,6 +177,14 @@ class CMDStartStop(StartStop):
             #    print 'processId: %d' % process.ProcessId
             #    if process.Terminate() == 0:
             #        result = STOPPED
+        else:
+            result = STOPPED
+        return result
+
+    def probeProcess(self):
+        w = win32gui.FindWindow(None, self.title)
+        if w != 0:
+            result = RUNNING
         else:
             result = STOPPED
         return result
