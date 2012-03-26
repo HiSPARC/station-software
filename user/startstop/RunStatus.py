@@ -7,25 +7,12 @@ import os
 import win32con
 import ConfigParser
 
-from startStop import StartStop, CMDStartStop, RUNNING, STOPPED, EXCEPTION, DISABLED, NOT_INSTALLED
+from startStop import StartStop, CMDStartStop, status, EXCEPTION, DISABLED
 from hslog     import log, setLogMode, MODE_BOTH
 
 def pStdout(app, result):
 
-    if result == RUNNING:
-        status = "running"
-    elif result == STOPPED:
-        status = "stopped"
-    elif result == EXCEPTION:
-        status = "exception"
-    elif result == DISABLED:
-        status = "disabled"
-    elif result == NOT_INSTALLED:
-        status = "not installed"
-    else:
-        status = "unknown (%d)" % result
-
-    info = "%(app)-20s: %(stat)s" %{"app": app, "stat": status}
+    info = "%(app)-20s: %(stat)s" % {"app": app, "stat": status(result)}
     log(info)
 
 def check():

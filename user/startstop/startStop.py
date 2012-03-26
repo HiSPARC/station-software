@@ -16,6 +16,23 @@ EXCEPTION     = 2
 DISABLED      = 4
 NOT_INSTALLED = 8
 
+def status(result):
+
+    if result == RUNNING:
+        status = "running"
+    elif result == STOPPED:
+        status = "stopped"
+    elif result == EXCEPTION:
+        status = "exception"
+    elif result == DISABLED:
+        status = "disabled"
+    elif result == NOT_INSTALLED:
+        status = "not installed"
+    else:
+        status = "unknown (%d)" % result
+
+    return status
+
 class StartStop:
     exeName = ''
     ShowWindow = win32con.SW_SHOWMINIMIZED
