@@ -1,0 +1,2 @@
+On a running HiSPARC station pc, this directory will contain a Storage.db
+file, which is the SQLite database used by the HiSPARC monitor.
