@@ -1,11 +1,11 @@
 import subprocess
 
-NSISPATH = "nsis"
+NSISPATH = "./nsis"
 
 class nsiHandling():
 
 	def __init__(self):
-		self.nsisExe = "%s\\makensis.exe" % NSISPATH
+		self.nsisExe = "%s/makensis.exe" % NSISPATH
 
 	def compileNSI(self, nsiPath, defines):
 		definelist = ""

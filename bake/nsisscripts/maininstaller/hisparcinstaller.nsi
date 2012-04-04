@@ -1,7 +1,7 @@
 #
 #   HiSPARC main installer
 #   R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#   Latest Revision: Oct 2011
+#   Latest Revision: April 2012; RunStatus & HiSPARC_Registry shortcut
 #
 
 !include "FileFunc.nsh"
@@ -31,11 +31,11 @@ ShowUninstDetails show
 
 Function .onInit
   DetailPrint ".OnInit"
-  
+
   InitPluginsDir
   SetOutPath $PLUGINSDIR
   File /r *.ini
-  
+
   # Check Windows version.
   xtInfoPlugin::IsWindowsME
   Pop $0
@@ -59,7 +59,7 @@ Function .onInit
      MessageBox MB_ICONEXCLAMATION $(lsNoAdmin)
      Abort $(lsNoAdmin)
   ${EndIf}
-  
+
   # Check for 32-bit computers
   System::Call "kernel32::GetCurrentProcess() i .s"
   System::Call "kernel32::IsWow64Process(i s, *i .r0)"
@@ -71,7 +71,7 @@ wrongProc:
 is32:
   IntCmp ${PROC} 32 procOk wrongProc wrongProc
 procOk:
-  
+
   ReadRegStr $CurVersion HKLM "${HISPARC_KEY}" ${REG_HISPARC_VERSION}
   StrCmp $CurVersion "" Install
   MessageBox MB_YESNO|MB_ICONQUESTION "It seems HiSPARC version $CurVersion is still installed.$\n\
@@ -94,12 +94,12 @@ FunctionEnd
 
 Section -SetMainVariables
   DetailPrint "SetMainVariables"
-  
+
   StrCpy $HisparcDir "$INSTDIR\hisparc"
   StrCpy $ConfigFile "$HisparcDir\persistent\configuration\config.ini"
   CreateDirectory    "$HisparcDir"
   DetailPrint        "HisparcDir: $HisparcDir"
-  
+
   ${DirState} $HisparcDir $Result
   ${If} $Result < 0
     MessageBox MB_ICONEXCLAMATION "FATAL: cannot create $HisparcDir !$\nMAIN-Installation aborted."
@@ -119,12 +119,12 @@ Section -CopyFilesForInstall
 
   # Create downloads folder and copy the adminUpdater and userUnpacker into it.
   SetOutPath "$HisparcDir\persistent\downloads"
-  SetOverwrite on 
+  SetOverwrite on
   File /r "..\..\releases\${HS_ADMIN_UPDATER}_v${ADMIN_VERSION}.exe" "..\..\releases\${HS_USER_UNPACKER}_v${USER_VERSION}.exe"
-  
+
   # Create directory for the admin, user and main installer to put their uninstallers!
   CreateDirectory "$HisparcDir\persistent\uninstallers"
-  
+
   # Copy certificate to the right location
   CopyFiles $CertZip "$HisparcDir\persistent\configuration"
 SectionEnd
@@ -134,10 +134,10 @@ SectionEnd
 #
 Section -WriteConfigFile
   DetailPrint "WriteConfigFile"
-  
+
   StrCpy $FileName $ConfigFile
   Call fileExists
-  
+
   # Station settings
   WriteINIStr $ConfigFile Station       Nummer      $StationNumber
   WriteINIStr $ConfigFile Station       Password    $StationPassword
@@ -209,7 +209,7 @@ SectionEnd
 #
 Section -AutologonEnabling
   DetailPrint "AutologonEnabling"
-  
+
   StrCpy $CpuName "this computer"
   ReadRegStr $0 HKLM ${CPUNAME_KEY} ${CPV_CPUNAME}
   StrCmp $0 "" done
@@ -229,14 +229,16 @@ SectionEnd
 #
 Section -AdditionalIcons
   DetailPrint "AdditionalIcons"
-  
+
   SetShellVarContext all
   CreateDirectory "$SMPROGRAMS\HiSPARC"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\StartHiSPARCSoftware.lnk" "$HisparcDir\persistent\startstopbatch\StartUserMode.bat"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\LocalDiagnosticTool.lnk"  "$HisparcDir\user\diagnostictool\run_diagnostictool.bat"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARCDAQ.lnk"           "$HisparcDir\user\hisparcdaq\run_hisparcdaq.bat"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\DSPMon.lnk"               "$HisparcDir\user\dspmon\DSPMon.exe"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\Uninstall.lnk"            "$HisparcDir\persistent\uninstallers\mainuninst.exe" 
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\RunStatus.lnk"            "$HisparcDir\persistent\startstopbatch\RunStatus.bat"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC_Registry.lnk"     "$HisparcDir\persistent\startstopbatch\HiSPARC_Registry.exe"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Uninstall.lnk"            "$HisparcDir\persistent\uninstallers\mainuninst.exe"
   # Add shortcuts to the startup folder
   CreateShortCut  "$SMSTARTUP\StartHiSPARCSoftware.lnk"          "$HisparcDir\persistent\startstopbatch\StartUp.bat"
 SectionEnd
@@ -261,12 +263,12 @@ SectionEnd
 #
 Section -ReBoot
   DetailPrint "ReBoot"
-  
+
   AccessControl::GrantOnFile "$HisparcDir" "(BU)" "FullAccess"
 
   MessageBox MB_YESNO|MB_ICONQUESTION "Do you want to restart the PC?$\n\
   On reboot Windows automatically activates the hisparc user account and DAQ." IDYES ReBoot IDNO NoReboot
-  
+
 ReBoot:
   ExecWait "shutdown -r -f -t 0"
 NoReboot:

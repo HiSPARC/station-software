@@ -1,17 +1,20 @@
+#
+# StorageManager.py ------
+#
 import os
 import sqlite3
+
 from threading import Lock
-from cPickle import dumps, loads
-from time import time
+from cPickle   import dumps, loads
+from time      import time
+from Subject   import Subject
+from hslog     import log
 
-from Subject import Subject
-from hslog import log
-
-FILENAME = "../../persistent/data/hsmonitor/Storage.db"
+FILEDIR  = "../../persistent/data/hsmonitor"
+FILENAME = "%s/Storage.db" % FILEDIR
 VACUUMTHRESHOLD = 1000
 
 lock = Lock()
-
 
 class StorageManager(Subject):
     """The StorageManager is used to access the SQLite database called storage.
@@ -31,6 +34,8 @@ class StorageManager(Subject):
         self.lock = lock
         Subject.__init__(self)
 
+        if not os.access(FILEDIR, os.F_OK):
+            os.makedirs(FILEDIR)
         if not os.path.exists(self.db_name):
             self.__create()
 

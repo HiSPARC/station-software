@@ -1,3 +1,6 @@
+#
+#   checkFiles.py ------
+#
 import os
 import re
 import ctypes
@@ -9,7 +12,6 @@ def checkIfAdmin():
         is_admin = os.getuid() == 0
     except:
         is_admin = ctypes.windll.shell32.IsUserAnAdmin()
-    print is_admin
     return is_admin
 
 
@@ -26,7 +28,7 @@ def checkIfNewerFileExists(location, searchName, currentVersion):
     found = False
     versionFound = 0
     fileFound = ""
-    print "currentVersion is: %s" % currentVersion
+    #print "currentVersion is: %s" % currentVersion
     for item in fileList:
         versionNr = parseVersion(item)
         if (item[0:12] == searchName and versionNr > currentVersion and

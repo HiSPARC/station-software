@@ -8,20 +8,18 @@ import win32con
 import ConfigParser
 
 from startStop import StartStop, CMDStartStop, status, EXCEPTION, DISABLED
-from hslog     import log, setLogMode, MODE_BOTH
 
 def pStdout(app, result):
 
     info = "%(app)-20s: %(stat)s" % {"app": app, "stat": status(result)}
-    log(info)
+    print info
 
 def check():
-    setLogMode(MODE_BOTH)
-    log("\nChecking User-Mode applications...\n")
+    print "\nChecking User-Mode applications...\n"
 
     HS_ROOT = "%s" % os.getenv("HISPARC_ROOT")
     if HS_ROOT == "":
-         log("FATAL: environment variable HISPARC_ROOT not set!")
+         print "FATAL: environment variable HISPARC_ROOT not set!"
          return
 
     configFile = "%s/persistent/configuration/config.ini" % HS_ROOT
@@ -84,7 +82,7 @@ def check():
         res = EXCEPTION
     pStdout(app, res)
 
-    log("\nChecking Admin-Mode services...\n")
+    print "\nChecking Admin-Mode services...\n"
 
     try:
         #check TightVNC
@@ -116,6 +114,6 @@ def check():
         res = EXCEPTION
     pStdout(app, res)
 
-    log("\n")
+    print "\n"
 
 check()

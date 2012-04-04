@@ -1,21 +1,22 @@
+#
+#   Checker.py ------
+#
 import os
 import sys
 import ConfigParser
-from urllib import urlencode
-import urllib2
-from cgi import parse_qs
-from Tkinter import Message, Tk
-
 import checkFiles
-from hslog import log, SEVERITY_CRITICAL
+import urllib2
+
+from cgi        import parse_qs
+from Tkinter    import Message, Tk
+from hslog      import log, SEVERITY_CRITICAL
 from Downloader import Downloader
 
-PATH = "%s" % os.getenv("HISPARC_ROOT")
-CONFIG_INI = 'config.ini'
-PERSISTENT_INI = '/persistent/configuration/config.ini'
+CONFIG_INI           = "config.ini"
+PERSISTENT_INI       = "../../persistent/configuration/config.ini"
 DISPLAY_GUI_MESSAGES = True
-UPDATE_USER_MODE = 1
-UPDATE_ADMIN_MODE = 2
+UPDATE_USER_MODE     = 1
+UPDATE_ADMIN_MODE    = 2
 
 
 class Checker:
@@ -26,34 +27,14 @@ class Checker:
         self.config.read([CONFIG_INI, PERSISTENT_INI])
 
     def requestCheckFromServer(self):
-        server = self.config.get('Update', 'UpdateURL')
-        stationname = self.config.get('Station', 'Nummer')
-        currentUser = self.config.get('Version', 'CurrentUser')
-        currentAdmin = self.config.get('Version', 'CurrentAdmin')
-        intervalBetweenChecks = self.config.get('Update',
-                                                'IntervalBetweenChecks')
-        params = urlencode({'admin_version': currentAdmin,
-                            'user_version': currentUser,
-                            'station_id': stationname})
-        proxy_support = urllib2.ProxyHandler()
-        auth_handler = urllib2.HTTPBasicAuthHandler()
-        auth_handler.add_password(realm='HiSPARC restricted', uri=server,
-                                  user='dummy', passwd='dummy')
-        opener = urllib2.build_opener(auth_handler, proxy_support)
-        # ...and install it globally so it can be used with urlopen.
-        urllib2.install_opener(opener)
-        connection = urllib2.urlopen(server, params)
+        server       = self.config.get("Update",  "UpdateURL")
+        currentAdmin = self.config.get("Version", "CurrentAdmin")
+        currentUser  = self.config.get("Version", "CurrentUser")
+
+        connection = urllib2.urlopen("%s/%s/%s" % (server, currentAdmin, currentUser))
         updateInfo = connection.read()
         print updateInfo
         connection.close()
-
-        #except (urllib2.URLError, urllib2.HTTPError), msg:
-        #    # For example: connection refused or internal server error
-        #    returncode = str(msg)
-        #except Exception, msg:
-        #    returncode = ('Uncatched exception occured in function '
-        #                  'upload_event_list: %s' % str(msg))
-
         return updateInfo
 
     def parseAnswerServer(self, updateInfo):
@@ -66,7 +47,7 @@ class Checker:
         mustUpdate = int(updateDict['mustUpdate'][0])
         updates['mustUpdate'] = mustUpdate
 
-        location = "%s/persistent/downloads" % PATH
+        location = "../../persistent/downloads"
 
         if (mustUpdate & UPDATE_ADMIN_MODE):
             adminURL = updateDict['urlAdmin'][0]
@@ -88,9 +69,9 @@ class Checker:
             userFile = downloader.downloadUpdate(location, userURL)
             updates['userFile'] = userFile
             log('User update is available called: %s' % userFile)
-            #Run the update to install it.
-            #First call a batch file so that Python can be closed.
-            os.system('/user/updater/runUserUpdate.bat %s' % userFile)
+            # Run the update to install it.
+            # First call a batch file so that Python can be closed.
+            os.system("./runUserUpdate.bat %s" % userFile)
 
         return updates
 
@@ -108,8 +89,3 @@ class Checker:
             log('Could not parse the answer of the server correctly: %s' %
                 str(sys.exc_info()[1]), severity=SEVERITY_CRITICAL)
             return
-
-#Main function
-#checker = Checker()
-#updateInfo = checker.requestCheckFromServer()
-#updates = checker.parseAnswerServer(updateInfo)

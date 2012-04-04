@@ -1,17 +1,21 @@
+#
+#   Update.py ------
+#
 import ConfigParser
 import sched
 import time
 import random
 import os
 import sys
-
 import checkFiles
-from Checker import Checker
-from hslog import log, setLogMode, MODE_BOTH, SEVERITY_CRITICAL
 
-PATH = "%s" % os.getenv("HISPARC_ROOT")
-CONFIG_INI = 'config.ini'
-PERSISTENT_INI = '/persistent/configuration/config.ini'
+sys.path.append("../pythonshared")
+
+from Checker import Checker
+from hslog   import log, setLogMode, MODE_BOTH, SEVERITY_CRITICAL
+
+CONFIG_INI       = "config.ini"
+PERSISTENT_INI   = "../../persistent/configuration/config.ini"
 ADMINUPDATE_NAME = "adminUpdater"
 
 
@@ -24,26 +28,29 @@ class Updater:
     # End time of the interval in which checks may be performed on a
     # day (in seconds) e.g. 0 is midnight, 7200 is 2am
     timeStopCheckInterval = 0
-    checkerInitialDelay = 0  # Bool with if there is an initial delay
+    checkerInitialDelay   = 0  # Bool with if there is an initial delay
     scheduler = sched.scheduler(time.time, time.sleep)
     checker = Checker()
 
     # Check if there is already an update to install in admin mode and if the
     # user is in admin mode
     def checkIfUpdateToInstall(self):
-        print "is admin: %s" % checkFiles.checkIfAdmin()
+        isAdmin      = checkFiles.checkIfAdmin()
+        currentAdmin = self.config.get("Version", "CurrentAdmin")
+        currentUser  = self.config.get("Version", "CurrentUser")
 
-        if checkFiles.checkIfAdmin():
-            currentVersionAdmin = self.config.get('Version', 'CurrentAdmin')
-            location = "%s/persistent/downloads" % PATH
+        print "Is administrator:      ", isAdmin
+        print "Current Admin Version: ", currentAdmin
+        print "Current User Version:  ", currentUser
 
+        if isAdmin:
+            location = "../../persistent/downloads"
             found, fileFound = checkFiles.checkIfNewerFileExists(location,
-                ADMINUPDATE_NAME, int(currentVersionAdmin))
-
-            print "found is %s" % found
+                ADMINUPDATE_NAME, int(currentAdmin))
+            #print "found is %s" % found
             if found:
-                os.system('/user/updater/runAdminUpdate.bat '
-                          '/persistent/downloads/%s' % fileFound)
+                os.system("./runAdminUpdate.bat "
+                          "../../persistent/downloads/%s" % fileFound)
 
     def calculateInitialDelay(self):
         if self.checkerInitialDelay == 1:
@@ -102,6 +109,3 @@ except:
     log("Updating failed due to %s, restart the checker!" %
         str(sys.exc_info()[1]), severity=SEVERITY_CRITICAL)
     exit
-
-#updates = checker.checkForUpdates()
-#updates = dict with { 'mustUpdate', 'adminFile', 'userFile'}
