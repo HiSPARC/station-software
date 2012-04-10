@@ -137,12 +137,13 @@ class Uploader(Observer, Thread):
 
         params = urlencode({'station_id': self.stationID,
                             'password': self.password,
-                            'data': data, 'checksum': checksum})
+                            'data': data,
+                            'checksum': checksum})
 
         # ADL: Something here causes the double events.
         # Check what happens in case of timeout.
 
-        # Open the connection and send our data. Exceptions are catched
+        # Open the connection and send our data. Exceptions are caught
         # explicitly to make sure we understand the implications of errors.
         try:
             f = urlopen(self.URL, params, timeout=30)
@@ -184,7 +185,7 @@ class Uploader(Observer, Thread):
 
                 numFailedAttempts = 0
 
-                # Record succesfull upload in storagemanager
+                # Record successful upload in storagemanager
                 self.storageManager.setUploaded(self.serverID, eidlist)
                 # Reduce counter
                 self.numEventsLock.acquire()
