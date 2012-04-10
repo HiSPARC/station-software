@@ -23,32 +23,32 @@ if not os.access(RELEASE_DIRECTORY, os.F_OK):
 
 #compile the administrator software first
 if os.path.exists("%s/adminUpdater_v%s.exe" % (RELEASE_DIRECTORY, adminVersion)):
-	print "Administrator installer already exists, not creating a new one!"
+    print "Administrator installer already exists, not creating a new one!"
 else:
-	try: 
-		nsiHandling.compileNSI("./nsisscripts/adminupdater/admininstaller.nsi",
-		["ADMIN_VERSION=%s" % adminVersion])
-	except:
-		print "ERROR: Compilation could not be finished!"
-		sys.exit
+    try:
+        nsiHandling.compileNSI("./nsisscripts/adminupdater/admininstaller.nsi",
+        ["ADMIN_VERSION=%s" % adminVersion])
+    except:
+        print "ERROR: Compilation could not be finished!"
+        sys.exit
 
 #compile the user software second
 if os.path.exists("%s/userUnpacker_v%s.exe" % (RELEASE_DIRECTORY, userVersion)):
-	print "User unpacker already exists, not creating a new one!"
+    print "User unpacker already exists, not creating a new one!"
 else:
-	try:
-		nsiHandling.compileNSI("./nsisscripts/userunpacker/userunpacker.nsi",
-		["USER_VERSION=%s" % userVersion])
-	except:
-		print "ERROR: Compilation could not be finished!"
-		sys.exit
+    try:
+        nsiHandling.compileNSI("./nsisscripts/userunpacker/userunpacker.nsi",
+        ["USER_VERSION=%s" % userVersion])
+    except:
+        print "ERROR: Compilation could not be finished!"
+        sys.exit
 
 #compile the main installer
 try:
-	nsiHandling.compileNSI("./nsisscripts/maininstaller/hisparcinstaller.nsi",
-	["ADMIN_VERSION=%s" % adminVersion]+["USER_VERSION=%s" % userVersion])
+    nsiHandling.compileNSI("./nsisscripts/maininstaller/hisparcinstaller.nsi",
+    ["ADMIN_VERSION=%s" % adminVersion]+["USER_VERSION=%s" % userVersion])
 except:
-	print "ERROR: Compilation could not be finished!"
-	sys.exit
+    print "ERROR: Compilation could not be finished!"
+    sys.exit
 
 print "\nFinished compilation of version %s.%s.\n" % (adminVersion, userVersion)

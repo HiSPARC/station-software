@@ -15,7 +15,7 @@ ADL: Check how the HsMonitor is started, what is the 'working directory'?
 RH:  The working directory: HISPARC_ROOT/user/hsmonitor
      The pythonshared folder has to be appended to the python search path.
      It is not inherited if called by the Startup*.bat files from
-	 persistent/startstopbatch.
+     persistent/startstopbatch.
 """
 
 import re
