@@ -1,7 +1,4 @@
-#
-#   startStop.py ------
-#   Start, stop and check the necessary processes and services for HiSPARC.
-#
+"""Start, stop and check the necessary processes and services for HiSPARC."""
 
 import wmi
 import win32con

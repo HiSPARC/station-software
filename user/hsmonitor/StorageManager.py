@@ -1,14 +1,11 @@
-#
-# StorageManager.py ------
-#
 import os
 import sqlite3
-
 from threading import Lock
-from cPickle   import dumps, loads
-from time      import time
-from Subject   import Subject
-from hslog     import log
+from cPickle import dumps, loads
+from time import time
+
+from Subject import Subject
+from hslog import log
 
 FILEDIR  = "../../persistent/data/hsmonitor"
 FILENAME = "%s/Storage.db" % FILEDIR

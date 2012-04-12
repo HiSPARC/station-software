@@ -1,22 +1,19 @@
-#
-#   Checker.py ------
-#
 import os
 import sys
 import ConfigParser
 import checkFiles
 import urllib2
+from cgi import parse_qs
+from Tkinter import Message, Tk
 
-from cgi        import parse_qs
-from Tkinter    import Message, Tk
-from hslog      import log, SEVERITY_CRITICAL
+from hslog import log, SEVERITY_CRITICAL
 from Downloader import Downloader
 
-CONFIG_INI           = "config.ini"
-PERSISTENT_INI       = "../../persistent/configuration/config.ini"
+CONFIG_INI = "config.ini"
+PERSISTENT_INI = "../../persistent/configuration/config.ini"
 DISPLAY_GUI_MESSAGES = True
-UPDATE_USER_MODE     = 1
-UPDATE_ADMIN_MODE    = 2
+UPDATE_USER_MODE = 1
+UPDATE_ADMIN_MODE = 2
 
 
 class Checker:
@@ -27,9 +24,9 @@ class Checker:
         self.config.read([CONFIG_INI, PERSISTENT_INI])
 
     def requestCheckFromServer(self):
-        server       = self.config.get("Update",  "UpdateURL")
+        server = self.config.get("Update", "UpdateURL")
         currentAdmin = self.config.get("Version", "CurrentAdmin")
-        currentUser  = self.config.get("Version", "CurrentUser")
+        currentUser = self.config.get("Version", "CurrentUser")
 
         connection = urllib2.urlopen("%s/%s/%s" % (server, currentAdmin, currentUser))
         updateInfo = connection.read()

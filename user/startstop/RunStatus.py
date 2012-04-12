@@ -1,7 +1,4 @@
-#
-#   CheckUserMode.py ------
-#   Determine status of the HiSPARC user processes and admin services.
-#
+"""Determine status of the HiSPARC user processes and admin services."""
 
 import os
 import win32con
@@ -9,10 +6,12 @@ import ConfigParser
 
 from startStop import StartStop, CMDStartStop, status, EXCEPTION, DISABLED
 
+
 def pStdout(app, result):
 
     info = "%(app)-20s: %(stat)s" % {"app": app, "stat": status(result)}
     print info
+
 
 def check():
     print "\nChecking User-Mode applications...\n"

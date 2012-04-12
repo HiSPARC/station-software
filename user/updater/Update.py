@@ -1,6 +1,3 @@
-#
-#   Update.py ------
-#
 import ConfigParser
 import sched
 import time

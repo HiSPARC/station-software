@@ -1,12 +1,9 @@
-#
-#   StartUserMode.py ------
-#   Start the HiSPARC user executables:
-#    - MySQL
-#    - LabVIEW Detector
-#    - LabVIEW Weather
-#    - HiSPARC Monitor
-#    - HiSPARC Updater
-#
+"""Start the HiSPARC user executables:
+
+These applications are started:
+LabVIEW Detector, LabVIEW Weather, MySQL, HiSPARC Monitor, HiSPARC Updater
+
+"""
 
 import sys
 import time
@@ -16,7 +13,7 @@ import win32con
 import ConfigParser
 
 from startStop import StartStop, CMDStartStop, status, RUNNING, DISABLED
-from hslog     import log, setLogMode, MODE_BOTH
+from hslog import log, setLogMode, MODE_BOTH
 
 def start():
     setLogMode(MODE_BOTH)
@@ -45,12 +42,12 @@ def start():
         exeBase = "%s/user/mysql/bin" % HS_ROOT
         program = "\"%(exec)s/%(binary)s\"" % {"exec": exeBase, "binary": binary}
 
-        handler                  = StartStop()
-        handler.exeName          = binary
-        handler.ShowWindow       = win32con.SW_HIDE
-        handler.command          = program
+        handler = StartStop()
+        handler.exeName = binary
+        handler.ShowWindow = win32con.SW_HIDE
+        handler.command = program
         handler.currentDirectory = HS_ROOT
-        handler.title            = "MySQL server"
+        handler.title = "MySQL server"
 
         res = handler.startProcess()
         if res == RUNNING:
@@ -67,10 +64,10 @@ def start():
         #start LabVIEW detector
         log("Starting LabVIEW detector...")
         if config.getboolean("Detector", "Enabled"):
-            handler                  = StartStop()
-            handler.exeName          = "hisparcdaq.exe"
+            handler = StartStop()
+            handler.exeName = "hisparcdaq.exe"
             handler.currentDirectory = "%s/user/hisparcdaq" % HS_ROOT
-            handler.command          = "%s/user/hisparcdaq/hisparcdaq.exe" % HS_ROOT
+            handler.command = "%s/user/hisparcdaq/hisparcdaq.exe" % HS_ROOT
 
             res = handler.startProcess()
         else:
@@ -85,10 +82,10 @@ def start():
         #start LabVIEW weather
         log("Starting LabVIEW weather...")
         if config.getboolean("Weather", "Enabled"):
-            handler                  = StartStop()
-            handler.exeName          = "hisparcweather.exe"
+            handler = StartStop()
+            handler.exeName = "hisparcweather.exe"
             handler.currentDirectory = "%s/user/hisparcweather" % HS_ROOT
-            handler.command          = "%s/user/hisparcweather/hisparcweather.exe" % HS_ROOT
+            handler.command = "%s/user/hisparcweather/hisparcweather.exe" % HS_ROOT
 
             res = handler.startProcess()
         else:
@@ -106,10 +103,10 @@ def start():
         #start HSMonitor
         log("Starting HSMonitor...")
         handler = CMDStartStop()
-        handler.exeName          = "python.exe"
-        handler.title            = "HISPARC MONITOR: hsmonitor"
+        handler.exeName = "python.exe"
+        handler.title = "HISPARC MONITOR: hsmonitor"
         handler.currentDirectory = "%s/user/hsmonitor" % HS_ROOT
-        handler.command          = "%s/user/python/python.exe HsMonitor.py" % HS_ROOT
+        handler.command = "%s/user/python/python.exe HsMonitor.py" % HS_ROOT
 
         res = handler.startProcess()
         log("Status: " + status(res))
@@ -122,10 +119,10 @@ def start():
         #start updater
         log("Starting Updater...")
         handler = CMDStartStop()
-        handler.exeName          = "python.exe"
-        handler.title            = "HISPARC Updater: updater"
+        handler.exeName = "python.exe"
+        handler.title = "HISPARC Updater: updater"
         handler.currentDirectory = "%s/user/updater" % HS_ROOT
-        handler.command          = "%s/user/python/python.exe Update.py" % HS_ROOT
+        handler.command = "%s/user/python/python.exe Update.py" % HS_ROOT
 
         res = handler.startProcess()
         log("Status: " + status(res))

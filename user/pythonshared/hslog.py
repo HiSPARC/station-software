@@ -1,17 +1,14 @@
-#
-#   hslog ------
-#   General log facility for the startstop programs.
-#
+""""General log facility for the startstop programs."""
+
 import time
 import sys
 import re
 import os
-
 from threading import Lock
 
 MODE_PRINT = 1
-MODE_FILE  = 2
-MODE_BOTH  = MODE_PRINT | MODE_FILE
+MODE_FILE = 2
+MODE_BOTH = MODE_PRINT | MODE_FILE
 
 logMode = MODE_FILE
 
@@ -20,24 +17,29 @@ lock = Lock()
 # severity support is not implemented yet
 # but the constants are here so the interface is ready
 
-SEVERITY_NORMAL   = 1
+SEVERITY_NORMAL = 1
 SEVERITY_CRITICAL = 2
 
-# getCurrentAppName ------
-# "private" function that extracts current application name by taking the
-# directory of the initially invoked .py file.
 
 def getCurrentAppName():
+	"""Get the name of the current application.
+	
+	A "private" function that extracts current application name by taking the
+	directory of the initially invoked .py file.
+
+	"""
     mo = re.search('\\\\([^\\\\]*)$', sys.path[0])
     return mo.group(1)
 
-# log ------
-# Sends a message to screen, to a file, or both, depending on the logMode.
-# The optional severity parameter is not implemented yet, but you are still
-# recommended to pass SEVERITY_CRITICAL in case you are logging an error that
-# cannot be recovered from without user intervention.
 
 def log(message, severity=SEVERITY_NORMAL):
+	"""Sends a message to screen, to a file, or both, depending on the logMode.
+
+	The optional severity parameter is not implemented yet, but you are still
+	recommended to pass SEVERITY_CRITICAL in case you are logging an error that
+	cannot be recovered from without user intervention.
+	
+	"""
     global logMode
     lock.acquire()
 

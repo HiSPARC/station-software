@@ -1,17 +1,14 @@
-#
-#   StopUserMode.py ------
-#   Stop the HiSPARC user executables:
-#    - LabVIEW Detector
-#    - LabVIEW Weather
-#    - MySQL
-#    - HiSPARC Monitor
-#    - HiSPARC Updater
-#
+"""Stop the HiSPARC user executables.
+
+These applications are stopped:
+LabVIEW Detector, LabVIEW Weather, MySQL, HiSPARC Monitor, HiSPARC Updater
+
+"""
 import os
 import win32con
 
 from startStop import StartStop, CMDStartStop, status
-from hslog     import log, setLogMode, MODE_BOTH
+from hslog import log, setLogMode, MODE_BOTH
 
 def stop():
     setLogMode(MODE_BOTH)

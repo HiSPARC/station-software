@@ -1,13 +1,10 @@
-#
-#   checkFiles.py ------
-#
 import os
 import re
 import ctypes
 
 
-# Check if you are in admin mode
 def checkIfAdmin():
+    """Check if you are in admin mode"""
     try:
         is_admin = os.getuid() == 0
     except:
