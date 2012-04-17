@@ -20,7 +20,7 @@ class NagiosPush:
         reportMessage = {}
         reportMessage['reportCode'] = nagiosResult.status_code
         reportMessage['textMessage'] = nagiosResult.description
-        reportMessage['send_nscaPath'] = "data/send_nsca_win32/"
+        reportMessage['send_nscaPath'] = "data\\send_nsca_win32\\"
         reportMessage['nagiosServer'] = self.host  # Server IP
         reportMessage['serverPort'] = self.port
         reportMessage['hostComputer'] = self.machine_name  # On Nagios server
