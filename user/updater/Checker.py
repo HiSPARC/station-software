@@ -68,7 +68,7 @@ class Checker:
             log('User update is available called: %s' % userFile)
             # Run the update to install it.
             # First call a batch file so that Python can be closed.
-            os.system("./runUserUpdate.bat %s" % userFile)
+            os.system(".\\runUserUpdate.bat %s" % userFile)
 
         return updates
 
