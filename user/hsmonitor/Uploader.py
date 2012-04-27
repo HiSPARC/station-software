@@ -2,6 +2,7 @@ from time import sleep, time
 from cPickle import dumps
 from urllib import urlencode
 from urllib2 import urlopen, HTTPError, URLError
+import socket
 from threading import Thread, Semaphore, Event
 
 from Observer import Observer
@@ -17,6 +18,9 @@ BATCHSIZE = 100
 MINWAIT = 1  # minimum time to wait in seconds after a failed attempt
              # the waiting time will be doubled for each failed attempt
 MAXWAIT = 60  # maximum time to wait in seconds after a failed attempt
+
+# To make sure there is no timeout set at socket level
+socket.setdefaulttimeout(None)
 
 # Python >= 2.5 has hashlib
 try:
@@ -140,13 +144,10 @@ class Uploader(Observer, Thread):
                             'data': data,
                             'checksum': checksum})
 
-        # ADL: Something here causes the double events.
-        # Check what happens in case of timeout.
-
         # Open the connection and send our data. Exceptions are caught
         # explicitly to make sure we understand the implications of errors.
         try:
-            f = urlopen(self.URL, params, timeout=30)
+            f = urlopen(self.URL, params)
         except (URLError, HTTPError), msg:
             # For example: connection refused or internal server error
             returncode = str(msg)
