@@ -46,7 +46,7 @@ class Updater:
                 ADMINUPDATE_NAME, int(currentAdmin))
             #print "found is %s" % found
             if found:
-                os.system("./runAdminUpdate.bat "
+                os.system(".\\runAdminUpdate.bat "
                           "../../persistent/downloads/%s" % fileFound)
 
     def calculateInitialDelay(self):
