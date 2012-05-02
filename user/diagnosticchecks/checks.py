@@ -3,9 +3,7 @@ import MySQLdb
 from socket import gethostbyname
 import ConfigParser
 
-CONFIG_INI = "/user/hsmonitor/data/config.ini"
-#ADL: Make absolute path, os.getenv, HiSPARC_ROOT..
-
+CONFIG_INI = "../../user/hsmonitor/data/config.ini"
 OK = 0
 WARNING = 1
 CRITICAL = 2

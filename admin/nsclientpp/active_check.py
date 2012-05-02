@@ -1,6 +1,7 @@
 import sys
-sys.path.insert(1, '/user/diagnosticchecks')
+sys.path.append('../../user/diagnosticchecks')
 from checks import *
+
 
 def parse_range(range):
     """
@@ -26,7 +27,7 @@ def main(argv):
 
     # Buffer database connection.
     if function_name == 'bufferdb':
-                warn = parse_range(argv[1])
+        warn = parse_range(argv[1])
         crit = parse_range(argv[2])
         retval = checkBufferdb(warn, crit)
 
@@ -37,6 +38,7 @@ def main(argv):
         retval = check_lvusage(warn, crit)
 
     return retval
+
 
 if __name__=="__main__":
     sys.exit(main(sys.argv[1:]))
