@@ -22,24 +22,24 @@ SEVERITY_CRITICAL = 2
 
 
 def getCurrentAppName():
-	"""Get the name of the current application.
-	
-	A "private" function that extracts current application name by taking the
-	directory of the initially invoked .py file.
+    """ Get the name of the current application.
 
-	"""
+    A "private" function that extracts current application name by taking the
+    directory of the initially invoked .py file.
+
+    """
     mo = re.search('\\\\([^\\\\]*)$', sys.path[0])
     return mo.group(1)
 
 
 def log(message, severity=SEVERITY_NORMAL):
-	"""Sends a message to screen, to a file, or both, depending on the logMode.
+    """Sends a message to screen, to a file, or both, depending on the logMode.
 
-	The optional severity parameter is not implemented yet, but you are still
-	recommended to pass SEVERITY_CRITICAL in case you are logging an error that
-	cannot be recovered from without user intervention.
-	
-	"""
+    The optional severity parameter is not implemented yet, but you are still
+    recommended to pass SEVERITY_CRITICAL in case you are logging an error that
+    cannot be recovered from without user intervention.
+
+    """
     global logMode
     lock.acquire()
 
