@@ -201,6 +201,8 @@ Section -CreateUserAccounts
   ExecWait "net localgroup Administrators ${ADMHISPARC_USERNAME} /add"
   # user
   ExecWait "net user ${HISPARC_USERNAME} ${HISPARC_PASSWORD} /add /expires:never /passwordchg:no"
+  # set accounts so that passwords never expire (RH: June 8 2012)
+  ExecWait "net accounts /maxpwage:unlimited"
   SetDetailsPrint both
 SectionEnd
 
