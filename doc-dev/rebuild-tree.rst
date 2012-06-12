@@ -12,25 +12,34 @@ in the installer tree.
           package or two with newer versions.
 
 
-Bazaar (a Distributed Version Control System (DVCS))
+git (a Distributed Version Control System (DVCS))
 ----------------------------------------------------
 
-:Homepage: http://bazaar.canonical.com/
-:Version: 2.3.1 (Standalone)
-:Download: http://wiki.bazaar.canonical.com/WindowsDownloads
-:Direct Link: http://launchpad.net/bzr/2.3/2.3.1/+download/bzr-2.3.1-1-setup.exe
+:Homepage: http://git-scm.com/
+:Version: 1.7.10.4 (Standalone)
+:Download: http://git-scm.com/downloads
+:Direct Link (win): http://git-scm.com/download/win
+:Direct Link (mac): http://git-scm.com/download/mac
 
 Installation steps:
 
 #. Download and run the installer
-#. **Select Components:** *A typical installation* with *Windows Shell
-   Extensions (TortoiseBZR) enabled*
+
+
+GitHub Client
+-------------
+:Homepage: http://www.github.com/
+:Download (win): http://windows.github.com/
+:Download (mac): http://mac.github.com/
 
 
 HiSPARC Software Checkout
 -------------------------
 
-:Direct Link: sftp://<user>@login.nikhef.nl/project/hisparc/bzr/windows-development/trunk/
+:Direct Link: https://github.com/HiSPARC/station-software.git
+:Command Line: git clone git@github.com:HiSPARC/station-software.git
+:GitHub For Windows link: github-windows://openRepo/https://github.com/HiSPARC/station-software
+:GitHub For Mac link: github-mac://openRepo/https://github.com/HiSPARC/station-software
 
 Steps:
 
@@ -52,9 +61,9 @@ Notepad++ (a Source Code Editor) (Optional)
 -------------------------------------------
 
 :Homepage: http://notepad-plus-plus.org/
-:Version: 5.8.5 (Installer)
-:Download: http://notepad-plus-plus.org/downloads
-:Direct Link: http://download.tuxfamily.org/notepadplus/5.8.5/npp.5.8.5.Installer.exe
+:Version: 6.1.3 (Installer)
+:Download: http://notepad-plus-plus.org/download/
+:Direct Link: http://download.tuxfamily.org/notepadplus/6.1.3/npp.6.1.3.Installer.exe
 
 Installation steps:
 
@@ -73,7 +82,13 @@ LabVIEW Run-Time Engine
 :Homepage: http://www.ni.com/
 :Version: 8.2.1 (Standard download)
 :Download: http://joule.ni.com/nidu/cds/view/p/id/550/lang/en
-:Direct Link: http://lumen.ni.com/nicif/US/GB_NIDU/content.xhtml?du=http://joule.ni.com/nidu/cds/view/p/id/550/lang/en_US
+:Direct Link: http://lumen.ni.com/nicif/US/GB_NIDU/content.xhtml?du=http://joule.ni.com/nidu/cds/view/p/id/550/lang/en_NL
+
+
+:Homepage: http://www.ni.com/
+:Version: 8.6.1 (Standard download)
+:Download: http://joule.ni.com/nidu/cds/view/p/id/1244/lang/en
+:Direct Link: http://lumen.ni.com/nicif/US/GB_NIDU/content.xhtml?du=http://joule.ni.com/nidu/cds/view/p/id/1244/lang/en_NL
 
 Installation steps:
 
@@ -214,14 +229,15 @@ FTDI Drivers (Communication with Electronics Box USB Chip)
 ----------------------------------------------------------
 
 :Homepage: http://www.ftdichip.com/
-:Version: 2.08.08 (CDM, x86 32-bit)
+:Version: 2.08.24 (CDM, x86 32-bit)
 :Download: http://www.ftdichip.com/Drivers/VCP.htm
-:Direct Link: http://www.ftdichip.com/Drivers/CDM/CDM20808.zip
+:Direct Link: http://www.ftdichip.com/Drivers/CDM/CDM%202.08.24%20WHQL%20Certified.zip
+:Setup executable: http://www.ftdichip.com/Drivers/CDM/CDM20824_Setup.exe
 
 Installation steps:
 
 #. Unpack the zip file.
-#. Move the ``CDM20814_WHQL_Certified`` folder to ``\admin``.
+#. Move the ``CDM20824_WHQL_Certified`` folder to ``\admin``.
 #. Rename the folder to ``ftdi_drivers``.
 #. Copy
    ``C:\WinDDK\7600.16385.1\redist\DIFx\dpinst\EngMui\x86\dpinst.exe`` to

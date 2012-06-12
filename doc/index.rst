@@ -8,11 +8,11 @@
 Welkom bij HiSPARC software documentatie!
 ============================================
 
-U kunt het software installatiepakket downloaden: (`software
-<http://data.hisparc.nl/media/uploads/hisparc/hisparcInstaller_v6.10.exe>`_)
+U kunt het software installatiepakket downloaden: `hisparcInstaller
+<http://data.hisparc.nl/media/uploads/hisparc/hisparcInstaller_v6.10.exe>`_
 
-U kunt een pdf-versie van deze handleiding downloaden: (`handleiding
-<http://www.nikhef.nl/~davidf/installer/HiSPARCsoftware.pdf>`_)
+U kunt een pdf-versie van deze handleiding downloaden: `handleiding
+<HiSPARCsoftware.pdf>`_
 
 Voor meer informatie over |hisparc|, zie http://www.hisparc.nl/.
 
@@ -28,10 +28,10 @@ projectcoördinator Surya Bonam (suryab@nikhef.nl).
    configuratie
 
 
-Indices and tables
-==================
+.. Other
+   ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   * :ref:`genindex`
+   * :ref:`modindex`
+   * :ref:`search`
 

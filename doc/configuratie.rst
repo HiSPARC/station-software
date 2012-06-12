@@ -62,27 +62,35 @@ hebben we een korte procedure opgesteld:
    spanningen onder de 700 V ziet u gewoonlijk geen enkel signaal.  Maar
    volg de procedure nauwgezet en begin bij 300 V.
 
+.. The singles per second for low thresholds using the -30 mV threshold
+   should be checked. And the 'acceptable' range for the singles per second
+   for the high thresholds.
+
 * Stel op de *Events / Settings* tab op het *Thresholds* tabje alle
-  thresholds (drempelwaarden) in op -250 mV (voor de *Low* thresholds) en
-  -300 mV (voor de *High* thresholds).
+  thresholds (drempelwaarden) in op -30 mV (voor de *Low* thresholds) en
+  -70 mV (voor de *High* thresholds).
 * Stel dan op het *Photomultiplier* tabje alle hoogspanningen in op 300 V.
+* Klik op de *Apply Settings* knop zodat deze instelling toegepast worden.
 * Ga naar de *Statistics (Trace & Trigger)* tab en kijk naar de *Last
   second* waarden in het *Singles* venster.  Daarin staat het aantal
   pulsen per seconde dat over de drempelwaardes ging.  Dat wil zeggen: bij
   *Channel 1 - low* staat het aantal pulsen per seconde dat de fotobuis
-  van detector 1 zag die sterker waren dan -250 mV [#drempels]_.
+  van detector 1 zag die sterker waren dan -30 mV [#drempels]_.
 * Voor een nauwkeurige bepaling van het gemiddelde aantal pulsen per
   seconde gebruikt u de timer functie in het midden van het scherm,
-  onderaan.  U kijkt dan ook bij de singles in de laatste kolom, *Average
-  per second*.
-* Verhoog de spanningen op de fotobuizen nu zodanig dat bij alle *low
-  thresholds* waarden staan tussen de 50 en de 60 (55), en bij alle *high
-  thresholds* waarden tussen de 30 en de 40 (35).  Als de gemeten waarden
+  onderaan, stel deze bijvoorbeeld in op 60 seconden.  U kijkt dan ook
+  bij de singles in de laatste kolom, *Average per second*.
+* Verhoog de spanningen op de fotobuizen nu zodanig dat bij alle *high
+  thresholds* waarden tussen de 110 en de 130 (120), dan zullen er bij de *low
+  thresholds* waarden staan rond de 250.  Als de gemeten waarden
   te *laag* zijn, dan *verhoogt* u de spanningen en omgekeerd.  Maakt u
   bij het verhogen van de spanningen nooit grotere stappen dan 50 V om
-  zeker te zijn dat de fotobuis niet beschadigd.
+  zeker te zijn dat de fotobuis niet beschadigd. Vergeet ook niet na elke
+  aanpassing weer op de *Apply Settings* knop te drukken.
+* Als de spanningen goed zijn ingesteld kunnen deze waarden worden opgeslagen.
+  Klik daarvoor op de *Save Settings* knop.
 
-.. figure:: images/singles.png
+.. figure:: images/daq-singles.png
    :align: center
    :scale: 100
 
@@ -123,21 +131,21 @@ instelling moeten veranderen, druk dan op de bijbehorende *Set* knop.
 
 .. note:: Let op: er komen soms meerdere *Set* knoppen per venster voor.
 
-.. figure:: images/screenshot-gps-receiver.png
+.. figure:: images/gps-receiver.png
    :align: center
    :scale: 85
 
    In dit venster stelt u de opties in voor de GPS ontvanger.  De
    belangrijkste optie is hier de *Receiver Mode*.
 
-.. figure:: images/screenshot-gps-timing.png
+.. figure:: images/gps-timing.png
    :align: center
    :scale: 85
 
    In dit venster stelt u de tijdsinstellingen in.  Het is zeer belangrijk
    om hier goed te controleren dat u *GPS* meet, en geen *UTC*-tijd.
 
-.. figure:: images/screenshot-gps-survey.png
+.. figure:: images/gps-survey.png
    :align: center
    :scale: 85
 
@@ -148,7 +156,7 @@ instelling moeten veranderen, druk dan op de bijbehorende *Set* knop.
    op één uur, maar het blijkt dat we de nauwkeurigheid van een dag nodig
    hebben.
 
-.. figure:: images/screenshot-gps-position.png
+.. figure:: images/gps-position.png
    :align: center
    :scale: 85
 
@@ -157,7 +165,7 @@ instelling moeten veranderen, druk dan op de bijbehorende *Set* knop.
    definitieve positie.  Het is veiliger om deze instellingen leeg te
    houden en de GPS zelf zijn positie te laten bepalen.
 
-.. figure:: images/screenshot-gps-options.png
+.. figure:: images/gps-options.png
    :align: center
    :scale: 85
 
@@ -185,7 +193,7 @@ goed is zijn de instellingen niet veranderd en staan ze nog als volgt:
 * Coincidence time: 1,5 us
 * Post coincidence time: 3,5 us
 
-.. figure:: images/time-window.png
+.. figure:: images/daq-time-window.png
    :align: center
    :scale: 100
 
@@ -202,7 +210,7 @@ De instellingen voor stations met twee detectoren zijn als volgt:
 * Trigger: *2 low* **AND** *Don't use high threshold* **AND** *Don't use
   external trigger*
 
-.. figure:: images/trigger-two-detectors.jpg
+.. figure:: images/daq-trigger-two-detectors.png
    :align: center
    :scale: 100
 
@@ -218,7 +226,7 @@ De instellingen voor stations met vier detectoren zijn als volgt:
 * Threshold High (alle kanalen): -70 mV
 * Trigger: *3 low* **OR** *2 high* **AND** *Don't use external trigger*
 
-.. figure:: images/trigger-four-detectors.jpg
+.. figure:: images/daq-trigger-four-detectors.png
    :align: center
    :scale: 100
 
