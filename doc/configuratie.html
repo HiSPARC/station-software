@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +7,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuratie van de HiSPARC software &mdash; HiSPARC software 3.8 documentation</title>
+    <title>Configuratie van de HiSPARC software &mdash; HiSPARC software 3.9 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '3.8',
+        VERSION:     '3.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="HiSPARC software 3.8 documentation" href="index.html" />
+    <link rel="top" title="HiSPARC software 3.9 documentation" href="index.html" />
     <link rel="prev" title="Installatie van de HiSPARC software" href="software-installatie.html" /> 
   </head>
   <body>
@@ -34,12 +33,9 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
           <a href="software-installatie.html" title="Installatie van de HiSPARC software"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">HiSPARC software 3.8 documentation</a> &raquo;</li> 
+             accesskey="P">previous</a></li>
+        <li><a href="index.html">HiSPARC software 3.9 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -115,27 +111,31 @@ volg de procedure nauwgezet en begin bij 300 V.</p>
 </div>
 <ul class="simple">
 <li>Stel op de <em>Events / Settings</em> tab op het <em>Thresholds</em> tabje alle
-thresholds (drempelwaarden) in op -250 mV (voor de <em>Low</em> thresholds) en
--300 mV (voor de <em>High</em> thresholds).</li>
+thresholds (drempelwaarden) in op -30 mV (voor de <em>Low</em> thresholds) en
+-70 mV (voor de <em>High</em> thresholds).</li>
 <li>Stel dan op het <em>Photomultiplier</em> tabje alle hoogspanningen in op 300 V.</li>
+<li>Klik op de <em>Apply Settings</em> knop zodat deze instelling toegepast worden.</li>
 <li>Ga naar de <em>Statistics (Trace &amp; Trigger)</em> tab en kijk naar de <em>Last
 second</em> waarden in het <em>Singles</em> venster.  Daarin staat het aantal
 pulsen per seconde dat over de drempelwaardes ging.  Dat wil zeggen: bij
 <em>Channel 1 - low</em> staat het aantal pulsen per seconde dat de fotobuis
-van detector 1 zag die sterker waren dan -250 mV <a class="footnote-reference" href="#drempels" id="id1">[2]</a>.</li>
+van detector 1 zag die sterker waren dan -30 mV <a class="footnote-reference" href="#drempels" id="id1">[2]</a>.</li>
 <li>Voor een nauwkeurige bepaling van het gemiddelde aantal pulsen per
 seconde gebruikt u de timer functie in het midden van het scherm,
-onderaan.  U kijkt dan ook bij de singles in de laatste kolom, <em>Average
-per second</em>.</li>
-<li>Verhoog de spanningen op de fotobuizen nu zodanig dat bij alle <em>low
-thresholds</em> waarden staan tussen de 50 en de 60 (55), en bij alle <em>high
-thresholds</em> waarden tussen de 30 en de 40 (35).  Als de gemeten waarden
+onderaan, stel deze bijvoorbeeld in op 60 seconden.  U kijkt dan ook
+bij de singles in de laatste kolom, <em>Average per second</em>.</li>
+<li>Verhoog de spanningen op de fotobuizen nu zodanig dat bij alle <em>high
+thresholds</em> waarden tussen de 110 en de 130 (120), dan zullen er bij de <em>low
+thresholds</em> waarden staan rond de 250.  Als de gemeten waarden
 te <em>laag</em> zijn, dan <em>verhoogt</em> u de spanningen en omgekeerd.  Maakt u
 bij het verhogen van de spanningen nooit grotere stappen dan 50 V om
-zeker te zijn dat de fotobuis niet beschadigd.</li>
+zeker te zijn dat de fotobuis niet beschadigd. Vergeet ook niet na elke
+aanpassing weer op de <em>Apply Settings</em> knop te drukken.</li>
+<li>Als de spanningen goed zijn ingesteld kunnen deze waarden worden opgeslagen.
+Klik daarvoor op de <em>Save Settings</em> knop.</li>
 </ul>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/singles.png"><img alt="_images/singles.png" src="_images/singles.png" /></a>
+<a class="reference internal image-reference" href="_images/daq-singles.png"><img alt="_images/daq-singles.png" src="_images/daq-singles.png" /></a>
 <p class="caption">Het aantal pulsen per seconde dat over de drempelwaarden gaat
 (singles).</p>
 </div>
@@ -178,17 +178,17 @@ minuut over te schakelen naar UTC.  Daarom gebruiken we nu GPS-tijd.</p>
 <p class="last">Let op: er komen soms meerdere <em>Set</em> knoppen per venster voor.</p>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-gps-receiver.png"><img alt="_images/screenshot-gps-receiver.png" src="_images/screenshot-gps-receiver.png" /></a>
+<a class="reference internal image-reference" href="_images/gps-receiver.png"><img alt="_images/gps-receiver.png" src="_images/gps-receiver.png" /></a>
 <p class="caption">In dit venster stelt u de opties in voor de GPS ontvanger.  De
 belangrijkste optie is hier de <em>Receiver Mode</em>.</p>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-gps-timing.png"><img alt="_images/screenshot-gps-timing.png" src="_images/screenshot-gps-timing.png" /></a>
+<a class="reference internal image-reference" href="_images/gps-timing.png"><img alt="_images/gps-timing.png" src="_images/gps-timing.png" /></a>
 <p class="caption">In dit venster stelt u de tijdsinstellingen in.  Het is zeer belangrijk
 om hier goed te controleren dat u <em>GPS</em> meet, en geen <em>UTC</em>-tijd.</p>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-gps-survey.png"><img alt="_images/screenshot-gps-survey.png" src="_images/screenshot-gps-survey.png" /></a>
+<a class="reference internal image-reference" href="_images/gps-survey.png"><img alt="_images/gps-survey.png" src="_images/gps-survey.png" /></a>
 <p class="caption">In dit venster zorgt u er voor dat de <em>self survey</em> lang genoeg duurt
 (één dag).</p>
 </div>
@@ -199,14 +199,14 @@ op één uur, maar het blijkt dat we de nauwkeurigheid van een dag nodig
 hebben.</p>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-gps-position.png"><img alt="_images/screenshot-gps-position.png" src="_images/screenshot-gps-position.png" /></a>
+<a class="reference internal image-reference" href="_images/gps-position.png"><img alt="_images/gps-position.png" src="_images/gps-position.png" /></a>
 <p class="caption">Dit venster kan gebruikt worden om een eerste schatting van de positie
 in te vullen, maar let hier mee op dat deze niet wordt vastgezet als
 definitieve positie.  Het is veiliger om deze instellingen leeg te
 houden en de GPS zelf zijn positie te laten bepalen.</p>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-gps-options.png"><img alt="_images/screenshot-gps-options.png" src="_images/screenshot-gps-options.png" /></a>
+<a class="reference internal image-reference" href="_images/gps-options.png"><img alt="_images/gps-options.png" src="_images/gps-options.png" /></a>
 <p class="caption">De GPS kent vele opties waarvan een aantal door de HiSPARC software
 worden gebruikt.  Controleert u deze vinkjes goed.</p>
 </div>
@@ -230,7 +230,7 @@ goed is zijn de instellingen niet veranderd en staan ze nog als volgt:</p>
 <li>Post coincidence time: 3,5 us</li>
 </ul>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/time-window.png"><img alt="_images/time-window.png" src="_images/time-window.png" /></a>
+<a class="reference internal image-reference" href="_images/daq-time-window.png"><img alt="_images/daq-time-window.png" src="_images/daq-time-window.png" /></a>
 <p class="caption">De instellingen voor het coïncidentie tijdvenster.</p>
 </div>
 </div>
@@ -244,7 +244,7 @@ goed is zijn de instellingen niet veranderd en staan ze nog als volgt:</p>
 external trigger</em></li>
 </ul>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/trigger-two-detectors.jpg"><img alt="_images/trigger-two-detectors.jpg" src="_images/trigger-two-detectors.jpg" /></a>
+<a class="reference internal image-reference" href="_images/daq-trigger-two-detectors.png"><img alt="_images/daq-trigger-two-detectors.png" src="_images/daq-trigger-two-detectors.png" /></a>
 <p class="caption">De triggerinstellingen voor een detectorstation met twee detectoren.</p>
 </div>
 </div>
@@ -257,7 +257,7 @@ external trigger</em></li>
 <li>Trigger: <em>3 low</em> <strong>OR</strong> <em>2 high</em> <strong>AND</strong> <em>Don&#8217;t use external trigger</em></li>
 </ul>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/trigger-four-detectors.jpg"><img alt="_images/trigger-four-detectors.jpg" src="_images/trigger-four-detectors.jpg" /></a>
+<a class="reference internal image-reference" href="_images/daq-trigger-four-detectors.png"><img alt="_images/daq-trigger-four-detectors.png" src="_images/daq-trigger-four-detectors.png" /></a>
 <p class="caption">De triggerinstellingen voor een detectorstation met vier detectoren.</p>
 </div>
 </div>
@@ -312,7 +312,7 @@ mV, maar <em>niet</em> op een puls van -50 mV.</td></tr>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="index.html">
-              <img class="logo" src="_static/logo.png" alt="Logo"/>
+              <img class="logo" src="_static/header.png" alt="Logo"/>
             </a></p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -363,17 +363,14 @@ mV, maar <em>niet</em> op een puls van -50 mV.</td></tr>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
           <a href="software-installatie.html" title="Installatie van de HiSPARC software"
-             >previous</a> |</li>
-        <li><a href="index.html">HiSPARC software 3.8 documentation</a> &raquo;</li> 
+             >previous</a></li>
+        <li><a href="index.html">HiSPARC software 3.9 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2011, HiSPARC.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+        &copy; Copyright 2009-2012, HiSPARC.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

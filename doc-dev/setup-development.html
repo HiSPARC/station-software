@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +7,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Setting up a Development Environment &mdash; Detector Software Developer Documentation 1.0 documentation</title>
+    <title>Setting up a Development Environment &mdash; Detector Software Developer Documentation 1.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.0',
+        VERSION:     '1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,24 +24,22 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Detector Software Developer Documentation 1.0 documentation" href="index.html" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="Detector Software Developer Documentation 1.1 documentation" href="index.html" />
     <link rel="next" title="Rebuilding the Development Tree" href="rebuild-tree.html" />
-    <link rel="prev" title="Welcome to Detector Software Developer Documentation’s documentation!" href="index.html" /> 
+    <link rel="prev" title="Welcome to Detector-Software Developer Documentation!" href="index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
           <a href="rebuild-tree.html" title="Rebuilding the Development Tree"
-             accesskey="N">next</a> |</li>
+             accesskey="N">next</a></li>
         <li class="right" >
-          <a href="index.html" title="Welcome to Detector Software Developer Documentation’s documentation!"
+          <a href="index.html" title="Welcome to Detector-Software Developer Documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Detector Software Developer Documentation 1.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Detector Software Developer Documentation 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -60,27 +57,29 @@ need to do this, and if you do, you&#8217;ll overwrite lots of third-party
 binaries which have been committed to the repository.</p>
 <p>Just follow these instructions and you can start building your own HiSPARC
 software installation packages.</p>
-<div class="section" id="bazaar-a-distributed-version-control-system-dvcs">
-<h2>Bazaar (a Distributed Version Control System (DVCS))<a class="headerlink" href="#bazaar-a-distributed-version-control-system-dvcs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="git-a-distributed-version-control-system-dvcs">
+<h2>git (a Distributed Version Control System (DVCS))<a class="headerlink" href="#git-a-distributed-version-control-system-dvcs" title="Permalink to this headline">¶</a></h2>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://bazaar.canonical.com/">http://bazaar.canonical.com/</a></td>
+<tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://git-scm.com/">http://git-scm.com/</a></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">2.3.1 (Standalone)</td>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">1.7.10.4 (Standalone)</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://wiki.bazaar.canonical.com/WindowsDownloads">http://wiki.bazaar.canonical.com/WindowsDownloads</a></td>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://git-scm.com/downloads">http://git-scm.com/downloads</a></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://launchpad.net/bzr/2.3/2.3.1/+download/bzr-2.3.1-1-setup.exe">http://launchpad.net/bzr/2.3/2.3.1/+download/bzr-2.3.1-1-setup.exe</a></td>
+<tr class="field-even field"><th class="field-name" colspan="2">Direct Link (win):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><a class="reference external" href="http://git-scm.com/download/win">http://git-scm.com/download/win</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Direct Link (mac):</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><a class="reference external" href="http://git-scm.com/download/mac">http://git-scm.com/download/mac</a></td>
 </tr>
 </tbody>
 </table>
 <p>Installation steps:</p>
 <ol class="arabic simple">
 <li>Download and run the installer</li>
-<li><strong>Select Components:</strong> <em>A typical installation</em> with <em>Windows Shell
-Extensions (TortoiseBZR) enabled</em></li>
 </ol>
 </div>
 <div class="section" id="hisparc-software-checkout">
@@ -89,7 +88,15 @@ Extensions (TortoiseBZR) enabled</em></li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Direct Link:</th><td class="field-body">sftp://&lt;user&gt;&#64;login.nikhef.nl/project/hisparc/bzr/windows-development/trunk/</td>
+<tr class="field-odd field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="https://github.com/HiSPARC/station-software.git">https://github.com/HiSPARC/station-software.git</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Command Line:</th><td class="field-body">git clone <a class="reference external" href="mailto:git&#37;&#52;&#48;github&#46;com">git<span>&#64;</span>github<span>&#46;</span>com</a>:HiSPARC/station-software.git</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">GitHub For Windows link:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">github-windows://openRepo/https://github.com/HiSPARC/station-software</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">GitHub For Mac link:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">github-mac://openRepo/https://github.com/HiSPARC/station-software</td>
 </tr>
 </tbody>
 </table>
@@ -97,11 +104,11 @@ Extensions (TortoiseBZR) enabled</em></li>
 <ol class="arabic">
 <li><p class="first">Run Command Prompt (Start -&gt; Run -&gt; <tt class="docutils literal"><span class="pre">cmd</span></tt>)</p>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">bzr</span> <span class="pre">checkout</span> <span class="pre">sftp://&lt;user&gt;&#64;login.nikhef.nl/project/hisparc/bzr/windows-development/trunk/</span> <span class="pre">&lt;checkout-location&gt;</span></tt>.
+<li><p class="first"><tt class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:HiSPARC/station-software.git</span> <span class="pre">&lt;checkout-location&gt;</span></tt>.
 Example:</p>
 <div class="highlight-python"><pre>C:\Documents and Settings\David Fokkema&gt;cd "My Documents"
 C:\Documents and Settings\David Fokkema\My Documents&gt;mkdir HiSPARC
-C:\Documents and Settings\David Fokkema\My Documents&gt;bzr checkout sftp://davidf@login.nikhef.nl/project/hisparc/bzr/windows-development/trunk/ HiSPARC\trunk</pre>
+C:\Documents and Settings\David Fokkema\My Documents&gt;git clone git@github.com:HiSPARC/station-software.git HiSPARC\trunk</pre>
 </div>
 </li>
 <li><p class="first">Edit <tt class="docutils literal"><span class="pre">\persistent\configuration\startup_settings.bat</span></tt> to your
@@ -120,11 +127,11 @@ terminal with a HiSPARC detector pc environment</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Homepage:</th><td class="field-body"><a class="reference external" href="http://notepad-plus-plus.org/">http://notepad-plus-plus.org/</a></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">5.8.5 (Installer)</td>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">6.1.3 (Installer)</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://notepad-plus-plus.org/downloads">http://notepad-plus-plus.org/downloads</a></td>
+<tr class="field-odd field"><th class="field-name">Download:</th><td class="field-body"><a class="reference external" href="http://notepad-plus-plus.org/download/">http://notepad-plus-plus.org/download/</a></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://download.tuxfamily.org/notepadplus/5.8.5/npp.5.8.5.Installer.exe">http://download.tuxfamily.org/notepadplus/5.8.5/npp.5.8.5.Installer.exe</a></td>
+<tr class="field-even field"><th class="field-name">Direct Link:</th><td class="field-body"><a class="reference external" href="http://download.tuxfamily.org/notepadplus/6.1.3/npp.6.1.3.Installer.exe">http://download.tuxfamily.org/notepadplus/6.1.3/npp.6.1.3.Installer.exe</a></td>
 </tr>
 </tbody>
 </table>
@@ -168,10 +175,13 @@ requires a serial number which is <em>not</em> committed in the repository.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/header.png" alt="Logo"/>
+            </a></p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Setting up a Development Environment</a><ul>
-<li><a class="reference internal" href="#bazaar-a-distributed-version-control-system-dvcs">Bazaar (a Distributed Version Control System (DVCS))</a></li>
+<li><a class="reference internal" href="#git-a-distributed-version-control-system-dvcs">git (a Distributed Version Control System (DVCS))</a></li>
 <li><a class="reference internal" href="#hisparc-software-checkout">HiSPARC Software Checkout</a></li>
 <li><a class="reference internal" href="#notepad-a-source-code-editor-optional">Notepad++ (a Source Code Editor) (Optional)</a></li>
 <li><a class="reference internal" href="#labview-run-time-engine">LabVIEW Run-Time Engine</a></li>
@@ -181,7 +191,7 @@ requires a serial number which is <em>not</em> committed in the repository.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to Detector Software Developer Documentation&#8217;s documentation!</a></p>
+                        title="previous chapter">Welcome to Detector-Software Developer Documentation!</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="rebuild-tree.html"
                         title="next chapter">Rebuilding the Development Tree</a></p>
@@ -211,20 +221,17 @@ requires a serial number which is <em>not</em> committed in the repository.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
           <a href="rebuild-tree.html" title="Rebuilding the Development Tree"
-             >next</a> |</li>
+             >next</a></li>
         <li class="right" >
-          <a href="index.html" title="Welcome to Detector Software Developer Documentation’s documentation!"
+          <a href="index.html" title="Welcome to Detector-Software Developer Documentation!"
              >previous</a> |</li>
-        <li><a href="index.html">Detector Software Developer Documentation 1.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Detector Software Developer Documentation 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, David Fokkema.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

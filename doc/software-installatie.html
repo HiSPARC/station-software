@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +7,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Installatie van de HiSPARC software &mdash; HiSPARC software 3.8 documentation</title>
+    <title>Installatie van de HiSPARC software &mdash; HiSPARC software 3.9 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '3.8',
+        VERSION:     '3.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="HiSPARC software 3.8 documentation" href="index.html" />
+    <link rel="top" title="HiSPARC software 3.9 documentation" href="index.html" />
     <link rel="next" title="Configuratie van de HiSPARC software" href="configuratie.html" />
     <link rel="prev" title="Installatie van de HiSPARC electronica" href="hardware-installatie.html" /> 
   </head>
@@ -35,15 +34,12 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
           <a href="configuratie.html" title="Configuratie van de HiSPARC software"
-             accesskey="N">next</a> |</li>
+             accesskey="N">next</a></li>
         <li class="right" >
           <a href="hardware-installatie.html" title="Installatie van de HiSPARC electronica"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">HiSPARC software 3.8 documentation</a> &raquo;</li> 
+        <li><a href="index.html">HiSPARC software 3.9 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -65,30 +61,36 @@ schoolnetwerk.  Voor het ondersteunen van meer dan één besturingssysteem
 hebben we helaas niet de mankracht.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
+<p class="last">Vóór uiteindelijk gebruik is het nodig de HiSPARC data
+acquisitie software na installatie te configureren!  Zie
+<a class="reference internal" href="configuratie.html"><em>Configuratie van de HiSPARC software</em></a>.  <strong>Als u deze stap (per ongeluk) overslaat, dan
+zijn uw meetgegevens ONBRUIKBAAR.</strong>  Als u deze handleiding stap voor
+stap volgt, dan komt u vanzelf aan de configuratie toe.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
 <p class="last">Op het science park en de TU/E maken we sinds kort gebruik van
 Asus EEE PC&#8217;s.  Deze pc&#8217;s zijn goedkoop, hebben voldoende geheugen,
 zijn energiezuinig, compact en snel genoeg voor onze doeleinden.  De
-pc&#8217;s worden geleverd met Microsoft Windows XP Home en ook dat is
-voldoende.  Let wel: een monitor wordt <em>niet</em> meegeleverd; toetsenbord
-en muis weer wel.  De nieuwste modellen worden echter geleverd met
+pc&#8217;s werden geleverd met Microsoft Windows XP Home en ook dat is
+voldoende.  Let wel: een monitor wordt <em>niet</em> meegeleverd; een toetsenbord
+en muis soms ook niet.  De nieuwste modellen worden echter geleverd met
 Windows 7, op zeer korte termijn ondersteunen we Windows 7 dan ook
 volledig.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Op aanvraag is alle broncode beschikbaar.  Wilt u zelf met
-LabVIEW aan de slag, bijvoorbeeld, dan kunt u contact met ons opnemen
-en de broncode van de data acquisitie software ontvangen.  Bent u of
+<p class="last">Alle broncode van de software is beschikbaar.  Wilt u zelf met
+LabVIEW (de broncode van de data acquisitie software) aan de slag of
 zijn uw leerlingen geïnteresseerd in hoe het verwerken en uploaden van
-de HiSPARC data in zijn werk gaat, kijkt u dan na installatie in de
-<tt class="docutils literal"><span class="pre">Z:\user\hsmonitor\src</span></tt> map.  Hier vindt u de Python <a class="footnote-reference" href="#python" id="id2">[2]</a>
-broncode van de HiSPARC monitor.</p>
+de HiSPARC data in zijn werk gaat, kijk dan op
+<a class="reference external" href="https://github.com/HiSPARC/">https://github.com/HiSPARC/</a> .</p>
 </div>
 <div class="section" id="benodigdheden">
 <h2>Benodigdheden<a class="headerlink" href="#benodigdheden" title="Permalink to this headline">¶</a></h2>
 <p>Vóór u aan de installatie begint dient u te beschikken over:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">hisparcInstaller_v3.7.exe</span></tt></li>
+<li>de HiSPARC software installer, <tt class="docutils literal"><span class="pre">hisparcInstaller_v6.10.exe</span></tt></li>
 <li>een door de clustercoördinator verstrekt beveiligingscertificaat,
 bijvoorbeeld: <tt class="docutils literal"><span class="pre">sciencepark501.zip</span></tt></li>
 <li>een door de clustercoördinator verstrekt stationnummer</li>
@@ -122,7 +124,7 @@ betekent een herstart bij stroomuitval, maar als de computer handmatig
 uit was gezet, dan blijft hij uit.</p>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-files.png"><img alt="_images/screenshot-files.png" src="_images/screenshot-files.png" /></a>
+<a class="reference internal image-reference" href="_images/req-files.png"><img alt="_images/req-files.png" src="_images/req-files.png" /></a>
 <p class="caption">Een folder met de installer en het beveiligingscertificaat.</p>
 </div>
 </div>
@@ -134,7 +136,7 @@ aantal screenshots van de installer met een korte beschrijving.</p>
 <h3>Welkom<a class="headerlink" href="#welkom" title="Permalink to this headline">¶</a></h3>
 <p>Dit venster spreekt voor zich.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-welkom.png"><img alt="_images/screenshot-welkom.png" src="_images/screenshot-welkom.png" /></a>
+<a class="reference internal image-reference" href="_images/install-welkom.png"><img alt="_images/install-welkom.png" src="_images/install-welkom.png" /></a>
 <p class="caption">De welkomstpagina van de installer.  Dit is het eerste dat u ziet
 nadat de installer is gestart.</p>
 </div>
@@ -146,7 +148,7 @@ wachtwoord.  Het beveiligingscertificaat kan geladen worden door ofwel de
 lokatie in te vullen of, handiger, op het knopje naast het veld te
 klikken en het bestand te selecteren.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-stationgegevens.png"><img alt="_images/screenshot-stationgegevens.png" src="_images/screenshot-stationgegevens.png" /></a>
+<a class="reference internal image-reference" href="_images/install-stationgegevens.png"><img alt="_images/install-stationgegevens.png" src="_images/install-stationgegevens.png" /></a>
 <p class="caption">De installer vraagt om het invullen van de stationgegevens.</p>
 </div>
 </div>
@@ -157,7 +159,7 @@ data te ontvangen, te verwerken en langdurig op te slaan, dan kunt u hier
 het adres invullen.  <em>Voor vrijwel alle installaties blijft dit veld
 leeg.</em></p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-lokaledatabase.png"><img alt="_images/screenshot-lokaledatabase.png" src="_images/screenshot-lokaledatabase.png" /></a>
+<a class="reference internal image-reference" href="_images/install-lokaledatabase.png"><img alt="_images/install-lokaledatabase.png" src="_images/install-lokaledatabase.png" /></a>
 <p class="caption">Het is mogelijk om een lokale database op te geven.  Normaliter blijft
 dit veld leeg.</p>
 </div>
@@ -176,7 +178,7 @@ we op zoveel mogelijk lokaties ook weerstations gebruiken.  Weerstations
 stellen ons in staat om de HiSPARC metingen nauwkeurig te koppelen aan
 o.a. actuele luchtdruk en temperatuur waarnemingen.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-detectoren.png"><img alt="_images/screenshot-detectoren.png" src="_images/screenshot-detectoren.png" /></a>
+<a class="reference internal image-reference" href="_images/install-detectoren.png"><img alt="_images/install-detectoren.png" src="_images/install-detectoren.png" /></a>
 <p class="caption">Hier vinkt u de aangesloten detectoren aan.  Dit station beschikt
 alleen over een HiSPARC detector.</p>
 </div>
@@ -204,11 +206,11 @@ te betalen voor hun Windows Logo test programma.  Het enige dat dit op
 zou leveren is het niet verschijnen van deze waarschuwing.</p>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-installatie.png"><img alt="_images/screenshot-installatie.png" src="_images/screenshot-installatie.png" /></a>
+<a class="reference internal image-reference" href="_images/install-installatie.png"><img alt="_images/install-installatie.png" src="_images/install-installatie.png" /></a>
 <p class="caption">De installatie is in volle gang.  Dit kan enige tijd duren.</p>
 </div>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-tapdriver.png"><img alt="_images/screenshot-tapdriver.png" src="_images/screenshot-tapdriver.png" /></a>
+<a class="reference internal image-reference" href="_images/install-tapdriver.png"><img alt="_images/install-tapdriver.png" src="_images/install-tapdriver.png" /></a>
 <p class="caption">De installatie van de TAP driver (virtuele netwerkkaart voor OpenVPN)
 is niet officieel door Microsoft gecertificeerd.  Daarom moet u
 expliciet toestemming geven voor de installatie.</p>
@@ -220,7 +222,7 @@ expliciet toestemming geven voor de installatie.</p>
 herstart zal de pc automatisch inloggen met het nieuwe HiSPARC user
 account en zal de detectorsoftware automatisch worden gestart.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-herstart.png"><img alt="_images/screenshot-herstart.png" src="_images/screenshot-herstart.png" /></a>
+<a class="reference internal image-reference" href="_images/install-herstart.png"><img alt="_images/install-herstart.png" src="_images/install-herstart.png" /></a>
 <p class="caption">De installer vraagt om het herstarten van de computer.  Het is mogelijk
 om dit later te doen, maar voordat de computer opnieuw is opgestart is
 de software niet volledig geïnstalleerd.</p>
@@ -236,6 +238,8 @@ automatisch worden gestart:</p>
 <ul class="simple">
 <li><em>MySQL server</em> voor tijdelijke data opslag</li>
 <li><em>HiSPARC DAQ</em> software voor data acquisitie</li>
+<li><em>HiSPARC Weather</em> software voor weer-data acquisitie (indien een weer station
+aanwezig is.</li>
 <li><em>HiSPARC Monitor</em> voor het versturen van data en het verzamelen van
 detectorstatistieken.  De monitor stelt ons in staat direct te weten
 wanneer een detector of detector pc niet meer goed functioneert.</li>
@@ -247,10 +251,10 @@ detector pc&#8217;s te installeren.</li>
 Firewall</em>. Dit is geen enkel probleem, en we raden u aan de
 waarschuwing in de toekomst te negeren (zie figuur).</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-mysql-firewall.png"><img alt="_images/screenshot-mysql-firewall.png" src="_images/screenshot-mysql-firewall.png" /></a>
+<a class="reference internal image-reference" href="_images/mysql-firewall.png"><img alt="_images/mysql-firewall.png" src="_images/mysql-firewall.png" /></a>
 </div>
 <p>Nadat alle software is opgestart zijn verschillende vensters geopend.
-Ieder venster, behalve <em>StartHiSPARCSoftware</em>, moeten blijven draaien.
+Ieder venster, behalve <em>StartHiSPARCSoftware</em>, moet blijven draaien.
 Het is dus niet mogelijk vensters te sluiten.  De vensters mogen
 natuurlijk wel geminimaliseerd worden.</p>
 <div class="admonition note">
@@ -267,7 +271,7 @@ netwerkverbindingen zonder problemen werken is het van belang de <em>Local
 Diagnostic Tool</em> te draaien.  Deze vindt u onder <em>Start -&gt; Alle
 Programma&#8217;s -&gt; HiSPARC -&gt; LocalDiagnosticTool</em>.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="_images/screenshot-localdiagnostictool.png"><img alt="_images/screenshot-localdiagnostictool.png" src="_images/screenshot-localdiagnostictool.png" /></a>
+<a class="reference internal image-reference" href="_images/localdiagnostictool.png"><img alt="_images/localdiagnostictool.png" src="_images/localdiagnostictool.png" /></a>
 <p class="caption">Screenshot van de Local Diagnostic Tool.  Op deze PC is alles in orde,
 en er is geen proxy server vereist.</p>
 </div>
@@ -303,7 +307,7 @@ data-overdracht en data-opslag onderzocht en verbeterd.</td></tr>
 <table class="docutils footnote" frame="void" id="python" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Python is een zeer veelzijdige programmeertaal die de laatste
+<tr><td class="label">[2]</td><td>Python is een zeer veelzijdige programmeertaal die de laatste
 jaren steeds populairder wordt.  Oorspronkelijk ontwikkeld aan het
 <em>Centrum voor wiskunde en informatica (CWI)</em> door <em>Guido van Rossum</em>
 (nu werkzaam bij <em>Google</em>) wordt de taal nu internationaal ontwikkeld
@@ -322,7 +326,7 @@ informatie over Python, zie de <a class="reference external" href="http://python
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="index.html">
-              <img class="logo" src="_static/logo.png" alt="Logo"/>
+              <img class="logo" src="_static/header.png" alt="Logo"/>
             </a></p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -375,20 +379,17 @@ informatie over Python, zie de <a class="reference external" href="http://python
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
           <a href="configuratie.html" title="Configuratie van de HiSPARC software"
-             >next</a> |</li>
+             >next</a></li>
         <li class="right" >
           <a href="hardware-installatie.html" title="Installatie van de HiSPARC electronica"
              >previous</a> |</li>
-        <li><a href="index.html">HiSPARC software 3.8 documentation</a> &raquo;</li> 
+        <li><a href="index.html">HiSPARC software 3.9 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2011, HiSPARC.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+        &copy; Copyright 2009-2012, HiSPARC.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

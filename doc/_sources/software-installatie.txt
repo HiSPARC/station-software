@@ -22,19 +22,17 @@ hebben we helaas niet de mankracht.
 .. note:: Op het science park en de TU/E maken we sinds kort gebruik van
    Asus EEE PC's.  Deze pc's zijn goedkoop, hebben voldoende geheugen,
    zijn energiezuinig, compact en snel genoeg voor onze doeleinden.  De
-   pc's worden geleverd met Microsoft Windows XP Home en ook dat is
-   voldoende.  Let wel: een monitor wordt *niet* meegeleverd; toetsenbord
-   en muis weer wel.  De nieuwste modellen worden echter geleverd met
+   pc's werden geleverd met Microsoft Windows XP Home en ook dat is
+   voldoende.  Let wel: een monitor wordt *niet* meegeleverd; een toetsenbord
+   en muis soms ook niet.  De nieuwste modellen worden echter geleverd met
    Windows 7, op zeer korte termijn ondersteunen we Windows 7 dan ook
    volledig.
 
-.. note:: Op aanvraag is alle broncode beschikbaar.  Wilt u zelf met
-   |labview| aan de slag, bijvoorbeeld, dan kunt u contact met ons opnemen
-   en de broncode van de data acquisitie software ontvangen.  Bent u of
+.. note:: Alle broncode van de software is beschikbaar.  Wilt u zelf met
+   |labview| (de broncode van de data acquisitie software) aan de slag of
    zijn uw leerlingen geïnteresseerd in hoe het verwerken en uploaden van
-   de |hisparc| data in zijn werk gaat, kijkt u dan na installatie in de
-   ``Z:\user\hsmonitor\src`` map.  Hier vindt u de Python [#python]_
-   broncode van de |hisparc| monitor.
+   de |hisparc| data in zijn werk gaat, kijk dan op
+   https://github.com/HiSPARC/ .
 
 
 Benodigdheden
@@ -42,7 +40,7 @@ Benodigdheden
 
 Vóór u aan de installatie begint dient u te beschikken over:
 
-* ``hisparcInstaller_v3.7.exe``
+* de HiSPARC software installer, ``hisparcInstaller_v6.10.exe``
 * een door de clustercoördinator verstrekt beveiligingscertificaat,
   bijvoorbeeld: ``sciencepark501.zip``
 * een door de clustercoördinator verstrekt stationnummer
@@ -69,7 +67,7 @@ Vóór u aan de installatie begint dient u te beschikken over:
    betekent een herstart bij stroomuitval, maar als de computer handmatig
    uit was gezet, dan blijft hij uit.
 
-.. figure:: images/screenshot-files.png
+.. figure:: images/req-files.png
    :align: center
    :scale: 85
 
@@ -87,7 +85,7 @@ Welkom
 
 Dit venster spreekt voor zich.
 
-.. figure:: images/screenshot-welkom.png
+.. figure:: images/install-welkom.png
    :align: center
    :scale: 85
 
@@ -102,7 +100,7 @@ wachtwoord.  Het beveiligingscertificaat kan geladen worden door ofwel de
 lokatie in te vullen of, handiger, op het knopje naast het veld te
 klikken en het bestand te selecteren.
 
-.. figure:: images/screenshot-stationgegevens.png
+.. figure:: images/install-stationgegevens.png
    :align: center
    :scale: 85
 
@@ -116,7 +114,7 @@ data te ontvangen, te verwerken en langdurig op te slaan, dan kunt u hier
 het adres invullen.  *Voor vrijwel alle installaties blijft dit veld
 leeg.*
 
-.. figure:: images/screenshot-lokaledatabase.png
+.. figure:: images/install-lokaledatabase.png
    :align: center
    :scale: 85
 
@@ -136,7 +134,7 @@ we op zoveel mogelijk lokaties ook weerstations gebruiken.  Weerstations
 stellen ons in staat om de |hisparc| metingen nauwkeurig te koppelen aan
 o.a. actuele luchtdruk en temperatuur waarnemingen.
 
-.. figure:: images/screenshot-detectoren.png
+.. figure:: images/install-detectoren.png
    :align: center
    :scale: 85
 
@@ -166,13 +164,13 @@ installatie.
    te betalen voor hun Windows Logo test programma.  Het enige dat dit op
    zou leveren is het niet verschijnen van deze waarschuwing.
 
-.. figure:: images/screenshot-installatie.png
+.. figure:: images/install-installatie.png
    :align: center
    :scale: 85
 
    De installatie is in volle gang.  Dit kan enige tijd duren.
 
-.. figure:: images/screenshot-tapdriver.png
+.. figure:: images/install-tapdriver.png
    :align: center
    :scale: 85
 
@@ -187,7 +185,7 @@ Na de installatie is het nodig de computer opnieuw op te starten.  Na de
 herstart zal de pc automatisch inloggen met het nieuwe |hisparc| user
 account en zal de detectorsoftware automatisch worden gestart.
 
-.. figure:: images/screenshot-herstart.png
+.. figure:: images/install-herstart.png
    :align: center
    :scale: 85
 
@@ -206,6 +204,8 @@ automatisch worden gestart:
 
 * *MySQL server* voor tijdelijke data opslag
 * *HiSPARC DAQ* software voor data acquisitie
+* *HiSPARC Weather* software voor weer-data acquisitie (indien een weer station
+  aanwezig is.
 * *HiSPARC Monitor* voor het versturen van data en het verzamelen van
   detectorstatistieken.  De monitor stelt ons in staat direct te weten
   wanneer een detector of detector pc niet meer goed functioneert.
@@ -217,12 +217,12 @@ Het starten van *MySQL* zorgt voor een waarschuwing door de *Windows
 Firewall*. Dit is geen enkel probleem, en we raden u aan de
 waarschuwing in de toekomst te negeren (zie figuur).
 
-.. figure:: images/screenshot-mysql-firewall.png
+.. figure:: images/mysql-firewall.png
    :align: center
    :scale: 85
 
 Nadat alle software is opgestart zijn verschillende vensters geopend.
-Ieder venster, behalve *StartHiSPARCSoftware*, moeten blijven draaien.
+Ieder venster, behalve *StartHiSPARCSoftware*, moet blijven draaien.
 Het is dus niet mogelijk vensters te sluiten.  De vensters mogen
 natuurlijk wel geminimaliseerd worden.
 
@@ -239,7 +239,7 @@ netwerkverbindingen zonder problemen werken is het van belang de *Local
 Diagnostic Tool* te draaien.  Deze vindt u onder *Start -> Alle
 Programma's -> HiSPARC -> LocalDiagnosticTool*.
 
-.. figure:: images/screenshot-localdiagnostictool.png
+.. figure:: images/localdiagnostictool.png
    :align: center
    :scale: 85
 

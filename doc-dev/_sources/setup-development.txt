@@ -11,35 +11,37 @@ Just follow these instructions and you can start building your own HiSPARC
 software installation packages.
 
 
-Bazaar (a Distributed Version Control System (DVCS))
+git (a Distributed Version Control System (DVCS))
 ----------------------------------------------------
 
-:Homepage: http://bazaar.canonical.com/
-:Version: 2.3.1 (Standalone)
-:Download: http://wiki.bazaar.canonical.com/WindowsDownloads
-:Direct Link: http://launchpad.net/bzr/2.3/2.3.1/+download/bzr-2.3.1-1-setup.exe
+:Homepage: http://git-scm.com/
+:Version: 1.7.10.4 (Standalone)
+:Download: http://git-scm.com/downloads
+:Direct Link (win): http://git-scm.com/download/win
+:Direct Link (mac): http://git-scm.com/download/mac
 
 Installation steps:
 
 #. Download and run the installer
-#. **Select Components:** *A typical installation* with *Windows Shell
-   Extensions (TortoiseBZR) enabled*
 
 
 HiSPARC Software Checkout
 -------------------------
 
-:Direct Link: sftp://<user>@login.nikhef.nl/project/hisparc/bzr/windows-development/trunk/
+:Direct Link: https://github.com/HiSPARC/station-software.git
+:Command Line: git clone git@github.com:HiSPARC/station-software.git
+:GitHub For Windows link: github-windows://openRepo/https://github.com/HiSPARC/station-software
+:GitHub For Mac link: github-mac://openRepo/https://github.com/HiSPARC/station-software
 
 Steps:
 
 #. Run Command Prompt (Start -> Run -> ``cmd``)
-#. ``bzr checkout sftp://<user>@login.nikhef.nl/project/hisparc/bzr/windows-development/trunk/ <checkout-location>``.
+#. ``git clone git@github.com:HiSPARC/station-software.git <checkout-location>``.
    Example::
 
     C:\Documents and Settings\David Fokkema>cd "My Documents"
     C:\Documents and Settings\David Fokkema\My Documents>mkdir HiSPARC
-    C:\Documents and Settings\David Fokkema\My Documents>bzr checkout sftp://davidf@login.nikhef.nl/project/hisparc/bzr/windows-development/trunk/ HiSPARC\trunk
+    C:\Documents and Settings\David Fokkema\My Documents>git clone git@github.com:HiSPARC/station-software.git HiSPARC\trunk
 
 #. Edit ``\persistent\configuration\startup_settings.bat`` to your
    personal taste
@@ -51,9 +53,9 @@ Notepad++ (a Source Code Editor) (Optional)
 -------------------------------------------
 
 :Homepage: http://notepad-plus-plus.org/
-:Version: 5.8.5 (Installer)
-:Download: http://notepad-plus-plus.org/downloads
-:Direct Link: http://download.tuxfamily.org/notepadplus/5.8.5/npp.5.8.5.Installer.exe
+:Version: 6.1.3 (Installer)
+:Download: http://notepad-plus-plus.org/download/
+:Direct Link: http://download.tuxfamily.org/notepadplus/6.1.3/npp.6.1.3.Installer.exe
 
 Installation steps:
 

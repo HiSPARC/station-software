@@ -113,7 +113,7 @@ detectoren en pc’s op afstand via internet te controleren (:ref:`Nagios
 <nagios>`).
 
 .. _nagios:
-.. figure:: images/screenshot-nagios.jpg
+.. figure:: images/nagios.png
    :align: center
    :width: 600
 
