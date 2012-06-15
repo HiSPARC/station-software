@@ -93,6 +93,8 @@ Section un.Uninstall
   
   # Remove startmenu items
   SetShellVarContext all
+  RMDir /r /REBOOTOK "$SMPROGRAMS\HiSPARC\Expert"
+  RMDir /r /REBOOTOK "$SMPROGRAMS\HiSPARC\Status"
   RMDir /r /REBOOTOK "$SMPROGRAMS\HiSPARC"
   # Remove StartHiSPARC from Startup folder
   Delete /REBOOTOK "$SMSTARTUP\StartHiSPARCSoftware.lnk"

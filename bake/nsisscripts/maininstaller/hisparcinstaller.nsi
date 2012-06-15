@@ -1,7 +1,9 @@
 #
 #   HiSPARC main installer
 #   R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#   Latest Revision: April 2012; RunStatus & HiSPARC_Registry shortcut
+#   Modified:       April 2012; RunStatus & HiSPARC_Registry shortcut
+#   Latest Revision: June 2012; Added HISPARC_ROOT environment variable &
+#                               grouped set of shortcuts
 #
 
 !include "FileFunc.nsh"
@@ -152,7 +154,7 @@ Section -WriteConfigFile
 SectionEnd
 
 #
-# Set the HiSPARC registry variables
+# Set the HiSPARC registry and global environment variable
 #
 Section -WriteRegKeys
   DetailPrint "WriteRegKeys"
@@ -167,6 +169,8 @@ Section -WriteRegKeys
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_WEATHER}     $HasWeatherStation
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_MAGNETIC}    $HasEarthMagnetic
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_LIGHTNING}   $HasLightning
+  
+  WriteRegStr HKLM ${ENVIRONMENT_KEY} ${HISPARC_ROOT}      $HisparcDir
 SectionEnd
 
 #
@@ -235,12 +239,15 @@ Section -AdditionalIcons
   SetShellVarContext all
   CreateDirectory "$SMPROGRAMS\HiSPARC"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\StartHiSPARCSoftware.lnk" "$HisparcDir\persistent\startstopbatch\StartUserMode.bat"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\LocalDiagnosticTool.lnk"  "$HisparcDir\user\diagnostictool\run_diagnostictool.bat"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARCDAQ.lnk"           "$HisparcDir\user\hisparcdaq\run_hisparcdaq.bat"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\DSPMon.lnk"               "$HisparcDir\user\dspmon\DSPMon.exe"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\RunStatus.lnk"            "$HisparcDir\persistent\startstopbatch\RunStatus.bat"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC_Registry.lnk"     "$HisparcDir\persistent\startstopbatch\HiSPARC_Registry.exe"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\Uninstall.lnk"            "$HisparcDir\persistent\uninstallers\mainuninst.exe"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC_ROOT.lnk"         "%windir%\explorer.exe" "$HisparcDir"
+  CreateDirectory "$SMPROGRAMS\HiSPARC\Status"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Status\RunStatus.lnk"     "$HisparcDir\persistent\startstopbatch\RunStatus.bat"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Status\Diagnostics.lnk"   "$HisparcDir\user\diagnostictool\run_diagnostictool.bat"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Status\Registry.lnk"      "$HisparcDir\persistent\startstopbatch\HiSPARC_Registry.exe"
+  CreateDirectory "$SMPROGRAMS\HiSPARC\Expert"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\DSPMon.lnk"        "$HisparcDir\user\dspmon\DSPMon.exe"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\HiSPARC_DAQ.lnk"   "$HisparcDir\user\hisparcdaq\run_hisparcdaq.bat"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\Uninstall.lnk"     "$HisparcDir\persistent\uninstallers\mainuninst.exe"
   # Add shortcuts to the startup folder
   CreateShortCut  "$SMSTARTUP\StartHiSPARCSoftware.lnk"          "$HisparcDir\persistent\startstopbatch\StartUp.bat"
 SectionEnd

@@ -39,3 +39,7 @@ Var CurVersion
 #
 !define CPUNAME_KEY         "'System\CurrentControlSet\Control\ComputerName\ActiveComputerName'"
 !define CPV_CPUNAME         "ComputerName"
+
+#
+# Registry key of (global) environment variables
+!define ENVIRONMENT_KEY     "'SYSTEM\CurrentControlSet\Control\Session Manager\Environment'"

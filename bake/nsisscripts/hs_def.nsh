@@ -2,12 +2,13 @@
 #   hs_def.nsh ------
 #   General definition file for the HiSPARC installer.
 #   R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#   Modified: Oct 2011
+#   Modified: June 2012
 #
 
 !define HISPARC_NAME                "HiSPARC"
 !define HISPARC_PUBLISHER           "Nikhef"
 !define HISPARC_WEB_SITE            "http://www.hisparc.nl"
+!define HISPARC_ROOT                "HISPARC_ROOT"
 !define HISPARC_KEY                 "SOFTWARE\${HISPARC_NAME}"
 !define HISPARC_UNINST_KEY          "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${HISPARC_NAME}"
 !define HISPARC_NSIS_RELEASE_DIR    "..\..\releases"
