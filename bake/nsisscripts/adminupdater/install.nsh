@@ -73,7 +73,7 @@ Section -TightVNCSetup
   WriteRegDWORD HKLM ${TVNCSERVER_KEY}       BlankScreen               0
   WriteRegDWORD HKLM ${TVNCSERVER_KEY}       BlockLocalInput           0
   WriteRegDWORD HKLM ${TVNCSERVER_KEY}       BlockRemoteInput          0 
-  WriteRegBin   HKLM ${TVNCSERVER_KEY}       ControlPassword           ${VNC_PASSWORD}
+  WriteRegBin   HKLM ${TVNCSERVER_KEY}       ControlPassword           ${VNC_CTRL_PASSWORD}
   WriteRegDWORD HKLM ${TVNCSERVER_KEY}       DisconnectAction          0
   WriteRegDWORD HKLM ${TVNCSERVER_KEY}       DisconnectClients         1
   WriteRegDWORD HKLM ${TVNCSERVER_KEY}       EnableFileTransfers       1

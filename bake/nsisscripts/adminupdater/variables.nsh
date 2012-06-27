@@ -21,6 +21,7 @@ Var FileName
 !define OPENVPN_KEY         "SOFTWARE\OpenVPN"
 
 # TightVNC definitions
+!define VNC_CTRL_PASSWORD   "PLACEHOLDER"
 !define VNC_PASSWORD        "PLACEHOLDER"
 !define TIGHTVNC_KEY        "'SOFTWARE\TightVNC'"
 !define TVNCCOMPONENTS_KEY  "'SOFTWARE\TightVNC\Components'"
