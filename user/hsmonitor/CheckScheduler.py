@@ -59,7 +59,7 @@ class Scheduler:
                     toremove.append(tid)
 
                 except Exception, msg:
-                    log("CheckScheduler: Uncatched exception in job: %s."
+                    log("CheckScheduler: Uncatched exception in job: %s. "
                               "Restarting..." % msg)
                     toremove.append(tid)
                     tostart.append(tid)
