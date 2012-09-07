@@ -88,6 +88,9 @@ class TriggerRate(Check):
                 except TypeError:
                     # Offset is not yet determined
                     pass
+                except ValueError:
+                    # Offset may be to large
+                    pass
                 # Calculate time difference between trigger and 'now'
                 dt = time.time() - t
             else:
