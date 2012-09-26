@@ -160,7 +160,8 @@ class Uploader(Observer, Thread):
         return returncode
 
     def run(self):
-        log("Uploader %i: Thread started for %s." % (self.serverID, self.URL))
+        log("Uploader %i: Thread started for %s." % (self.serverID, self.URL),
+            severity=2)
 
         # Initialize storage manager
         self.storageManager.openConnection()
@@ -197,11 +198,11 @@ class Uploader(Observer, Thread):
 
                 msg1 = ("Error Uploader %i: %s: Return code: %s." %
                         (self.serverID, self.URL, returncode))
-                log(msg1)
+                log(msg1, severity=2)
                 msg2 = ("Error Uploader %i: %d events attempted to upload, "
                         "number of failed attempts: %i." %
                         (self.serverID, bsize, numFailedAttempts))
-                log(msg2)
+                log(msg2, severity=2)
                 msg3 = msg1 + "\n" + msg2
                 nr = NagiosResult(2, msg3, "ServerCheck")
                 self.nagiosPush.sendToNagios(nr)
@@ -210,4 +211,4 @@ class Uploader(Observer, Thread):
                 log("Uploader %i: Sleeping for %f seconds." %
                     (self.serverID, sleeptime))
                 sleep(sleeptime)
-        log("Uploader %i: Thread stopped!" % self.serverID)
+        log("Uploader %i: Thread stopped!" % self.serverID, severity=2)

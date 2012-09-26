@@ -50,7 +50,7 @@ class HsMonitor:
             self.cfg = EConfigParser()
             self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2])
         except:
-            log("HsMonitor: Cannot open the config file!")
+            log("HsMonitor: Cannot open the config file!", severity=2)
             return
         else:
             log("HsMonitor: Initialize variables.")
@@ -112,7 +112,7 @@ class HsMonitor:
                 thread.start()
 
         except Exception, msg:
-            log("Error HsMonitor: %s" % msg)
+            log("Error HsMonitor: %s" % msg, severity=2)
             exit(1)
 
     def stopAll(self):
@@ -151,7 +151,7 @@ class HsMonitor:
         maxbs = self.cfg.ifgetint(section_name, "MaxBatchSize", 50)
         if (minbs > maxbs):
             log("Warning HsMonitor: Maximum batch size must be more than "
-                "minimum batch size. Setting maximum=minimum.")
+                "minimum batch size. Setting maximum=minimum.", severity=2)
             maxbs = minbs
         minwait = self.cfg.ifgetfloat(section_name, "MinWait", 1.0)
         maxwait = self.cfg.ifgetfloat(section_name, "MaxWait", 60.0)
@@ -174,16 +174,18 @@ def main():
             sleep(10)
             for thread in hsMonitor.hsThreads:
                 if not thread.is_alive():
-                    log("HsMonitor: Thread %s died, restarting." % thread.name)
+                    log("HsMonitor: Thread %s died, restarting." % thread.name,
+                        severity=2)
                     thread.init_restart()
                     thread.start()
-                    log("HsMonitor: Thread %s restarted." % thread.name)
+                    log("HsMonitor: Thread %s restarted." % thread.name,
+                        severity=2)
     except ThreadCrashError, exc:
         log(exc)
         log("HsMonitor: Thread %s keeps crashing, shutting down." %
-            thread.name)
+            thread.name, severity=2)
     except KeyboardInterrupt:
-        log("HsMonitor: Interrupted by keyboard, closing down.")
+        log("HsMonitor: Interrupted by keyboard, closing down.", severity=2)
 
     # Close down everything
     hsMonitor.stopAll()

@@ -47,7 +47,7 @@ class Interpreter:
             event = WeatherEvent(message)
         else:
             log("Interpreter: Unknown message type %s (%d)." %
-                eventcode, self.type_id)
+                (eventcode, self.type_id), severity=2)
             return None
 
         event.uploadCode = eventcode
@@ -105,7 +105,7 @@ class Interpreter:
                 # add parsed event_id into the list of event_ids
                 self.discard_event_ids.append(message[2])
                 log("Interpreter: Event exception (discarding event): %s." %
-                    errormsg)
+                    errormsg, severity=2)
             else:
                 # add parsed event into the list of events
                 self.eventlist.append({'header': header,

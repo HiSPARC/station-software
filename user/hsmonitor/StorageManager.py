@@ -62,7 +62,8 @@ class StorageManager(Subject):
         try:
             self.db = sqlite3.connect(self.db_name)
         except Exception, msg:
-            log("StorageManager: Error opening connection: %s." % str(msg))
+            log("StorageManager: Error opening connection: %s." % str(msg),
+                severity=2)
             raise Exception("Could not connect to sqlite3 database.")
 
     def __create(self):
@@ -158,7 +159,8 @@ class StorageManager(Subject):
                 c.close()
             except sqlite3.OperationalError, msg:
                 res = False  # Prevent events from being removed from buffer
-                log("StorageManager: Error AddEvents: %s" % str(msg))
+                log("StorageManager: Error AddEvents: %s" % str(msg),
+                    severity=2)
 
             if StorageManager.storagesize is not None:
                 StorageManager.storagesize += n_events

@@ -32,7 +32,7 @@ class HsMonitor:
             self.cfg = EConfigParser()
             self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2])
         except:
-            log("Cannot open the config file!")
+            log("Cannot open the config file!", severity=2)
             return
         else:
             log("Initilize variables")

@@ -50,7 +50,7 @@ class BufferListener(threading.Thread):
     # is always overridden.
     def run(self):
         self.interpreter.openStorage()
-        log("BufferListener: Thread started")
+        log("BufferListener: Thread started", severity=2)
         while not self.stop_event.isSet():
             # DF: Unfortunately, not reconnecting results in stale connections
             self.conn = self.getDBConnection(self.config)
@@ -65,7 +65,7 @@ class BufferListener(threading.Thread):
                     self.clearBufferMessages(event_ids)
             # wait for a polling interval
             sleep(int(self.config['poll_interval']))
-        log("BufferListener: Thread stopped!")
+        log("BufferListener: Thread stopped!", severity=2)
 
     def getDBConnection(self, dbdict):
         """Get the connection to Buffer database"""
@@ -73,7 +73,7 @@ class BufferListener(threading.Thread):
             conn = connect(host=dbdict['host'], user=dbdict['user'],
                            passwd=dbdict['password'], db=dbdict['db'])
         except OperationalError, (msg_id, msg):
-            log('BufferListener: Error: %d: %s' % (msg_id, msg))
+            log('BufferListener: Error: %d: %s' % (msg_id, msg), severity=2)
             conn = None
         else:
             log("BufferListener: Connected to the buffer database!")

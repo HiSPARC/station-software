@@ -31,7 +31,7 @@ class Check:
             maxa = float(a[1])
             return (mina, maxa)
         except:
-            log("Check: Wrong arguments given! %s" % (prange,))
+            log("Check: Wrong arguments given! %s" % (prange,), severity=2)
             sys.exit(CRITICAL)
 
 
@@ -50,7 +50,7 @@ class TriggerRate(Check):
                 crit = self.parse_range(critRange)
             except:
                 log("Check: Unable to read config.ini in %s" %
-                    self.nagiosResult.serviceName)
+                    self.nagiosResult.serviceName, severity=2)
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
@@ -137,7 +137,7 @@ class StorageSize(Check):
                 crit = self.parse_range(critRange)
             except:
                 log("Check: Unable to read config.ini in %s" %
-                    self.nagiosResult.serviceName)
+                    self.nagiosResult.serviceName, severity=2)
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
@@ -219,7 +219,7 @@ class StorageGrowth(Check):
                 crit = float(config['storagegrowth_crit'])
             except:
                 log("Check: Unable to read config.ini in %s" %
-                    self.nagiosResult.serviceName)
+                    self.nagiosResult.serviceName, severity=2)
                 self.nagiosResult.status_code = CRITICAL
 
             self.newStorageSize = StorageManager.storagesize
