@@ -69,9 +69,9 @@ def check_lvusage(warn, crit):
             print 'Memory usage: %.1f Mb' % mem
             print 'CPU time: %.2fs' % cpu
 
-            if mem < cmin or mem > cmax:
+            if not cmin < mem < cmax:
                 return CRITICAL
-            elif mem < wmin or mem > wmax:
+            elif not wmin < mem < wmax:
                 return WARNING
             else:
                 return OK
