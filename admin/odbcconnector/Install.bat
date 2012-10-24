@@ -80,8 +80,7 @@ ECHO "|                                                     |"
 ECHO "| Connector/ODBC not built.                           |"
 ECHO "|                                                     |"
 ECHO "+-----------------------------------------------------+"
-PAUSE
-EXIT /B 1
+EXIT /B 2
 
 :doError4
 ECHO "+-----------------------------------------------------+"
@@ -91,8 +90,7 @@ ECHO "|                                                     |"
 ECHO "| Existing Connector/ODBC installed. Request ignored. |"
 ECHO "|                                                     |"
 ECHO "+-----------------------------------------------------+"
-PAUSE
-EXIT /B 1
+EXIT /B 4
 
 :doError5
 ECHO "+-----------------------------------------------------+"
@@ -102,6 +100,5 @@ ECHO "|                                                     |"
 ECHO "| Can't find the Windows system directory             |"
 ECHO "|                                                     |"
 ECHO "+-----------------------------------------------------+"
-PAUSE
-EXIT /B 1
+EXIT /B 5
 

@@ -1,9 +1,9 @@
 #
 #   HiSPARC main installer
 #   R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#   Modified:       April 2012; RunStatus & HiSPARC_Registry shortcut
-#   Latest Revision: June 2012; Added HISPARC_ROOT environment variable &
-#                               grouped set of shortcuts
+#   Modified: Apr 2012; RunStatus & HiSPARC_Registry shortcut
+#             Jun 2012; Added HISPARC_ROOT environment variable & grouped set of shortcuts
+#             Aug 2012; Uninstaller cleaned and checked, labels renamed
 #
 
 !include "FileFunc.nsh"
@@ -77,31 +77,29 @@ procOk:
   ReadRegStr $CurVersion HKLM "${HISPARC_KEY}" ${REG_HISPARC_VERSION}
   StrCmp $CurVersion "" Install
   MessageBox MB_YESNO|MB_ICONQUESTION "It seems HiSPARC version $CurVersion is still installed.$\n\
-  Do you want to continue the installation?" IDYES Install IDNO NoInstall
-NoInstall:
+  Do you want to continue the installation?" IDYES inStall IDNO noInstall
+noInstall:
   Quit
-Install:
+inStall:
   Return
 FunctionEnd
 
 Function fileExists
   FileOpen $Result $FileName r
-  StrCmp $Result "" nofile
+  StrCmp $Result "" noFile
   FileClose $Result
   Return
-nofile:
+noFile:
   MessageBox MB_ICONEXCLAMATION "Cannot open $FileName!$\nMAIN-Installation aborted."
   Quit
 FunctionEnd
 
 Section -SetMainVariables
   DetailPrint "SetMainVariables"
-
   StrCpy $HisparcDir "$INSTDIR\hisparc"
   StrCpy $ConfigFile "$HisparcDir\persistent\configuration\config.ini"
   CreateDirectory    "$HisparcDir"
   DetailPrint        "HisparcDir: $HisparcDir"
-
   ${DirState} $HisparcDir $Result
   ${If} $Result < 0
     MessageBox MB_ICONEXCLAMATION "FATAL: cannot create $HisparcDir !$\nMAIN-Installation aborted."
@@ -114,19 +112,16 @@ SectionEnd
 #
 Section -CopyFilesForInstall
   DetailPrint "CopyFilesForInstall"
-
+  # Copy persistent folder
   SetOutPath "$HisparcDir"
   SetOverwrite on
   File /r "..\..\..\persistent"
-
   # Create downloads folder and copy the adminUpdater and userUnpacker into it.
   SetOutPath "$HisparcDir\persistent\downloads"
   SetOverwrite on
   File /r "..\..\releases\${HS_ADMIN_UPDATER}_v${ADMIN_VERSION}.exe" "..\..\releases\${HS_USER_UNPACKER}_v${USER_VERSION}.exe"
-
   # Create directory for the admin, user and main installer to put their uninstallers!
   CreateDirectory "$HisparcDir\persistent\uninstallers"
-
   # Copy certificate to the right location
   CopyFiles $CertZip "$HisparcDir\persistent\configuration"
 SectionEnd
@@ -136,16 +131,13 @@ SectionEnd
 #
 Section -WriteConfigFile
   DetailPrint "WriteConfigFile"
-
   StrCpy $FileName $ConfigFile
   Call fileExists
-
   # Station settings
   WriteINIStr $ConfigFile Station       Nummer      $StationNumber
   WriteINIStr $ConfigFile Station       Password    $StationPassword
   WriteINIStr $ConfigFile Station       Certificate $CertZip
   WriteINIStr $ConfigFile Upload        LocalDBUrl  $LDBHOST
-
   # Connected detectors/sensors
   WriteINIStr $ConfigFile Detector      Enabled     $HasHiSPARC
   WriteINIStr $ConfigFile Weather       Enabled     $HasWeatherStation
@@ -158,19 +150,22 @@ SectionEnd
 #
 Section -WriteRegKeys
   DetailPrint "WriteRegKeys"
+  # HiSPARC registry
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_PATH}            $HisparcDir
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_VOLATILE_PATH}   $HisparcDir
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_DISPLAY_NAME}    "${HISPARC_NAME}"
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HISPARC_VERSION} "${HISPARC_VERSION}"
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_ADMIN_VERSION}   ""   # set by the admin installer
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_USER_VERSION}    ""   # set by the user installer
+  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_RELEASE}         "${RELEASE}"
+  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_RELEASE_DATE}    "${RELEASE_DATE}"
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_STATION_NUMBER}  $StationNumber
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_HISPARC}     $HasHiSPARC
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_WEATHER}     $HasWeatherStation
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_MAGNETIC}    $HasEarthMagnetic
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_LIGHTNING}   $HasLightning
-  
-  WriteRegStr HKLM ${ENVIRONMENT_KEY} ${HISPARC_ROOT}      $HisparcDir
+  # HiSPARC environment variable
+  WriteRegStr HKLM "${ENVIRONMENT_KEY}" ${HISPARC_ROOT}    $HisparcDir
 SectionEnd
 
 #
@@ -180,7 +175,8 @@ Section -AdminInstallation
   DetailPrint "AdminInstallation"
   StrCpy $FileName "$HisparcDir\persistent\downloads\${HS_ADMIN_UPDATER}_v${ADMIN_VERSION}.exe"
   Call fileExists
-  ExecWait '$HisparcDir\persistent\downloads\${HS_ADMIN_UPDATER}_v${ADMIN_VERSION}.exe /S'
+  StrCpy $Program $FileName
+  ExecWait '"$Program" /S' $Result
 SectionEnd
 
 #
@@ -190,7 +186,8 @@ Section -UserInstallation
   DetailPrint "UserInstallation"
   StrCpy $FileName "$HisparcDir\persistent\downloads\${HS_USER_UNPACKER}_v${USER_VERSION}.exe"
   Call fileExists
-  ExecWait '$HisparcDir\persistent\downloads\${HS_USER_UNPACKER}_v${USER_VERSION}.exe /S'
+  StrCpy $Program $FileName
+  ExecWait '"$Program" /S' $Result
 SectionEnd
 
 #
@@ -215,18 +212,18 @@ SectionEnd
 #
 Section -AutologonEnabling
   DetailPrint "AutologonEnabling"
-
+  # obtain computer name
   StrCpy $CpuName "this computer"
-  ReadRegStr $0 HKLM ${CPUNAME_KEY} ${CPV_CPUNAME}
-  StrCmp $0 "" done
+  ReadRegStr $0 HKLM "${CPUNAME_KEY}" ${CPV_CPUNAME}
+  StrCmp $0 "" wrAutoLogon
   StrCpy $CpuName $0
-done:
+wrAutoLogon:
   DetailPrint "- CpuName: $CpuName"
-  WriteRegStr HKLM ${AUTOLOGON_KEY} ${ALV_USER_NAME}   "${HISPARC_USERNAME}"
-  WriteRegStr HKLM ${AUTOLOGON_KEY} ${ALV_PASSWORD}    "${HISPARC_PASSWORD}"
-  WriteRegStr HKLM ${AUTOLOGON_KEY} ${ALV_AUTO_ADMIN}  "1"
-  WriteRegStr HKLM ${AUTOLOGON_KEY} ${ALV_FORCE_ADMIN} "0"
-  WriteRegStr HKLM ${AUTOLOGON_KEY} ${ALV_DOMAIN_NAME} "$CpuName"
+  WriteRegStr HKLM "${AUTOLOGON_KEY}" ${ALV_USER_NAME}   "${HISPARC_USERNAME}"
+  WriteRegStr HKLM "${AUTOLOGON_KEY}" ${ALV_PASSWORD}    "${HISPARC_PASSWORD}"
+  WriteRegStr HKLM "${AUTOLOGON_KEY}" ${ALV_AUTO_ADMIN}  "1"
+  WriteRegStr HKLM "${AUTOLOGON_KEY}" ${ALV_FORCE_ADMIN} "0"
+  WriteRegStr HKLM "${AUTOLOGON_KEY}" ${ALV_DOMAIN_NAME} "$CpuName"
 SectionEnd
 
 #
@@ -235,7 +232,6 @@ SectionEnd
 #
 Section -AdditionalIcons
   DetailPrint "AdditionalIcons"
-
   SetShellVarContext all
   CreateDirectory "$SMPROGRAMS\HiSPARC"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\StartHiSPARCSoftware.lnk" "$HisparcDir\persistent\startstopbatch\StartUserMode.bat"
@@ -272,13 +268,10 @@ SectionEnd
 #
 Section -ReBoot
   DetailPrint "ReBoot"
-
   AccessControl::GrantOnFile "$HisparcDir" "(BU)" "FullAccess"
-
   MessageBox MB_YESNO|MB_ICONQUESTION "Do you want to restart the PC?$\n\
-  On reboot Windows automatically activates the hisparc user account and DAQ." IDYES ReBoot IDNO NoReboot
-
-ReBoot:
+  On reboot Windows automatically activates the hisparc user account and DAQ." IDYES reBoot IDNO noReboot
+reBoot:
   ExecWait "shutdown -r -f -t 0"
-NoReboot:
+noReboot:
 SectionEnd

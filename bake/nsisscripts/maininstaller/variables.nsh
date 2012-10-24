@@ -14,6 +14,7 @@ Var LDBHOST
 Var CpuName
 Var Result
 Var FileName
+Var Program
 Var CurVersion
 
 #
@@ -27,7 +28,7 @@ Var CurVersion
 #
 # Registry key of autologon and variables.
 #
-!define AUTOLOGON_KEY       "'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'"
+!define AUTOLOGON_KEY       "SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
 !define ALV_USER_NAME       "DefaultUserName"
 !define ALV_PASSWORD        "DefaultPassword"
 !define ALV_AUTO_ADMIN      "AutoAdminLogon"
@@ -37,9 +38,9 @@ Var CurVersion
 #
 # Registry key of computer name and variable.
 #
-!define CPUNAME_KEY         "'System\CurrentControlSet\Control\ComputerName\ActiveComputerName'"
+!define CPUNAME_KEY         "System\CurrentControlSet\Control\ComputerName\ActiveComputerName"
 !define CPV_CPUNAME         "ComputerName"
 
 #
 # Registry key of (global) environment variables
-!define ENVIRONMENT_KEY     "'SYSTEM\CurrentControlSet\Control\Session Manager\Environment'"
+!define ENVIRONMENT_KEY     "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"

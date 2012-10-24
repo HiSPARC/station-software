@@ -1,7 +1,7 @@
 #
 #   HiSPARC user installer
 #   R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#   Latest Revision: Oct 2011
+#   Latest Revision: Aug 2012
 #
 
 !include FileFunc.nsh
@@ -33,9 +33,8 @@ Function .onInit
   InitPluginsDir
   
   # userUnpacker needs no administrator rights
-  
   ReadRegStr $HisparcDir HKLM "${HISPARC_KEY}" ${REG_PATH}
-  StrCmp $HisparcDir "" nopath
+  StrCmp $HisparcDir "" noReg
   ${DirState} $HisparcDir $Result
   ${If} $Result < 0
     MessageBox MB_ICONEXCLAMATION "FATAL: Folder $HisparcDir does not exist!$\nUser-Installation aborted."
@@ -48,32 +47,30 @@ Function .onInit
   
   StrCpy $FileName $ConfigFile
   Call fileExists   # check if configfile exists
-
   Return
   
-nopath:
+noReg:
   MessageBox MB_ICONEXCLAMATION "FATAL: Registry entry ${REG_PATH} not set or defined!$\nUser-Installation aborted."
   Quit
 FunctionEnd
 
 Function fileExists
   FileOpen $Result $FileName r
-  StrCmp $Result "" nofile
+  StrCmp $Result "" noFile
   FileClose $Result
   Return
-nofile:
+noFile:
   MessageBox MB_ICONEXCLAMATION "Cannot open $FileName!$\nUser-Installation aborted."
   Quit
 FunctionEnd
 
 Section -InstallProgs
   DetailPrint "user-InstallProgs"
-  
   # Copy the files
   SetOutPath $HisparcDir
   SetOverwrite on
   File /r "..\..\..\user"
-  
+  # redundent check
   ${DirState} $UserDir $Result
   ${If} $Result < 0
     MessageBox MB_ICONEXCLAMATION "FATAL: Folder $UserDir does not exist!$\nUser-Installation aborted."
@@ -83,23 +80,30 @@ SectionEnd
 
 Section -Post
   DetailPrint "user-Post"
-  
   WriteINIStr $ConfigFile Version CurrentUser ${USER_VERSION}
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_USER_VERSION} ${USER_VERSION}
   WriteUninstaller "$HisparcDir\persistent\uninstallers\useruninst.exe"
 SectionEnd
 
-Function un.onUninstSuccess
-  # nothing to do
-FunctionEnd
-
 Function un.onInit
-  # nothing to do
+  ReadRegStr $HisparcDir HKLM "${HISPARC_KEY}" ${REG_PATH}
+  StrCmp $HisparcDir "" noReg
+  StrCpy $UserDir    "$HisparcDir\user"
+  ${DirState} $UserDir $Result
+  ${If} $Result < 0
+    MessageBox MB_ICONEXCLAMATION "FATAL: Folder $UserDir does not exist!$\nUser-Uninstallation aborted."
+    Quit
+  ${Endif}
+  DetailPrint "UserDir: $UserDir"
+  Return
+  
+noReg:
+  MessageBox MB_ICONEXCLAMATION "FATAL: Registry entry ${REG_PATH} not set or defined!$\nUser-Uninstallation aborted."
+  Quit
 FunctionEnd
 
 Section un.Uninstall
   DetailPrint "user-un.Uninstall"
-  
   RMDir /r /REBOOTOK "$UserDir"
   Delete "$HisparcDir\persistent\uninstallers\useruninst.exe"
   SetAutoClose true

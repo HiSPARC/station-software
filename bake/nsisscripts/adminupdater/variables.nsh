@@ -23,9 +23,9 @@ Var FileName
 # TightVNC definitions
 !define VNC_CTRL_PASSWORD   "PLACEHOLDER"
 !define VNC_PASSWORD        "PLACEHOLDER"
-!define TIGHTVNC_KEY        "'SOFTWARE\TightVNC'"
-!define TVNCCOMPONENTS_KEY  "'SOFTWARE\TightVNC\Components'"
-!define TVNCSERVER_KEY      "'SOFTWARE\TightVNC\Server'"
+!define TIGHTVNC_KEY        "SOFTWARE\TightVNC"
+!define TVNCCOMPONENTS_KEY  "SOFTWARE\TightVNC\Components"
+!define TVNCSERVER_KEY      "SOFTWARE\TightVNC\Server"
 
 # Register key of ODBC
 !define ODBCDRV             "MySQL ODBC 5.1 Driver"
@@ -34,3 +34,7 @@ Var FileName
 !define ODBCDRVPATH         "C:\WINDOWS\system32\myodbc5.dll"
 !define BUFFERPASS          "PLACEHOLDER"
 !define BDBHOST             "localhost"
+
+# LabVIEW definitions
+!define LABVIEW_KEY         "SOFTWARE\National Instruments\Common\Installer"
+!define LABVIEW_DIR         "NIDIR"

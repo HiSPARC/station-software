@@ -52,8 +52,7 @@ ECHO "|                                                     |"
 ECHO "| Connector/ODBC does not appear to be installed.     |"
 ECHO "|                                                     |"
 ECHO "+-----------------------------------------------------+"
-PAUSE
-EXIT /B 1
+EXIT /B 2
 
 :doError4
 ECHO "+-----------------------------------------------------+"
@@ -63,6 +62,5 @@ ECHO "|                                                     |"
 ECHO "| Can't find the Windows system directory             |"
 ECHO "|                                                     |"
 ECHO "+-----------------------------------------------------+"
-PAUSE
-EXIT /B 1
+EXIT /B 4
 

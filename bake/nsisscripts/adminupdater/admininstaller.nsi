@@ -1,7 +1,7 @@
 #
 #   HiSPARC admin installer
 #   R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#   Latest Revision: Oct 2011
+#   Latest Revision: Aug 2012
 #
 
 !include FileFunc.nsh
@@ -24,7 +24,6 @@ Function .onInit
   DetailPrint "admin-.onInit"
   
   InitPluginsDir
-  
   # check if user has administrator rights
   xtInfoPlugin::IsAdministrator
   Pop $0
@@ -34,7 +33,7 @@ Function .onInit
   ${EndIf}
   
   ReadRegStr $HisparcDir HKLM "${HISPARC_KEY}" ${REG_PATH}
-  StrCmp $HisparcDir "" nopath
+  StrCmp $HisparcDir "" noReg
   ${DirState} $HisparcDir $Result
   ${If} $Result < 0
     MessageBox MB_ICONEXCLAMATION "FATAL: Folder $HisparcDir does not exist!$\nAdmin-Installation aborted."
@@ -53,19 +52,18 @@ Function .onInit
   Call fileExists   # check if certificate exists
   Return
   
-nopath:
+noReg:
   MessageBox MB_ICONEXCLAMATION "FATAL: Registry entry ${REG_PATH} not set or defined!$\nAdmin-Installation aborted."
   Quit
-  
 FunctionEnd
 
 Function fileExists
   FileOpen $Result $FileName r
-  StrCmp $Result "" nofile
+  StrCmp $Result "" noFile
   FileClose $Result
   Return
-nofile:
-  MessageBox MB_ICONEXCLAMATION "Cannot open $FileName!$\nADMIN-Installation aborted."
+noFile:
+  MessageBox MB_ICONEXCLAMATION "Cannot open $FileName!$\nAdmin-Installation aborted."
   Quit
 FunctionEnd
 
@@ -74,27 +72,34 @@ FunctionEnd
 #
 Section -InstallProgs
   DetailPrint "admin-InstallProgs"
-  
   # copy the files
   SetOutPath "$HisparcDir"
   SetOverwrite on
   File /r "..\..\..\admin"
+  # redundent check
+  ${DirState} $AdminDir $Result
+  ${If} $Result < 0
+    MessageBox MB_ICONEXCLAMATION "FATAL: Folder $AdminDir does not exist!$\nAdmin-Installation aborted."
+    Quit
+  ${Endif}
 SectionEnd
 
 !include install.nsh
 !include firewall.nsh
 
+#
+# Post admin installation
+#
 Section -Post
   DetailPrint "admin-Post"
-  
+  # set admin version
   WriteINIStr $ConfigFile Version CurrentAdmin ${ADMIN_VERSION}
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_ADMIN_VERSION} ${ADMIN_VERSION}
-  
-  ReadRegStr $NIdir HKLM "SOFTWARE\National Instruments\Common\Installer\" "NIDIR"
+  # LabVIEW
+  ReadRegStr $NIdir HKLM "${LABVIEW_KEY}" ${LABVIEW_DIR}
   AccessControl::GrantOnFile "$NIdir" "(BU)" "FullAccess"
-  
-  RMDir /r /REBOOTOK "$AdminDir\niruntimeinstaller"
-
+  # RMDir /r /REBOOTOK "$AdminDir\niruntimeinstaller"
+  # admin uninstaller
   WriteUninstaller "$HisparcDir\persistent\uninstallers\adminuninst.exe"
 SectionEnd
 

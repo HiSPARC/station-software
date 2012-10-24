@@ -37,7 +37,6 @@ SectionEnd
 #
 Section -OpenVPNSetup
   DetailPrint "admin-OpenVPNSetup"
-  
   # register
   WriteRegStr HKLM ${OPENVPN_KEY} ""         "$AdminDir"
   WriteRegStr HKLM ${OPENVPN_KEY} config_dir "$AdminDir\OpenVPN\config"
@@ -47,9 +46,11 @@ Section -OpenVPNSetup
   WriteRegStr HKLM ${OPENVPN_KEY} log_dir    "$AdminDir\OpenVPN\log"
   WriteRegStr HKLM ${OPENVPN_KEY} priority   "NORMAL_PRIORITY_CLASS"
   # install tap driver
-  ExecWait '"$AdminDir\openvpn\bin\tapinstall.exe" install "$AdminDir\openvpn\driver\oemWin2k.inf" tap0901'
+  ExecWait '"$AdminDir\openvpn\bin\tapinstall.exe" install "$AdminDir\openvpn\driver\oemWin2k.inf" tap0901' $Result
+  DetailPrint "VPN tapinstall: $Result"
   # service
-  ExecWait '"$AdminDir\openvpn\bin\openvpnserv.exe" -install'
+  ExecWait '"$AdminDir\openvpn\bin\openvpnserv.exe" -install' $Result
+  DetailPrint "VPN openvpnserv: $Result"
   # unzip certificate zip
   nsisunz::UnzipToLog "$CertZip" "$AdminDir\openvpn\config"
 SectionEnd
@@ -59,7 +60,6 @@ SectionEnd
 #
 Section -TightVNCSetup
   DetailPrint "admin-TightVNCSetup"
-  
   # register
   StrCpy $TvncFolder "$AdminDir\tightvnc"
   WriteRegStr   HKLM ${TIGHTVNC_KEY}         Path                      "$TvncFolder"
@@ -101,7 +101,8 @@ Section -TightVNCSetup
   WriteRegDWORD HKLM ${TVNCSERVER_KEY}       VideoRecognitionInterval  3000
   # service
   StrCpy $Program "$TvncFolder\${VNC_SERVICENAME}.exe"
-  ExecWait '"$Program" -install -silent'
+  ExecWait '"$Program" -install -silent' $Result
+  DetailPrint "VNC tightvnc: $Result"
 SectionEnd
 
 #
@@ -109,8 +110,8 @@ SectionEnd
 #
 Section -NscpSetup
   DetailPrint "admin-NscpSetup"
-  
-  ExecWait '"$AdminDir\nsclientpp\NSClient++.exe" /install'
+  ExecWait '"$AdminDir\nsclientpp\NSClient++.exe" /install' $Result
+  DetailPrint "Nagios NSClient++: $Result"
 SectionEnd
 
 #
@@ -118,9 +119,9 @@ SectionEnd
 #
 Section -ODBCSetup
   DetailPrint "admin-ODBCSetup"
-
   # install
-  ExecWait '"$AdminDir\odbcconnector\Install_HiSPARC.bat"'
+  ExecWait '"$AdminDir\odbcconnector\Install_HiSPARC.bat"' $Result
+  DetailPrint "ODBC install: $Result"
   # register
   WriteRegStr HKLM ${ODBCREGKEY}     DATABASE    "buffer"
   WriteRegStr HKLM ${ODBCREGKEY}     DESCRIPTION "HiSPARC buffer"
@@ -137,8 +138,8 @@ SectionEnd
 #
 Section -LabviewRuntimeSetup
   DetailPrint "admin-LabviewRuntimeSetup"
-  
-  ExecWait "$AdminDir\niruntimeinstaller\setup.exe hisparcspec.ini /acceptlicenses yes /r:n /q"
+  ExecWait '"$AdminDir\niruntimeinstaller\setup.exe" hisparcspec.ini /AcceptLicenses yes /r:n /q' $Result
+  DetailPrint "LabVIEW setup: $Result"
 SectionEnd
 
 #
@@ -146,16 +147,15 @@ SectionEnd
 #
 Section -FTDIDrivers
   DetailPrint "admin-FTDIDrivers"
-  
-  ExecWait "$AdminDir\ftdi_drivers\dpinst.exe /q"
+  ExecWait '"$AdminDir\ftdi_drivers\dpinst.exe" /q' $Result
+  DetailPrint "FTDI dpinst: $Result"
 SectionEnd
 
 #
 # Post install page. Stratup the services
 #
-Section RegisterServices
+Section -RegisterServices
   DetailPrint "admin-RegisterServices"
-  
   # Put the OpenVPN service to automatic and start it.
   SimpleSC::SetServiceStartType ${VPN_SERVICENAME} 2
   SimpleSC::StartService        ${VPN_SERVICENAME}
