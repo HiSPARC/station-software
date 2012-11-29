@@ -11,7 +11,7 @@ ifeq ($(strip $(shell git status --porcelain | wc -l)), 0)
 	make -C doc-dev/ html
 	make -C doc-dev/ latexpdf
 	mkdir TO_DELETE
-	mv -fv * TO_DELETE
+	mv -v * TO_DELETE
 	mkdir doc
 	mkdir doc-dev
 	mv -fv TO_DELETE/doc/_build/html/* doc/
