@@ -55,12 +55,12 @@ class Scheduler:
                     nagiosPush.sendToNagios(returnValues)
 
                 except StopIteration:
-                    log("CheckScheduler: JOB STOPPED!")
+                    log("CheckScheduler: JOB STOPPED!", severity=2)
                     toremove.append(tid)
 
                 except Exception, msg:
                     log("CheckScheduler: Uncatched exception in job: %s. "
-                              "Restarting..." % msg)
+                              "Restarting..." % msg, severity=2)
                     toremove.append(tid)
                     tostart.append(tid)
 
@@ -118,7 +118,7 @@ class CheckScheduler(threading.Thread):
     # The threading.Thread.start() calls threading.Thread.run(),
     # which is always overridden.
     def run(self):
-        log("CheckScheduler: Thread started!")
+        log("CheckScheduler: Thread started!", severity=2)
         self.storageManager.openConnection()
 
         ### Trigger rate:
@@ -151,4 +151,4 @@ class CheckScheduler(threading.Thread):
                 break
             except:
                 pass
-        log("CheckScheduler: Thread stopped!")
+        log("CheckScheduler: Thread stopped!", severity=2)

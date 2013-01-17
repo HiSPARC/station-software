@@ -1,6 +1,6 @@
 ; FTDIBUS.INF
 ; 
-; Copyright © 2000-2011 Future Technology Devices International Limited
+; Copyright © 2000-2012 Future Technology Devices International Limited
 ; 
 ; USB serial converter driver installation file for Windows 2000, XP, Server 2003, Vista, Server 2008,
 ; Windows 7 and Server 2008 R2 (x86 and x64).
@@ -33,7 +33,7 @@ Class=USB
 ClassGUID={36fc9e60-c465-11cf-8056-444553540000}
 Provider=%FTDI%
 CatalogFile=ftdibus.cat
-DriverVer=03/18/2011,2.08.14
+DriverVer=04/10/2012,2.08.24
 
 [SourceDisksNames]
 1=%DriversDisk%,,,
@@ -71,6 +71,7 @@ FtdiBus.NTamd64.Copy3 = 10,syswow64
 %USB\VID_0403&PID_6011&MI_02.DeviceDesc%=FtdiBus.NT,USB\VID_0403&PID_6011&MI_02
 %USB\VID_0403&PID_6011&MI_03.DeviceDesc%=FtdiBus.NT,USB\VID_0403&PID_6011&MI_03
 %USB\VID_0403&PID_6014.DeviceDesc%=FtdiBus.NT,USB\VID_0403&PID_6014
+%USB\VID_0403&PID_6015.DeviceDesc%=FtdiBus.NT,USB\VID_0403&PID_6015
 
 [FtdiHw.NTamd64]
 %USB\VID_0403&PID_6001.DeviceDesc%=FtdiBus.NTamd64,USB\VID_0403&PID_6001
@@ -81,6 +82,7 @@ FtdiBus.NTamd64.Copy3 = 10,syswow64
 %USB\VID_0403&PID_6011&MI_02.DeviceDesc%=FtdiBus.NTamd64,USB\VID_0403&PID_6011&MI_02
 %USB\VID_0403&PID_6011&MI_03.DeviceDesc%=FtdiBus.NTamd64,USB\VID_0403&PID_6011&MI_03
 %USB\VID_0403&PID_6014.DeviceDesc%=FtdiBus.NTamd64,USB\VID_0403&PID_6014
+%USB\VID_0403&PID_6015.DeviceDesc%=FtdiBus.NTamd64,USB\VID_0403&PID_6015
 
 [ControlFlags]
 ExcludeFromSelect=*
@@ -149,5 +151,6 @@ USB\VID_0403&PID_6011&MI_01.DeviceDesc="USB Serial Converter B"
 USB\VID_0403&PID_6011&MI_02.DeviceDesc="USB Serial Converter C"
 USB\VID_0403&PID_6011&MI_03.DeviceDesc="USB Serial Converter D"
 USB\VID_0403&PID_6014.DeviceDesc="USB Serial Converter"
+USB\VID_0403&PID_6015.DeviceDesc="USB Serial Converter"
 SvcDesc="USB Serial Converter Driver"
 ClassName="USB"

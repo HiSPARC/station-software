@@ -1,6 +1,6 @@
 ; FTDIPORT.INF
 ; 
-; Copyright © 2000-2011 Future Technology Devices International Limited
+; Copyright © 2000-2012 Future Technology Devices International Limited
 ;
 ; USB serial port driver installation file for Windows 2000, XP, Server 2003, Vista, Server 2008,
 ; Windows 7 and Server 2008 R2 (x86 and x64).
@@ -33,7 +33,7 @@ Class=Ports
 ClassGUID={4d36e978-e325-11ce-bfc1-08002be10318}
 Provider=%FTDI%
 CatalogFile=ftdiport.cat
-DriverVer=03/18/2011,2.08.14
+DriverVer=04/10/2012,2.08.24
 
 [SourceDisksNames]
 1=%DriversDisk%,,,
@@ -64,12 +64,14 @@ ExcludeFromSelect=*
 %VID_0403&PID_6010.DeviceDesc%=FtdiPort.NT,FTDIBUS\COMPORT&VID_0403&PID_6010
 %VID_0403&PID_6011.DeviceDesc%=FtdiPort.NT,FTDIBUS\COMPORT&VID_0403&PID_6011
 %VID_0403&PID_6014.DeviceDesc%=FtdiPort.NT,FTDIBUS\COMPORT&VID_0403&PID_6014
+%VID_0403&PID_6015.DeviceDesc%=FtdiPort.NT,FTDIBUS\COMPORT&VID_0403&PID_6015
 
 [FtdiHw.NTamd64]
 %VID_0403&PID_6001.DeviceDesc%=FtdiPort.NTamd64,FTDIBUS\COMPORT&VID_0403&PID_6001
 %VID_0403&PID_6010.DeviceDesc%=FtdiPort.NTamd64,FTDIBUS\COMPORT&VID_0403&PID_6010
 %VID_0403&PID_6011.DeviceDesc%=FtdiPort.NTamd64,FTDIBUS\COMPORT&VID_0403&PID_6011
 %VID_0403&PID_6014.DeviceDesc%=FtdiPort.NTamd64,FTDIBUS\COMPORT&VID_0403&PID_6014
+%VID_0403&PID_6015.DeviceDesc%=FtdiPort.NTamd64,FTDIBUS\COMPORT&VID_0403&PID_6015
 
 [FtdiPort.NT.AddService]
 DisplayName    = %SvcDesc%
@@ -158,6 +160,7 @@ VID_0403&PID_6001.DeviceDesc="USB Serial Port"
 VID_0403&PID_6010.DeviceDesc="USB Serial Port"
 VID_0403&PID_6011.DeviceDesc="USB Serial Port"
 VID_0403&PID_6014.DeviceDesc="USB Serial Port"
+VID_0403&PID_6015.DeviceDesc="USB Serial Port"
 SvcDesc="USB Serial Port Driver"
 SerEnum.SvcDesc="Serenum Filter Driver"
 
