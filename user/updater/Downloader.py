@@ -23,13 +23,3 @@ class Downloader():
         else:
             log('File already exist!')
         return fileLocation
-
-#Main function:
-#ADL: This links to an old version?
-#URL = ('http://www.hisparc.nl/drupal/files/'
-#       'HiSPARC%20Software%20Installatie%20V1-0.pdf')
-
-#downloader = Downloader()
-#downloadLocation = downloader.config.get('UpdateLocation', 'AdminLocation')
-
-#location = downloader.downloadUpdate(downloadLocation, URL)

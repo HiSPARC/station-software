@@ -25,16 +25,16 @@ class Updater:
     # End time of the interval in which checks may be performed on a
     # day (in seconds) e.g. 0 is midnight, 7200 is 2am
     timeStopCheckInterval = 0
-    checkerInitialDelay   = 0  # Bool with if there is an initial delay
+    checkerInitialDelay = 0  # Bool with if there is an initial delay
     scheduler = sched.scheduler(time.time, time.sleep)
     checker = Checker()
 
     # Check if there is already an update to install in admin mode and if the
     # user is in admin mode
     def checkIfUpdateToInstall(self):
-        isAdmin      = checkFiles.checkIfAdmin()
+        isAdmin = checkFiles.checkIfAdmin()
         currentAdmin = self.config.get("Version", "CurrentAdmin")
-        currentUser  = self.config.get("Version", "CurrentUser")
+        currentUser = self.config.get("Version", "CurrentUser")
 
         print "Is administrator:      ", isAdmin
         print "Current Admin Version: ", currentAdmin
@@ -60,7 +60,7 @@ class Updater:
 
             #Check if you are allowed to update already
             #(in the interval between starttime and stoptime)
-            if ((today_at_starttime < now) & (now < today_at_stoptime)):
+            if today_at_starttime < now < today_at_stoptime:
                 today_random_moment = random.randint(now, today_at_stoptime)
                 return today_random_moment - now
             else:
@@ -78,7 +78,7 @@ class Updater:
         self.scheduler.run()
 
     def performContinuousCheck(self):
-        while (True):
+        while True:
             self.scheduler.enter(self.timeBetweenChecks, 1,
                                  self.checker.checkForUpdates, '')
             self.scheduler.run()
