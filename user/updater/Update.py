@@ -4,15 +4,15 @@ import time
 import random
 import os
 import sys
-import checkFiles
 
 sys.path.append("../pythonshared")
 
+import checkFiles
 from Checker import Checker
-from hslog   import log, setLogMode, MODE_BOTH, SEVERITY_CRITICAL
+from hslog import log, setLogMode, MODE_BOTH, SEVERITY_CRITICAL
 
-CONFIG_INI       = "config.ini"
-PERSISTENT_INI   = "../../persistent/configuration/config.ini"
+CONFIG_INI = "config.ini"
+PERSISTENT_INI = "../../persistent/configuration/config.ini"
 ADMINUPDATE_NAME = "adminUpdater"
 
 
@@ -36,7 +36,7 @@ class Updater:
         currentAdmin = self.config.get("Version", "CurrentAdmin")
         currentUser = self.config.get("Version", "CurrentUser")
 
-        print "Is administrator:      ", isAdmin
+        print "You are Administrator: ", isAdmin
         print "Current Admin Version: ", currentAdmin
         print "Current User Version:  ", currentUser
 
