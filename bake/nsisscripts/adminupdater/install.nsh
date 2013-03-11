@@ -1,6 +1,7 @@
 #
 #   install.nsh ------
 #   Admin installer.
+#   Jan 2013: multiple (2) NI-RunTimeEngines
 #
 
 #
@@ -27,6 +28,8 @@ Section -CheckExecutables
   StrCpy $FileName "$AdminDir\odbcconnector\Install_HiSPARC.bat"
   Call fileExists
   StrCpy $FileName "$AdminDir\niruntimeinstaller\setup.exe"
+  Call fileExists
+  StrCpy $FileName "$AdminDir\nirte2012\setup.exe"
   Call fileExists
   StrCpy $FileName "$AdminDir\ftdi_drivers\dpinst.exe"
   Call fileExists
@@ -134,12 +137,15 @@ Section -ODBCSetup
 SectionEnd
 
 #
-# Install LabVIEW
+# Install LabVIEW Run-Time-Engine
+# Two versions are installed: 8.2.1 and 2012
 #
 Section -LabviewRuntimeSetup
   DetailPrint "admin-LabviewRuntimeSetup"
-  ExecWait '"$AdminDir\niruntimeinstaller\setup.exe" hisparcspec.ini /AcceptLicenses yes /r:n /q' $Result
-  DetailPrint "LabVIEW setup: $Result"
+  ExecWait '"$AdminDir\niruntimeinstaller\setup.exe" /AcceptLicenses yes /r:n /q' $Result
+  DetailPrint "LabVIEW RTE 8.2.1 setup: $Result"
+  ExecWait '"$AdminDir\nirte2012\setup.exe" /AcceptLicenses yes /r:n /q' $Result
+  DetailPrint "LabVIEW RTE 2012 setup: $Result"
 SectionEnd
 
 #

@@ -83,9 +83,9 @@ def start():
         log("Starting LabVIEW weather...")
         if config.getboolean("Weather", "Enabled"):
             handler = StartStop()
-            handler.exeName = "hisparcweather.exe"
+            handler.exeName = "HiSPARC Weather Station.exe"
             handler.currentDirectory = "%s/user/hisparcweather" % HS_ROOT
-            handler.command = "%s/user/hisparcweather/hisparcweather.exe" % HS_ROOT
+            handler.command = "%s/user/hisparcweather/HiSPARC Weather Station.exe" % HS_ROOT
 
             res = handler.startProcess()
         else:

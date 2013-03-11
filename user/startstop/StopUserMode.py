@@ -30,7 +30,7 @@ def stop():
         #stop LabVIEW weather
         log("Stopping LabVIEW weather...")
         handler         = StartStop()
-        handler.exeName = "hisparcweather.exe"
+        handler.exeName = "HiSPARC Weather Station.exe"
 
         res = handler.stopProcess()
         log("Status: " + status(res))

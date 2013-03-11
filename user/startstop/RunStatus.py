@@ -53,7 +53,7 @@ def check():
         app = "LabVIEW Weather"
         if config.getboolean("Weather", "Enabled"):
             handler         = StartStop()
-            handler.exeName = "hisparcweather.exe"
+            handler.exeName = "HiSPARC Weather Station.exe"
             res = handler.probeProcess()
         else:
             res = DISABLED

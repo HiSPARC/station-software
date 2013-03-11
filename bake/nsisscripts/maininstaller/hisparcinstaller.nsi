@@ -4,6 +4,7 @@
 #   Modified: Apr 2012; RunStatus & HiSPARC_Registry shortcut
 #             Jun 2012; Added HISPARC_ROOT environment variable & grouped set of shortcuts
 #             Aug 2012; Uninstaller cleaned and checked, labels renamed
+#             Jan 2013; Release number part of version
 #
 
 !include "FileFunc.nsh"
@@ -11,9 +12,7 @@
 
 SetCompressor lzma
 
-!define PROC                32      # 32 bits (x86) version only
-
-!define HISPARC_VERSION     "${ADMIN_VERSION}.${USER_VERSION}"
+!define HISPARC_VERSION     "${ADMIN_VERSION}.${USER_VERSION}.${RELEASE}"
 
 !include ..\hs_def.nsh
 !include interface2.nsh
@@ -26,7 +25,6 @@ InstallDir  "$PROGRAMFILES\${HISPARC_NAME}"
 
 LangString  lsWrongVersion ${LANG_ENGLISH} "HiSPARC runs only on Windows XP or 7."
 LangString  lsNoAdmin      ${LANG_ENGLISH} "You have no administrator rights."
-LangString  lsWrongProc    ${LANG_ENGLISH} "This distribution is for ${PROC} bits computers only."
 
 ShowInstDetails   show
 ShowUninstDetails show
@@ -65,19 +63,18 @@ Function .onInit
   # Check for 32-bit computers
   System::Call "kernel32::GetCurrentProcess() i .s"
   System::Call "kernel32::IsWow64Process(i s, *i .r0)"
-  IntCmp $0 0 is32
-  IntCmp ${PROC} 64 procOk
-wrongProc:
-  MessageBox MB_ICONEXCLAMATION $(lsWrongProc)
-  Abort $(lsWrongProc)
-is32:
-  IntCmp ${PROC} 32 procOk wrongProc wrongProc
-procOk:
+  StrCmp $0 "0" proCeed isNot32
 
+isNot32:
+  MessageBox MB_YESNO|MB_ICONQUESTION "WARNING: No 32-bit architecture. Probably 64-bit.$\n\
+  Do you want to continue?" IDYES proCeed IDNO noInstall
+
+proCeed:
   ReadRegStr $CurVersion HKLM "${HISPARC_KEY}" ${REG_HISPARC_VERSION}
   StrCmp $CurVersion "" Install
   MessageBox MB_YESNO|MB_ICONQUESTION "It seems HiSPARC version $CurVersion is still installed.$\n\
   Do you want to continue the installation?" IDYES inStall IDNO noInstall
+  
 noInstall:
   Quit
 inStall:

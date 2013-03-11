@@ -98,7 +98,6 @@ Section -Post
   # LabVIEW
   ReadRegStr $NIdir HKLM "${LABVIEW_KEY}" ${LABVIEW_DIR}
   AccessControl::GrantOnFile "$NIdir" "(BU)" "FullAccess"
-  # RMDir /r /REBOOTOK "$AdminDir\niruntimeinstaller"
   # admin uninstaller
   WriteUninstaller "$HisparcDir\persistent\uninstallers\adminuninst.exe"
 SectionEnd
