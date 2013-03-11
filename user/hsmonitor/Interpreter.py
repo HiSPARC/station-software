@@ -6,10 +6,10 @@ creates Events from them. The Events are passed on to the StorageManager.
 """
 
 from hslog import log
-from CIC import CIC
-from ERR import ERR
-from CFG import CFG
-from CMP import CMP
+from HiSPARCEvent import CIC
+from HiSPARCError import ERR
+from HiSPARCConfig import CFG
+from HiSPARCComparator import CMP
 from WeatherEvent import WeatherEvent
 
 # create a dictionary to store all type_codes of events
