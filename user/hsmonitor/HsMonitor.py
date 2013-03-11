@@ -27,12 +27,12 @@ sys.path.append("../pythonshared")
 from time  import sleep
 from hslog import log, setLogMode, MODE_BOTH
 
-from EConfigParser  import EConfigParser
+from EConfigParser import EConfigParser
 from BufferListener import BufferListener
-from Interpreter    import Interpreter
+from Interpreter import Interpreter
 from CheckScheduler import CheckScheduler
 from StorageManager import StorageManager
-from Uploader       import Uploader
+from Uploader import Uploader
 from UserExceptions import ThreadCrashError
 
 # Default configuration file path
