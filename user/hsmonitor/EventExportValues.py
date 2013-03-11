@@ -28,7 +28,8 @@ export_values = {
         ('N', 'TR2', 'mas_tr2'),
         ('N', 'TR3', 'slv_tr1'),
         ('N', 'TR4', 'slv_tr2')],
-    'ERR': [('N', 'ERRMSG', 'error_message')],
+    'ERR': [
+        ('N', 'ERRMSG', 'error_message')],
     'CFG': [
         ('N', 'CFG_GPS_LAT', 'cfg_gps_latitude'),
         ('N', 'CFG_GPS_LONG', 'cfg_gps_longitude'),
@@ -136,4 +137,22 @@ export_values = {
         ('Y', 'WTR_HEAT_INDEX', 'heatIndex'),
         ('Y', 'WTR_DEW_POINT', 'dewPoint'),
         ('Y', 'WTR_WIND_CHILL', 'windChill')],
+    'WER': [
+        ('N', 'LER_ERRMSG', 'error_message')],
+    'WCG': [],
+    'LIT': [
+        ('N', 'LIT_CORR_DIST', 'correctedDistance'),
+        ('N', 'LIT_UNCORR_DIST', 'uncorrectedDistance'),
+        ('N', 'LIT_UNCORR_ANGLE', 'uncorrectedAngle'),
+        ('N', 'LIT_CORR_ANGLE', 'correctedAngle')],
+    'LER': [
+        ('N', 'LER_ERRMSG', 'error_message')],
+    'LCG': [],
+    'LST': [
+        ('N', 'LST_CLOSE_RATE', 'closeStrikeRate'),
+        ('N', 'LST_TOTAL_RATE', 'totalStrikeRate'),
+        ('N', 'LST_CLOSE_ALARM', 'closeAlarm'),
+        ('N', 'LST_SEVERE_ALARM', 'severeAlarm'),
+        ('N', 'LST_CURR_HEADING', 'currentHeading')],
+    'LNS': [], # This is an empty message
 }

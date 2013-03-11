@@ -11,10 +11,18 @@ from HiSPARCError import ERR
 from HiSPARCConfig import CFG
 from HiSPARCComparator import CMP
 from WeatherEvent import WeatherEvent
+from WeatherError import WeatherError
+from WeatherConfig import WeatherConfig
+from LightningEvent import LightningEvent
+from LightningError import LightningError
+from LightningConfig import LightningConfig
+from LightningStatus import LightningStatus
+from LightningNoise import LightningNoise
 
 # create a dictionary to store all type_codes of events
 event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP',
-                    '16': 'WTR'}
+                    '16': 'WTR', '17': 'WER', '18': 'WCG',
+                    '32': 'LIT', '33': 'LER', '34': 'LCG', '35': 'LST', '36': 'LNS',}
 
 
 class TriggerRateHolder:
@@ -45,6 +53,20 @@ class Interpreter:
             event = CMP(message)
         elif eventcode == 'WTR':
             event = WeatherEvent(message)
+        elif eventcode == 'WER':
+            event = LightningError(message)
+        elif eventcode == 'WCG':
+            event = LightningConfig(message)
+        elif eventcode == 'LIT':
+            event = LightningEvent(message)
+        elif eventcode == 'LER':
+            event = LightningError(message)
+        elif eventcode == 'LCG':
+            event = LightningConfig(message)
+        elif eventcode == 'LST':
+            event = LightningStatus(message)
+        elif eventcode == 'LNS':
+            event = LightningNoise(message)
         else:
             log("Interpreter: Unknown message type %s (%d)." %
                 (eventcode, self.type_id), severity=2)
