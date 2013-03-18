@@ -54,9 +54,9 @@ class Interpreter:
         elif eventcode == 'WTR':
             event = WeatherEvent(message)
         elif eventcode == 'WER':
-            event = LightningError(message)
+            event = WeatherError(message)
         elif eventcode == 'WCG':
-            event = LightningConfig(message)
+            event = WeatherConfig(message)
         elif eventcode == 'LIT':
             event = LightningEvent(message)
         elif eventcode == 'LER':
