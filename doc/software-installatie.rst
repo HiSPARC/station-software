@@ -5,7 +5,7 @@ Installatie van de |hisparc| software
 
 De software bestaat uit één installatiepakket [#OOTI]_.  We raden aan om
 de software te installeren op een moderne pc met een schone installatie
-van Microsoft Windows XP.  Windows Vista en Windows 7 zouden in principe
+van Microsoft Windows XP of Windows 7 zouden in principe
 ook moeten werken, maar daarop is de software (nog) niet getest.  De keuze
 voor Windows is slechts gemaakt omdat een groot aantal systeembeheerders
 in het voortgezet onderwijs alleen ervaring heeft met Windows en een
@@ -237,7 +237,8 @@ HiSPARC Local Diagnostic Tool
 Om te controleren of de installatie succesvol is verlopen en alle
 netwerkverbindingen zonder problemen werken is het van belang de *Local
 Diagnostic Tool* te draaien.  Deze vindt u onder *Start -> Alle
-Programma's -> HiSPARC -> LocalDiagnosticTool*.
+Programmma's -> HiSPARC -> LocalDiagnosticTool* of *Start -> 
+Programs -> HiSPARC -> Status -> Diagnostics*.
 
 .. figure:: images/localdiagnostictool.png
    :align: center

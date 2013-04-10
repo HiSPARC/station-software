@@ -15,4 +15,4 @@ The documentation to set up your own development environment, as well as
 the documentation that describes how the initial environment was created,
 can be found in the ``doc-dev/`` subdirectory.
 
-The documentation can be read online at http://hisparc.github.com/station-software/.
+The documentation can be read online at http://docs.hisparc.nl/station-software/.
