@@ -1,6 +1,7 @@
 #
 #   userinput.nsh ------
 #   The Page functions.
+#   Main parameters are mandatory (April 2013, RH).
 #
 
 Function userinput1
@@ -15,14 +16,26 @@ Function userinput1
 
         ReadINIStr $StationNumber   "$PLUGINSDIR\userinput1.ini" "Field 1" "State"
         ReadINIStr $StationPassword "$PLUGINSDIR\userinput1.ini" "Field 2" "State"
-        
-        # certificate
-        ReadINIStr $CertZip "$PLUGINSDIR\userinput1.ini" "Field 3" "State"
+        ReadINIStr $CertZip         "$PLUGINSDIR\userinput1.ini" "Field 3" "State"
 
+        ${If} $StationNumber == ""
+            MessageBox MB_OK "You must enter a station number!"
+            GoTo loginsettings_start
+        ${EndIf}
+        ${If} $StationPassword == ""
+            MessageBox MB_OK "You must enter a password!"
+            GoTo loginsettings_start
+        ${EndIf}
         ${If} $CertZip == ""
             MessageBox MB_OK "You must enter a certificate!"
             GoTo loginsettings_start
         ${EndIf}
+        FileOpen $Result $CertZip r
+        ${If} $Result == ""
+            MessageBox MB_OK "Cannot open certificate, choose another!"
+            GoTo loginsettings_start
+        ${EndIf}
+        FileClose $Result
     ${EndIf}
 FunctionEnd
 
