@@ -117,13 +117,13 @@ detectoren en pc’s op afstand via internet te controleren (:ref:`Nagios
    :align: center
    :width: 600
 
-   Het Nagios menu aan de linkerzijde biedt verschillende monitor opties.
+   Het menu aan de linkerzijde biedt links naar verschillende overzichten om de stations te monitoren.
 
 Ga naar:
 
-http://vpn.hisparc.nl/nagios/
+http://vpn.hisparc.nl/
 
-en selecteer vervolgens een van de opties in de linker menubalk.  De
+Selecteer vervolgens een van de stations in het scherm om in meer detail te zien wat de status is van dat station.  De
 clustercoördinatoren hebben bovendien de mogelijkheid om de instellingen
 van de detector via een ‘virtual private network’ (VPN, :ref:`VPN diagram
 <network-diagram>`) op afstand te wijzigen.  De toegang tot de pc’s biedt
