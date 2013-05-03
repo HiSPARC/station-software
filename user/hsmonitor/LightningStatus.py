@@ -15,6 +15,9 @@ class LightningStatus(object, Event):
         """Invoke constructor of parent class."""
         Event.__init__(self)
         self.message = message[1]
+        
+    def fixBoolean(self, datastring):
+        return eval(datastring.title())
 
     def parseMessage(self):
         tmp = self.message.split("\t")
@@ -29,8 +32,8 @@ class LightningStatus(object, Event):
         self.year = self.datetime.year
         self.closeStrikeRate = int(tmp[1])
         self.totalStrikeRate = int(tmp[2])
-        self.closeAlarm = bool(tmp[3])
-        self.severeAlarm = bool(tmp[4])
+        self.closeAlarm = fixBoolean(tmp[3])
+        self.severeAlarm = fixBoolean(tmp[4])
         self.currentHeading = float(tmp[4])
 
         # Get all event data necessary for an upload.
