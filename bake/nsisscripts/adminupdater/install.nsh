@@ -2,6 +2,8 @@
 #   install.nsh ------
 #   Admin installer.
 #   Jan 2013: multiple (2) NI-RunTimeEngines
+#   May 2013: - separate OpenVpn folder for 32-bit and 64-bit
+#             - popup-window in case of error
 #
 
 #
@@ -17,9 +19,9 @@ Section -CheckExecutables
     Quit
   ${Endif}
   
-  StrCpy $FileName "$AdminDir\openvpn\bin\tapinstall.exe"
+  StrCpy $FileName "$OpenVpnDir\bin\tapinstall.exe"
   Call fileExists
-  StrCpy $FileName "$AdminDir\openvpn\bin\openvpnserv.exe"
+  StrCpy $FileName "$OpenVpnDir\bin\openvpnserv.exe"
   Call fileExists
   StrCpy $FileName "$AdminDir\tightvnc\${VNC_SERVICENAME}.exe"
   Call fileExists
@@ -42,20 +44,28 @@ Section -OpenVPNSetup
   DetailPrint "admin-OpenVPNSetup"
   # register
   WriteRegStr HKLM ${OPENVPN_KEY} ""         "$AdminDir"
-  WriteRegStr HKLM ${OPENVPN_KEY} config_dir "$AdminDir\OpenVPN\config"
+  WriteRegStr HKLM ${OPENVPN_KEY} config_dir "$OpenVpnDir\config"
   WriteRegStr HKLM ${OPENVPN_KEY} config_ext "ovpn"
-  WriteRegStr HKLM ${OPENVPN_KEY} exe_path   "$AdminDir\OpenVPN\bin\openvpn.exe"
+  WriteRegStr HKLM ${OPENVPN_KEY} exe_path   "$OpenVpnDir\bin\openvpn.exe"
   WriteRegStr HKLM ${OPENVPN_KEY} log_append "0"
-  WriteRegStr HKLM ${OPENVPN_KEY} log_dir    "$AdminDir\OpenVPN\log"
+  WriteRegStr HKLM ${OPENVPN_KEY} log_dir    "$OpenVpnDir\log"
   WriteRegStr HKLM ${OPENVPN_KEY} priority   "NORMAL_PRIORITY_CLASS"
   # install tap driver
-  ExecWait '"$AdminDir\openvpn\bin\tapinstall.exe" install "$AdminDir\openvpn\driver\oemWin2k.inf" tap0901' $Result
-  DetailPrint "VPN tapinstall: $Result"
+  ExecWait '"$OpenVpnDir\bin\tapinstall.exe" install "$OpenVpnDir\driver\OemWin2k.inf" tap0901' $Result
+  StrCpy $Message "VPN tapinstall: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
   # service
-  ExecWait '"$AdminDir\openvpn\bin\openvpnserv.exe" -install' $Result
-  DetailPrint "VPN openvpnserv: $Result"
+  ExecWait '"$OpenVpnDir\bin\openvpnserv.exe" -install' $Result
+  StrCpy $Message "VPN openvpnserv: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
   # unzip certificate zip
-  nsisunz::UnzipToLog "$CertZip" "$AdminDir\openvpn\config"
+  nsisunz::UnzipToLog "$CertZip" "$OpenVpnDir\config"
 SectionEnd
 
 #
@@ -105,7 +115,11 @@ Section -TightVNCSetup
   # service
   StrCpy $Program "$TvncFolder\${VNC_SERVICENAME}.exe"
   ExecWait '"$Program" -install -silent' $Result
-  DetailPrint "VNC tightvnc: $Result"
+  StrCpy $Message "VNC tightvnc: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
 SectionEnd
 
 #
@@ -114,7 +128,11 @@ SectionEnd
 Section -NscpSetup
   DetailPrint "admin-NscpSetup"
   ExecWait '"$AdminDir\nsclientpp\NSClient++.exe" /install' $Result
-  DetailPrint "Nagios NSClient++: $Result"
+  StrCpy $Message "Nagios NSClient++: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
 SectionEnd
 
 #
@@ -124,7 +142,11 @@ Section -ODBCSetup
   DetailPrint "admin-ODBCSetup"
   # install
   ExecWait '"$AdminDir\odbcconnector\Install_HiSPARC.bat"' $Result
-  DetailPrint "ODBC install: $Result"
+  StrCpy $Message "ODBC install: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
   # register
   WriteRegStr HKLM ${ODBCREGKEY}     DATABASE    "buffer"
   WriteRegStr HKLM ${ODBCREGKEY}     DESCRIPTION "HiSPARC buffer"
@@ -143,9 +165,17 @@ SectionEnd
 Section -LabviewRuntimeSetup
   DetailPrint "admin-LabviewRuntimeSetup"
   ExecWait '"$AdminDir\niruntimeinstaller\setup.exe" /AcceptLicenses yes /r:n /q' $Result
-  DetailPrint "LabVIEW RTE 8.2.1 setup: $Result"
+  StrCpy $Message "LabVIEW RTE 8.2.1 setup: $Result"
+  DetailPrint $Message
+  ${If} $Result != 3010
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
   ExecWait '"$AdminDir\nirte2012\setup.exe" /AcceptLicenses yes /r:n /q' $Result
-  DetailPrint "LabVIEW RTE 2012 setup: $Result"
+  StrCpy $Message "LabVIEW RTE 2012 setup: $Result"
+  DetailPrint $Message
+  ${If} $Result != 3010
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
 SectionEnd
 
 #

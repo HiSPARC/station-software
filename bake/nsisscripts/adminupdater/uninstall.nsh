@@ -24,6 +24,17 @@ Function un.onInit
     Quit
   ${Endif}
   DetailPrint "AdminDir: $AdminDir"
+  
+  # Check for 32-bit or 64-bit computer
+  System::Call "kernel32::GetCurrentProcess() i .s"
+  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
+  StrCmp $0 "0" is32
+  StrCpy $OpenVpnDir "$AdminDir\openvpn64"
+  GoTo proCeed
+is32:
+  StrCpy $OpenVpnDir "$AdminDir\openvpn32"
+proCeed:
+  DetailPrint "OpenVpnDir: $OpenVpnDir"
   Return
   
 noReg:
@@ -37,15 +48,16 @@ FunctionEnd
 Section un.UninstOpenVPN
   DetailPrint "admin-un.UninstOpenVPN"
   # remove service
-  ExecWait '"$AdminDir\openvpn\bin\openvpnserv.exe" -remove' $Result
+  ExecWait '"$OpenVpnDir\bin\openvpnserv.exe" -remove' $Result
   DetailPrint "VPN openvpnserv: $Result"
   # delete reg keys
   DeleteRegKey HKLM ${OPENVPN_KEY}
   # remove the tap devices
-  ExecWait '"$AdminDir\openvpn\bin\tapinstall.exe" remove tap0901' $Result
+  ExecWait '"$OpenVpnDir\bin\tapinstall.exe" remove tap0901' $Result
   DetailPrint "VPN tapremove: $Result"
   # remove the folder
-  RMDir /r /REBOOTOK "$AdminDir\openvpn"
+  RMDir /r /REBOOTOK "$AdminDir\openvpn32"
+  RMDir /r /REBOOTOK "$AdminDir\openvpn64"
 SectionEnd
 
 #

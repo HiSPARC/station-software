@@ -44,6 +44,17 @@ Function .onInit
   StrCpy $AdminDir   "$HisparcDir\admin"
   StrCpy $ConfigFile "$HisparcDir\persistent\configuration\config.ini"
   
+  # Check for 32-bit or 64-bit computer
+  System::Call "kernel32::GetCurrentProcess() i .s"
+  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
+  StrCmp $0 "0" is32
+  StrCpy $OpenVpnDir "$AdminDir\openvpn64"
+  GoTo proCeed
+is32:
+  StrCpy $OpenVpnDir "$AdminDir\openvpn32"
+proCeed:
+  DetailPrint "OpenVpnDir: $OpenVpnDir"
+  
   StrCpy $FileName $ConfigFile
   Call fileExists   # check if configfile exists
   

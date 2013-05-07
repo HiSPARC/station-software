@@ -8,9 +8,11 @@ Var NIdir
 Var ConfigFile
 Var CertZip
 Var TvncFolder
+Var OpenVpnDir
 Var Program
 Var Result
 Var FileName
+Var Message
 
 # Names of the services
 !define VPN_SERVICENAME     "OpenVPNService"
