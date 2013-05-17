@@ -1,7 +1,9 @@
+import logging
+
+logger = getLogger('hsmonitor.nagiospush')
+
 from time import sleep, time
 from subprocess import Popen, PIPE
-
-from hslog import log
 
 TIMEOUT = 10
 
@@ -50,6 +52,6 @@ class NagiosPush:
             res = "send_nsca_command failed"
         else:
             res = v.communicate()[0]
-        log("Check %s: Status code: %i, Status description: %s.\n\t %s." %
+	logger.debug('Check %s: Status code: %i, Status description: %s.\n\t %s.' % 
             (nagiosResult.serviceName, nagiosResult.status_code,
              nagiosResult.description, res))

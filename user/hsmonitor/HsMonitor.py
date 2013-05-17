@@ -1,5 +1,7 @@
 """The main HiSPARC monitor process, it creates other objects and threads.
 
+WW: Pathing to pythonshared removed, since it is no longer required to use hslog.py.
+
 DF: Unfortunately, I think the UML model of this system is not entirely
     correct. For example, this creates several instances of our StorageManager
     class. It has its own class, that's good, but I think it should also have
@@ -20,12 +22,11 @@ RH:  The working directory: HISPARC_ROOT/user/hsmonitor
 
 import re
 import os
-import sys
 
-sys.path.append("../pythonshared")
+import logging
+import logging.handlers
 
 from time  import sleep
-from hslog import log, setLogMode, MODE_BOTH
 
 from EConfigParser import EConfigParser
 from BufferListener import BufferListener
@@ -39,21 +40,28 @@ from UserExceptions import ThreadCrashError
 CONFIG_INI_PATH1 = "data/config.ini"
 CONFIG_INI_PATH2 = "../../persistent/configuration/config.ini"
 
+logger = logging.getLogger('hsmonitor')
+formatter = logging.Formatter('%(asctime)s %(name)s[%(process)d]'
+                              '.%(funcName)s.%(levelname)s: %(message)s')
 
 class HsMonitor:
     def __init__(self):
         # Setup the log mode
-        setLogMode(MODE_BOTH)
+	file = 'log-hsmonitor'
+    	handler = logging.handlers.TimedRotatingFileHandler(file,when='midnight', backupCount=14)
+    	handler.setFormatter(formatter)
+    	logger.addHandler(handler)
+    	logger.setLevel(level=logging.INFO)
 
         # Read the configuration file
         try:
             self.cfg = EConfigParser()
             self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2])
         except:
-            log("HsMonitor: Cannot open the config file!", severity=2)
+	    logger.critical('Cannot open the config file!')
             return
         else:
-            log("HsMonitor: Initialize variables.")
+	    logger.info('Initialize variables.')
 
             # List of all the threads
             self.hsThreads = []
@@ -100,9 +108,9 @@ class HsMonitor:
                 up.setNumServer(self.numServers)
                 up2.setNumServer(self.numServers)
             except Exception, msg:
-                log("HsMonitor: Error while parsing local server: %s." % msg)
-                log("HsMonitor: Will not upload to local server!")
-
+		logger.warning("Error while parsing local server: %s." % msg)
+		logger.warning("Will nog upload to local server!")
+                
             # Set number of servers for our own StorageManager
             storMan.setNumServer(self.numServers)
             storMan.clearOldUploadedEvents()
@@ -112,7 +120,7 @@ class HsMonitor:
                 thread.start()
 
         except Exception, msg:
-            log("Error HsMonitor: %s" % msg, severity=2)
+	    logger.critical("Error HsMonitor: %s" % msg)
             exit(1)
 
     def stopAll(self):
@@ -150,8 +158,7 @@ class HsMonitor:
         minbs = self.cfg.ifgetint(section_name, "MinBatchSize", 50)
         maxbs = self.cfg.ifgetint(section_name, "MaxBatchSize", 50)
         if (minbs > maxbs):
-            log("Warning HsMonitor: Maximum batch size must be more than "
-                "minimum batch size. Setting maximum=minimum.", severity=2)
+	    logger.warning("Maximum batch size must be more than minimum batch size. Setting maximum=minimum.")
             maxbs = minbs
         minwait = self.cfg.ifgetfloat(section_name, "MinWait", 1.0)
         maxwait = self.cfg.ifgetfloat(section_name, "MaxWait", 60.0)
@@ -174,21 +181,19 @@ def main():
             sleep(10)
             for thread in hsMonitor.hsThreads:
                 if not thread.is_alive():
-                    log("HsMonitor: Thread %s died, restarting." % thread.name,
-                        severity=2)
+		    logger.warning('Thread %s died, restarting.' % thread.name)
                     thread.init_restart()
                     thread.start()
-                    log("HsMonitor: Thread %s restarted." % thread.name,
-                        severity=2)
+		    logger.warning('Thread %s restarted.' % thread.name)
     except ThreadCrashError, exc:
-        log(exc)
-        log("HsMonitor: Thread %s keeps crashing, shutting down." %
-            thread.name, severity=2)
+	logger.critical(exc)
+	logger.critical('Thread %s keeps crashing, shutting down.' % thread.name)
     except KeyboardInterrupt:
-        log("HsMonitor: Interrupted by keyboard, closing down.", severity=2)
+	logger.critical('Interrupted by keyboard, closing down.')
 
     # Close down everything
     hsMonitor.stopAll()
+    logging.shutdown()
     # wait for all threads to finish
     for thread in hsMonitor.hsThreads:
         thread.join()

@@ -1,12 +1,13 @@
 import time
 import threading
+import logging
 
-from hslog import log
 from Check import EventRate, StorageGrowth, StorageSize, TriggerRate
 from NagiosPush import NagiosPush
 from StorageManager import StorageManager
 from UserExceptions import ThreadCrashError
 
+logger = logging.getLogger('hsmonitor.checkscheduler')
 
 class ScheduledJob:
     def __init__(self, job, jobfunc, interval, args):
@@ -55,12 +56,12 @@ class Scheduler:
                     nagiosPush.sendToNagios(returnValues)
 
                 except StopIteration:
-                    log("CheckScheduler: JOB STOPPED!", severity=2)
+		    logger.error('JOB STOPPED!')
                     toremove.append(tid)
 
                 except Exception, msg:
-                    log("CheckScheduler: Uncatched exception in job: %s. "
-                              "Restarting..." % msg, severity=2)
+		    logger.error('Uncatched expection in job: %s. ' % msg)
+		    logger.error('Restarting...')
                     toremove.append(tid)
                     tostart.append(tid)
 
@@ -118,7 +119,7 @@ class CheckScheduler(threading.Thread):
     # The threading.Thread.start() calls threading.Thread.run(),
     # which is always overridden.
     def run(self):
-        log("CheckScheduler: Thread started!", severity=2)
+	logger.info('Thread started!')
         self.storageManager.openConnection()
 
         ### Trigger rate:
@@ -151,4 +152,4 @@ class CheckScheduler(threading.Thread):
                 break
             except:
                 pass
-        log("CheckScheduler: Thread stopped!", severity=2)
+	logger.warning('Thread stopped!')

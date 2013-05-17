@@ -5,9 +5,10 @@ This process creates other objects and threads.
 
 """
 
+import logging
+import logging.handlers
 import os, sys, cmd
 sys.path.append("..")
-from hslog import log, setLogMode, MODE_PRINT
 from EConfigParser import EConfigParser
 import BufferListener
 from Interpreter import Interpreter
@@ -21,11 +22,18 @@ CONFIG_INI_PATH2 = '../../../persistent/configuration/config.ini'
 
 NUMSERVERS = 2  # TODO
 
+logger = logging.getLogger('hsmonitor')
+formatter = logging.Formatter('%(asctime)s %(name)s[%(process)d]'
+                              '.%(funcName)s.%(levelname)s: %(message)s')
 
 class HsMonitor:
     def __init__(self):
         # setup the log mode
-        setLogMode(MODE_PRINT)
+        file = 'log-testfornagiospushfromhisparc'
+    	handler = logging.handlers.TimedRotatingFileHandler(file,when='midnight', backupCount=14)
+    	handler.setFormatter(formatter)
+    	logger.addHandler(handler)
+    	logger.setLevel(level=logging.DEBUG)
 
         # read the configuration file
         try:
@@ -116,7 +124,7 @@ def main():
     it = Interpreter(sm)
     checkSched = hsMonitor.createCheckScheduler(it)
     checkSched.run()
-
+    logging.shutdown()
 
 if __name__ == '__main__':
     main()

@@ -1,9 +1,9 @@
 import sys
 import time
+import logging
 from threading import Lock
 
 from Observer import Observer
-from hslog import log
 from NagiosResult import NagiosResult
 from StorageManager import StorageManager
 
@@ -14,6 +14,7 @@ UNKNOWN = 3
 
 TIME_DIFF_INI = '../../persistent/configuration/HisparcII.ini'
 
+logging.getLogger('hsmonitor.check')
 
 class Check:
     def __init__(self):
@@ -31,7 +32,7 @@ class Check:
             maxa = float(a[1])
             return (mina, maxa)
         except:
-            log("Check: Wrong arguments given! %s" % (prange,), severity=2)
+	    logger.critical('Wrong arguments given! %s' % (prange,))
             sys.exit(CRITICAL)
 
 
@@ -49,8 +50,7 @@ class TriggerRate(Check):
                 critRange = config['triggerrate_crit']
                 crit = self.parse_range(critRange)
             except:
-                log("Check: Unable to read config.ini in %s" %
-                    self.nagiosResult.serviceName, severity=2)
+		logger.critical('Unable to read config.ini in %s' % self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
@@ -136,8 +136,7 @@ class StorageSize(Check):
                 critRange = config['storagesize_crit']
                 crit = self.parse_range(critRange)
             except:
-                log("Check: Unable to read config.ini in %s" %
-                    self.nagiosResult.serviceName, severity=2)
+		logger.critical('Unable to read config.ini %s' % self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
@@ -218,8 +217,7 @@ class StorageGrowth(Check):
                 warn = float(config['storagegrowth_warn'])
                 crit = float(config['storagegrowth_crit'])
             except:
-                log("Check: Unable to read config.ini in %s" %
-                    self.nagiosResult.serviceName, severity=2)
+		logger.critical('Unable to read config.ini in %s' % self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 
             self.newStorageSize = StorageManager.storagesize
