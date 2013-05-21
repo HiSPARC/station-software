@@ -166,7 +166,7 @@ class StorageManager(Subject):
                 StorageManager.storagesize += n_events
 
             self.lock.release()
-            log.debug('Events added in %d seconds.' % (time() - t0))
+            logger.debug('Events added in %d seconds.' % (time() - t0))
 
             # Notify the observers
             self.update(n_events)
@@ -283,7 +283,8 @@ class StorageManager(Subject):
         self.openConnection()
         c = self.db.cursor()
 
-        logger.debug('Deleting old events which have already been uploaded to all currently specified servers.')
+        logger.debug('Deleting old events which have already been uploaded to '
+                     'all currently specified servers.')
         sql = "SELECT COUNT(*) FROM Event WHERE UploadedTo & ? = ?"
         args = (self.allUploadedMask, self.allUploadedMask)
         c.execute(sql, args)

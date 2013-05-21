@@ -77,7 +77,7 @@ class BufferListener(threading.Thread):
             logger.error('Error: %d: %s' % (msg_id, msg))
             conn = None
         else:
-            logger.info('Connected to the buffer database!')
+            logger.debug('Connected to the buffer database!')
         return conn
 
     def getMessageCount(self):
@@ -101,7 +101,7 @@ class BufferListener(threading.Thread):
         cursor.execute(sql)
         logger.debug('Fetching SQL results...')
         messages = cursor.fetchall()
-        logger.debug('Selected %d messages.' % len(messags))
+        logger.debug('Selected %d messages.' % len(messages))
         cursor.close()
         return messages
 

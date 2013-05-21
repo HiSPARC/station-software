@@ -50,7 +50,8 @@ class TriggerRate(Check):
                 critRange = config['triggerrate_crit']
                 crit = self.parse_range(critRange)
             except:
-                logger.critical('Unable to read config.ini in %s' % self.nagiosResult.serviceName)
+                logger.critical('Unable to read config.ini in %s' % 
+                                self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
@@ -136,7 +137,8 @@ class StorageSize(Check):
                 critRange = config['storagesize_crit']
                 crit = self.parse_range(critRange)
             except:
-                logger.critical('Unable to read config.ini %s' % self.nagiosResult.serviceName)
+                logger.critical('Unable to read config.ini %s' % 
+                                self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
@@ -217,7 +219,8 @@ class StorageGrowth(Check):
                 warn = float(config['storagegrowth_warn'])
                 crit = float(config['storagegrowth_crit'])
             except:
-                logger.critical('Unable to read config.ini in %s' % self.nagiosResult.serviceName)
+                logger.critical('Unable to read config.ini in %s' % 
+                                self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 
             self.newStorageSize = StorageManager.storagesize

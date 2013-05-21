@@ -1,6 +1,6 @@
 import logging
 
-logger = getLogger('hsmonitor.nagiospush')
+logger = logging.getLogger('hsmonitor.nagiospush')
 
 from time import sleep, time
 from subprocess import Popen, PIPE

@@ -128,9 +128,9 @@ class Uploader(Observer, Thread):
         self.numEventsLock.release()
 
         if shouldBlock:
-            log.debug('%i: Blocked: Too few events' % self.serverID)
+            logger.debug('%i: Blocked: Too few events' % self.serverID)
             self.noEventsSem.acquire()
-            log.debug('%i: Unblocked' % self.serverID)
+            logger.debug('%i: Unblocked' % self.serverID)
             return self.minBatchSize
         else:
             return res
@@ -207,6 +207,7 @@ class Uploader(Observer, Thread):
                 self.nagiosPush.sendToNagios(nr)
                 sleeptime = min(2 ** numFailedAttempts * self.retryAfter,
                                 self.maxWait)
-                logger.debug('%i: Sleeping for %f seconds.' % (self.serverID, sleeptime))
+                logger.debug('%i: Sleeping for %f seconds.' % 
+                             (self.serverID, sleeptime))
                 sleep(sleeptime)
         logger.warning('%i: Thread stopped!' % self.servedID)
