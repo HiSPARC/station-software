@@ -15,7 +15,7 @@ from WeatherError import WeatherError
 from WeatherConfig import WeatherConfig
 from LightningEvent import LightningEvent
 from LightningError import LightningError
-from LightningConfig import LightningConfig
+#from LightningConfig import LightningConfig
 from LightningStatus import LightningStatus
 from LightningNoise import LightningNoise
 
@@ -61,8 +61,8 @@ class Interpreter:
             event = LightningEvent(message)
         elif eventcode == 'LER':
             event = LightningError(message)
-        elif eventcode == 'LCG':
-            event = LightningConfig(message)
+        #elif eventcode == 'LCG':
+        #    event = LightningConfig(message)
         elif eventcode == 'LST':
             event = LightningStatus(message)
         elif eventcode == 'LNS':
