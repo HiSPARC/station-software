@@ -47,21 +47,21 @@ formatter = logging.Formatter('%(asctime)s %(name)s[%(process)d]'
 class HsMonitor:
     def __init__(self):
         # Setup the log mode
-	file = 'log-hsmonitor'
-    	handler = logging.handlers.TimedRotatingFileHandler(file,when='midnight', backupCount=14)
-    	handler.setFormatter(formatter)
-    	logger.addHandler(handler)
-    	logger.setLevel(level=logging.INFO)
+        file = 'log-hsmonitor'
+            handler = logging.handlers.TimedRotatingFileHandler(file,when='midnight', backupCount=14)
+            handler.setFormatter(formatter)
+            logger.addHandler(handler)
+            logger.setLevel(level=logging.INFO)
 
         # Read the configuration file
         try:
             self.cfg = EConfigParser()
             self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2])
         except:
-	    logger.critical('Cannot open the config file!')
+            logger.critical('Cannot open the config file!')
             return
         else:
-	    logger.info('Initialize variables.')
+            logger.info('Initialize variables.')
 
             # List of all the threads
             self.hsThreads = []
@@ -108,8 +108,8 @@ class HsMonitor:
                 up.setNumServer(self.numServers)
                 up2.setNumServer(self.numServers)
             except Exception, msg:
-		logger.warning("Error while parsing local server: %s." % msg)
-		logger.warning("Will nog upload to local server!")
+                logger.warning("Error while parsing local server: %s." % msg)
+                logger.warning("Will nog upload to local server!")
                 
             # Set number of servers for our own StorageManager
             storMan.setNumServer(self.numServers)
@@ -120,7 +120,7 @@ class HsMonitor:
                 thread.start()
 
         except Exception, msg:
-	    logger.critical("Error HsMonitor: %s" % msg)
+            logger.critical("Error HsMonitor: %s" % msg)
             exit(1)
 
     def stopAll(self):
@@ -158,7 +158,7 @@ class HsMonitor:
         minbs = self.cfg.ifgetint(section_name, "MinBatchSize", 50)
         maxbs = self.cfg.ifgetint(section_name, "MaxBatchSize", 50)
         if (minbs > maxbs):
-	    logger.warning("Maximum batch size must be more than minimum batch size. Setting maximum=minimum.")
+            logger.warning("Maximum batch size must be more than minimum batch size. Setting maximum=minimum.")
             maxbs = minbs
         minwait = self.cfg.ifgetfloat(section_name, "MinWait", 1.0)
         maxwait = self.cfg.ifgetfloat(section_name, "MaxWait", 60.0)
@@ -181,15 +181,15 @@ def main():
             sleep(10)
             for thread in hsMonitor.hsThreads:
                 if not thread.is_alive():
-		    logger.warning('Thread %s died, restarting.' % thread.name)
+                    logger.warning('Thread %s died, restarting.' % thread.name)
                     thread.init_restart()
                     thread.start()
-		    logger.warning('Thread %s restarted.' % thread.name)
+                    logger.warning('Thread %s restarted.' % thread.name)
     except ThreadCrashError, exc:
-	logger.critical(exc)
-	logger.critical('Thread %s keeps crashing, shutting down.' % thread.name)
+        logger.critical(exc)
+        logger.critical('Thread %s keeps crashing, shutting down.' % thread.name)
     except KeyboardInterrupt:
-	logger.critical('Interrupted by keyboard, closing down.')
+        logger.critical('Interrupted by keyboard, closing down.')
 
     # Close down everything
     hsMonitor.stopAll()

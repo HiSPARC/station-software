@@ -65,7 +65,7 @@ class StorageManager(Subject):
         try:
             self.db = sqlite3.connect(self.db_name)
         except Exception, msg:
-	    logger.error('Error opening connection: %s' % str(msg))
+            logger.error('Error opening connection: %s' % str(msg))
             raise Exception("Could not connect to sqlite3 database.")
 
     def __create(self):
@@ -95,10 +95,10 @@ class StorageManager(Subject):
         ssize = StorageManager.storagesize
         if (ssize is not None and ssize < VACUUMTHRESHOLD and
             time() - StorageManager.lastvacuum > 100000):
-		logger.debug('Starting VACUUM operation...')
+                logger.debug('Starting VACUUM operation...')
                 c.execute("VACUUM")
                 StorageManager.lastvacuum = time()
-		logger.debug('VACUUM finished.')
+                logger.debug('VACUUM finished.')
         c.execute("SELECT * FROM Event WHERE (UploadedTo & ?) == 0 LIMIT ?;",
                   (serverbit, numEvents))
         res = c.fetchall()
@@ -144,9 +144,9 @@ class StorageManager(Subject):
         res = True
         n_events = len(events)
         if n_events:
-	    logger.debug('Adding %d parsed events into Storage.' % n_events)
+            logger.debug('Adding %d parsed events into Storage.' % n_events)
             self.lock.acquire()
-	    logger.debug('Acquired lock.')
+            logger.debug('Acquired lock.')
             t0 = time()
 
             c = self.db.cursor()
@@ -160,13 +160,13 @@ class StorageManager(Subject):
                 c.close()
             except sqlite3.OperationalError, msg:
                 res = False  # Prevent events from being removed from buffer
-		logger.error('Error AddEvents: %s' % str(msg))
+                logger.error('Error AddEvents: %s' % str(msg))
 
             if StorageManager.storagesize is not None:
                 StorageManager.storagesize += n_events
 
             self.lock.release()
-	    log.debug('Events added in %d seconds.' % (time() - t0))
+            log.debug('Events added in %d seconds.' % (time() - t0))
 
             # Notify the observers
             self.update(n_events)
@@ -221,7 +221,7 @@ class StorageManager(Subject):
         if n_remove > 0:
             query = ("""DELETE from Event WHERE EventID in %s;""" %
                      self.__IDList2String(need_remove))
-	    logger.debug('%d events removed from Storage' % n_remove)
+            logger.debug('%d events removed from Storage' % n_remove)
             c.execute(query)
             if StorageManager.storagesize is not None:
                 StorageManager.storagesize -= n_remove
@@ -231,7 +231,7 @@ class StorageManager(Subject):
         if len(need_update) > 0:
             query = ("UPDATE Event Set UploadedTo = UploadedTo | ? WHERE "
                      "EventId in %s;" % self.__IDList2String(need_update))
-	    logger.debug('%d events updated in Storage' % n_need_update)
+            logger.debug('%d events updated in Storage' % n_need_update)
             c.execute(query, (serverbit,))
 
         self.db.commit()
@@ -283,11 +283,11 @@ class StorageManager(Subject):
         self.openConnection()
         c = self.db.cursor()
 
-	logger.debug('Deleting old events which have already been uploaded to all currently specified servers.')
+        logger.debug('Deleting old events which have already been uploaded to all currently specified servers.')
         sql = "SELECT COUNT(*) FROM Event WHERE UploadedTo & ? = ?"
         args = (self.allUploadedMask, self.allUploadedMask)
         c.execute(sql, args)
-	logger.debug('Deleting %d events.' % c.fetchone()[0])
+        logger.debug('Deleting %d events.' % c.fetchone()[0])
 
         sql = "DELETE FROM Event WHERE UploadedTo & ? = ?"
         args = (self.allUploadedMask, self.allUploadedMask)

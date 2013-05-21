@@ -15,7 +15,7 @@ class WeatherConfig(object, Event):
         """Invoke constructor of parent class."""
         Event.__init__(self)
         self.message = message[1]
-  	
+
     def fixBoolean(self, datastring):
         return eval(datastring.title())
 

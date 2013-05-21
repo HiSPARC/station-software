@@ -52,6 +52,6 @@ class NagiosPush:
             res = "send_nsca_command failed"
         else:
             res = v.communicate()[0]
-	logger.debug('Check %s: Status code: %i, Status description: %s.\n\t %s.' % 
+        logger.debug('Check %s: Status code: %i, Status description: %s.\n\t %s.' % 
             (nagiosResult.serviceName, nagiosResult.status_code,
              nagiosResult.description, res))

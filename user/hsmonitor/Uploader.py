@@ -100,7 +100,7 @@ class Uploader(Observer, Thread):
 
             oldNumEvents = self.numEvents
             self.numEvents += count
-	    logger.debug('%i: %i events pending.' % (self.serverID, self.numEvents))
+            logger.debug('%i: %i events pending.' % (self.serverID, self.numEvents))
 
             # calculate if uploader-thread should be unblocked
             if (self.numEvents >= self.minBatchSize and
@@ -128,9 +128,9 @@ class Uploader(Observer, Thread):
         self.numEventsLock.release()
 
         if shouldBlock:
-	    log.debug('%i: Blocked: Too few events' % self.serverID)
+            log.debug('%i: Blocked: Too few events' % self.serverID)
             self.noEventsSem.acquire()
-	    log.debug('%i: Unblocked' % self.serverID)
+            log.debug('%i: Unblocked' % self.serverID)
             return self.minBatchSize
         else:
             return res
@@ -162,15 +162,15 @@ class Uploader(Observer, Thread):
         return returncode
 
     def run(self):
-	logger.info('%i: Thread started for %s.' % (self.serverID, self.URL))
+        logger.info('%i: Thread started for %s.' % (self.serverID, self.URL))
 
         # Initialize storage manager
         self.storageManager.openConnection()
 
         # Number of events that have been received
-	logger.debug('%i: Getting number of events to upload.' % self.serverID)
+        logger.debug('%i: Getting number of events to upload.' % self.serverID)
         self.numEvents = self.storageManager.getNumEventsServer(self.serverID)
-	logger.debug('%i: %i events in storage.' % (self.serverID, self.numEvents))
+        logger.debug('%i: %i events in storage.' % (self.serverID, self.numEvents))
 
         self.isRunning = True
 
@@ -182,7 +182,7 @@ class Uploader(Observer, Thread):
                                                              bsize)
             returncode = self.__upload(elist)
             if returncode == '100':
-		logger.info('%i: %d events uploaded to %s.' % (self.serverID, bsize, self.URL))
+                logger.info('%i: %d events uploaded to %s.' % (self.serverID, bsize, self.URL))
 
                 numFailedAttempts = 0
 
@@ -197,16 +197,16 @@ class Uploader(Observer, Thread):
 
                 msg1 = ("Error Uploader %i: %s: Return code: %s." %
                         (self.serverID, self.URL, returncode))
-		logger.error(msg1)
+                logger.error(msg1)
                 msg2 = ("Error Uploader %i: %d events attempted to upload, "
                         "number of failed attempts: %i." %
                         (self.serverID, bsize, numFailedAttempts))
-		logger.error(msg2)
+                logger.error(msg2)
                 msg3 = msg1 + "\n" + msg2
                 nr = NagiosResult(2, msg3, "ServerCheck")
                 self.nagiosPush.sendToNagios(nr)
                 sleeptime = min(2 ** numFailedAttempts * self.retryAfter,
                                 self.maxWait)
-		logger.debug('%i: Sleeping for %f seconds.' % (self.serverID, sleeptime))
+                logger.debug('%i: Sleeping for %f seconds.' % (self.serverID, sleeptime))
                 sleep(sleeptime)
-	logger.warning('%i: Thread stopped!' % self.servedID)
+        logger.warning('%i: Thread stopped!' % self.servedID)

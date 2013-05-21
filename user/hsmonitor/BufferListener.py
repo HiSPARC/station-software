@@ -51,7 +51,7 @@ class BufferListener(threading.Thread):
     # is always overridden.
     def run(self):
         self.interpreter.openStorage()
-	logger.info('Thread started')
+        logger.info('Thread started')
         while not self.stop_event.isSet():
             # DF: Unfortunately, not reconnecting results in stale connections
             self.conn = self.getDBConnection(self.config)
@@ -66,7 +66,7 @@ class BufferListener(threading.Thread):
                     self.clearBufferMessages(event_ids)
             # wait for a polling interval
             sleep(int(self.config['poll_interval']))
-	logging.warning('Thread stopped!')
+        logging.warning('Thread stopped!')
 
     def getDBConnection(self, dbdict):
         """Get the connection to Buffer database"""
@@ -74,21 +74,21 @@ class BufferListener(threading.Thread):
             conn = connect(host=dbdict['host'], user=dbdict['user'],
                            passwd=dbdict['password'], db=dbdict['db'])
         except OperationalError, (msg_id, msg):
-	    logger.error('Error: %d: %s' % (msg_id, msg))
+            logger.error('Error: %d: %s' % (msg_id, msg))
             conn = None
         else:
-	    logger.info('Connected to the buffer database!')
+            logger.info('Connected to the buffer database!')
         return conn
 
     def getMessageCount(self):
         """Get the number of event messages"""
         cursor = self.conn.cursor()
         sql = "SELECT COUNT(*) FROM message"
-	logger.debug('Executing SQL: %s' %sql)
+        logger.debug('Executing SQL: %s' %sql)
         cursor.execute(sql)
-	logger.debug('Fetching SQL results...')
+        logger.debug('Fetching SQL results...')
         count = cursor.fetchone()[0]
-	logger.debug('Done.')
+        logger.debug('Done.')
         return count
 
     def getBufferMessages(self):
@@ -97,11 +97,11 @@ class BufferListener(threading.Thread):
         sql = ("SELECT message_type_id, message, message_id FROM message "
                "ORDER BY message_id DESC LIMIT %d" %
                int(self.config['poll_limit']))
-	logger.debug('Executing SQL: %s' %sql)
+        logger.debug('Executing SQL: %s' %sql)
         cursor.execute(sql)
-	logger.debug('Fetching SQL results...')
+        logger.debug('Fetching SQL results...')
         messages = cursor.fetchall()
-	logger.debug('Selected %d messages.' % len(messags))
+        logger.debug('Selected %d messages.' % len(messags))
         cursor.close()
         return messages
 
@@ -118,7 +118,7 @@ class BufferListener(threading.Thread):
             sql = "DELETE FROM message WHERE message_id IN %s"
             numcleared = cursor.execute(sql, (message_ids,))
 
-	logger.debug('Clear %d events from buffer...' %numcleared)
+        logger.debug('Clear %d events from buffer...' %numcleared)
         self.conn.commit()
-	logger.debug('Done')
+        logger.debug('Done')
         return len(message_ids)

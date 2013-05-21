@@ -71,7 +71,7 @@ class Interpreter:
         elif eventcode == 'LNS':
             event = LightningNoise(message)
         else:
-	    logger.warning('Unknown message type %s (%d).' % (eventcode, self.type_id))
+            logger.warning('Unknown message type %s (%d).' % (eventcode, self.type_id))
             return None
 
         event.uploadCode = eventcode
@@ -98,7 +98,7 @@ class Interpreter:
         self.discard_event_ids = []
         # this variable stores the trigger rate of the recent event
         trigger_rate = TriggerRateHolder(0, 0)
-	logger.debug('Parsing %d messages.' % len(messages))
+        logger.debug('Parsing %d messages.' % len(messages))
 
         firsttime = True
         for message in messages:
@@ -128,7 +128,7 @@ class Interpreter:
             except Exception, (errormsg):
                 # add parsed event_id into the list of event_ids
                 self.discard_event_ids.append(message[2])
-		logger.error('Event exception (discarding event): %s.' % errormsg)
+                logger.error('Event exception (discarding event): %s.' % errormsg)
             else:
                 # add parsed event into the list of events
                 self.eventlist.append({'header': header,
