@@ -30,10 +30,10 @@ class HsMonitor:
     def __init__(self):
         # setup the log mode
         file = 'log-testfornagiospushfromhisparc'
-    	handler = logging.handlers.TimedRotatingFileHandler(file,when='midnight', backupCount=14)
-    	handler.setFormatter(formatter)
-    	logger.addHandler(handler)
-    	logger.setLevel(level=logging.DEBUG)
+        handler = logging.handlers.TimedRotatingFileHandler(file,when='midnight', backupCount=14)
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(level=logging.DEBUG)
 
         # read the configuration file
         try:
