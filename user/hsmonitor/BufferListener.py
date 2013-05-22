@@ -51,7 +51,7 @@ class BufferListener(threading.Thread):
     # is always overridden.
     def run(self):
         self.interpreter.openStorage()
-        logger.info('Thread started')
+        logger.debug('Thread started')
         while not self.stop_event.isSet():
             # DF: Unfortunately, not reconnecting results in stale connections
             self.conn = self.getDBConnection(self.config)

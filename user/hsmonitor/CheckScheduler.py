@@ -119,7 +119,7 @@ class CheckScheduler(threading.Thread):
     # The threading.Thread.start() calls threading.Thread.run(),
     # which is always overridden.
     def run(self):
-        logger.info('Thread started!')
+        logger.debug('Thread started!')
         self.storageManager.openConnection()
 
         ### Trigger rate:
