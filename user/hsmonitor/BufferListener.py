@@ -74,7 +74,7 @@ class BufferListener(threading.Thread):
             conn = connect(host=dbdict['host'], user=dbdict['user'],
                            passwd=dbdict['password'], db=dbdict['db'])
         except OperationalError, (msg_id, msg):
-            logger.error('Error: %d: %s' % (msg_id, msg))
+            logger.error('%d: %s' % (msg_id, msg))
             conn = None
         else:
             logger.debug('Connected to the buffer database!')
