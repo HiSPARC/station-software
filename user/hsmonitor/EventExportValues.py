@@ -176,7 +176,22 @@ export_values = {
         ('N', 'LIT_CORR_ANGLE', 'correctedAngle')],
     'LER': [
         ('N', 'LER_ERRMSG', 'error_message')],
-    'LCG': [],
+    'LCG': [
+        ('N', 'LCG_COM_PORT', 'com_port'),
+        ('N', 'LCG_BAUD_RATE', 'baud_rate'),
+        ('N', 'LCG_STATION_ID', 'station_id'),
+        ('N', 'LCG_DATABASE_NAME', 'database_name'),
+        ('N', 'LCG_HELP_URL', 'help_url'),
+        ('N', 'LCG_DAQ_MODE', 'daq_mode'),
+        ('N', 'LCG_LATITUDE', 'latitude'),
+        ('N', 'LCG_LONGITUDE', 'longitude'),
+        ('N', 'LCG_ALTITUDE', 'altitude'),
+        ('N', 'LCG_SQUELCH_SETTING', 'squelch_setting'),
+        ('N', 'LCG_CLOSE_ALARM_DISTANCE', 'close_alarm_distance'),
+        ('N', 'LCG_SEVERE_ALARM_DISTANCE', 'severe_alarm_distance'),
+        ('N', 'LCG_NOISE_BEEP', 'noise_beep'),
+        ('N', 'LCG_MINIMUM_GPS_SPEED', 'minimum_gps_speed'),
+        ('N', 'LCG_ANGLE_CORRECTION', 'angle_correction')],
     'LST': [
         ('N', 'LST_CLOSE_RATE', 'closeStrikeRate'),
         ('N', 'LST_TOTAL_RATE', 'totalStrikeRate'),
