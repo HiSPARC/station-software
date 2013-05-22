@@ -24,10 +24,9 @@ import re
 import os
 
 import logging
-import logging.handlers
 
 from time  import sleep
-
+from TimedConcurrentLogging import TimedConcurrentRotatingFileHandler
 from EConfigParser import EConfigParser
 from BufferListener import BufferListener
 from Interpreter import Interpreter
@@ -50,7 +49,8 @@ formatter_screen = logging.Formatter('%(asctime)s - %(name)s'
                                      '%Y-%m-%d %H:%M:%S')
 
 # Logging levels which can be set in the configuration file
-LEVELS = { "debug"   : logging.DEBUG,
+LEVELS = { "unset"   : logging.UNSET,
+           "debug"   : logging.DEBUG,
            "info"    : logging.INFO,
            "warning" : logging.WARNING,
            "error"   : logging.ERROR,
@@ -63,12 +63,11 @@ class HsMonitor:
         # Making sure the directory exists
         if not os.access(logDirname, os.F_OK):
             os.makedirs(logDirname)
-        logFilename = 'log-hsmonitor'
+        logFilename = 'hsmonitor'
         logFilename = '%s/%s' % (logDirname, logFilename)
         # Add file handler
-        handler = logging.handlers.TimedRotatingFileHandler(logFilename,
-                                                            when='midnight',
-                                                            backupCount=14)
+        handler = TimedConcurrentRotatingFileHandler(logFilename, when='midnight',
+                                                     backupCount=14, suffix='log')
         handler.setFormatter(formatter_file)
         logger.addHandler(handler)
         # Add handler which prints to the screen
