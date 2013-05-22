@@ -41,7 +41,8 @@ CONFIG_INI_PATH1 = "data/config.ini"
 CONFIG_INI_PATH2 = "../../persistent/configuration/config.ini"
 
 logger = logging.getLogger('hsmonitor')
-formatter_file   = logging.Formatter('%(asctime)s %(name)s'
+formatter_file   = logging.Formatter('%(asctime)s (%(threadName)s)'
+                              ' %(name)s'
                               '.%(funcName)s.%(levelname)s: %(message)s',
                               '%Y-%m-%d %H:%M:%S')
 formatter_screen = logging.Formatter('%(asctime)s - %(name)s'
