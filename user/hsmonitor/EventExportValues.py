@@ -147,6 +147,7 @@ export_values = {
         ('N', 'WCG_DAQ_MODE', 'daq_mode'),
         ('N', 'WCG_LATITUDE', 'latitude'),
         ('N', 'WCG_LONGITUDE', 'longitude'),
+        ('N', 'WCG_ALTITUDE', 'altitude'),
         ('N', 'WCG_TEMPERATURE_INSIDE', 'temperature_inside'),
         ('N', 'WCG_TEMPERATURE_OUTSIDE', 'temperature_outside'),
         ('N', 'WCG_HUMIDITY_INSIDE', 'humidity_inside'),
@@ -167,8 +168,7 @@ export_values = {
         ('N', 'WCG_OFFSET_OUTSIDE_HUMIDITY', 'offset_outside_humidity'),
         ('N', 'WCG_OFFSET_WIND_DIRECTION', 'offset_wind_direction'),
         ('N', 'WCG_OFFSET_STATION_ALTITUDE', 'offset_station_altitude'),
-        ('N', 'WCG_OFFSET_BAR_SEA_LEVEL', 'offset_bar_sea_level'),
-        ('N', 'WCG_ALTITUDE', 'altitude')],
+        ('N', 'WCG_OFFSET_BAR_SEA_LEVEL', 'offset_bar_sea_level')],
     'LIT': [
         ('N', 'LIT_CORR_DIST', 'correctedDistance'),
         ('N', 'LIT_UNCORR_DIST', 'uncorrectedDistance'),
