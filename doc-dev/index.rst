@@ -1,10 +1,9 @@
-.. Detector Software Developer Documentation master file, created by
-   sphinx-quickstart on Thu Dec  9 17:17:18 2010.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Detector-Software Developer Documentation!
 =====================================================
+
+The HiSPARC Installer Implementation Notes can be downloaded here:
+`HiSPARC Installer <_static/HiSPARC_Installer.pdf>`_
+
 
 Contents:
 
