@@ -16,28 +16,29 @@ RH:  The working directory: HISPARC_ROOT/user/hsmonitor
      The pythonshared folder has to be appended to the python search path.
      It is not inherited if called by the Startup*.bat files from
      persistent/startstopbatch.
-"""
 
+"""
 import re
 import os
 import sys
 
 sys.path.append("../pythonshared")
 
-from time  import sleep
+from time import sleep
 from hslog import log, setLogMode, MODE_BOTH
 
-from EConfigParser  import EConfigParser
+from EConfigParser import EConfigParser
 from BufferListener import BufferListener
-from Interpreter    import Interpreter
+from Interpreter import Interpreter
 from CheckScheduler import CheckScheduler
 from StorageManager import StorageManager
-from Uploader       import Uploader
+from Uploader import Uploader
 from UserExceptions import ThreadCrashError
 
 # Default configuration file path
 CONFIG_INI_PATH1 = "data/config.ini"
 CONFIG_INI_PATH2 = "../../persistent/configuration/config.ini"
+CONFIG_INI_PATH3 = "data/config-password.ini"
 
 
 class HsMonitor:
@@ -48,7 +49,8 @@ class HsMonitor:
         # Read the configuration file
         try:
             self.cfg = EConfigParser()
-            self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2])
+            self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2,
+                           CONFIG_INI_PATH3])
         except:
             log("HsMonitor: Cannot open the config file!", severity=2)
             return
