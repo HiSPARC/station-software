@@ -10,9 +10,42 @@ connecting to the VPN network is all here.
 The installer for the HiSPARC station software is built from this
 repository.
 
-The installer documentation can be found in the ``doc/`` subdirectory.
+The installer documentation can be found in the `doc/` subdirectory.
 The documentation to set up your own development environment, as well as
 the documentation that describes how the initial environment was created,
-can be found in the ``doc-dev/`` subdirectory.
+can be found in the `doc-dev/` subdirectory.
 
 The documentation can be read online at http://docs.hisparc.nl/station-software/.
+
+
+Deployment
+----------
+
+Here are the steps to create an installer executable for the HiSPARC
+installer.
+
+First it is necessary to modify some develop files. We renamed some
+files to provide templates for the actual files, which have been added
+to `.gitignore`, so no sensitive information is accidentally committed.
+
+Copy the file `/db_buffer/buffer-develop.sql` to
+`/db_buffer/buffer.sql`. Then replace the PLACEHOLDERs with the actual
+passwords in the new file.
+
+You can create the following file to override the buffer password in the
+Monitor config: `/user/hsmonitor/data/config-password.ini` This file
+should contain the following data:
+
+    [BufferDB]
+    Password=PLACEHOLDER
+
+There are also some locations in the `*.nsh` files where passwords need
+to be changed.
+
+When the password configuration is complete, run the bake script:
+
+    bake/bake.bat
+
+Which then runs the script `bake.py`, this then calls NSIS to compile
+the installers. You will be asked to enter a version number for this
+release.
