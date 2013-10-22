@@ -1,5 +1,6 @@
 # Specific
 user/hsmonitor/data/config-password.ini
+db_buffer/buffer.sql
 doc/_build/*
 doc-dev/_build/*
 bake/releases/*
