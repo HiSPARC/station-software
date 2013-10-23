@@ -28,24 +28,25 @@ First it is necessary to modify some develop files. We renamed some
 files to provide templates for the actual files, which have been added
 to `.gitignore`, so no sensitive information is accidentally committed.
 
-Copy the file `/db_buffer/buffer-develop.sql` to
-`/db_buffer/buffer.sql`. Then replace the PLACEHOLDERs with the actual
-passwords in the new file.
+1. Copy the file `/db_buffer/buffer-develop.sql` to
+   `/db_buffer/buffer.sql`. Then replace the PLACEHOLDERs with the actual
+   passwords in the new file.
 
-You can create the following file to override the buffer password in the
-Monitor config: `/user/hsmonitor/data/config-password.ini` This file
-should contain the following data:
+2. You can create the following file to override the buffer password in the
+   Monitor config: `/user/hsmonitor/data/config-password.ini`. This file
+   should contain the following data:
 
     [BufferDB]
     Password=PLACEHOLDER
 
-There are also some locations in the `*.nsh` files where passwords need
-to be changed.
+3. Copy the file `/bake/nsisscripts/password-placeholder.nsh` to
+   `/bake/nsisscripts/password.nsh`. Then replace the PLACEHOLDERs with the
+   actual passwords in the new file.
 
 When the password configuration is complete, run the bake script:
 
     bake/bake.bat
 
 Which then runs the script `bake.py`, this then calls NSIS to compile
-the installers. You will be asked to enter a version number for this
-release.
+the installers. You will be asked to enter a version and release number
+for this release.

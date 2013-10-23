@@ -4,6 +4,9 @@
 #   Jan 2013: multiple (2) NI-RunTimeEngines
 #   May 2013: - separate OpenVpn folder for 32-bit and 64-bit
 #             - popup-window in case of error
+#   Aug 2013: - 64-bit: only OpenVPN and TightVNC have a true 64-bit executable
+#               Other application still use the 32-bit registry.
+#               OpenVPN, due to a bug in version 2.2.2, as well.
 #
 
 #
@@ -23,7 +26,7 @@ Section -CheckExecutables
   Call fileExists
   StrCpy $FileName "$OpenVpnDir\bin\openvpnserv.exe"
   Call fileExists
-  StrCpy $FileName "$AdminDir\tightvnc\${VNC_SERVICENAME}.exe"
+  StrCpy $FileName "$TvncFolder\${VNC_SERVICENAME}.exe"
   Call fileExists
   StrCpy $FileName "$AdminDir\nsclientpp\NSClient++.exe"
   Call fileExists
@@ -42,6 +45,8 @@ SectionEnd
 #
 Section -OpenVPNSetup
   DetailPrint "admin-OpenVPNSetup"
+  # OpenVPN 2.2.2 64-bit version, still reads its registry as a 32-bit application
+  SetRegView 32
   # register
   WriteRegStr HKLM ${OPENVPN_KEY} ""         "$AdminDir"
   WriteRegStr HKLM ${OPENVPN_KEY} config_dir "$OpenVpnDir\config"
@@ -66,6 +71,9 @@ Section -OpenVPNSetup
   ${Endif}
   # unzip certificate zip
   nsisunz::UnzipToLog "$CertZip" "$OpenVpnDir\config"
+  ${If} $Architecture == "64"
+    SetRegView 64
+  ${Endif}
 SectionEnd
 
 #
@@ -74,7 +82,6 @@ SectionEnd
 Section -TightVNCSetup
   DetailPrint "admin-TightVNCSetup"
   # register
-  StrCpy $TvncFolder "$AdminDir\tightvnc"
   WriteRegStr   HKLM ${TIGHTVNC_KEY}         Path                      "$TvncFolder"
   WriteRegStr   HKLM ${TIGHTVNC_KEY}         StartMenuGroup            "TightVNC"
   WriteRegDWORD HKLM ${TVNCCOMPONENTS_KEY}   "TightVNC Server"         1
@@ -140,6 +147,7 @@ SectionEnd
 #
 Section -ODBCSetup
   DetailPrint "admin-ODBCSetup"
+  SetRegView 32
   # install
   ExecWait '"$AdminDir\odbcconnector\Install_HiSPARC.bat"' $Result
   StrCpy $Message "ODBC install: $Result"
@@ -156,6 +164,9 @@ Section -ODBCSetup
   WriteRegStr HKLM ${ODBCREGKEY}     SERVER      "${BDBHOST}"
   WriteRegStr HKLM ${ODBCREGKEY}     UID         "buffer"
   WriteRegStr HKLM '${ODBCDSREGKEY}' buffer      '${ODBCDRV}'
+  ${If} $Architecture == "64"
+    SetRegView 64
+  ${Endif}
 SectionEnd
 
 #
@@ -164,17 +175,23 @@ SectionEnd
 #
 Section -LabviewRuntimeSetup
   DetailPrint "admin-LabviewRuntimeSetup"
+  SetRegView 32
   ExecWait '"$AdminDir\niruntimeinstaller\setup.exe" /AcceptLicenses yes /r:n /q' $Result
   StrCpy $Message "LabVIEW RTE 8.2.1 setup: $Result"
   DetailPrint $Message
   ${If} $Result != 3010
+  ${AndIf} $Result != 0
     MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
   ${Endif}
   ExecWait '"$AdminDir\nirte2012\setup.exe" /AcceptLicenses yes /r:n /q' $Result
   StrCpy $Message "LabVIEW RTE 2012 setup: $Result"
   DetailPrint $Message
   ${If} $Result != 3010
+  ${AndIf} $Result != 0
     MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
+  ${If} $Architecture == "64"
+    SetRegView 64
   ${Endif}
 SectionEnd
 

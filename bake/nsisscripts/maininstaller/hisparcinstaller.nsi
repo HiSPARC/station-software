@@ -5,6 +5,7 @@
 #             Jun 2012; Added HISPARC_ROOT environment variable & grouped set of shortcuts
 #             Aug 2012; Uninstaller cleaned and checked, labels renamed
 #             Jan 2013; Release number part of version
+#             Aug 2013; 64-bit architecture support
 #
 
 !include "FileFunc.nsh"
@@ -15,6 +16,7 @@ SetCompressor lzma
 !define HISPARC_VERSION     "${ADMIN_VERSION}.${USER_VERSION}.${RELEASE}"
 
 !include ..\hs_def.nsh
+!include ..\password.nsh
 !include interface2.nsh
 !include variables.nsh
 !include userinput.nsh
@@ -63,12 +65,13 @@ Function .onInit
   # Check for 32-bit computers
   System::Call "kernel32::GetCurrentProcess() i .s"
   System::Call "kernel32::IsWow64Process(i s, *i .r0)"
-  StrCmp $0 "0" proCeed isNot32
-
-isNot32:
-  MessageBox MB_YESNO|MB_ICONQUESTION "WARNING: No 32-bit architecture. Probably 64-bit.$\n\
-  Do you want to continue?" IDYES proCeed IDNO noInstall
-
+  StrCmp $0 "0" is32 is64
+is32:
+  SetRegView 32
+  Goto proCeed
+is64:
+  SetRegView 64
+  
 proCeed:
   ReadRegStr $CurVersion HKLM "${HISPARC_KEY}" ${REG_HISPARC_VERSION}
   StrCmp $CurVersion "" Install

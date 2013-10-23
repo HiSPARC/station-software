@@ -18,12 +18,10 @@ Var Program
 Var CurVersion
 
 #
-# Windows accounts and passwords.
+# Windows accounts.
 #
 !define ADMHISPARC_USERNAME "admhisparc"
-!define ADMHISPARC_PASSWORD "PLACEHOLDER"
 !define HISPARC_USERNAME    "hisparc"
-!define HISPARC_PASSWORD    "PLACEHOLDER"
 
 #
 # Registry key of autologon and variables.

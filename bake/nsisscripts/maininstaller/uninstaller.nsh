@@ -15,6 +15,17 @@ Function un.onInit
      Abort $(lsNoAdmin)
   ${EndIf}
   
+  # Check for 32-bit computers
+  System::Call "kernel32::GetCurrentProcess() i .s"
+  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
+  StrCmp $0 "0" is32 is64
+is32:
+  SetRegView 32
+  Goto proCeed
+is64:
+  SetRegView 64
+
+proCeed:
   ReadRegStr $HisparcDir HKLM "${HISPARC_KEY}" ${REG_PATH}
   StrCmp $HisparcDir "" noHomedir 
   ${DirState} $HisparcDir $Result

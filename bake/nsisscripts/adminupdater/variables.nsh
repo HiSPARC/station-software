@@ -3,6 +3,7 @@
 #   Admin installer
 #
 Var HisparcDir
+Var Architecture
 Var AdminDir
 Var NIdir
 Var ConfigFile
@@ -23,8 +24,6 @@ Var Message
 !define OPENVPN_KEY         "SOFTWARE\OpenVPN"
 
 # TightVNC definitions
-!define VNC_CTRL_PASSWORD   "PLACEHOLDER"
-!define VNC_PASSWORD        "PLACEHOLDER"
 !define TIGHTVNC_KEY        "SOFTWARE\TightVNC"
 !define TVNCCOMPONENTS_KEY  "SOFTWARE\TightVNC\Components"
 !define TVNCSERVER_KEY      "SOFTWARE\TightVNC\Server"
@@ -34,7 +33,6 @@ Var Message
 !define ODBCREGKEY          "SOFTWARE\ODBC\ODBC.INI\buffer"
 !define ODBCDSREGKEY        "SOFTWARE\ODBC\ODBC.INI\ODBC Data Sources"
 !define ODBCDRVPATH         "C:\WINDOWS\system32\myodbc5.dll"
-!define BUFFERPASS          "PLACEHOLDER"
 !define BDBHOST             "localhost"
 
 # LabVIEW definitions

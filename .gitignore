@@ -1,4 +1,5 @@
 # Specific
+bake/nsisscripts/password.nsh
 user/hsmonitor/data/config-password.ini
 db_buffer/buffer.sql
 doc/_build/*
