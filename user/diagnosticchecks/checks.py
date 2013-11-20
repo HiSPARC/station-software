@@ -22,7 +22,7 @@ def checkBufferdb(warn=None, crit=None):
     config = ConfigParser.ConfigParser()
 
     try:
-        config.read(CONFIG_INI1, CONFIG_INI2)
+        config.read([CONFIG_INI1, CONFIG_INI2])
         host = config.get('BufferDB', 'Host')
         user = config.get('BufferDB', 'Username')
         pwd = config.get('BufferDB', 'Password')
