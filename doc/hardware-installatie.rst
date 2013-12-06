@@ -108,27 +108,29 @@ aan de achterzijde).
 Monitor en controle
 -------------------
 
-De nieuwe besturingssoftware biedt bovendien de optie om de status van de
-detectoren en pc’s op afstand via internet te controleren (:ref:`Nagios
-<nagios>`).
+De |hisparc| besturingssoftware biedt bovendien de optie om de status
+van de detectoren en pc’s op afstand via internet te controleren
+(:ref:`Nagios <nagios>`).
 
 .. _nagios:
 .. figure:: images/nagios.png
    :align: center
    :width: 600
 
-   Het menu aan de linkerzijde biedt links naar verschillende overzichten om de stations te monitoren.
+   Het menu aan de linkerzijde biedt links naar verschillende
+   overzichten om de stations te monitoren.
 
-Ga naar:
+Deze status overzicht pagina is te vinden via deze link:
 
 http://vpn.hisparc.nl/
 
-Selecteer vervolgens een van de stations in het scherm om in meer detail te zien wat de status is van dat station.  De
-clustercoördinatoren hebben bovendien de mogelijkheid om de instellingen
-van de detector via een ‘virtual private network’ (VPN, :ref:`VPN diagram
-<network-diagram>`) op afstand te wijzigen.  De toegang tot de pc’s biedt
-de mogelijkheid om snel en efficiënt kritische instellingen te veranderen
-en software updates door te voeren.
+Selecteer vervolgens een van de stations in het scherm om in meer detail
+te zien wat de status is van dat station. De clustercoördinatoren hebben
+bovendien de mogelijkheid om de instellingen van de detector via een
+‘virtual private network’ (VPN, :ref:`VPN diagram <network-diagram>`) op
+afstand te wijzigen. De toegang tot de pc’s biedt de mogelijkheid om
+snel en efficiënt kritische instellingen te veranderen en software
+updates door te voeren.
 
 .. _network-diagram:
 .. figure:: images/network-diagram.png
@@ -136,5 +138,5 @@ en software updates door te voeren.
    :width: 600
 
    De software biedt monitor en controle mogelijkheden via een VPN
-   verbinding.  Data van de detector wordt over een gescheiden verbinding
+   verbinding. Data van de detector wordt over een gescheiden verbinding
    verzonden.
