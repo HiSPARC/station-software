@@ -12,7 +12,7 @@ opnemen met onze projectcoördinator `Surya Bonam <suryab@nikhef.nl>`_.
 
 U kunt het software installatiepakket downloaden met deze link:
 `HiSPARC Installer v6.11.13
-<http://data.hisparc.nl/media/uploads/hisparc/hisparcInstaller_v6.11.13.exe>`_
+<http://data.hisparc.nl/media/uploads/hisparc/hisparcInstaller_v6.11.13_1.exe>`_
 
 
 Inhoud
