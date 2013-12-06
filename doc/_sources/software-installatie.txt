@@ -4,14 +4,14 @@ Installatie van de |hisparc| software
 =====================================
 
 De software bestaat uit één installatiepakket [#OOTI]_.  We raden aan om
-de software te installeren op een moderne pc met een schone installatie
-van Microsoft Windows XP of Windows 7 zouden in principe
-ook moeten werken, maar daarop is de software (nog) niet getest.  De keuze
-voor Windows is slechts gemaakt omdat een groot aantal systeembeheerders
-in het voortgezet onderwijs alleen ervaring heeft met Windows en een
-aantal van hen in het verleden aangaf geen Linux pc's toe te staan op het
-schoolnetwerk.  Voor het ondersteunen van meer dan één besturingssysteem
-hebben we helaas niet de mankracht.
+de software te installeren op een moderne pc (32 of 64-bit) met een
+schone installatie van Microsoft Windows XP of Windows 7 (op Windows 8
+is de software nog niet getest).  De keuze voor Windows is slechts
+gemaakt omdat een groot aantal systeembeheerders in het voortgezet
+onderwijs alleen ervaring heeft met Windows en een aantal van hen in het
+verleden aangaf geen Linux pc's toe te staan op het schoolnetwerk.  Voor
+het ondersteunen van meer dan één besturingssysteem hebben we helaas
+niet de mankracht.
 
 .. note:: Vóór uiteindelijk gebruik is het nodig de |hisparc| data
    acquisitie software na installatie te configureren!  Zie
@@ -19,14 +19,12 @@ hebben we helaas niet de mankracht.
    zijn uw meetgegevens ONBRUIKBAAR.**  Als u deze handleiding stap voor
    stap volgt, dan komt u vanzelf aan de configuratie toe.
 
-.. note:: Op het science park en de TU/E maken we sinds kort gebruik van
+.. note:: Op het Science Park en de TU/E maken we gebruik van
    Asus EEE PC's.  Deze pc's zijn goedkoop, hebben voldoende geheugen,
-   zijn energiezuinig, compact en snel genoeg voor onze doeleinden.  De
-   pc's werden geleverd met Microsoft Windows XP Home en ook dat is
+   zijn energiezuinig, compact en snel genoeg voor onze doeleinden.  Deze
+   mini pc's werden geleverd met Microsoft Windows XP Home en ook dat is
    voldoende.  Let wel: een monitor wordt *niet* meegeleverd; een toetsenbord
-   en muis soms ook niet.  De nieuwste modellen worden echter geleverd met
-   Windows 7, op zeer korte termijn ondersteunen we Windows 7 dan ook
-   volledig.
+   en muis soms ook niet.
 
 .. note:: Alle broncode van de software is beschikbaar.  Wilt u zelf met
    |labview| (de broncode van de data acquisitie software) aan de slag of
@@ -40,24 +38,19 @@ Benodigdheden
 
 Vóór u aan de installatie begint dient u te beschikken over:
 
-* de HiSPARC software installer, ``hisparcInstaller_v6.10.exe``
-* een door de clustercoördinator verstrekt beveiligingscertificaat,
-  bijvoorbeeld: ``sciencepark501.zip``
-* een door de clustercoördinator verstrekt stationnummer
-* een wachtwoord, uniek voor dit station, door de clustercoördinator
-  verstrekt of door uzelf gekozen.  Dit wachtwoord wordt gebruikt als
-  controle op een vergissing in stationnummers.  Denkt u er in het geval
-  van een zelfgekozen wachtwoord aan dit wachtwoord aan de
-  clustercoördinator te verstrekken.
+* de HiSPARC software installer, ``hisparcInstaller_v6.11.exe``
+* door u clustercoördinator verstrekt:
+    * beveiligingscertificaat, bijvoorbeeld: ``sciencepark501.zip``
+    * een stationnummer
+    * een wachtwoord, uniek voor dit station.  Dit wachtwoord wordt
+      gebruikt als controle op een vergissing in stationnummers.  Denkt
+      u er in het geval van een zelfgekozen wachtwoord aan dit wachtwoord
+      aan de clustercoördinator te verstrekken.
 
 .. note:: de naam van uw pc zoals gebruikt in ons monitorsysteem
    (:ref:`nagios-doc`) is gelijk aan de naam van het certificaat, zonder
    de ``.zip`` extensie.  Als het certificaat ``sciencepark501.zip`` heet,
    dan is de pc-naam ``sciencepark501``.
-
-.. note:: In het verleden ondersteunden we geen proxy-servers.  Nu we dat
-   wel doen, is het niet langer nodig de systeembeheerder te vragen
-   poorten open te zetten.
 
 .. note:: Stel de pc in de *BIOS setup* zódanig in dat hij in het geval
    van stroomuitval automatisch weer opstart.  Bij een *EEE PC* kan dat

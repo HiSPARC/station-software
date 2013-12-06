@@ -6,15 +6,16 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Installatie van de HiSPARC software &mdash; HiSPARC software 3.9 documentation</title>
+    <title>Installatie van de HiSPARC software &mdash; HiSPARC software 6.11 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/hisparc_style.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.9',
+        VERSION:     '6.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="HiSPARC software 3.9 documentation" href="index.html" />
+    <link rel="top" title="HiSPARC software 6.11 documentation" href="index.html" />
     <link rel="next" title="Configuratie van de HiSPARC software" href="configuratie.html" />
     <link rel="prev" title="Installatie van de HiSPARC electronica" href="hardware-installatie.html" /> 
   </head>
@@ -38,7 +39,7 @@
         <li class="right" >
           <a href="hardware-installatie.html" title="Installatie van de HiSPARC electronica"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">HiSPARC software 3.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,14 +51,14 @@
   <div class="section" id="installatie-van-de-hisparc-software">
 <h1>Installatie van de HiSPARC software<a class="headerlink" href="#installatie-van-de-hisparc-software" title="Permalink to this headline">¶</a></h1>
 <p>De software bestaat uit één installatiepakket <a class="footnote-reference" href="#ooti" id="id1">[1]</a>.  We raden aan om
-de software te installeren op een moderne pc met een schone installatie
-van Microsoft Windows XP of Windows 7 zouden in principe
-ook moeten werken, maar daarop is de software (nog) niet getest.  De keuze
-voor Windows is slechts gemaakt omdat een groot aantal systeembeheerders
-in het voortgezet onderwijs alleen ervaring heeft met Windows en een
-aantal van hen in het verleden aangaf geen Linux pc&#8217;s toe te staan op het
-schoolnetwerk.  Voor het ondersteunen van meer dan één besturingssysteem
-hebben we helaas niet de mankracht.</p>
+de software te installeren op een moderne pc (32 of 64-bit) met een
+schone installatie van Microsoft Windows XP of Windows 7 (op Windows 8
+is de software nog niet getest).  De keuze voor Windows is slechts
+gemaakt omdat een groot aantal systeembeheerders in het voortgezet
+onderwijs alleen ervaring heeft met Windows en een aantal van hen in het
+verleden aangaf geen Linux pc&#8217;s toe te staan op het schoolnetwerk.  Voor
+het ondersteunen van meer dan één besturingssysteem hebben we helaas
+niet de mankracht.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Vóór uiteindelijk gebruik is het nodig de HiSPARC data
@@ -68,14 +69,12 @@ stap volgt, dan komt u vanzelf aan de configuratie toe.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Op het science park en de TU/E maken we sinds kort gebruik van
+<p class="last">Op het Science Park en de TU/E maken we gebruik van
 Asus EEE PC&#8217;s.  Deze pc&#8217;s zijn goedkoop, hebben voldoende geheugen,
-zijn energiezuinig, compact en snel genoeg voor onze doeleinden.  De
-pc&#8217;s werden geleverd met Microsoft Windows XP Home en ook dat is
+zijn energiezuinig, compact en snel genoeg voor onze doeleinden.  Deze
+mini pc&#8217;s werden geleverd met Microsoft Windows XP Home en ook dat is
 voldoende.  Let wel: een monitor wordt <em>niet</em> meegeleverd; een toetsenbord
-en muis soms ook niet.  De nieuwste modellen worden echter geleverd met
-Windows 7, op zeer korte termijn ondersteunen we Windows 7 dan ook
-volledig.</p>
+en muis soms ook niet.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -88,16 +87,22 @@ de HiSPARC data in zijn werk gaat, kijk dan op
 <div class="section" id="benodigdheden">
 <h2>Benodigdheden<a class="headerlink" href="#benodigdheden" title="Permalink to this headline">¶</a></h2>
 <p>Vóór u aan de installatie begint dient u te beschikken over:</p>
-<ul class="simple">
-<li>de HiSPARC software installer, <tt class="docutils literal"><span class="pre">hisparcInstaller_v6.10.exe</span></tt></li>
-<li>een door de clustercoördinator verstrekt beveiligingscertificaat,
-bijvoorbeeld: <tt class="docutils literal"><span class="pre">sciencepark501.zip</span></tt></li>
-<li>een door de clustercoördinator verstrekt stationnummer</li>
-<li>een wachtwoord, uniek voor dit station, door de clustercoördinator
-verstrekt of door uzelf gekozen.  Dit wachtwoord wordt gebruikt als
-controle op een vergissing in stationnummers.  Denkt u er in het geval
-van een zelfgekozen wachtwoord aan dit wachtwoord aan de
-clustercoördinator te verstrekken.</li>
+<ul>
+<li><p class="first">de HiSPARC software installer, <tt class="docutils literal"><span class="pre">hisparcInstaller_v6.11.exe</span></tt></p>
+</li>
+<li><dl class="first docutils">
+<dt>door u clustercoördinator verstrekt:</dt>
+<dd><ul class="first last simple">
+<li>beveiligingscertificaat, bijvoorbeeld: <tt class="docutils literal"><span class="pre">sciencepark501.zip</span></tt></li>
+<li>een stationnummer</li>
+<li>een wachtwoord, uniek voor dit station.  Dit wachtwoord wordt
+gebruikt als controle op een vergissing in stationnummers.  Denkt
+u er in het geval van een zelfgekozen wachtwoord aan dit wachtwoord
+aan de clustercoördinator te verstrekken.</li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -105,12 +110,6 @@ clustercoördinator te verstrekken.</li>
 (<a class="reference internal" href="hardware-installatie.html#nagios-doc"><em>Monitor en controle</em></a>) is gelijk aan de naam van het certificaat, zonder
 de <tt class="docutils literal"><span class="pre">.zip</span></tt> extensie.  Als het certificaat <tt class="docutils literal"><span class="pre">sciencepark501.zip</span></tt> heet,
 dan is de pc-naam <tt class="docutils literal"><span class="pre">sciencepark501</span></tt>.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">In het verleden ondersteunden we geen proxy-servers.  Nu we dat
-wel doen, is het niet langer nodig de systeembeheerder te vragen
-poorten open te zetten.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -384,11 +383,11 @@ informatie over Python, zie de <a class="reference external" href="http://python
         <li class="right" >
           <a href="hardware-installatie.html" title="Installatie van de HiSPARC electronica"
              >previous</a> |</li>
-        <li><a href="index.html">HiSPARC software 3.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, HiSPARC.
+        &copy; Copyright 2009-2013, HiSPARC.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>

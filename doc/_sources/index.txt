@@ -1,23 +1,22 @@
-.. HiSPARC software documentation master file, created by
-   sphinx-quickstart on Wed Nov 11 20:01:39 2009.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 .. include:: subst.inc
 
-Welkom bij HiSPARC software documentatie!
-============================================
+HiSPARC station software en hardware documentatie
+=================================================
 
-U kunt het software installatiepakket downloaden: `hisparcInstaller
-<http://data.hisparc.nl/media/uploads/hisparc/hisparcInstaller_v6.10.exe>`_
+Deze documentatie beschrijft hoe de hard- en software bij een |hisparc|
+station geïnstalleerd moeten worden. Een pdf-versie van deze handleiding
+is ook te downloaden: `HiSPARCsoftware.pdf <HiSPARCsoftware.pdf>`_. Ga
+naar de `HiSPARC Homepage <http://www.hisparc.nl/>`_ voor meer
+informatie over |hisparc|. Bij vragen of suggesties kunt u contact
+opnemen met onze projectcoördinator `Surya Bonam <suryab@nikhef.nl>`_.
 
-U kunt een pdf-versie van deze handleiding downloaden: `handleiding
-<HiSPARCsoftware.pdf>`_
+U kunt het software installatiepakket downloaden met deze link:
+`HiSPARC Installer v6.11.13
+<http://data.hisparc.nl/media/uploads/hisparc/hisparcInstaller_v6.11.13_1.exe>`_
 
-Voor meer informatie over |hisparc|, zie http://www.hisparc.nl/.
 
-Bij vragen, onduidelijkheden of suggesties kunt u contact opnemen met onze
-projectcoördinator Surya Bonam (suryab@nikhef.nl).
+Inhoud
+------
 
 .. toctree::
    :maxdepth: 2
@@ -26,12 +25,3 @@ projectcoördinator Surya Bonam (suryab@nikhef.nl).
    hardware-installatie
    software-installatie
    configuratie
-
-
-.. Other
-   ==================
-
-   * :ref:`genindex`
-   * :ref:`modindex`
-   * :ref:`search`
-
