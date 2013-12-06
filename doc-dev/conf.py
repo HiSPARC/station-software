@@ -166,6 +166,9 @@ html_use_index = False
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'DetectorSoftwareDeveloperDocumentationdoc'
 
+def setup(app):
+    app.add_stylesheet('hisparc_style.css')
+
 
 # -- Options for LaTeX output --------------------------------------------------
 
