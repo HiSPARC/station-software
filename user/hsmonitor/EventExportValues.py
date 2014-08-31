@@ -1,4 +1,3 @@
-
 export_values = {
     'CIC': [
         ('N', 'RED', 'data_reduction'),
@@ -28,7 +27,8 @@ export_values = {
         ('N', 'TR2', 'mas_tr2'),
         ('N', 'TR3', 'slv_tr1'),
         ('N', 'TR4', 'slv_tr2')],
-    'ERR': [('N', 'ERRMSG', 'error_message')],
+    'ERR': [
+        ('N', 'ERRMSG', 'error_message')],
     'CFG': [
         ('N', 'CFG_GPS_LAT', 'cfg_gps_latitude'),
         ('N', 'CFG_GPS_LONG', 'cfg_gps_longitude'),
@@ -136,4 +136,67 @@ export_values = {
         ('Y', 'WTR_HEAT_INDEX', 'heatIndex'),
         ('Y', 'WTR_DEW_POINT', 'dewPoint'),
         ('Y', 'WTR_WIND_CHILL', 'windChill')],
+    'WER': [
+        ('N', 'WER_ERRMSG', 'error_message')],
+    'WCG': [
+        ('N', 'WCG_COM_PORT', 'com_port'),
+        ('N', 'WCG_BAUD_RATE', 'baud_rate'),
+        ('N', 'WCG_STATION_ID', 'station_id'),
+        ('N', 'WCG_DATABASE_NAME', 'database_name'),
+        ('N', 'WCG_HELP_URL', 'help_url'),
+        ('N', 'WCG_DAQ_MODE', 'daq_mode'),
+        ('N', 'WCG_LATITUDE', 'latitude'),
+        ('N', 'WCG_LONGITUDE', 'longitude'),
+        ('N', 'WCG_ALTITUDE', 'altitude'),
+        ('N', 'WCG_TEMPERATURE_INSIDE', 'temperature_inside'),
+        ('N', 'WCG_TEMPERATURE_OUTSIDE', 'temperature_outside'),
+        ('N', 'WCG_HUMIDITY_INSIDE', 'humidity_inside'),
+        ('N', 'WCG_HUMIDITY_OUTSIDE', 'humidity_outside'),
+        ('N', 'WCG_BAROMETER', 'barometer'),
+        ('N', 'WCG_WIND_DIRECTION', 'wind_direction'),
+        ('N', 'WCG_WIND_SPEED', 'wind_speed'),
+        ('N', 'WCG_SOLAR_RADIATION', 'solar_radiation'),
+        ('N', 'WCG_UV_INDEX', 'uv_index'),
+        ('N', 'WCG_EVAPOTRANSPIRATION', 'evapotranspiration'),
+        ('N', 'WCG_RAIN_RATE', 'rain_rate'),
+        ('N', 'WCG_HEAT_INDEX', 'heat_index'),
+        ('N', 'WCG_DEW_POINT', 'dew_point'),
+        ('N', 'WCG_WIND_CHILL', 'wind_chill'),
+        ('N', 'WCG_OFFSET_INSIDE_TEMPERATURE', 'offset_inside_temperature'),
+        ('N', 'WCG_OFFSET_OUTSIDE_TEMPERATURE', 'offset_outside_temperature'),
+        ('N', 'WCG_OFFSET_INSIDE_HUMIDITY', 'offset_inside_humidity'),
+        ('N', 'WCG_OFFSET_OUTSIDE_HUMIDITY', 'offset_outside_humidity'),
+        ('N', 'WCG_OFFSET_WIND_DIRECTION', 'offset_wind_direction'),
+        ('N', 'WCG_OFFSET_STATION_ALTITUDE', 'offset_station_altitude'),
+        ('N', 'WCG_OFFSET_BAR_SEA_LEVEL', 'offset_bar_sea_level')],
+    'LIT': [
+        ('N', 'LIT_CORR_DIST', 'correctedDistance'),
+        ('N', 'LIT_UNCORR_DIST', 'uncorrectedDistance'),
+        ('N', 'LIT_UNCORR_ANGLE', 'uncorrectedAngle'),
+        ('N', 'LIT_CORR_ANGLE', 'correctedAngle')],
+    'LER': [
+        ('N', 'LER_ERRMSG', 'error_message')],
+    'LCG': [
+        ('N', 'LCG_COM_PORT', 'com_port'),
+        ('N', 'LCG_BAUD_RATE', 'baud_rate'),
+        ('N', 'LCG_STATION_ID', 'station_id'),
+        ('N', 'LCG_DATABASE_NAME', 'database_name'),
+        ('N', 'LCG_HELP_URL', 'help_url'),
+        ('N', 'LCG_DAQ_MODE', 'daq_mode'),
+        ('N', 'LCG_LATITUDE', 'latitude'),
+        ('N', 'LCG_LONGITUDE', 'longitude'),
+        ('N', 'LCG_ALTITUDE', 'altitude'),
+        ('N', 'LCG_SQUELCH_SETTING', 'squelch_setting'),
+        ('N', 'LCG_CLOSE_ALARM_DISTANCE', 'close_alarm_distance'),
+        ('N', 'LCG_SEVERE_ALARM_DISTANCE', 'severe_alarm_distance'),
+        ('N', 'LCG_NOISE_BEEP', 'noise_beep'),
+        ('N', 'LCG_MINIMUM_GPS_SPEED', 'minimum_gps_speed'),
+        ('N', 'LCG_ANGLE_CORRECTION', 'angle_correction')],
+    'LST': [
+        ('N', 'LST_CLOSE_RATE', 'closeStrikeRate'),
+        ('N', 'LST_TOTAL_RATE', 'totalStrikeRate'),
+        ('N', 'LST_CLOSE_ALARM', 'closeAlarm'),
+        ('N', 'LST_SEVERE_ALARM', 'severeAlarm'),
+        ('N', 'LST_CURR_HEADING', 'currentHeading')],
+    'LNS': [], # This is an empty message
 }
