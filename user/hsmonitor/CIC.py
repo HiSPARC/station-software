@@ -49,10 +49,10 @@ class CIC(HiSparc2Event):
         self.unpackSeqMessage()
 
         self.version, self.database_id, self.data_reduction, \
-        self.eventrate, self.num_devices, self.length, \
-        gps_second, gps_minute, gps_hour, gps_day, gps_month, gps_year, \
-        self.nanoseconds, self.time_delta, self.trigger_pattern = \
-        self.unpackSeqMessage('>2BBfBH5BH3L')
+            self.eventrate, self.num_devices, self.length, \
+            gps_second, gps_minute, gps_hour, gps_day, gps_month, gps_year, \
+            self.nanoseconds, self.time_delta, self.trigger_pattern = \
+            self.unpackSeqMessage('>2BBfBH5BH3L')
 
         # Try to handle NaNs for eventrate. These are handled differently from
         # platform to platform (i.e. MSVC libraries are screwed). This
@@ -72,10 +72,10 @@ class CIC(HiSparc2Event):
 
         # Read out and save traces and calculated trace parameters
         self.mas_stdev1, self.mas_stdev2, self.mas_baseline1, \
-        self.mas_baseline2, self.mas_npeaks1, self.mas_npeaks2, \
-        self.mas_pulseheight1, self.mas_pulseheight2, self.mas_int1, \
-        self.mas_int2, mas_tr1, mas_tr2 = \
-        self.unpackSeqMessage('>8H2L%ds%ds' % (l, l))
+            self.mas_baseline2, self.mas_npeaks1, self.mas_npeaks2, \
+            self.mas_pulseheight1, self.mas_pulseheight2, self.mas_int1, \
+            self.mas_int2, mas_tr1, mas_tr2 = \
+            self.unpackSeqMessage('>8H2L%ds%ds' % (l, l))
 
         self.mas_tr1 = compress(self.unpack_trace(mas_tr1))
         self.mas_tr2 = compress(self.unpack_trace(mas_tr2))
@@ -83,10 +83,10 @@ class CIC(HiSparc2Event):
         # Read out and save slave data as well, if available
         if self.num_devices > 1:
             self.slv_stdev1, self.slv_stdev2, self.slv_baseline1, \
-            self.slv_baseline2, self.slv_npeaks1, self.slv_npeaks2, \
-            self.slv_pulseheight1, self.slv_pulseheight2, self.slv_int1, \
-            self.slv_int2, slv_tr1, slv_tr2 = \
-            self.unpackSeqMessage('>8H2L%ds%ds' % (l, l))
+                self.slv_baseline2, self.slv_npeaks1, self.slv_npeaks2, \
+                self.slv_pulseheight1, self.slv_pulseheight2, self.slv_int1, \
+                self.slv_int2, slv_tr1, slv_tr2 = \
+                self.unpackSeqMessage('>8H2L%ds%ds' % (l, l))
 
             self.slv_tr1 = compress(self.unpack_trace(slv_tr1))
             self.slv_tr2 = compress(self.unpack_trace(slv_tr2))
@@ -110,7 +110,7 @@ class CIC(HiSparc2Event):
 
         n = len(raw_trace)
         if n % 3 != 0:
-            #return None
+            # return None
             raise Exception("Blob length is not divisible by 3!")
         a = struct.unpack("%dB" % (n), raw_trace)
         trace = []

@@ -21,9 +21,9 @@ class CMP(HiSparc2Event):
         self.unpackSeqMessage()
 
         self.version, self.database_id, \
-        gps_second, gps_minute, gps_hour, gps_day, gps_month, gps_year, \
-        self.nanoseconds, self.cmp_device, self.cmp_comparator, \
-        self.cmp_count_over_threshold = self.unpackSeqMessage('>2B5BHL2BL')
+            gps_second, gps_minute, gps_hour, gps_day, gps_month, gps_year, \
+            self.nanoseconds, self.cmp_device, self.cmp_comparator, \
+            self.cmp_count_over_threshold = self.unpackSeqMessage('>2B5BHL2BL')
 
         try:
             self.datetime = datetime(gps_year, gps_month, gps_day,

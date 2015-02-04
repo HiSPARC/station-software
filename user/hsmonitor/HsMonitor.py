@@ -19,7 +19,6 @@ RH:  The working directory: HISPARC_ROOT/user/hsmonitor
 
 """
 import re
-import os
 import sys
 
 sys.path.append("../pythonshared")

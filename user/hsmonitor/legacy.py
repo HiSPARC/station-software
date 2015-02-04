@@ -35,9 +35,9 @@ def unpack_legacy_message(self):
     self.minute = struct.unpack("B", self.blob[5:6])[0]
     self.hour = struct.unpack("B", self.blob[6:7])[0]
     self.day = min(31, struct.unpack("B", self.blob[7:8])[0] +
-                                    random.randrange(1, 30))
+                       random.randrange(1, 30))
     self.month = min(12, struct.unpack("B", self.blob[8:9])[0] +
-                                       random.randrange(1, 11))
+                         random.randrange(1, 11))
     self.year = struct.unpack(">H", self.blob[9:11])[0]
     self.datetime = datetime(self.year, self.month, self.day,
                              self.hour, self.minute, self.second)

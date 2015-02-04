@@ -23,7 +23,7 @@ class ERR(HiSparc2Event):
         self.unpackSeqMessage()
 
         self.version, self.database_id, gps_second, gps_minute, gps_hour, \
-        gps_day, gps_month, gps_year = self.unpackSeqMessage('>2B5BH')
+            gps_day, gps_month, gps_year = self.unpackSeqMessage('>2B5BH')
 
         self.datetime = datetime(gps_year, gps_month, gps_day,
                                  gps_hour, gps_minute, gps_second)

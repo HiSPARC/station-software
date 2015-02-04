@@ -9,7 +9,6 @@ creates Events from it. The Events are passed on to the StorageManager.
 from time import sleep, time
 import threading
 
-import _mysql
 from MySQLdb import connect, OperationalError
 
 from hslog import log

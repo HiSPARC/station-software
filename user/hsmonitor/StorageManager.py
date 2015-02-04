@@ -7,11 +7,12 @@ from time import time
 from Subject import Subject
 from hslog import log
 
-FILEDIR  = "../../persistent/data/hsmonitor"
+FILEDIR = "../../persistent/data/hsmonitor"
 FILENAME = "%s/Storage.db" % FILEDIR
 VACUUMTHRESHOLD = 1000
 
 lock = Lock()
+
 
 class StorageManager(Subject):
     """The StorageManager is used to access the SQLite database called storage.
@@ -92,11 +93,11 @@ class StorageManager(Subject):
         c = self.db.cursor()
         ssize = StorageManager.storagesize
         if (ssize is not None and ssize < VACUUMTHRESHOLD and
-            time() - StorageManager.lastvacuum > 100000):
-                log("StorageManager: Starting VACUUM operation...")
-                c.execute("VACUUM")
-                StorageManager.lastvacuum = time()
-                log("StorageManager: VACUUM finished.")
+                time() - StorageManager.lastvacuum > 100000):
+            log("StorageManager: Starting VACUUM operation...")
+            c.execute("VACUUM")
+            StorageManager.lastvacuum = time()
+            log("StorageManager: VACUUM finished.")
         c.execute("SELECT * FROM Event WHERE (UploadedTo & ?) == 0 LIMIT ?;",
                   (serverbit, numEvents))
         res = c.fetchall()
