@@ -2,17 +2,13 @@
 
 from datetime import datetime
 
-from HiSparc2Event import HiSparc2Event
+from Event import BaseHiSPARCEvent
 
 
-class ERR(HiSparc2Event):
-    def __init__(self, message):
-        """Proceed to unpack the message."""
-        # invoke constructor of parent class
-        HiSparc2Event.__init__(self, message)
+class ERR(BaseHiSPARCEvent):
 
     def unpackMessage(self):
-        """Unpack a buffer error message.
+        """Unpack an error message.
 
         This routine unpacks the error messages written to the buffer by the
         LabVIEW DAQ software.

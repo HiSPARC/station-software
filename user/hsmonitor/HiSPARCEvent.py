@@ -4,16 +4,16 @@ import struct
 from datetime import datetime
 from zlib import compress
 
-from HiSparc2Event import HiSparc2Event
+from Event import BaseHiSPARCEvent
 from legacy import unpack_legacy_message
 import EventExportValues
 
 
-class CIC(HiSparc2Event):
+class CIC(BaseHiSPARCEvent):
+
     def __init__(self, message):
         """Proceed to unpack the message."""
-        # invoke constructor of parent class
-        HiSparc2Event.__init__(self, message)
+        super(CIC, self).__init__(message)
 
         # init the trigger rate attribute
         self.eventrate = 0
@@ -32,7 +32,7 @@ class CIC(HiSparc2Event):
         return self.getEventData()
 
     def unpackMessage(self):
-        """Unpack a buffer message.
+        """Unpack an event message.
 
         This routine unpacks a buffer message written by the LabVIEW DAQ
         software version 3.0 and above. Version 2.1.1 doesn't use a version

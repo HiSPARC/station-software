@@ -2,14 +2,10 @@
 
 from datetime import datetime
 
-from HiSparc2Event import HiSparc2Event
+from Event import BaseHiSPARCEvent
 
 
-class CMP(HiSparc2Event):
-    def __init__(self, message):
-        """Proceed to unpack the message."""
-        # invoke constructor of parent class
-        HiSparc2Event.__init__(self, message)
+class CMP(BaseHiSPARCEvent):
 
     def unpackMessage(self):
         """Unpack a comparator message.

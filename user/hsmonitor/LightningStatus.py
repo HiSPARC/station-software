@@ -1,27 +1,12 @@
-#!/usr/bin/env python
-
 from datetime import datetime
 import time
 
-from Event import Event
+from Event import BaseLightningEvent
 import EventExportValues
 
 
-class LightningStatus(Event):
-    """A Lighting status class to makes all data handling easy."""
-
-    def __init__(self, message):
-        """Invoke constructor of parent class."""
-        Event.__init__(self)
-        self.message = message[1]
-
-    def fixBoolean(self, datastring):
-        if datastring == 'TRUE':
-            return True
-        elif datastring == 'FALSE':
-            return False
-        else:
-            raise ValueError('Value is neither TRUE or FALSE.')
+class LightningStatus(BaseLightningEvent):
+    """A Lightning status class to makes all data handling easy."""
 
     def parseMessage(self):
         tmp = self.message.split("\t")
@@ -36,39 +21,10 @@ class LightningStatus(Event):
         self.year = self.datetime.year
         self.closeStrikeRate = int(tmp[1])
         self.totalStrikeRate = int(tmp[2])
-        self.closeAlarm = self.fixBoolean(tmp[3])
-        self.severeAlarm = self.fixBoolean(tmp[4])
+        self.closeAlarm = self.fix_boolean(tmp[3])
+        self.severeAlarm = self.fix_boolean(tmp[4])
         self.currentHeading = float(tmp[4])
 
         # Get all event data necessary for an upload.
         self.export_values = EventExportValues.export_values[self.uploadCode]
         return self.getEventData()
-
-    def __getattribute__(self, name):
-        return object.__getattribute__(self, name)
-
-    def __getattr__(self, name):
-        if name == "date":
-            return self.datetime.date().isoformat()
-        elif name == "time":
-            return self.datetime.time().isoformat()
-        else:
-            raise AttributeError(name)
-
-    def getEventData(self):
-        """Get all event data necessary for an upload.
-
-        This function parses the export_values variable declared in the
-        EventExportValues and figures out what data to collect for an upload to
-        the eventwarehouse. It returns a list of dictionaries, one for each
-        data element.
-
-        """
-
-        eventdata = []
-        for value in self.export_values:
-            eventdata.append({"calculated": value[0],
-                              "data_uploadcode": value[1],
-                              "data": self.__getattribute__(value[2])})
-
-        return eventdata

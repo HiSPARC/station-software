@@ -57,7 +57,7 @@ LEVELS = {"unset": logging.UNSET,
           "critical": logging.CRITICAL}
 
 
-class HsMonitor:
+class HsMonitor(object):
     def __init__(self):
         # Setup the log mode
         log_dirname = '../../persistent/logs/hsmonitor/'
@@ -88,13 +88,13 @@ class HsMonitor:
                                                  'info')
             if log_level_file in LEVELS:
                 logger.handlers[0].setLevel(level=LEVELS[log_level_file])
-                logger.info('File logging level set to ' + log_level_file+'.')
+                logger.info('File logging level set to ' + log_level_file)
             else:
                 logger.warning("Illegal file logging level '%s' in config "
                                "file, defaulting to debug" % log_level_file)
             if log_level_screen in LEVELS:
                 logger.handlers[1].setLevel(level=LEVELS[log_level_screen])
-                logger.info('File logging level set to '+log_level_screen+'.')
+                logger.info('File logging level set to ' + log_level_screen)
             else:
                 logger.warning("Illegal file logging level '%s' in config "
                                "file, defaulting to debug" % log_level_screen)
