@@ -23,7 +23,7 @@ WW: Pathing to pythonshared is removed, since it is no longer required to
 """
 import re
 import os
-from time  import sleep
+from time import sleep
 import logging
 
 from TimedConcurrentLogging import TimedConcurrentRotatingFileHandler
@@ -41,34 +41,34 @@ CONFIG_INI_PATH2 = "../../persistent/configuration/config.ini"
 CONFIG_INI_PATH3 = "data/config-password.ini"
 
 logger = logging.getLogger('hsmonitor')
-formatter_file   = logging.Formatter('%(asctime)s (%(threadName)s)'
-                              ' %(name)s'
-                              '.%(funcName)s.%(levelname)s: %(message)s',
-                              '%Y-%m-%d %H:%M:%S')
+formatter_file = logging.Formatter('%(asctime)s (%(threadName)s) %(name)s'
+                                   '.%(funcName)s.%(levelname)s: %(message)s',
+                                   '%Y-%m-%d %H:%M:%S')
 formatter_screen = logging.Formatter('%(asctime)s - %(name)s'
                                      ' - %(levelname)s: %(message)s',
                                      '%Y-%m-%d %H:%M:%S')
 
 # Logging levels which can be set in the configuration file
-LEVELS = { "unset"   : logging.UNSET,
-           "debug"   : logging.DEBUG,
-           "info"    : logging.INFO,
-           "warning" : logging.WARNING,
-           "error"   : logging.ERROR,
-           "critical": logging.CRITICAL }
+LEVELS = {"unset": logging.UNSET,
+          "debug": logging.DEBUG,
+          "info": logging.INFO,
+          "warning": logging.WARNING,
+          "error": logging.ERROR,
+          "critical": logging.CRITICAL}
+
 
 class HsMonitor:
     def __init__(self):
         # Setup the log mode
-        logDirname = '../../persistent/logs/hsmonitor/'
+        log_dirname = '../../persistent/logs/hsmonitor/'
         # Making sure the directory exists
-        if not os.access(logDirname, os.F_OK):
-            os.makedirs(logDirname)
-        logFilename = 'hsmonitor'
-        logFilename = '%s/%s' % (logDirname, logFilename)
+        if not os.access(log_dirname, os.F_OK):
+            os.makedirs(log_dirname)
+        log_filename = 'hsmonitor'
+        log_filename = '%s/%s' % (log_dirname, log_filename)
         # Add file handler
-        handler = TimedConcurrentRotatingFileHandler(logFilename, when='midnight',
-                                                     backupCount=14, suffix='log')
+        handler = TimedConcurrentRotatingFileHandler(
+            log_filename, when='midnight', backupCount=14, suffix='log')
         handler.setFormatter(formatter_file)
         logger.addHandler(handler)
         # Add handler which prints to the screen
@@ -84,18 +84,19 @@ class HsMonitor:
             self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2,
                            CONFIG_INI_PATH3])
             log_level_file = self.cfg.ifgetstr('Logging', 'FileLevel', 'debug')
-            log_level_screen = self.cfg.ifgetstr('Logging', 'ScreenLevel', 'info')
+            log_level_screen = self.cfg.ifgetstr('Logging', 'ScreenLevel',
+                                                 'info')
             if log_level_file in LEVELS:
                 logger.handlers[0].setLevel(level=LEVELS[log_level_file])
-                logger.info('File logging level set to '+log_level_file+'.')
+                logger.info('File logging level set to ' + log_level_file+'.')
             else:
-                logger.warning("Illegal file logging level '%s' in configuration "
+                logger.warning("Illegal file logging level '%s' in config "
                                "file, defaulting to debug" % log_level_file)
             if log_level_screen in LEVELS:
                 logger.handlers[1].setLevel(level=LEVELS[log_level_screen])
                 logger.info('File logging level set to '+log_level_screen+'.')
             else:
-                logger.warning("Illegal file logging level '%s' in configuration "
+                logger.warning("Illegal file logging level '%s' in config "
                                "file, defaulting to debug" % log_level_screen)
         except:
             logger.critical('Cannot open the config file!')
@@ -228,7 +229,8 @@ def main():
                     logger.warning('Thread %s restarted.' % thread.name)
     except ThreadCrashError, exc:
         logger.critical(exc)
-        logger.critical('Thread %s keeps crashing, shutting down.' % thread.name)
+        logger.critical('Thread %s keeps crashing, shutting down.' %
+                        thread.name)
     except KeyboardInterrupt:
         logger.critical('Interrupted by keyboard, closing down.')
 

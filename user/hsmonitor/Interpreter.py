@@ -18,14 +18,15 @@ from WeatherError import WeatherError
 from WeatherConfig import WeatherConfig
 from LightningEvent import LightningEvent
 from LightningError import LightningError
-#from LightningConfig import LightningConfig
+from LightningConfig import LightningConfig
 from LightningStatus import LightningStatus
 from LightningNoise import LightningNoise
 
 # create a dictionary to store all type_codes of events
 event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP',
                     '16': 'WTR', '17': 'WER', '18': 'WCG',
-                    '32': 'LIT', '33': 'LER', '34': 'LCG', '35': 'LST', '36': 'LNS',}
+                    '32': 'LIT', '33': 'LER', '34': 'LCG', '35': 'LST',
+                    '36': 'LNS'}
 
 
 class TriggerRateHolder:
@@ -64,14 +65,14 @@ class Interpreter:
             event = LightningEvent(message)
         elif eventcode == 'LER':
             event = LightningError(message)
-        #elif eventcode == 'LCG':
-        #    event = LightningConfig(message)
+        elif eventcode == 'LCG':
+            event = LightningConfig(message)
         elif eventcode == 'LST':
             event = LightningStatus(message)
         elif eventcode == 'LNS':
             event = LightningNoise(message)
         else:
-            logger.warning('Unknown message type %s (%d).' % 
+            logger.warning('Unknown message type %s (%d).' %
                            (eventcode, self.type_id))
             return None
 
@@ -129,7 +130,7 @@ class Interpreter:
             except Exception, (errormsg):
                 # add parsed event_id into the list of event_ids
                 self.discard_event_ids.append(message[2])
-                logger.error('Event exception (discarding event): %s.' % 
+                logger.error('Event exception (discarding event): %s.' %
                              errormsg)
             else:
                 # add parsed event into the list of events

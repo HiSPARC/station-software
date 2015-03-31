@@ -1,8 +1,8 @@
 """This module creates types of Events that are specified by the subclasses."""
 
 
-class Event():
-    # The instantiation operation
+class Event(object):
+
     def __init__(self):
         # init variables here if needed
         self.datetime = 0

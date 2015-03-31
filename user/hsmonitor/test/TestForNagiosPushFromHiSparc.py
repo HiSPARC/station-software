@@ -26,11 +26,14 @@ logger = logging.getLogger('hsmonitor')
 formatter = logging.Formatter('%(asctime)s %(name)s[%(process)d]'
                               '.%(funcName)s.%(levelname)s: %(message)s')
 
+
 class HsMonitor:
+
     def __init__(self):
         # setup the log mode
         file = 'log-testfornagiospushfromhisparc'
-        handler = logging.handlers.TimedRotatingFileHandler(file,when='midnight', backupCount=14)
+        handler = logging.handlers.TimedRotatingFileHandler(
+            file, when='midnight', backupCount=14)
         handler.setFormatter(formatter)
         logger.addHandler(handler)
         logger.setLevel(level=logging.DEBUG)
@@ -40,10 +43,10 @@ class HsMonitor:
             self.cfg = EConfigParser()
             self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2])
         except:
-            log("Cannot open the config file!", severity=2)
+            logger.error("Cannot open the config file!", severity=2)
             return
         else:
-            log("Initilize variables")
+            logger.debug("Initilize variables")
 
             # list of all the threads
             self.hsThreads = []
@@ -67,7 +70,7 @@ class HsMonitor:
         buffLis = BufferListener.BufferListener(bufferdb, interpreter)
 
         if not buffLis:
-            log("Cannot connect to the buffer database!")
+            logger.error("Cannot connect to the buffer database!")
             return None
         # TODO better error handling
 

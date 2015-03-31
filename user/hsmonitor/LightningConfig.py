@@ -2,22 +2,26 @@
 
 from datetime import datetime
 import time
-#import base64
 
 from Event import Event
 import EventExportValues
 
 
-class LightningConfig(object, Event):
+class LightningConfig(Event):
     """A Lightning config class to makes all data handling easy."""
 
     def __init__(self, message):
         """Invoke constructor of parent class."""
         Event.__init__(self)
         self.message = message[1]
-    
+
     def fixBoolean(self, datastring):
-        return eval(datastring.title())
+        if datastring == 'TRUE':
+            return True
+        elif datastring == 'FALSE':
+            return False
+        else:
+            raise ValueError('Value is neither TRUE or FALSE.')
 
     def parseMessage(self):
         tmp = self.message.split("\t")
@@ -35,14 +39,14 @@ class LightningConfig(object, Event):
         self.station_id = int(tmp[3])
         self.database_name = tmp[4]
         self.help_url = tmp[5]
-        self.daq_mode = fixBoolean(tmp[6])
+        self.daq_mode = self.fixBoolean(tmp[6])
         self.latitude = float(tmp[7])
         self.longitude = float(tmp[8])
         self.altitude = float(tmp[9])
         self.squelch_setting = int(tmp[10])
         self.close_alarm_distance = int(tmp[11])
         self.severe_alarm_distance = int(tmp[12])
-        self.noise_beep = fixBoolean(tmp[13])
+        self.noise_beep = self.fixBoolean(tmp[13])
         self.minimum_gps_speed = int(tmp[14])
         self.angle_correction = float(tmp[15])
 
@@ -59,7 +63,7 @@ class LightningConfig(object, Event):
         elif name == "time":
             return self.datetime.time().isoformat()
         else:
-            raise AttributeError, name
+            raise AttributeError(name)
 
     def getEventData(self):
         """Get all event data necessary for an upload.
@@ -76,6 +80,5 @@ class LightningConfig(object, Event):
             eventdata.append({"calculated": value[0],
                               "data_uploadcode": value[1],
                               "data": self.__getattribute__(value[2])})
-                    #"data": base64.b64encode(self.__getattribute__(value[2]))
 
         return eventdata

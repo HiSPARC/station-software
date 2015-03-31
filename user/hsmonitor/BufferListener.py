@@ -16,6 +16,7 @@ from UserExceptions import ThreadCrashError
 
 logger = logging.getLogger('hsmonitor.bufferlistener')
 
+
 class BufferListener(threading.Thread):
     # the instantiation operation
     def __init__(self, config, interpreter):
@@ -83,7 +84,7 @@ class BufferListener(threading.Thread):
         """Get the number of event messages"""
         cursor = self.conn.cursor()
         sql = "SELECT COUNT(*) FROM message"
-        logger.debug('Executing SQL: %s' %sql)
+        logger.debug('Executing SQL: %s' % sql)
         cursor.execute(sql)
         logger.debug('Fetching SQL results...')
         count = cursor.fetchone()[0]
@@ -96,7 +97,7 @@ class BufferListener(threading.Thread):
         sql = ("SELECT message_type_id, message, message_id FROM message "
                "ORDER BY message_id DESC LIMIT %d" %
                int(self.config['poll_limit']))
-        logger.debug('Executing SQL: %s' %sql)
+        logger.debug('Executing SQL: %s' % sql)
         cursor.execute(sql)
         logger.debug('Fetching SQL results...')
         messages = cursor.fetchall()
@@ -117,7 +118,7 @@ class BufferListener(threading.Thread):
             sql = "DELETE FROM message WHERE message_id IN %s"
             numcleared = cursor.execute(sql, (message_ids,))
 
-        logger.debug('Clear %d events from buffer...' %numcleared)
+        logger.debug('Clear %d events from buffer...' % numcleared)
         self.conn.commit()
         logger.debug('Done')
         return len(message_ids)

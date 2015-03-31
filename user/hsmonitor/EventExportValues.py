@@ -198,5 +198,5 @@ export_values = {
         ('N', 'LST_CLOSE_ALARM', 'closeAlarm'),
         ('N', 'LST_SEVERE_ALARM', 'severeAlarm'),
         ('N', 'LST_CURR_HEADING', 'currentHeading')],
-    'LNS': [], # This is an empty message
+    'LNS': [],  # This is an empty message
 }

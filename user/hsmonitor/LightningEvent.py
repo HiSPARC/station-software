@@ -2,13 +2,12 @@
 
 from datetime import datetime
 import time
-#import base64
 
 from Event import Event
 import EventExportValues
 
 
-class LightningEvent(object, Event):
+class LightningEvent(Event):
     """A Lighting event class to makes all data handling easy."""
 
     def __init__(self, message):
@@ -45,7 +44,7 @@ class LightningEvent(object, Event):
         elif name == "time":
             return self.datetime.time().isoformat()
         else:
-            raise AttributeError, name
+            raise AttributeError(name)
 
     def getEventData(self):
         """Get all event data necessary for an upload.
@@ -62,6 +61,5 @@ class LightningEvent(object, Event):
             eventdata.append({"calculated": value[0],
                               "data_uploadcode": value[1],
                               "data": self.__getattribute__(value[2])})
-                    #"data": base64.b64encode(self.__getattribute__(value[2]))
 
         return eventdata

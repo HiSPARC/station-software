@@ -9,6 +9,7 @@ from UserExceptions import ThreadCrashError
 
 logger = logging.getLogger('hsmonitor.checkscheduler')
 
+
 class ScheduledJob:
     def __init__(self, job, jobfunc, interval, args):
         self.job = job

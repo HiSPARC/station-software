@@ -14,7 +14,8 @@ UNKNOWN = 3
 
 TIME_DIFF_INI = '../../persistent/configuration/HisparcII.ini'
 
-logging.getLogger('hsmonitor.check')
+logger = logging.getLogger('hsmonitor.check')
+
 
 class Check:
     def __init__(self):
@@ -50,7 +51,7 @@ class TriggerRate(Check):
                 critRange = config['triggerrate_crit']
                 crit = self.parse_range(critRange)
             except:
-                logger.critical('Unable to read config.ini in %s' % 
+                logger.critical('Unable to read config.ini in %s' %
                                 self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 
@@ -137,7 +138,7 @@ class StorageSize(Check):
                 critRange = config['storagesize_crit']
                 crit = self.parse_range(critRange)
             except:
-                logger.critical('Unable to read config.ini %s' % 
+                logger.critical('Unable to read config.ini %s' %
                                 self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 
@@ -219,7 +220,7 @@ class StorageGrowth(Check):
                 warn = float(config['storagegrowth_warn'])
                 crit = float(config['storagegrowth_crit'])
             except:
-                logger.critical('Unable to read config.ini in %s' % 
+                logger.critical('Unable to read config.ini in %s' %
                                 self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 

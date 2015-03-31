@@ -3,6 +3,7 @@ from ConfigParser import ConfigParser
 
 logger = logging.getLogger('hsmonitor.econfigparser')
 
+
 class EConfigParser(ConfigParser):
     # extend the Config parser to make parsing easier
     def __init__(self):
@@ -12,7 +13,7 @@ class EConfigParser(ConfigParser):
         if self.has_option(section, option):
             return dtype(self.get(section, option))
         else:
-            logger.warning('option %s. %s not specified, using default: %s' % 
+            logger.warning('option %s. %s not specified, using default: %s' %
                            (section, option, str(default)))
             return default
 
