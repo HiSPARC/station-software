@@ -12,8 +12,12 @@ def checkIfAdmin():
     return is_admin
 
 
-# Parses something_v19.exe to 19, and something_v20.124.exe to (20, 124).
 def parseVersion(filename):
+    """Extract version numbers from filename
+
+    Parses something_v19.exe to 19, and something_v20.124.exe to (20, 124).
+
+    """
     mo = re.search("_v(\d+)\.(\d+)?\.exe$", filename)
     if mo:
         return mo.group(2) is None and int(mo.group(1)) or (int(mo.group(1)),
