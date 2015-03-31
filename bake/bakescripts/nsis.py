@@ -3,7 +3,7 @@ import subprocess
 NSISPATH = "./nsis"
 
 
-class nsiHandling():
+class nsiHandling(object):
 
     def __init__(self):
         self.nsisExe = "%s/makensis.exe" % NSISPATH

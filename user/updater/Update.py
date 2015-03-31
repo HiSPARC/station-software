@@ -16,7 +16,7 @@ PERSISTENT_INI = "../../persistent/configuration/config.ini"
 ADMINUPDATE_NAME = "adminUpdater"
 
 
-class Updater:
+class Updater(object):
     config = ConfigParser.ConfigParser()
     timeBetweenChecks = 0  # (in seconds)
     # Start time of the interval in which checks may be performed on a

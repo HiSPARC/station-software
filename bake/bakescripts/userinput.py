@@ -1,4 +1,4 @@
-class userInput():
+class userInput(object):
 
     def __init__(self):
         pass

@@ -12,7 +12,7 @@ class TimeoutException(Exception):
     pass
 
 
-class NagiosPush:
+class NagiosPush(object):
     def __init__(self, config):
         self.host = config["host"]
         self.port = int(config["port"])

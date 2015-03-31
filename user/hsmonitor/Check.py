@@ -17,7 +17,7 @@ TIME_DIFF_INI = '../../persistent/configuration/HisparcII.ini'
 logger = logging.getLogger('hsmonitor.check')
 
 
-class Check:
+class Check(object):
     def __init__(self):
         self.nagiosResult = NagiosResult()
         self.nagiosResult.status_code = UNKNOWN
@@ -39,7 +39,7 @@ class Check:
 
 class TriggerRate(Check):
     def __init__(self, interpreter):
-        Check.__init__(self)
+        super(TriggerRate, self).__init__()
         self.nagiosResult.serviceName = "TriggerRate"
         self.interpreter = interpreter
 
@@ -117,7 +117,7 @@ class TriggerRate(Check):
 
 class StorageSize(Check):
     def __init__(self, storageManager):
-        Check.__init__(self)
+        super(StorageSize, self).__init__()
         self.nagiosResult.serviceName = "StorageSize"
         self.storageManager = storageManager
 
@@ -165,7 +165,7 @@ class StorageSize(Check):
 
 class EventRate(Check, Observer):
     def __init__(self):
-        Check.__init__(self)
+        super(EventRate, self).__init__()
         self.nagiosResult.serviceName = "EventRate"
         self.eventCount = 0
         self.oldCountTime = 0
@@ -206,7 +206,7 @@ class EventRate(Check, Observer):
 
 class StorageGrowth(Check):
     def __init__(self, storageManager):
-        Check.__init__(self)
+        super(StorageGrowth, self).__init__()
         self.nagiosResult.serviceName = "StorageGrowth"
         self.newStorageSize = 0
         self.oldStorageSize = 0

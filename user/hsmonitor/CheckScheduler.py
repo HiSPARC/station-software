@@ -10,7 +10,7 @@ from UserExceptions import ThreadCrashError
 logger = logging.getLogger('hsmonitor.checkscheduler')
 
 
-class ScheduledJob:
+class ScheduledJob(object):
     def __init__(self, job, jobfunc, interval, args):
         self.job = job
         self.jobfunc = jobfunc
@@ -19,7 +19,7 @@ class ScheduledJob:
         self.last_run = 0
 
 
-class Scheduler:
+class Scheduler(object):
     def __init__(self, status):
         self.jobs = {}
         self.jobcounter = 0
@@ -83,7 +83,7 @@ class Scheduler:
 class CheckScheduler(threading.Thread):
     def __init__(self, config, interpreter):
         # invoke constructor of parent class (threading)
-        threading.Thread.__init__(self)
+        super(CheckScheduler, self).__init__()
         self.stop_event = threading.Event()
 
         self.status = None

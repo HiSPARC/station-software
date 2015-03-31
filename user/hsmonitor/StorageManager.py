@@ -33,7 +33,7 @@ class StorageManager(Subject):
         global lock
         self.db_name = db_name
         self.lock = lock
-        Subject.__init__(self)
+        super(StorageManager, self).__init__()
 
         if not os.access(FILEDIR, os.F_OK):
             os.makedirs(FILEDIR)

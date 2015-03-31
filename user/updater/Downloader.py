@@ -5,7 +5,7 @@ import checkFiles
 from hslog import log
 
 
-class Downloader():
+class Downloader(object):
     def downloadUpdate(self, location, URL):
         m = re.search('\/([^\/]*)\/?$', URL)
         if m:

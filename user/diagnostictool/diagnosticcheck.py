@@ -1,7 +1,7 @@
 from definitions import status
 
 
-class DiagnosticCheck:
+class DiagnosticCheck(object):
     status = status.HASNT_RUN
     results = None
     message = None
@@ -12,6 +12,10 @@ class DiagnosticCheck:
         if self.status is None:
             self.message = "Unknown failure. Please report."
             self.status = status.FAIL
+
+    def _check(self):
+        """To be implemented by subclasses"""
+        pass
 
     def __str__(self):
         return self.name

@@ -21,7 +21,7 @@ class BufferListener(threading.Thread):
     # the instantiation operation
     def __init__(self, config, interpreter):
         # invoke constructor of parent class (threading)
-        threading.Thread.__init__(self)
+        super(BufferListener, self).__init__()
         self.interpreter = interpreter
         self.stop_event = threading.Event()
 

@@ -7,7 +7,7 @@ logger = logging.getLogger('hsmonitor.econfigparser')
 class EConfigParser(ConfigParser):
     # extend the Config parser to make parsing easier
     def __init__(self):
-        ConfigParser.__init__(self)
+        super(EConfigParser, self).__init__()
 
     def ifget(self, section, option, dtype, default):
         if self.has_option(section, option):

@@ -32,7 +32,7 @@ def status(result):
     return status
 
 
-class StartStop:
+class StartStop(object):
     exeName = ''
     ShowWindow = win32con.SW_SHOWMINIMIZED
     currentDirectory = ''

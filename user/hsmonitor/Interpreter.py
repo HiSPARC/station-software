@@ -29,13 +29,13 @@ event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP',
                     '36': 'LNS'}
 
 
-class TriggerRateHolder:
+class TriggerRateHolder(object):
     def __init__(self, triggerRate, date):
         self.triggerRate = triggerRate
         self.date = date
 
 
-class Interpreter:
+class Interpreter(object):
     # the instantiation operation
     def __init__(self, storageManager):
         # init variables here if needed

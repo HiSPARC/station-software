@@ -16,7 +16,7 @@ UPDATE_USER_MODE = 1
 UPDATE_ADMIN_MODE = 2
 
 
-class Checker:
+class Checker(object):
     # Internal handle to the database cursor
     config = ConfigParser.ConfigParser()
 

@@ -51,7 +51,7 @@ class Uploader(Observer, Thread):
         # Semaphore to block if the number of events drops below minBatchSize
         self.noEventsSem = Semaphore(0)
 
-        Thread.__init__(self)
+        super(Uploader, self).__init__()
         self.stop_event = Event()
         self.isRunning = False
 
@@ -78,10 +78,7 @@ class Uploader(Observer, Thread):
             raise ThreadCrashError("Thread has crashed three times in "
                                    "less than a minute")
         else:
-            # FIXME correctly work out that super stuff.  I think that
-            # the superclasses should both use super, but ...?
-            # super(Uploader, self).__init__()
-            Thread.__init__(self)
+            super(Uploader, self).__init__()
             self.crashes.append(time())
 
     def notify(self, count=1):

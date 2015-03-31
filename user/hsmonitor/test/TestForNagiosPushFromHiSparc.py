@@ -27,7 +27,7 @@ formatter = logging.Formatter('%(asctime)s %(name)s[%(process)d]'
                               '.%(funcName)s.%(levelname)s: %(message)s')
 
 
-class HsMonitor:
+class HsMonitor(object):
 
     def __init__(self):
         # setup the log mode
