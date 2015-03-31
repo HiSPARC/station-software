@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../../user/diagnosticchecks')
-from checks import *
+from checks import CRITICAL, checkBufferdb, check_lvusage
 
 
 def parse_range(range):
@@ -40,5 +40,5 @@ def main(argv):
     return retval
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))

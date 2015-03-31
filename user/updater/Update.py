@@ -42,24 +42,24 @@ class Updater:
 
         if isAdmin:
             location = "../../persistent/downloads"
-            found, fileFound = checkFiles.checkIfNewerFileExists(location,
-                ADMINUPDATE_NAME, int(currentAdmin))
-            #print "found is %s" % found
+            found, fileFound = checkFiles.checkIfNewerFileExists(
+                location, ADMINUPDATE_NAME, int(currentAdmin))
+            # print "found is %s" % found
             if found:
                 os.system(".\\runAdminUpdate.bat "
                           "../../persistent/downloads/%s" % fileFound)
 
     def calculateInitialDelay(self):
         if self.checkerInitialDelay == 1:
-            #Calculate the time now
-            #..and the time it is be today at four and at noon
+            # Calculate the time now
+            # ..and the time it is be today at four and at noon
             now = int(time.time())
             last_midnight = now - (now % 86400)
             today_at_starttime = last_midnight + self.timeStartCheckInterval
             today_at_stoptime = last_midnight + self.timeStopCheckInterval
 
-            #Check if you are allowed to update already
-            #(in the interval between starttime and stoptime)
+            # Check if you are allowed to update already
+            # (in the interval between starttime and stoptime)
             if today_at_starttime < now < today_at_stoptime:
                 today_random_moment = random.randint(now, today_at_stoptime)
                 return today_random_moment - now

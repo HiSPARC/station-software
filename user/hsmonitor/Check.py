@@ -94,7 +94,7 @@ class TriggerRate(Check):
                 # Calculate time difference between trigger and 'now'
                 dt = time.time() - t
             else:
-                #'Never updated, make dt very large'
+                # Never updated, make dt very large
                 dt = 1e6
 
             # If last update was significantly longer than time between monitor
@@ -170,7 +170,7 @@ class EventRate(Check, Observer):
         self.eventRate = 0
         self.lock = Lock()
 
-    #Add number of events
+    # Add number of events
     def notify(self, count):
         self.lock.acquire()
         self.eventCount = self.eventCount + count

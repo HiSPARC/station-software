@@ -68,7 +68,7 @@ def log(message, severity=SEVERITY_NORMAL):
 def setLogMode(mode):
     global logMode
     lock.acquire()
-    if not mode in [MODE_PRINT, MODE_FILE, MODE_BOTH]:
+    if mode not in [MODE_PRINT, MODE_FILE, MODE_BOTH]:
         raise Exception("incorrect log mode!")
     logMode = mode
     lock.release()

@@ -5,6 +5,7 @@ from Interpreter import Interpreter
 from StorageManager import StorageManager
 from BufferListener import BufferListener
 
+
 class TestBufferListener(unittest.TestCase):
     def setUp(self):
         self.dbdict = {}
@@ -16,15 +17,15 @@ class TestBufferListener(unittest.TestCase):
         self.dbdict['poll_interval'] = 5
         self.dbdict['poll_limit'] = 100
         self.dbdict['keep_buffer_data'] = 0
-        
+
         # setup storagemanager
         self.sm = StorageManager(2)
         self.interpreter = Interpreter(self.sm)
         self.bufferLis = BufferListener(self.dbdict, self.interpreter)
-        
+
     def tearDown(self):
         # get the number of events in the buffer
-        #self.TotalEvents = self.bufferLis.getMessageCount()
+        # self.TotalEvents = self.bufferLis.getMessageCount()
         self.TotalEvents1 = 0
 
     def testConnection(self):
@@ -46,7 +47,8 @@ class TestBufferListener(unittest.TestCase):
         self.TotalEvents = self.bufferLis.getMessageCount()
         self.bufferLis.clearBufferMessages(self.event_ids)
         self.TotalEvents1 = self.bufferLis.getMessageCount()
-        self.assertEqual(len(self.event_ids), self.TotalEvents - self.TotalEvents1)
+        self.assertEqual(len(self.event_ids),
+                         self.TotalEvents - self.TotalEvents1)
 
 if __name__ == '__main__':
     unittest.main()

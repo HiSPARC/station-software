@@ -93,7 +93,7 @@ class CheckScheduler(threading.Thread):
         self.storageManager = StorageManager()
         self.interpreter = interpreter
 
-        ### Event rate:
+        # Event rate:
         self.eventRate = EventRate()
 
     def getEventRate(self):
@@ -121,21 +121,21 @@ class CheckScheduler(threading.Thread):
         log("CheckScheduler: Thread started!", severity=2)
         self.storageManager.openConnection()
 
-        ### Trigger rate:
+        # Trigger rate:
         triggerRate = TriggerRate(self.interpreter)
         TR_interval = int(self.dicConfig['triggerrate_interval'])
         self.sched.addJob(triggerRate.check, interval=TR_interval,
                           args=self.dicConfig)
-        ### Storage size:
+        # Storage size:
         storageSize = StorageSize(self.storageManager)
         SS_interval = int(self.dicConfig['storagesize_interval'])
         self.sched.addJob(storageSize.check, interval=SS_interval,
                           args=self.dicConfig)
-        ### Event rate:
+        # Event rate:
         ER_interval = int(self.dicConfig['eventrate_interval'])
         self.sched.addJob(self.eventRate.check, interval=ER_interval,
                           args=self.dicConfig)
-        ### Storage growth:
+        # Storage growth:
         storageGrowth = StorageGrowth(self.storageManager)
         SG_interval = int(self.dicConfig['storagegrowth_interval'])
         self.sched.addJob(storageGrowth.check, interval=SG_interval,

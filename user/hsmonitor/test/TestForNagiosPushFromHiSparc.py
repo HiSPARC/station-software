@@ -1,11 +1,11 @@
-#TODO insert default values for configuration file
+# TODO insert default values for configuration file
 """A test for the main process of the HiSPARC monitor.
 
 This process creates other objects and threads.
 
 """
 
-import os, sys, cmd
+import sys
 sys.path.append("..")
 from hslog import log, setLogMode, MODE_PRINT
 from EConfigParser import EConfigParser
@@ -37,7 +37,7 @@ class HsMonitor:
         else:
             log("Initilize variables")
 
-            #list of all the threads
+            # list of all the threads
             self.hsThreads = []
         # Assume one server (eventwarehouse)
         # if the local is also specified it will be added
@@ -91,21 +91,21 @@ def main():
     # create a HiSparc monitor object
     hsMonitor = HsMonitor()
 
-##    # start all threads
-##    hsMonitor.startAll()
-##
-##    # this to get the keyboard interruption
-##    c = cmd.Cmd()
-##
-##    try:
-##        c.cmdloop()
-##    except KeyboardInterrupt:
-##         # stop all threads
-##         hsMonitor.stopAll()
+    # start all threads
+    # hsMonitor.startAll()
+
+    # this to get the keyboard interruption
+    # c = cmd.Cmd()
+
+    # try:
+    #     c.cmdloop()
+    # except KeyboardInterrupt:
+    #     # stop all threads
+    #     hsMonitor.stopAll()
 
     # wait for all threads to finish
-    #for thread in hsMonitor.hsThreads:
-    #    thread.join()
+    # for thread in hsMonitor.hsThreads:
+    #     thread.join()
 
     # DBG: test the nagios push
     # buffLis = hsMonitor.createBufferListener()

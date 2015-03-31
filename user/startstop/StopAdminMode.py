@@ -9,7 +9,7 @@ def stop():
     log('\nStopping Admin-Mode applications...')
 
     try:
-        #stop TightVNC
+        # stop TightVNC
         log('Stopping TightVNC service...')
         tightVNCHandler = StartStop()
         tightVNCHandler.serviceName = 'tvnserver'
@@ -25,7 +25,7 @@ def stop():
             str(sys.exc_info()[1]))
 
     try:
-        #stop Nagios Service
+        # stop Nagios Service
         log('Stopping Nagios Service')
         nagiosServHandler = StartStop()
         nagiosServHandler.serviceName = "NSClientpp"
@@ -41,7 +41,7 @@ def stop():
             str(sys.exc_info()[1]))
 
     try:
-        #stop OpenVpn Service
+        # stop OpenVpn Service
         log('Stopping OpenVPN Service')
         openVpnServHandler = StartStop()
         openVpnServHandler.serviceName = "OpenVPNService"

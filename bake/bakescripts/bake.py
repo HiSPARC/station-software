@@ -5,11 +5,11 @@ import os
 import sys
 from datetime import datetime
 
-from userinput import *
-from nsis import *
+from userinput import userInput
+from nsis import nsiHandling
 
 
-#files created will always be put in the "/bake/releases" directory
+# files created will always be put in the "/bake/releases" directory
 RELEASE_DIRECTORY = "./releases"
 
 input = userInput()
@@ -23,12 +23,13 @@ release_number = input.get_version("release")
 now = datetime.now()
 release_date = now.strftime('%Y%m%d_%H%M%S')
 
-#check if the RELEASE_DIRECTORY exists, if not create it
+# check if the RELEASE_DIRECTORY exists, if not create it
 if not os.access(RELEASE_DIRECTORY, os.F_OK):
     os.makedirs(RELEASE_DIRECTORY)
 
-#compile the administrator software first
-if os.path.exists("%s/adminUpdater_v%s.exe" % (RELEASE_DIRECTORY, admin_version)):
+# compile the administrator software first
+if os.path.exists("%s/adminUpdater_v%s.exe" % (RELEASE_DIRECTORY,
+                                               admin_version)):
     print "Administrator installer already exists, not creating a new one!"
 else:
     try:
@@ -38,8 +39,9 @@ else:
         print "ERROR: Compilation could not be finished!"
         sys.exit
 
-#compile the user software
-if os.path.exists("%s/userUnpacker_v%s.exe" % (RELEASE_DIRECTORY, user_version)):
+# compile the user software
+if os.path.exists("%s/userUnpacker_v%s.exe" % (RELEASE_DIRECTORY,
+                                               user_version)):
     print "User unpacker already exists, not creating a new one!"
 else:
     try:
@@ -49,7 +51,7 @@ else:
         print "ERROR: Compilation could not be finished!"
         sys.exit
 
-#compile the main installer
+# compile the main installer
 try:
     nsiHandling.compileNSI("./nsisscripts/maininstaller/hisparcinstaller.nsi",
                            ["ADMIN_VERSION=%s" % admin_version] +

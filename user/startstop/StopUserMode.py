@@ -4,20 +4,18 @@ These applications are stopped:
 LabVIEW Detector, LabVIEW Weather, MySQL, HiSPARC Monitor, HiSPARC Updater
 
 """
-import os
-import win32con
-
 from startStop import StartStop, CMDStartStop, status
 from hslog import log, setLogMode, MODE_BOTH
+
 
 def stop():
     setLogMode(MODE_BOTH)
     log("\nStopping User-Mode applications...")
 
     try:
-        #stop LabVIEW detector
+        # stop LabVIEW detector
         log("Stopping LabVIEW detector...")
-        handler         = StartStop()
+        handler = StartStop()
         handler.exeName = "hisparcdaq.exe"
 
         res = handler.stopProcess()
@@ -27,9 +25,9 @@ def stop():
         log("An exception was generated while stopping LabVIEW detector!")
 
     try:
-        #stop LabVIEW weather
+        # stop LabVIEW weather
         log("Stopping LabVIEW weather...")
-        handler         = StartStop()
+        handler = StartStop()
         handler.exeName = "HiSPARC Weather Station.exe"
 
         res = handler.stopProcess()
@@ -39,9 +37,9 @@ def stop():
         log("An exception was generated while stopping LabVIEW weather!")
 
     try:
-        #stop MySQL
+        # stop MySQL
         log("Stopping MySQL...")
-        handler         = StartStop()
+        handler = StartStop()
         handler.exeName = "mysqld.exe"
 
         res = handler.stopProcess()
@@ -51,11 +49,11 @@ def stop():
         log("An exception was generated while stopping MySQL!")
 
     try:
-        #stop HSMonitor
+        # stop HSMonitor
         log("Stopping HSMonitor...")
-        handler         = CMDStartStop()
+        handler = CMDStartStop()
         handler.exeName = "python.exe"
-        handler.title   = "HISPARC MONITOR: hsmonitor"
+        handler.title = "HISPARC MONITOR: hsmonitor"
 
         res = handler.stopProcess()
         log("Status: " + status(res))
@@ -64,11 +62,11 @@ def stop():
         log("An exception was generated while stopping HSMonitor!")
 
     try:
-        #stop Updater
+        # stop Updater
         log("Stopping Updater...")
-        handler         = CMDStartStop()
+        handler = CMDStartStop()
         handler.exeName = "python.exe"
-        handler.title   = "HISPARC Updater: updater"
+        handler.title = "HISPARC Updater: updater"
 
         res = handler.stopProcess()
         log("Status: " + status(res))

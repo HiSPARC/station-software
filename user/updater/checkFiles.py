@@ -16,7 +16,7 @@ def checkIfAdmin():
 def parseVersion(filename):
     mo = re.search("_v(\d+)\.(\d+)?\.exe$", filename)
     if mo:
-        return mo.group(2) == None and int(mo.group(1)) or (int(mo.group(1)),
+        return mo.group(2) is None and int(mo.group(1)) or (int(mo.group(1)),
                                                             int(mo.group(2)))
 
 
@@ -25,11 +25,11 @@ def checkIfNewerFileExists(location, searchName, currentVersion):
     found = False
     versionFound = 0
     fileFound = ""
-    #print "currentVersion is: %s" % currentVersion
+    # print "currentVersion is: %s" % currentVersion
     for item in fileList:
         versionNr = parseVersion(item)
         if (item[0:12] == searchName and versionNr > currentVersion and
-            versionNr > versionFound):
+                versionNr > versionFound):
             print "item: %s" % item
             versionFound = versionNr
             fileFound = item
