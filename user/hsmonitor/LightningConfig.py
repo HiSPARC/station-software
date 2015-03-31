@@ -8,14 +8,14 @@ from Event import Event
 import EventExportValues
 
 
-class WeatherConfig(object, Event):
-    """A Weather config class to makes all data handling easy."""
+class LightningConfig(object, Event):
+    """A Lightning config class to makes all data handling easy."""
 
     def __init__(self, message):
         """Invoke constructor of parent class."""
         Event.__init__(self)
         self.message = message[1]
-
+    
     def fixBoolean(self, datastring):
         return eval(datastring.title())
 
@@ -23,7 +23,7 @@ class WeatherConfig(object, Event):
         tmp = self.message.split("\t")
         t = time.strptime(tmp[0].strip(), "%Y-%m-%d %H:%M:%S")
         self.datetime = datetime(t[0], t[1], t[2], t[3], t[4], t[5])
-        self.nanoseconds = 0  # Weather is not accurate enough
+        self.nanoseconds = 0  # Lightning is not accurate enough
         self.second = self.datetime.second
         self.minute = self.datetime.minute
         self.hour = self.datetime.hour
@@ -39,27 +39,12 @@ class WeatherConfig(object, Event):
         self.latitude = float(tmp[7])
         self.longitude = float(tmp[8])
         self.altitude = float(tmp[9])
-        self.temperature_inside = fixBoolean(tmp[10])
-        self.temperature_outside = fixBoolean(tmp[11])
-        self.humidity_inside = fixBoolean(tmp[12])
-        self.humidity_outside = fixBoolean(tmp[13])
-        self.barometer = fixBoolean(tmp[14])
-        self.wind_direction = fixBoolean(tmp[15])
-        self.wind_speed = fixBoolean(tmp[16])
-        self.solar_radiation = fixBoolean(tmp[17])
-        self.uv_index = fixBoolean(tmp[18])
-        self.evapotranspiration = fixBoolean(tmp[19])
-        self.rain_rate = fixBoolean(tmp[20])
-        self.heat_index = fixBoolean(tmp[21])
-        self.dew_point = fixBoolean(tmp[22])
-        self.wind_chill = fixBoolean(tmp[23])
-        self.offset_inside_temperature = float(tmp[24])
-        self.offset_outside_temperature = float(tmp[25])
-        self.offset_inside_humidity = int(tmp[26])
-        self.offset_outside_humidity = int(tmp[27])
-        self.offset_wind_direction = int(tmp[28])
-        self.offset_station_altitude = float(tmp[29])
-        self.offset_bar_sea_level = float(tmp[30])
+        self.squelch_setting = int(tmp[10])
+        self.close_alarm_distance = int(tmp[11])
+        self.severe_alarm_distance = int(tmp[12])
+        self.noise_beep = fixBoolean(tmp[13])
+        self.minimum_gps_speed = int(tmp[14])
+        self.angle_correction = float(tmp[15])
 
         # Get all event data necessary for an upload.
         self.export_values = EventExportValues.export_values[self.uploadCode]
