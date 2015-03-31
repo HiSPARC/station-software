@@ -1,7 +1,7 @@
 #
 #   HiSPARC user installer
 #   R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#   Latest Revision: Aug 2012
+#   Latest Revision: Aug 2013
 #
 
 !include FileFunc.nsh
@@ -32,6 +32,17 @@ Function .onInit
   
   InitPluginsDir
   
+  # Check for 32-bit or 64-bit computer
+  System::Call "kernel32::GetCurrentProcess() i .s"
+  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
+  StrCmp $0 "0" is32 is64
+is32:
+  SetRegView 32
+  Goto proCeed
+is64:
+  SetRegView 64
+  
+proCeed:
   # userUnpacker needs no administrator rights
   ReadRegStr $HisparcDir HKLM "${HISPARC_KEY}" ${REG_PATH}
   StrCmp $HisparcDir "" noReg
@@ -86,6 +97,18 @@ Section -Post
 SectionEnd
 
 Function un.onInit
+
+  # Check for 32-bit or 64-bit computer
+  System::Call "kernel32::GetCurrentProcess() i .s"
+  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
+  StrCmp $0 "0" is32 is64
+is32:
+  SetRegView 32
+  Goto proCeed
+is64:
+  SetRegView 64
+  
+proCeed:
   ReadRegStr $HisparcDir HKLM "${HISPARC_KEY}" ${REG_PATH}
   StrCmp $HisparcDir "" noReg
   StrCpy $UserDir    "$HisparcDir\user"

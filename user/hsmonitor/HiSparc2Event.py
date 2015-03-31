@@ -59,8 +59,8 @@ class HiSparc2Event(object, Event):
             except AttributeError:
                 # This is not a legacy message. Therefore, it should contain
                 # all exported variables, but alas, it apparently doesn't.
-                #if not self.version == 21:
-                #    print 'I missed this variable: ', value[2]
+                # if not self.version == 21:
+                #     print 'I missed this variable: ', value[2]
                 continue
 
             if data_uploadcode in ['TR1', 'TR2', 'TR3', 'TR4']:
@@ -97,7 +97,7 @@ class HiSparc2Event(object, Event):
             fmt = ">%ds" % length
 
         # For debugging, keeping track of trailing bytes
-        #print len(self.message[self._struct_offset:]), struct.calcsize(fmt)
+        # print len(self.message[self._struct_offset:]), struct.calcsize(fmt)
 
         data = struct.unpack_from(fmt, self.message,
                                   offset=self._struct_offset)

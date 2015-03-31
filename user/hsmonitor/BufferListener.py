@@ -10,7 +10,6 @@ from time import sleep, time
 import threading
 import logging
 
-import _mysql
 from MySQLdb import connect, OperationalError
 
 from UserExceptions import ThreadCrashError

@@ -17,7 +17,7 @@ UPDATE_ADMIN_MODE = 2
 
 
 class Checker:
-    #Internal handle to the database cursor
+    # Internal handle to the database cursor
     config = ConfigParser.ConfigParser()
 
     def __init__(self):
@@ -28,7 +28,8 @@ class Checker:
         currentAdmin = self.config.get("Version", "CurrentAdmin")
         currentUser = self.config.get("Version", "CurrentUser")
 
-        connection = urllib2.urlopen("%s/%s/%s" % (server, currentAdmin, currentUser))
+        connection = urllib2.urlopen("%s/%s/%s" % (server, currentAdmin,
+                                                   currentUser))
         updateInfo = connection.read()
         print updateInfo
         connection.close()
@@ -36,8 +37,8 @@ class Checker:
 
     def parseAnswerServer(self, updateInfo):
         updateDict = parse_qs(updateInfo, strict_parsing=True)
-        #updateDict has: mustUpdate, urlUser, newVersionUser, urlAdmin,
-        #                newVersionAdmin
+        # updateDict has: mustUpdate, urlUser, newVersionUser, urlAdmin,
+        #                 newVersionAdmin
         downloader = Downloader()
         updates = dict()  # updates has: mustUpdate, userFile, adminFile
 

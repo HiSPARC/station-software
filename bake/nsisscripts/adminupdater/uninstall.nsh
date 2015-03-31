@@ -1,6 +1,7 @@
 #
 #   uninstaller.nsh ------
 #   Create the admin uninstaller.
+#   Aug 2013: some applications still use the 32-bit registry
 #
 
 Function un.onInit
@@ -15,6 +16,19 @@ Function un.onInit
     Quit
   ${EndIf}
   
+  # Check for 32-bit or 64-bit computer
+  System::Call "kernel32::GetCurrentProcess() i .s"
+  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
+  StrCmp $0 "0" is32 is64
+is32:
+  SetRegView 32
+  StrCpy $Architecture "32"
+  Goto proCeed
+is64:
+  SetRegView 64
+  StrCpy $Architecture "64"
+  
+proCeed:
   ReadRegStr $HisparcDir HKLM "${HISPARC_KEY}" ${REG_PATH}
   StrCmp $HisparcDir "" noReg
   StrCpy $AdminDir   "$HisparcDir\admin"
@@ -24,6 +38,16 @@ Function un.onInit
     Quit
   ${Endif}
   DetailPrint "AdminDir: $AdminDir"
+  
+  ${If} $Architecture == "32"
+    StrCpy $OpenVpnDir "$AdminDir\openvpn32"
+    StrCpy $TvncFolder "$AdminDir\tightvnc32"
+  ${Else}
+    StrCpy $OpenVpnDir "$AdminDir\openvpn64"
+    StrCpy $TvncFolder "$AdminDir\tightvnc64"
+  ${Endif}
+  DetailPrint "OpenVpnDir: $OpenVpnDir"
+  DetailPrint "TvncFolder: $TvncFolder"
   Return
   
 noReg:
@@ -36,16 +60,22 @@ FunctionEnd
 #
 Section un.UninstOpenVPN
   DetailPrint "admin-un.UninstOpenVPN"
+  # OpenVPN 2.2.2 64-bit version, still reads its registry as a 32-bit application
+  SetRegView 32
   # remove service
-  ExecWait '"$AdminDir\openvpn\bin\openvpnserv.exe" -remove' $Result
+  ExecWait '"$OpenVpnDir\bin\openvpnserv.exe" -remove' $Result
   DetailPrint "VPN openvpnserv: $Result"
   # delete reg keys
   DeleteRegKey HKLM ${OPENVPN_KEY}
   # remove the tap devices
-  ExecWait '"$AdminDir\openvpn\bin\tapinstall.exe" remove tap0901' $Result
+  ExecWait '"$OpenVpnDir\bin\tapinstall.exe" remove tap0901' $Result
   DetailPrint "VPN tapremove: $Result"
   # remove the folder
-  RMDir /r /REBOOTOK "$AdminDir\openvpn"
+  RMDir /r /REBOOTOK "$AdminDir\openvpn32"
+  RMDir /r /REBOOTOK "$AdminDir\openvpn64"
+  ${If} $Architecture == "64"
+    SetRegView 64
+  ${Endif}
 SectionEnd
 
 #
@@ -54,14 +84,14 @@ SectionEnd
 Section un.UninstTightVNC
   DetailPrint "admin-un.UninstTightVNC"
   # remove service
-  StrCpy $TvncFolder "$AdminDir\tightvnc"
   StrCpy $Program "$TvncFolder\${VNC_SERVICENAME}.exe"
   ExecWait '"$Program" -remove -silent' $Result
   DetailPrint "VNC tightvnc: $Result"
   # delete reg keys
   DeleteRegKey HKLM ${TIGHTVNCKEY}   
   # remove the folder
-  RMDir /r /REBOOTOK "$AdminDir\tightvnc"
+  RMDir /r /REBOOTOK "$AdminDir\tightvnc32"
+  RMDir /r /REBOOTOK "$AdminDir\tightvnc64"
 SectionEnd
 
 #
@@ -81,11 +111,15 @@ SectionEnd
 #
 Section un.UninstODBC
   DetailPrint "admin-un.UninstODBC"
+  SetRegView 32
   DeleteRegKey   HKLM ${ODBCREGKEY}
   DeleteRegValue HKLM "${ODBCDSREGKEY}" "buffer"
   ExecWait '"$AdminDir\odbcconnector\Uninstall_HiSPARC.bat"' $Result
   DetailPrint "ODBC uninstall: $Result"
   RMDir /r /REBOOTOK "$AdminDir\odbcconnector"
+  ${If} $Architecture == "64"
+    SetRegView 64
+  ${Endif}
 SectionEnd
 
 #
@@ -93,6 +127,7 @@ SectionEnd
 #
 Section un.UninstNIRuntime
   DetailPrint "admin-un.UninstNIRuntime"
+  SetRegView 32
   MessageBox MB_YESNO|MB_ICONQUESTION "Do you also want to remove the NI Runtime Engine?" IDYES removeNI IDNO keepNI
 removeNI:
   ReadRegStr $NIdir HKLM "${LABVIEW_KEY}" ${LABVIEW_DIR}
@@ -100,6 +135,9 @@ removeNI:
   DetailPrint "LabVIEW uninst: $Result"
   RMDir /r /REBOOTOK "$NIdir"
 keepNI:
+  ${If} $Architecture == "64"
+    SetRegView 64
+  ${Endif}
 SectionEnd
 
 #

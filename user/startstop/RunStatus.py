@@ -1,7 +1,6 @@
 """Determine status of the HiSPARC user processes and admin services."""
 
 import os
-import win32con
 import ConfigParser
 
 from startStop import StartStop, CMDStartStop, status, EXCEPTION, DISABLED
@@ -18,17 +17,17 @@ def check():
 
     HS_ROOT = "%s" % os.getenv("HISPARC_ROOT")
     if HS_ROOT == "":
-         print "FATAL: environment variable HISPARC_ROOT not set!"
-         return
+        print "FATAL: environment variable HISPARC_ROOT not set!"
+        return
 
     configFile = "%s/persistent/configuration/config.ini" % HS_ROOT
     config = ConfigParser.ConfigParser()
     config.read(configFile)
 
     try:
-        #check MySQL
+        # check MySQL
         app = "MySQL"
-        handler         = StartStop()
+        handler = StartStop()
         handler.exeName = "mysqld.exe"
         res = handler.probeProcess()
     except:
@@ -36,10 +35,10 @@ def check():
     pStdout(app, res)
 
     try:
-        #check LabVIEW Detector
+        # check LabVIEW Detector
         app = "LabVIEW Detector"
         if config.getboolean("Detector", "Enabled"):
-            handler         = StartStop()
+            handler = StartStop()
             handler.exeName = "hisparcdaq.exe"
             res = handler.probeProcess()
         else:
@@ -49,11 +48,11 @@ def check():
     pStdout(app, res)
 
     try:
-        #check LabVIEW Weather
+        # check LabVIEW Weather
         app = "LabVIEW Weather"
         if config.getboolean("Weather", "Enabled"):
-            handler         = StartStop()
-            handler.exeName = "hisparcweather.exe"
+            handler = StartStop()
+            handler.exeName = "HiSPARC Weather Station.exe"
             res = handler.probeProcess()
         else:
             res = DISABLED
@@ -62,9 +61,9 @@ def check():
     pStdout(app, res)
 
     try:
-        #check HSMonitor
+        # check HSMonitor
         app = "HSMonitor"
-        handler       = CMDStartStop()
+        handler = CMDStartStop()
         handler.title = "HISPARC MONITOR: hsmonitor"
         res = handler.probeProcess()
     except:
@@ -72,9 +71,9 @@ def check():
     pStdout(app, res)
 
     try:
-        #check Updater
+        # check Updater
         app = "Updater"
-        handler       = CMDStartStop()
+        handler = CMDStartStop()
         handler.title = "HISPARC Updater: updater"
         res = handler.probeProcess()
     except:
@@ -84,9 +83,9 @@ def check():
     print "\nChecking Admin-Mode services...\n"
 
     try:
-        #check TightVNC
+        # check TightVNC
         app = "TightVNC"
-        handler             = StartStop()
+        handler = StartStop()
         handler.serviceName = "tvnserver"
         res = handler.probeService()
     except:
@@ -94,9 +93,9 @@ def check():
     pStdout(app, res)
 
     try:
-        #check NAGIOS
+        # check NAGIOS
         app = "NAGIOS"
-        handler             = StartStop()
+        handler = StartStop()
         handler.serviceName = "NSClientpp"
         res = handler.probeService()
     except:
@@ -104,9 +103,9 @@ def check():
     pStdout(app, res)
 
     try:
-        #check OpenVPN
+        # check OpenVPN
         app = "OpenVPN"
-        handler             = StartStop()
+        handler = StartStop()
         handler.serviceName = "OpenVPNService"
         res = handler.probeService()
     except:

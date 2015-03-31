@@ -8,7 +8,7 @@ def start():
     log('\nStarting Admin-Mode applications...')
 
     try:
-        #start tightVNC
+        # start tightVNC
         log('Starting TightVNC service...')
         tightVNCHandler = StartStop()
         tightVNCHandler.serviceName = 'tvnserver'
@@ -24,7 +24,7 @@ def start():
             str(sys.exc_info()[1]))
 
     try:
-        #start Nagios Service
+        # start Nagios Service
         log('Starting Nagios Service')
         nagiosServHandler = StartStop()
         nagiosServHandler.serviceName = "NSClientpp"
@@ -40,7 +40,7 @@ def start():
             str(sys.exc_info()[1]))
 
     try:
-        #start OpenVpn Service
+        # start OpenVpn Service
         log('Starting OpenVpn Service')
         openVpnServHandler = StartStop()
         openVpnServHandler.serviceName = "OpenVPNService"

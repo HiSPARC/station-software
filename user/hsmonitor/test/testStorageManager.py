@@ -3,12 +3,12 @@ sys.path.append("..")
 from StorageManager import StorageManager
 from Observer import Observer
 import unittest
-from cPickle import loads
 
 
 class Event:
     def __init__(self, datetime):
         self.datetime = datetime
+
 
 observer_calls = 0
 
@@ -70,7 +70,7 @@ class TestStorageManager(unittest.TestCase):
         self.assertEqual(num + 4, num4)
 
     def testGetOneByOne(self):
-    # this test also sets the status so that you get a new event each time
+        # this test also sets the status so that you get a new event each time
         self.sm.addEvent(self.e1)
         self.sm.addEvent(self.e2)
         self.sm.addEvent(self.e3)
@@ -189,6 +189,7 @@ class TestStorageManager(unittest.TestCase):
         self.assertEqual(2, observer_calls)
         self.sm.addEvents(self.elist)
         self.assertEqual(10, observer_calls)
+
 
 if __name__ == '__main__':
     unittest.main()

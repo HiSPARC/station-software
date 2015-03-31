@@ -2,7 +2,7 @@
 
 from datetime import datetime
 import time
-#import base64
+# import base64
 
 from Event import Event
 import EventExportValues
@@ -55,7 +55,7 @@ class WeatherEvent(object, Event):
         elif name == "time":
             return self.datetime.time().isoformat()
         else:
-            raise AttributeError, name
+            raise AttributeError(name)
 
     def getEventData(self):
         """Get all event data necessary for an upload.
@@ -72,6 +72,6 @@ class WeatherEvent(object, Event):
             eventdata.append({"calculated": value[0],
                               "data_uploadcode": value[1],
                               "data": self.__getattribute__(value[2])})
-                    #"data": base64.b64encode(self.__getattribute__(value[2]))
+        # "data": base64.b64encode(self.__getattribute__(value[2]))
 
         return eventdata

@@ -34,10 +34,10 @@ def unpack_legacy_message(self):
     self.second = struct.unpack("B", self.blob[4:5])[0]
     self.minute = struct.unpack("B", self.blob[5:6])[0]
     self.hour = struct.unpack("B", self.blob[6:7])[0]
-    self.day = min(31, struct.unpack("B", self.blob[7:8])[0] +
-                                    random.randrange(1, 30))
-    self.month = min(12, struct.unpack("B", self.blob[8:9])[0] +
-                                       random.randrange(1, 11))
+    self.day = min(31, (struct.unpack("B", self.blob[7:8])[0] +
+                        random.randrange(1, 30)))
+    self.month = min(12, (struct.unpack("B", self.blob[8:9])[0] +
+                          random.randrange(1, 11)))
     self.year = struct.unpack(">H", self.blob[9:11])[0]
     self.datetime = datetime(self.year, self.month, self.day,
                              self.hour, self.minute, self.second)
@@ -76,4 +76,4 @@ def unpack_legacy_message(self):
         self.slv_tr1 = compress(self.unpack_trace(self.blob[o + 20:o + 20 +
                                                             self.N / 2]))
         self.slv_tr2 = compress(self.unpack_trace(
-                           self.blob[o + 20 + self.N / 2:o + 20 + self.N]))
+            self.blob[o + 20 + self.N / 2:o + 20 + self.N]))

@@ -1,7 +1,7 @@
 #
 #   HiSPARC admin installer
 #   R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#   Latest Revision: Aug 2012
+#   Latest Revision: Aug 2013
 #
 
 !include FileFunc.nsh
@@ -10,6 +10,7 @@
 SetCompressor lzma
 
 !include ..\hs_def.nsh
+!include ..\password.nsh
 !include interface.nsh
 !include variables.nsh
 
@@ -32,6 +33,19 @@ Function .onInit
     Quit
   ${EndIf}
   
+  # Check for 32-bit or 64-bit computer
+  System::Call "kernel32::GetCurrentProcess() i .s"
+  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
+  StrCmp $0 "0" is32 is64
+is32:
+  SetRegView 32
+  StrCpy $Architecture "32"
+  Goto proCeed
+is64:
+  SetRegView 64
+  StrCpy $Architecture "64"
+  
+proCeed:
   ReadRegStr $HisparcDir HKLM "${HISPARC_KEY}" ${REG_PATH}
   StrCmp $HisparcDir "" noReg
   ${DirState} $HisparcDir $Result
@@ -43,13 +57,23 @@ Function .onInit
   
   StrCpy $AdminDir   "$HisparcDir\admin"
   StrCpy $ConfigFile "$HisparcDir\persistent\configuration\config.ini"
-  
   StrCpy $FileName $ConfigFile
   Call fileExists   # check if configfile exists
   
   ReadINIStr $CertZip "$ConfigFile" "Station" "Certificate"
   StrCpy $FileName $CertZip
   Call fileExists   # check if certificate exists
+  
+  ${If} $Architecture == "32"
+    StrCpy $OpenVpnDir "$AdminDir\openvpn32"
+    StrCpy $TvncFolder "$AdminDir\tightvnc32"
+  ${Else}
+    StrCpy $OpenVpnDir "$AdminDir\openvpn64"
+    StrCpy $TvncFolder "$AdminDir\tightvnc64"
+  ${Endif}
+  DetailPrint "OpenVpnDir: $OpenVpnDir"
+  DetailPrint "TvncFolder: $TvncFolder"
+  
   Return
   
 noReg:
@@ -98,7 +122,6 @@ Section -Post
   # LabVIEW
   ReadRegStr $NIdir HKLM "${LABVIEW_KEY}" ${LABVIEW_DIR}
   AccessControl::GrantOnFile "$NIdir" "(BU)" "FullAccess"
-  # RMDir /r /REBOOTOK "$AdminDir\niruntimeinstaller"
   # admin uninstaller
   WriteUninstaller "$HisparcDir\persistent\uninstallers\adminuninst.exe"
 SectionEnd

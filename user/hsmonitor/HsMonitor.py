@@ -1,7 +1,5 @@
 """The main HiSPARC monitor process, it creates other objects and threads.
 
-WW: Pathing to pythonshared removed, since it is no longer required to use hslog.py.
-
 DF: Unfortunately, I think the UML model of this system is not entirely
     correct. For example, this creates several instances of our StorageManager
     class. It has its own class, that's good, but I think it should also have
@@ -18,14 +16,16 @@ RH:  The working directory: HISPARC_ROOT/user/hsmonitor
      The pythonshared folder has to be appended to the python search path.
      It is not inherited if called by the Startup*.bat files from
      persistent/startstopbatch.
-"""
 
+WW: Pathing to pythonshared is removed, since it is no longer required to
+    use hslog.py.
+
+"""
 import re
 import os
-
+from time  import sleep
 import logging
 
-from time  import sleep
 from TimedConcurrentLogging import TimedConcurrentRotatingFileHandler
 from EConfigParser import EConfigParser
 from BufferListener import BufferListener
@@ -38,6 +38,7 @@ from UserExceptions import ThreadCrashError
 # Default configuration file path
 CONFIG_INI_PATH1 = "data/config.ini"
 CONFIG_INI_PATH2 = "../../persistent/configuration/config.ini"
+CONFIG_INI_PATH3 = "data/config-password.ini"
 
 logger = logging.getLogger('hsmonitor')
 formatter_file   = logging.Formatter('%(asctime)s (%(threadName)s)'
@@ -80,7 +81,8 @@ class HsMonitor:
         # Read the configuration file
         try:
             self.cfg = EConfigParser()
-            self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2])
+            self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2,
+                           CONFIG_INI_PATH3])
             log_level_file = self.cfg.ifgetstr('Logging', 'FileLevel', 'debug')
             log_level_screen = self.cfg.ifgetstr('Logging', 'ScreenLevel', 'info')
             if log_level_file in LEVELS:
@@ -148,7 +150,7 @@ class HsMonitor:
             except Exception, msg:
                 logger.warning("Error while parsing local server: %s." % msg)
                 logger.warning("Will nog upload to local server!")
-                
+
             # Set number of servers for our own StorageManager
             storMan.setNumServer(self.numServers)
             storMan.clearOldUploadedEvents()

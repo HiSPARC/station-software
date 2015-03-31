@@ -4,14 +4,15 @@ import wmi
 import win32con
 import win32gui
 
-from hslog  import log
+from hslog import log
 from ctypes import c_ulong, byref, windll
 
-RUNNING       = 0
-STOPPED       = 1
-EXCEPTION     = 2
-DISABLED      = 4
+RUNNING = 0
+STOPPED = 1
+EXCEPTION = 2
+DISABLED = 4
 NOT_INSTALLED = 8
+
 
 def status(result):
 
@@ -29,6 +30,7 @@ def status(result):
         status = "unknown (%d)" % result
 
     return status
+
 
 class StartStop:
     exeName = ''
@@ -127,7 +129,7 @@ class StartStop:
                 raise Exception(": error code %d" % res)
         else:
             result = EXCEPTION
-        
+
         return result
 
     def probeProcess(self):
@@ -141,7 +143,8 @@ class StartStop:
     def probeService(self):
         service = self.wmiObj.Win32_Service(Name=self.serviceName)
         if service != []:
-            service = self.wmiObj.Win32_Service(Name=self.serviceName, State="Running")
+            service = self.wmiObj.Win32_Service(Name=self.serviceName,
+                                                State="Running")
             if service != []:
                 result = RUNNING
             else:
@@ -173,7 +176,7 @@ class CMDStartStop(StartStop):
             win32gui.SetWindowText(w, self.title +
                                    ' (shutdown in progress...)')
             dword = c_ulong()
-            tid = windll.user32.GetWindowThreadProcessId(w, byref(dword))
+            windll.user32.GetWindowThreadProcessId(w, byref(dword))
             pid = dword.value
 
             phandle = windll.kernel32.OpenProcess(2035711, 0, pid)
@@ -187,10 +190,10 @@ class CMDStartStop(StartStop):
             else:
                 log("major fail: r = %d" % r)
                 result = EXCEPTION
-            #for process in self.wmiObj.Win32_Process(name = self.exeName):
-            #    print 'processId: %d' % process.ProcessId
-            #    if process.Terminate() == 0:
-            #        result = STOPPED
+            # for process in self.wmiObj.Win32_Process(name = self.exeName):
+            #     print 'processId: %d' % process.ProcessId
+            #     if process.Terminate() == 0:
+            #         result = STOPPED
         else:
             result = STOPPED
         return result

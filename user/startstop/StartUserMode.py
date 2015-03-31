@@ -15,21 +15,22 @@ import ConfigParser
 from startStop import StartStop, CMDStartStop, status, RUNNING, DISABLED
 from hslog import log, setLogMode, MODE_BOTH
 
+
 def start():
     setLogMode(MODE_BOTH)
     log("\nStarting User-Mode applications...")
 
     HS_ROOT = "%s" % os.getenv("HISPARC_ROOT")
     if HS_ROOT == "":
-         log("FATAL: environment variable HISPARC_ROOT not set!")
-         return
+        log("FATAL: environment variable HISPARC_ROOT not set!")
+        return
 
     configFile = "%s/persistent/configuration/config.ini" % HS_ROOT
     config = ConfigParser.ConfigParser()
     config.read(configFile)
 
     try:
-        #start MySQL
+        # start MySQL
         log("Starting MySQL...")
         datapath = "%s/persistent/data/mysql" % HS_ROOT
         binlogs = glob.glob(os.path.join(datapath, "mysql-bin.*"))
@@ -38,9 +39,10 @@ def start():
             for f in binlogs:
                 os.remove(f)
 
-        binary  = "mysqld.exe"
+        binary = "mysqld.exe"
         exeBase = "%s/user/mysql/bin" % HS_ROOT
-        program = "\"%(exec)s/%(binary)s\"" % {"exec": exeBase, "binary": binary}
+        program = "\"%(exec)s/%(binary)s\"" % {"exec": exeBase,
+                                               "binary": binary}
 
         handler = StartStop()
         handler.exeName = binary
@@ -61,7 +63,7 @@ def start():
             str(sys.exc_info()[1]))
 
     try:
-        #start LabVIEW detector
+        # start LabVIEW detector
         log("Starting LabVIEW detector...")
         if config.getboolean("Detector", "Enabled"):
             handler = StartStop()
@@ -79,13 +81,14 @@ def start():
             str(sys.exc_info()[1]))
 
     try:
-        #start LabVIEW weather
+        # start LabVIEW weather
         log("Starting LabVIEW weather...")
         if config.getboolean("Weather", "Enabled"):
             handler = StartStop()
-            handler.exeName = "hisparcweather.exe"
+            handler.exeName = "HiSPARC Weather Station.exe"
             handler.currentDirectory = "%s/user/hisparcweather" % HS_ROOT
-            handler.command = "%s/user/hisparcweather/hisparcweather.exe" % HS_ROOT
+            handler.command = ("%s/user/hisparcweather/"
+                               "HiSPARC Weather Station.exe" % HS_ROOT)
 
             res = handler.startProcess()
         else:
@@ -100,7 +103,7 @@ def start():
         time.sleep(20)
 
     try:
-        #start HSMonitor
+        # start HSMonitor
         log("Starting HSMonitor...")
         handler = CMDStartStop()
         handler.exeName = "python.exe"
@@ -116,7 +119,7 @@ def start():
             str(sys.exc_info()[1]))
 
     try:
-        #start updater
+        # start updater
         log("Starting Updater...")
         handler = CMDStartStop()
         handler.exeName = "python.exe"

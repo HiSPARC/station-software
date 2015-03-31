@@ -8,6 +8,10 @@ from urllib import urlencode
 from urllib2 import urlopen, HTTPError, URLError
 import socket
 from threading import Thread, Semaphore, Event
+try:
+    from hashlib import md5
+except ImportError:
+    from md5 import new as md5
 
 from Observer import Observer
 from StorageManager import StorageManager
@@ -18,23 +22,12 @@ from UserExceptions import ThreadCrashError
 # TODO add observer
 # use BUI's trick to stop a thread
 BATCHSIZE = 100
+# the waiting time will be doubled for each failed attempt
 MINWAIT = 1  # minimum time to wait in seconds after a failed attempt
-             # the waiting time will be doubled for each failed attempt
 MAXWAIT = 60  # maximum time to wait in seconds after a failed attempt
 
 # To make sure there is no timeout set at socket level
 socket.setdefaulttimeout(None)
-
-# Python >= 2.5 has hashlib
-try:
-    from hashlib import md5
-    def md5_sum(s):
-        return md5(s).hexdigest()
-except:
-    print "ERROR: No hashlib found. Using md5 instead."
-    import md5
-    def md5_sum(s):
-        return md5.new(s).hexdigest()
 
 
 class Uploader(Observer, Thread):
@@ -87,7 +80,7 @@ class Uploader(Observer, Thread):
         else:
             # FIXME correctly work out that super stuff.  I think that
             # the superclasses should both use super, but ...?
-            #super(Uploader, self).__init__()
+            # super(Uploader, self).__init__()
             Thread.__init__(self)
             self.crashes.append(time())
 
@@ -104,7 +97,7 @@ class Uploader(Observer, Thread):
 
             # calculate if uploader-thread should be unblocked
             if (self.numEvents >= self.minBatchSize and
-                oldNumEvents < self.minBatchSize):
+                    oldNumEvents < self.minBatchSize):
                 shouldRelease = 1
 
             self.numEventsLock.release()
@@ -139,7 +132,7 @@ class Uploader(Observer, Thread):
         """Upload a list of events to the database server."""
 
         data = dumps(elist)
-        checksum = md5_sum(data)
+        checksum = md5(data).hexdigest()
 
         params = urlencode({'station_id': self.stationID,
                             'password': self.password,

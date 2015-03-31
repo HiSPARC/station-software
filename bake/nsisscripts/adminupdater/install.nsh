@@ -1,6 +1,12 @@
 #
 #   install.nsh ------
 #   Admin installer.
+#   Jan 2013: multiple (2) NI-RunTimeEngines
+#   May 2013: - separate OpenVpn folder for 32-bit and 64-bit
+#             - popup-window in case of error
+#   Aug 2013: - 64-bit: only OpenVPN and TightVNC have a true 64-bit executable
+#               Other application still use the 32-bit registry.
+#               OpenVPN, due to a bug in version 2.2.2, as well.
 #
 
 #
@@ -16,17 +22,19 @@ Section -CheckExecutables
     Quit
   ${Endif}
   
-  StrCpy $FileName "$AdminDir\openvpn\bin\tapinstall.exe"
+  StrCpy $FileName "$OpenVpnDir\bin\tapinstall.exe"
   Call fileExists
-  StrCpy $FileName "$AdminDir\openvpn\bin\openvpnserv.exe"
+  StrCpy $FileName "$OpenVpnDir\bin\openvpnserv.exe"
   Call fileExists
-  StrCpy $FileName "$AdminDir\tightvnc\${VNC_SERVICENAME}.exe"
+  StrCpy $FileName "$TvncFolder\${VNC_SERVICENAME}.exe"
   Call fileExists
   StrCpy $FileName "$AdminDir\nsclientpp\NSClient++.exe"
   Call fileExists
   StrCpy $FileName "$AdminDir\odbcconnector\Install_HiSPARC.bat"
   Call fileExists
   StrCpy $FileName "$AdminDir\niruntimeinstaller\setup.exe"
+  Call fileExists
+  StrCpy $FileName "$AdminDir\nirte2012\setup.exe"
   Call fileExists
   StrCpy $FileName "$AdminDir\ftdi_drivers\dpinst.exe"
   Call fileExists
@@ -37,22 +45,35 @@ SectionEnd
 #
 Section -OpenVPNSetup
   DetailPrint "admin-OpenVPNSetup"
+  # OpenVPN 2.2.2 64-bit version, still reads its registry as a 32-bit application
+  SetRegView 32
   # register
   WriteRegStr HKLM ${OPENVPN_KEY} ""         "$AdminDir"
-  WriteRegStr HKLM ${OPENVPN_KEY} config_dir "$AdminDir\OpenVPN\config"
+  WriteRegStr HKLM ${OPENVPN_KEY} config_dir "$OpenVpnDir\config"
   WriteRegStr HKLM ${OPENVPN_KEY} config_ext "ovpn"
-  WriteRegStr HKLM ${OPENVPN_KEY} exe_path   "$AdminDir\OpenVPN\bin\openvpn.exe"
+  WriteRegStr HKLM ${OPENVPN_KEY} exe_path   "$OpenVpnDir\bin\openvpn.exe"
   WriteRegStr HKLM ${OPENVPN_KEY} log_append "0"
-  WriteRegStr HKLM ${OPENVPN_KEY} log_dir    "$AdminDir\OpenVPN\log"
+  WriteRegStr HKLM ${OPENVPN_KEY} log_dir    "$OpenVpnDir\log"
   WriteRegStr HKLM ${OPENVPN_KEY} priority   "NORMAL_PRIORITY_CLASS"
   # install tap driver
-  ExecWait '"$AdminDir\openvpn\bin\tapinstall.exe" install "$AdminDir\openvpn\driver\oemWin2k.inf" tap0901' $Result
-  DetailPrint "VPN tapinstall: $Result"
+  ExecWait '"$OpenVpnDir\bin\tapinstall.exe" install "$OpenVpnDir\driver\OemWin2k.inf" tap0901' $Result
+  StrCpy $Message "VPN tapinstall: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
   # service
-  ExecWait '"$AdminDir\openvpn\bin\openvpnserv.exe" -install' $Result
-  DetailPrint "VPN openvpnserv: $Result"
+  ExecWait '"$OpenVpnDir\bin\openvpnserv.exe" -install' $Result
+  StrCpy $Message "VPN openvpnserv: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
   # unzip certificate zip
-  nsisunz::UnzipToLog "$CertZip" "$AdminDir\openvpn\config"
+  nsisunz::UnzipToLog "$CertZip" "$OpenVpnDir\config"
+  ${If} $Architecture == "64"
+    SetRegView 64
+  ${Endif}
 SectionEnd
 
 #
@@ -61,7 +82,6 @@ SectionEnd
 Section -TightVNCSetup
   DetailPrint "admin-TightVNCSetup"
   # register
-  StrCpy $TvncFolder "$AdminDir\tightvnc"
   WriteRegStr   HKLM ${TIGHTVNC_KEY}         Path                      "$TvncFolder"
   WriteRegStr   HKLM ${TIGHTVNC_KEY}         StartMenuGroup            "TightVNC"
   WriteRegDWORD HKLM ${TVNCCOMPONENTS_KEY}   "TightVNC Server"         1
@@ -102,7 +122,11 @@ Section -TightVNCSetup
   # service
   StrCpy $Program "$TvncFolder\${VNC_SERVICENAME}.exe"
   ExecWait '"$Program" -install -silent' $Result
-  DetailPrint "VNC tightvnc: $Result"
+  StrCpy $Message "VNC tightvnc: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
 SectionEnd
 
 #
@@ -111,7 +135,11 @@ SectionEnd
 Section -NscpSetup
   DetailPrint "admin-NscpSetup"
   ExecWait '"$AdminDir\nsclientpp\NSClient++.exe" /install' $Result
-  DetailPrint "Nagios NSClient++: $Result"
+  StrCpy $Message "Nagios NSClient++: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
 SectionEnd
 
 #
@@ -119,9 +147,14 @@ SectionEnd
 #
 Section -ODBCSetup
   DetailPrint "admin-ODBCSetup"
+  SetRegView 32
   # install
   ExecWait '"$AdminDir\odbcconnector\Install_HiSPARC.bat"' $Result
-  DetailPrint "ODBC install: $Result"
+  StrCpy $Message "ODBC install: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
   # register
   WriteRegStr HKLM ${ODBCREGKEY}     DATABASE    "buffer"
   WriteRegStr HKLM ${ODBCREGKEY}     DESCRIPTION "HiSPARC buffer"
@@ -131,15 +164,35 @@ Section -ODBCSetup
   WriteRegStr HKLM ${ODBCREGKEY}     SERVER      "${BDBHOST}"
   WriteRegStr HKLM ${ODBCREGKEY}     UID         "buffer"
   WriteRegStr HKLM '${ODBCDSREGKEY}' buffer      '${ODBCDRV}'
+  ${If} $Architecture == "64"
+    SetRegView 64
+  ${Endif}
 SectionEnd
 
 #
-# Install LabVIEW
+# Install LabVIEW Run-Time-Engine
+# Two versions are installed: 8.2.1 and 2012
 #
 Section -LabviewRuntimeSetup
   DetailPrint "admin-LabviewRuntimeSetup"
-  ExecWait '"$AdminDir\niruntimeinstaller\setup.exe" hisparcspec.ini /AcceptLicenses yes /r:n /q' $Result
-  DetailPrint "LabVIEW setup: $Result"
+  SetRegView 32
+  ExecWait '"$AdminDir\niruntimeinstaller\setup.exe" /AcceptLicenses yes /r:n /q' $Result
+  StrCpy $Message "LabVIEW RTE 8.2.1 setup: $Result"
+  DetailPrint $Message
+  ${If} $Result != 3010
+  ${AndIf} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
+  ExecWait '"$AdminDir\nirte2012\setup.exe" /AcceptLicenses yes /r:n /q' $Result
+  StrCpy $Message "LabVIEW RTE 2012 setup: $Result"
+  DetailPrint $Message
+  ${If} $Result != 3010
+  ${AndIf} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
+  ${Endif}
+  ${If} $Architecture == "64"
+    SetRegView 64
+  ${Endif}
 SectionEnd
 
 #

@@ -149,4 +149,5 @@ class Interpreter:
             self.event_ids = []
             return self.discard_event_ids
 
+        self.event_ids.extend(self.discard_event_ids)
         return self.event_ids

@@ -2,6 +2,7 @@ import subprocess
 
 NSISPATH = "./nsis"
 
+
 class nsiHandling():
 
     def __init__(self):
@@ -9,12 +10,12 @@ class nsiHandling():
 
     def compileNSI(self, nsiPath, defines):
         definelist = ""
-        #print str(defines)
+        # print str(defines)
         for i in defines:
             definelist = "%s /D%s" % (definelist, i)
-        #print definelist
+        # print definelist
         command = "%s /V1 %s %s" % (self.nsisExe, definelist, nsiPath)
-        #print command
+        # print command
         print "Compiling %s..." % nsiPath
         nsiProcess = subprocess.Popen(command)
         nsiProcess.wait()
