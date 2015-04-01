@@ -14,7 +14,6 @@ class ERR(BaseHiSPARCEvent):
         LabVIEW DAQ software.
 
         """
-
         # Initialize sequential reading mode
         self.unpackSeqMessage()
 

@@ -21,34 +21,30 @@ class CFG(BaseHiSPARCEvent):
             gps_second, gps_minute, gps_hour, gps_day, gps_month, gps_year, \
             self.cfg_gps_longitude, self.cfg_gps_latitude, \
             self.cfg_gps_altitude = self.unpackSeqMessage('>2B5BH3d')
-        # self.cfg_gps_altitude = self.unpackSeqMessage('>BBBBBBBHddd')
 
         self.datetime = datetime(gps_year, gps_month, gps_day,
                                  gps_hour, gps_minute, gps_second)
         self.nanoseconds = 0
 
-        self.cfg_mas_version, = self.unpackSeqMessage('LVstring')
-        self.cfg_slv_version, = self.unpackSeqMessage('LVstring')
+        self.cfg_mas_version = self.unpackSeqMessage('LVstring')[0]
+        self.cfg_slv_version = self.unpackSeqMessage('LVstring')[0]
 
         self.cfg_trig_low_signals, self.cfg_trig_high_signals, \
             self.cfg_trig_external, self.cfg_trig_and_or, \
             self.cfg_precoinctime, self.cfg_coinctime, \
             self.cfg_postcoinctime, self.cfg_detnum = \
             self.unpackSeqMessage('>3LB3dH')
-        # self.unpackSeqMessage('>LLLBdddH')
 
-        self.cfg_password, = self.unpackSeqMessage('LVstring')
+        self.cfg_password = self.unpackSeqMessage('LVstring')[0]
 
         self.cfg_spare_bytes, self.cfg_use_filter, \
             self.cfg_use_filter_threshold, self.cfg_reduce_data = \
             self.unpackSeqMessage('>4B')
-        # self.unpackSeqMessage('>BBBB')
 
-        self.cfg_buffer, = self.unpackSeqMessage('LVstring')
+        self.cfg_buffer = self.unpackSeqMessage('LVstring')[0]
 
         self.cfg_startmode, self.cfg_delay_screen, self.cfg_delay_check, \
             self.cfg_delay_error = self.unpackSeqMessage('>B3d')
-        # self.cfg_delay_error = self.unpackSeqMessage('>Bddd')
 
         self.cfg_mas_ch1_thres_low, self.cfg_mas_ch1_thres_high, \
             self.cfg_mas_ch2_thres_low, self.cfg_mas_ch2_thres_high, \

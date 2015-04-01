@@ -44,7 +44,6 @@ class CIC(BaseHiSPARCEvent):
         format strings.
 
         """
-
         # Initialize sequential reading mode
         self.unpackSeqMessage()
 
