@@ -9,10 +9,11 @@ import logging
 
 logger = logging.getLogger('hsmonitor.interpreter')
 
-from HiSPARCEvent import CIC
-from HiSPARCError import ERR
-from HiSPARCConfig import CFG
-from HiSPARCComparator import CMP
+from HiSPARCEvent import HiSPARCEvent
+from HiSPARCError import HiSPARCError
+from HiSPARCConfig import HiSPARCConfig
+from HiSPARCComparator import HiSPARCComparator
+from HiSPARCSingles import HiSPARCSingles
 from WeatherEvent import WeatherEvent
 from WeatherError import WeatherError
 from WeatherConfig import WeatherConfig
@@ -23,7 +24,7 @@ from LightningStatus import LightningStatus
 from LightningNoise import LightningNoise
 
 # create a dictionary to store all type_codes of events
-event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP',
+event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP', '5': 'SIN',
                     '16': 'WTR', '17': 'WER', '18': 'WCG',
                     '32': 'LIT', '33': 'LER', '34': 'LCG', '35': 'LST',
                     '36': 'LNS'}
@@ -36,7 +37,7 @@ class TriggerRateHolder(object):
 
 
 class Interpreter(object):
-    # the instantiation operation
+
     def __init__(self, storageManager):
         # init variables here if needed
         self.storageManager = storageManager
@@ -48,13 +49,15 @@ class Interpreter(object):
     def createEvent(self, eventcode, message):
         # create an event corresponding to the eventcode
         if eventcode == 'CIC':
-            event = CIC(message)
+            event = HiSPARCEvent(message)
         elif eventcode == 'ERR':
-            event = ERR(message)
+            event = HiSPARCError(message)
         elif eventcode == 'CFG':
-            event = CFG(message)
+            event = HiSPARCConfig(message)
         elif eventcode == 'CMP':
-            event = CMP(message)
+            event = HiSPARCComparator(message)
+        # elif eventcode == 'SIN':
+        #     event = HiSPARCSingles(message)
         elif eventcode == 'WTR':
             event = WeatherEvent(message)
         elif eventcode == 'WER':
@@ -94,7 +97,6 @@ class Interpreter(object):
         can be serialized for transfer via an HTTP POST request.
 
         """
-
         self.eventlist = []
         self.event_ids = []
         self.discard_event_ids = []

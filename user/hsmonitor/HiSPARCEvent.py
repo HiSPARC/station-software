@@ -9,11 +9,11 @@ from legacy import unpack_legacy_message
 import EventExportValues
 
 
-class CIC(BaseHiSPARCEvent):
+class HiSPARCEvent(BaseHiSPARCEvent):
 
     def __init__(self, message):
         """Proceed to unpack the message."""
-        super(CIC, self).__init__(message)
+        super(HiSPARCEvent, self).__init__(message)
 
         # init the trigger rate attribute
         self.eventrate = 0

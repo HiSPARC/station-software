@@ -112,7 +112,7 @@ class BaseHiSPARCEvent(BaseEvent):
         if fmt == 'LVstring':
             # Request for a labview string. That is, first a long for the
             # length, then the string itself.
-            length, = self.unpackSeqMessage('>L')
+            length = self.unpackSeqMessage('>L')[0]
             fmt = ">%ds" % length
 
         # For debugging, keeping track of trailing bytes

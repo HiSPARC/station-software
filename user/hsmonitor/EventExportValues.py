@@ -121,6 +121,7 @@ export_values = {
         ('N', 'CMP_DEVICE', 'cmp_device'),
         ('N', 'CMP_COMPARATOR', 'cmp_comparator'),
         ('N', 'CMP_COUNT', 'cmp_count_over_threshold')],
+    'SIN': [],
     'WTR': [
         ('N', 'WTR_TEMP_INSIDE', 'tempInside'),
         ('N', 'WTR_TEMP_OUTSIDE', 'tempOutside'),

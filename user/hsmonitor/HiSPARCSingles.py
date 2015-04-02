@@ -1,23 +1,22 @@
-"""Process the ERR event message from a buffer."""
+"""Process the singles event message from a buffer."""
 
 from datetime import datetime
 
 from Event import BaseHiSPARCEvent
 
 
-class HiSPARCError(BaseHiSPARCEvent):
+class HiSPARCSingles(BaseHiSPARCEvent):
 
     def unpackMessage(self):
-        """Unpack an error message.
+        """Unpack a singles message.
 
-        This routine unpacks the error messages written to the buffer by the
-        LabVIEW DAQ software.
+        This routine unpacks a singles message from the buffer database.
 
         """
         # Initialize sequential reading mode
         self.unpackSeqMessage()
 
-        self.version, self.database_id,
+        self.version, self.database_id, \
             gps_second, gps_minute, gps_hour, gps_day, gps_month, gps_year = \
             self.unpackSeqMessage('>2B5BH')
 
@@ -25,5 +24,3 @@ class HiSPARCError(BaseHiSPARCEvent):
                                  gps_hour, gps_minute, gps_second)
 
         self.nanoseconds = 0
-
-        self.error_message = self.unpackSeqMessage('LVstring')[0]

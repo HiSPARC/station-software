@@ -5,7 +5,7 @@ from datetime import datetime
 from Event import BaseHiSPARCEvent
 
 
-class CFG(BaseHiSPARCEvent):
+class HiSPARCConfig(BaseHiSPARCEvent):
 
     def unpackMessage(self):
         """Unpack a configuration message.

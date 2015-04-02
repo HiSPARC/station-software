@@ -5,7 +5,7 @@ from datetime import datetime
 from Event import BaseHiSPARCEvent
 
 
-class CMP(BaseHiSPARCEvent):
+class HiSPARCComparator(BaseHiSPARCEvent):
 
     def unpackMessage(self):
         """Unpack a comparator message.
