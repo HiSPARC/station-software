@@ -50,7 +50,7 @@ formatter_screen = logging.Formatter('%(asctime)s UTC - %(name)s'
                                      '%Y-%m-%d %H:%M:%S')
 
 # Logging levels which can be set in the configuration file
-LEVELS = {"unset": logging.UNSET,
+LEVELS = {"notset": logging.NOTSET,
           "debug": logging.DEBUG,
           "info": logging.INFO,
           "warning": logging.WARNING,
@@ -99,7 +99,7 @@ class HsMonitor(object):
                 logger.info('Screen logging level set to ' + log_level_screen)
             else:
                 logger.warning("Illegal screen logging level '%s' in config, "
-                               " defaulting to debug" % log_level_screen)
+                               " defaulting to info" % log_level_screen)
         except:
             logger.critical('Cannot open the config file!')
             return

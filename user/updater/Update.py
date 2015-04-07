@@ -27,7 +27,7 @@ formatter_screen = logging.Formatter('%(asctime)s - %(name)s'
                                      '%Y-%m-%d %H:%M:%S')
 
 # Logging levels which can be set in the configuration file
-LEVELS = {"unset": logging.UNSET,
+LEVELS = {"notset": logging.NOTSET,
           "debug": logging.DEBUG,
           "info": logging.INFO,
           "warning": logging.WARNING,
@@ -90,7 +90,7 @@ class Updater(object):
             logger.info('Screen logging level set to ' + self.log_level_screen)
         else:
             logger.warning("Illegal screen logging level '%s' in config, "
-                           "defaulting to debug" % self.log_level_screen)
+                           "defaulting to info" % self.log_level_screen)
 
     def checkIfUpdateToInstall(self):
         """Check if there is already an admin update to install
