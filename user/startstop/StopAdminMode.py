@@ -56,4 +56,6 @@ def stop():
         log('An exception was generated while stopping OpenVPN Service:' +
             str(sys.exc_info()[1]))
 
-stop()
+
+if __name__ == "__main__":
+    stop()

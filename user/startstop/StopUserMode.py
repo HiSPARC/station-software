@@ -74,4 +74,6 @@ def stop():
     except:
         log("An exception was generated while stopping the Updater!")
 
-stop()
+
+if __name__ == "__main__":
+    stop()

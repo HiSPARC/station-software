@@ -134,4 +134,6 @@ def start():
         log("An exception was generated while starting the Updater: " +
             str(sys.exc_info()[1]))
 
-start()
+
+if __name__ == "__main__":
+    start()

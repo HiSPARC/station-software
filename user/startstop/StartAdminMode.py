@@ -40,8 +40,8 @@ def start():
             str(sys.exc_info()[1]))
 
     try:
-        # start OpenVpn Service
-        log('Starting OpenVpn Service')
+        # start OpenVPN Service
+        log('Starting OpenVPN Service')
         openVpnServHandler = StartStop()
         openVpnServHandler.serviceName = "OpenVPNService"
         resOpenVpn = openVpnServHandler.startService()
@@ -55,4 +55,6 @@ def start():
         log('An exception was generated while starting the OpenVPN Service:' +
             str(sys.exc_info()[1]))
 
-start()
+
+if __name__ == "__main__":
+    start()
