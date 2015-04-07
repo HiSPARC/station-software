@@ -76,7 +76,7 @@ class Interpreter(object):
             event = LightningNoise(message)
         else:
             logger.warning('Unknown message type %s (%d).' %
-                           (eventcode, self.type_id))
+                           (eventcode, message[0]))
             return None
 
         event.uploadCode = eventcode
