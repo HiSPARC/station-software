@@ -23,7 +23,7 @@ WW: Pathing to pythonshared is removed, since it is no longer required to
 """
 import re
 import os
-from time import sleep
+import time
 import logging
 
 from TimedConcurrentLogging import TimedConcurrentRotatingFileHandler
@@ -41,10 +41,11 @@ CONFIG_INI_PATH2 = "../../persistent/configuration/config.ini"
 CONFIG_INI_PATH3 = "data/config-password.ini"
 
 logger = logging.getLogger('hsmonitor')
+logging.Formatter.converter = time.gmtime
 formatter_file = logging.Formatter('%(asctime)s (%(threadName)s) %(name)s'
                                    '.%(funcName)s.%(levelname)s: %(message)s',
                                    '%Y-%m-%d %H:%M:%S')
-formatter_screen = logging.Formatter('%(asctime)s - %(name)s'
+formatter_screen = logging.Formatter('%(asctime)s UTC - %(name)s'
                                      ' - %(levelname)s: %(message)s',
                                      '%Y-%m-%d %H:%M:%S')
 
@@ -221,7 +222,7 @@ def main():
     # Periodically check for crashed threads, and restart them if necessary
     try:
         while True:
-            sleep(10)
+            time.sleep(10)
             for thread in hsMonitor.hsThreads:
                 if not thread.is_alive():
                     logger.warning('Thread %s died, restarting.' % thread.name)

@@ -18,7 +18,8 @@ PERSISTENT_INI = "../../persistent/configuration/config.ini"
 ADMINUPDATE_NAME = "adminUpdater"
 
 logger = logging.getLogger('updater')
-formatter_file = logging.Formatter('%(asctime)s (%(threadName)s) %(name)s'
+logging.Formatter.converter = time.gmtime
+formatter_file = logging.Formatter('%(asctime)s UTC (%(threadName)s) %(name)s'
                                    '.%(funcName)s.%(levelname)s: %(message)s',
                                    '%Y-%m-%d %H:%M:%S')
 formatter_screen = logging.Formatter('%(asctime)s - %(name)s'
