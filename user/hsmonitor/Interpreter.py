@@ -56,8 +56,8 @@ class Interpreter(object):
             event = HiSPARCConfig(message)
         elif eventcode == 'CMP':
             event = HiSPARCComparator(message)
-        # elif eventcode == 'SIN':
-        #     event = HiSPARCSingles(message)
+        elif eventcode == 'SIN':
+            event = HiSPARCSingles(message)
         elif eventcode == 'WTR':
             event = WeatherEvent(message)
         elif eventcode == 'WER':

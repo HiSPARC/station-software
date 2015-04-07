@@ -24,3 +24,10 @@ class HiSPARCSingles(BaseHiSPARCEvent):
                                  gps_hour, gps_minute, gps_second)
 
         self.nanoseconds = 0
+
+        self.device_id = self.unpackSeqMessage('>B')
+
+        self.mas_ch1_low, self.mas_ch1_high, \
+            self.mas_ch2_low, self.mas_ch2_high, \
+            self.slv_ch1_low, self.slv_ch1_high, \
+            self.slv_ch2_low, self.slv_ch2_high = self.unpackSeqMessage('>8I')
