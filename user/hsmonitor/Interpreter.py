@@ -134,6 +134,7 @@ class Interpreter(object):
                 self.discard_event_ids.append(message[2])
                 logger.error('Event exception (discarding event): %s.' %
                              errormsg)
+                logger.debug('Bad event: %s' % message)
             else:
                 # add parsed event into the list of events
                 self.eventlist.append({'header': header,
