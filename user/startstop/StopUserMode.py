@@ -47,4 +47,4 @@ def stop_executables():
 
 
 if __name__ == "__main__":
-    stop()
+    stop_executables()
