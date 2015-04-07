@@ -1,78 +1,49 @@
 """Stop the HiSPARC user executables.
 
 These applications are stopped:
-LabVIEW Detector, LabVIEW Weather, MySQL, HiSPARC Monitor, HiSPARC Updater
+HiSPARC Detector, HiSPARC Weather, MySQL, HiSPARC Monitor, HiSPARC Updater
 
 """
+
 from startStop import StartStop, CMDStartStop, status
 from hslog import log, setLogMode, MODE_BOTH
 
 
-def stop():
+def stop_executable(name, exe_name, title=None):
+    """Stop an executable
+
+    :param name: common name for the program
+    :param exe_name: name of the process
+    :param title: specific name of the window to stop
+
+    """
+    try:
+        log("Stopping %s..." % name)
+        if title is None:
+            handler = StartStop()
+        else:
+            handler = CMDStartStop()
+            handler.title = title
+        handler.exeName = exe_name
+        result = handler.stopProcess()
+        log("Status: " + status(result))
+    except:
+        log("An exception was generated while stopping %s!" % name)
+
+
+def stop_executables():
+    """Stop the user executables"""
+
     setLogMode(MODE_BOTH)
-    log("\nStopping User-Mode applications...")
+    log("Stopping User-Mode applications...")
 
-    try:
-        # stop LabVIEW detector
-        log("Stopping LabVIEW detector...")
-        handler = StartStop()
-        handler.exeName = "hisparcdaq.exe"
-
-        res = handler.stopProcess()
-        log("Status: " + status(res))
-
-    except:
-        log("An exception was generated while stopping LabVIEW detector!")
-
-    try:
-        # stop LabVIEW weather
-        log("Stopping LabVIEW weather...")
-        handler = StartStop()
-        handler.exeName = "HiSPARC Weather Station.exe"
-
-        res = handler.stopProcess()
-        log("Status: " + status(res))
-
-    except:
-        log("An exception was generated while stopping LabVIEW weather!")
-
-    try:
-        # stop MySQL
-        log("Stopping MySQL...")
-        handler = StartStop()
-        handler.exeName = "mysqld.exe"
-
-        res = handler.stopProcess()
-        log("Status: " + status(res))
-
-    except:
-        log("An exception was generated while stopping MySQL!")
-
-    try:
-        # stop HSMonitor
-        log("Stopping HSMonitor...")
-        handler = CMDStartStop()
-        handler.exeName = "python.exe"
-        handler.title = "HISPARC MONITOR: hsmonitor"
-
-        res = handler.stopProcess()
-        log("Status: " + status(res))
-
-    except:
-        log("An exception was generated while stopping HSMonitor!")
-
-    try:
-        # stop Updater
-        log("Stopping Updater...")
-        handler = CMDStartStop()
-        handler.exeName = "python.exe"
-        handler.title = "HISPARC Updater: updater"
-
-        res = handler.stopProcess()
-        log("Status: " + status(res))
-
-    except:
-        log("An exception was generated while stopping the Updater!")
+    stop_executable('HiSPARC Detector', 'hisparcdaq.exe')
+    stop_executable('HiSPARC Weather', 'HiSPARC Weather Station.exe')
+    stop_executable('MySQL', 'mysqld.exe')
+    stop_executable('HiSPARC Monitor', 'python.exe',
+                    'HISPARC MONITOR: hsmonitor')
+    stop_executable('HiSPARC Updater', 'python.exe',
+                    'HISPARC Updater: updater')
 
 
 if __name__ == "__main__":

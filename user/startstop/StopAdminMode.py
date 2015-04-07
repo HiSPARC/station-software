@@ -4,58 +4,39 @@ from startStop import StartStop
 from hslog import log, setLogMode, MODE_BOTH
 
 
-def stop():
+def stop_service(name, service_name):
+    """Stop a service
+
+    :param name: common name for printing
+    :param service_name: name of the Service
+
+    """
+    try:
+        log('Stopping %s Service' % name)
+        service_handler = StartStop()
+        service_handler.serviceName = service_name
+        result = service_handler.stopService()
+        if result == 0:
+            log('Status: running')
+        elif result == 1:
+            log('Status: stopped')
+        else:
+            log('The service was not found!')
+    except:
+        log('An exception was generated while stopping %s:' % name +
+            str(sys.exc_info()[1]))
+
+
+def stop_admin_services():
+    """Stop the admin services"""
+
     setLogMode(MODE_BOTH)
-    log('\nStopping Admin-Mode applications...')
+    log('Stopping Admin-Mode applications...')
 
-    try:
-        # stop TightVNC
-        log('Stopping TightVNC service...')
-        tightVNCHandler = StartStop()
-        tightVNCHandler.serviceName = 'tvnserver'
-        resTightVNC = tightVNCHandler.stopService()
-        if resTightVNC == 0:
-            log('Status:running')
-        elif resTightVNC == 1:
-            log('Status:stopped')
-        else:
-            log('The service was not found!')
-    except:
-        log('An exception was generated while stopping TightVNC:' +
-            str(sys.exc_info()[1]))
-
-    try:
-        # stop Nagios Service
-        log('Stopping Nagios Service')
-        nagiosServHandler = StartStop()
-        nagiosServHandler.serviceName = "NSClientpp"
-        resNagios = nagiosServHandler.stopService()
-        if resNagios == 0:
-            log('Status:running')
-        elif resNagios == 1:
-            log('Status:stopped')
-        else:
-            log('The service was not found!')
-    except:
-        log('An exception was generated while stopping Nagios Service:' +
-            str(sys.exc_info()[1]))
-
-    try:
-        # stop OpenVpn Service
-        log('Stopping OpenVPN Service')
-        openVpnServHandler = StartStop()
-        openVpnServHandler.serviceName = "OpenVPNService"
-        resOpenVpn = openVpnServHandler.stopService()
-        if resOpenVpn == 0:
-            log('Status:running')
-        elif resOpenVpn == 1:
-            log('Status:stopped')
-        else:
-            log('The service was not found!')
-    except:
-        log('An exception was generated while stopping OpenVPN Service:' +
-            str(sys.exc_info()[1]))
+    stop_service('TightVNC', 'tvnserver')
+    stop_service('Nagios', 'NSClientpp')
+    stop_service('OpenVPN', 'OpenVPNService')
 
 
 if __name__ == "__main__":
-    stop()
+    stop_admin_services()
