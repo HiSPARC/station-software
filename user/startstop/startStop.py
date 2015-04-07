@@ -15,6 +15,7 @@ NOT_INSTALLED = 8
 
 
 def status(result):
+    """Translate result code to a readable string"""
 
     if result == RUNNING:
         status = "running"
@@ -33,6 +34,9 @@ def status(result):
 
 
 class StartStop(object):
+
+    """A class to start and stop programs on Windows"""
+
     exeName = ''
     ShowWindow = win32con.SW_SHOWMINIMIZED
     currentDirectory = ''
