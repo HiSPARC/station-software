@@ -35,16 +35,33 @@ class HiSPARCConfig(BaseHiSPARCEvent):
             self.cfg_postcoinctime, self.cfg_detnum = \
             self.unpackSeqMessage('>3LB3dH')
 
-        self.cfg_password = self.unpackSeqMessage('LVstring')[0]
+        # DAQ v40 has a slightly different configuration structure
+        if self.version < 40:
+            self.cfg_password = self.unpackSeqMessage('LVstring')[0]
 
-        self.cfg_spare_bytes, self.cfg_use_filter, \
-            self.cfg_use_filter_threshold, self.cfg_reduce_data = \
-            self.unpackSeqMessage('>4B')
+            self.cfg_spare_bytes, self.cfg_use_filter, \
+                self.cfg_use_filter_threshold, self.cfg_reduce_data = \
+                self.unpackSeqMessage('>4B')
 
-        self.cfg_buffer = self.unpackSeqMessage('LVstring')[0]
+            self.cfg_buffer = self.unpackSeqMessage('LVstring')[0]
 
-        self.cfg_startmode, self.cfg_delay_screen, self.cfg_delay_check, \
-            self.cfg_delay_error = self.unpackSeqMessage('>B3d')
+            self.cfg_startmode, self.cfg_delay_screen, self.cfg_delay_check, \
+                self.cfg_delay_error = self.unpackSeqMessage('>B3d')
+        else:
+            # Should the 'missing' attributes also get an assignment?
+            self.cfg_buffer = self.unpackSeqMessage('LVstring')[0]
+
+            self.cfg_startmode = self.unpackSeqMessage('>B')
+
+            self.cfg_spare_bytes, self.cfg_use_filter, \
+                self.cfg_use_filter_threshold, self.cfg_reduce_data = \
+                self.unpackSeqMessage('>4B')
+
+            # Ignore the filter thresholds and ADC to mV conversion factor
+            self.unpackSeqMessage('>5d')
+
+            self.cfg_delay_screen, self.cfg_delay_check, \
+                self.cfg_delay_error = self.unpackSeqMessage('>3d')
 
         self.cfg_mas_ch1_thres_low, self.cfg_mas_ch1_thres_high, \
             self.cfg_mas_ch2_thres_low, self.cfg_mas_ch2_thres_high, \
