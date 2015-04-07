@@ -1,5 +1,4 @@
 import os
-import sys
 import ConfigParser
 import checkFiles
 import urllib2
@@ -55,7 +54,8 @@ class Checker(object):
             print adminURL
             adminFile = downloader.downloadUpdate(location, adminURL)
             updates['adminFile'] = adminFile
-            logger.info('Administrator update is available called: %s' % adminFile)
+            logger.info('Administrator update is available called: %s' %
+                        adminFile)
 
             if DISPLAY_GUI_MESSAGES and not(checkFiles.checkIfAdmin()):
                 root = Tk()

@@ -13,7 +13,7 @@ from HiSPARCEvent import HiSPARCEvent
 from HiSPARCError import HiSPARCError
 from HiSPARCConfig import HiSPARCConfig
 from HiSPARCComparator import HiSPARCComparator
-from HiSPARCSingles import HiSPARCSingles
+# from HiSPARCSingles import HiSPARCSingles
 from WeatherEvent import WeatherEvent
 from WeatherError import WeatherError
 from WeatherConfig import WeatherConfig

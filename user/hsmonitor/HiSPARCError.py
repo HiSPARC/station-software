@@ -17,7 +17,7 @@ class HiSPARCError(BaseHiSPARCEvent):
         # Initialize sequential reading mode
         self.unpackSeqMessage()
 
-        self.version, self.database_id,
+        self.version, self.database_id, \
             gps_second, gps_minute, gps_hour, gps_day, gps_month, gps_year = \
             self.unpackSeqMessage('>2B5BH')
 

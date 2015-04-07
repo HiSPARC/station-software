@@ -2,6 +2,7 @@ import sched
 import time
 import random
 import os
+import sys
 import logging
 
 import checkFiles
