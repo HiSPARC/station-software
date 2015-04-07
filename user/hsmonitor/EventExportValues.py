@@ -123,11 +123,11 @@ export_values = {
         ('N', 'CMP_COUNT', 'cmp_count_over_threshold')],
     'SIN': [
         ('N', 'MAS_CH1_LOW', 'mas_ch1_low'),
-        ('N', 'MAS_CH1_HIGH', 'mas_ch1_high')
+        ('N', 'MAS_CH1_HIGH', 'mas_ch1_high'),
         ('N', 'MAS_CH2_LOW', 'mas_ch2_low'),
-        ('N', 'MAS_CH2_HIGH', 'mas_ch2_high')
+        ('N', 'MAS_CH2_HIGH', 'mas_ch2_high'),
         ('N', 'SLV_CH1_LOW', 'slv_ch1_low'),
-        ('N', 'SLV_CH1_HIGH', 'slv_ch1_high')
+        ('N', 'SLV_CH1_HIGH', 'slv_ch1_high'),
         ('N', 'SLV_CH2_LOW', 'slv_ch2_low'),
         ('N', 'SLV_CH2_HIGH', 'slv_ch2_high')],
     'WTR': [
