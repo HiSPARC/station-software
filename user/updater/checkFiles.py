@@ -22,6 +22,7 @@ def parse_version(search_name, filename):
     if mo:
         return int(mo.group(1))
 
+
 def checkIfNewerFileExists(location, search_name, current_version):
     """Check if newer file exists
 

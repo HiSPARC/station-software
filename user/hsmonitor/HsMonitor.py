@@ -96,7 +96,7 @@ class HsMonitor(object):
         self.config.read([CONFIG_INI, PERSISTENT_INI, PASSWORD_INI])
         for i, target in enumerate(['File', 'Screen']):
             log_level = self.config.ifgetstr('Logging', '%sLevel' % target,
-                                          'debug')
+                                             'debug')
             if log_level in LEVELS:
                 logger.handlers[i].setLevel(level=LEVELS[log_level])
                 logger.info('%s logging level set to %s' % (target, log_level))

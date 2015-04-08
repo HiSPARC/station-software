@@ -84,7 +84,6 @@ class Updater(object):
                 logger.warning("Illegal %s logging level '%s' in config, "
                                "using debug" % (target, log_level))
 
-
     def checkIfUpdateToInstall(self):
         """Check if there is already an admin update to install
 
