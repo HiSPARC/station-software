@@ -102,7 +102,8 @@ def start():
         handler.exeName = "python.exe"
         handler.title = "HiSPARC Monitor"
         handler.currentDirectory = os.path.join(HS_ROOT, "user/hsmonitor")
-        handler.command = "%s/user/python/python.exe HsMonitor.py" % HS_ROOT
+        handler.command = ("%s/user/startstop/runmanually.bat user/hsmonitor "
+                           "HsMonitor.py" % HS_ROOT)
         result = handler.startProcess()
         log("Status: " + status(result))
     except:
@@ -115,7 +116,8 @@ def start():
         handler.exeName = "python.exe"
         handler.title = "HiSPARC Updater"
         handler.currentDirectory = os.path.join(HS_ROOT, "user/updater")
-        handler.command = "%s/user/python/python.exe Update.py" % HS_ROOT
+        handler.command = ("%s/user/startstop/runmanually.bat user/updater "
+                           "Update.py" % HS_ROOT)
         result = handler.startProcess()
         log("Status: " + status(result))
     except:

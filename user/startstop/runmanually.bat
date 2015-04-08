@@ -8,7 +8,7 @@
 :: Batch file to help running applications in the context of the HiSPARC
 :: system. Sets the environment variables and launches the specified COMMAND in
 :: the specified PATH. If COMMAND ends with ".py", the python interpreter
-:: (as part of the HiSPARC distribution)is automatically used.
+:: (as part of the HiSPARC distribution) is automatically used.
 :: Otherwise, COMMAND is simply executed as if it were typed on the command line.
 ::
 :: Note: the name of this file is slightly incorrect: it has nothing to do
