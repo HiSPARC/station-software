@@ -2,13 +2,11 @@ import sched
 import time
 import random
 import os
-import sys
 import logging
 
 import checkFiles
 from Checker import Checker
 
-sys.path.append("../hsmonitor")
 from EConfigParser import EConfigParser
 from TimedConcurrentLogging import TimedConcurrentRotatingFileHandler
 
