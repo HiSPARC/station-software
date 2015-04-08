@@ -1,3 +1,10 @@
+"""Start the HiSPARC admin services:
+
+These services are started:
+TightVNC, Nagios, OpenVPN
+
+"""
+
 import sys
 
 from startStop import StartStop
