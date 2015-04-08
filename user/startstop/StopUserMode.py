@@ -40,10 +40,8 @@ def stop_executables():
     stop_executable('HiSPARC Detector', 'hisparcdaq.exe')
     stop_executable('HiSPARC Weather', 'HiSPARC Weather Station.exe')
     stop_executable('MySQL', 'mysqld.exe')
-    stop_executable('HiSPARC Monitor', 'python.exe',
-                    'HISPARC MONITOR: hsmonitor')
-    stop_executable('HiSPARC Updater', 'python.exe',
-                    'HISPARC Updater: updater')
+    stop_executable('HiSPARC Monitor', 'python.exe', 'HiSPARC Monitor')
+    stop_executable('HiSPARC Updater', 'python.exe', 'HiSPARC Updater')
 
 
 if __name__ == "__main__":
