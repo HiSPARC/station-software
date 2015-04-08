@@ -10,7 +10,7 @@ from write_vpn_config import write_config
 class GUI(Tkinter.Frame):
     def __init__(self, queue, master=None):
         self.queue = queue
-        super(GUI, self).__init__(master)
+        Tkinter.Frame.__init__(self, master)
         self.grid()
         self.create_widgets()
         self.check_queue()
