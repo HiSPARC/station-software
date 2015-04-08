@@ -89,10 +89,10 @@ class Updater(object):
 
         """
         is_admin = checkFiles.checkIfAdmin()
-        currentAdmin = self.config.get("Version", "CurrentAdmin")
-        currentUser = self.config.ifgetint("Version", "CurrentUser")
+        currentAdmin = self.config.ifgetint("Version", "CurrentAdmin", 0)
+        currentUser = self.config.ifgetint("Version", "CurrentUser", 0)
 
-        logger.info("You are Administrator: " + is_admin)
+        logger.info("You are Administrator: %s" % is_admin)
         logger.info("Current Admin Version: %s" % currentAdmin)
         logger.info("Current User Version:  %s" % currentUser)
 
