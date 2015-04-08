@@ -39,7 +39,6 @@ class TriggerRateHolder(object):
 class Interpreter(object):
 
     def __init__(self, storageManager):
-        # init variables here if needed
         self.storageManager = storageManager
         self.triggerRate = TriggerRateHolder(0, 0)
 
@@ -47,7 +46,8 @@ class Interpreter(object):
         self.storageManager.openConnection()
 
     def createEvent(self, eventcode, message):
-        # create an event corresponding to the eventcode
+        """Create an event corresponding to the eventcode"""
+
         if eventcode == 'CIC':
             event = HiSPARCEvent(message)
         elif eventcode == 'ERR':
@@ -107,11 +107,8 @@ class Interpreter(object):
         firsttime = True
         for message in messages:
             try:
-                # get the event message code
                 eventcode = event_type_codes['%d' % message[0]]
-                # create an event object
                 event = self.createEvent(eventcode, message)
-                # skip processing event if it is None
                 if event is None:
                     continue
                 # create the event header
@@ -130,15 +127,12 @@ class Interpreter(object):
                     trigger_rate.date = event.datetime
 
             except Exception, (errormsg):
-                # add parsed event_id into the list of event_ids
                 self.discard_event_ids.append(message[2])
                 logger.error('Event exception (discarding event): %s.' %
                              errormsg)
             else:
-                # add parsed event into the list of events
                 self.eventlist.append({'header': header,
                                        'datalist': event.data})
-                # add parsed event_id into the list of event_ids
                 self.event_ids.append(message[2])
 
         # set the trigger rate in Storage Manager
