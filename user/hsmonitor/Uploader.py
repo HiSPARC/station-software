@@ -51,7 +51,7 @@ class Uploader(Observer, Thread):
         # Semaphore to block if the number of events drops below minBatchSize
         self.noEventsSem = Semaphore(0)
 
-        super(Uploader, self).__init__()
+        super(Uploader, self).__init__(name='Uploader')
         self.stop_event = Event()
         self.isRunning = False
 

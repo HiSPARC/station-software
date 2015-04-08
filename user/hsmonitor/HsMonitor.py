@@ -99,7 +99,7 @@ class HsMonitor(object):
                 logger.info('Screen logging level set to ' + log_level_screen)
             else:
                 logger.warning("Illegal screen logging level '%s' in config, "
-                               " defaulting to info" % log_level_screen)
+                               "defaulting to info" % log_level_screen)
         except:
             logger.critical('Cannot open the config file!')
             return
@@ -151,8 +151,8 @@ class HsMonitor(object):
                 up.setNumServer(self.numServers)
                 up2.setNumServer(self.numServers)
             except Exception, msg:
-                logger.warning("Error while parsing local server: %s." % msg)
-                logger.warning("Will nog upload to local server!")
+                logger.debug("Error while parsing local server: %s." % msg)
+                logger.info("Will not upload to a local server.")
 
             # Set number of servers for our own StorageManager
             storMan.setNumServer(self.numServers)
@@ -242,6 +242,7 @@ def main():
     # wait for all threads to finish
     for thread in hsMonitor.hsThreads:
         thread.join()
+
 
 if __name__ == '__main__':
     main()

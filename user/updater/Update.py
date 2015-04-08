@@ -19,8 +19,8 @@ ADMINUPDATE_NAME = "adminUpdater"
 
 logger = logging.getLogger('updater')
 logging.Formatter.converter = time.gmtime
-formatter_file = logging.Formatter('%(asctime)s UTC (%(threadName)s) %(name)s'
-                                   '.%(funcName)s.%(levelname)s: %(message)s',
+formatter_file = logging.Formatter('%(asctime)s UTC %(name)s.%(funcName)s.'
+                                   '%(levelname)s: %(message)s',
                                    '%Y-%m-%d %H:%M:%S')
 formatter_screen = logging.Formatter('%(asctime)s - %(name)s'
                                      ' - %(levelname)s: %(message)s',

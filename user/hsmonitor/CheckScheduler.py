@@ -82,20 +82,17 @@ class Scheduler(object):
 
 class CheckScheduler(threading.Thread):
     def __init__(self, config, interpreter):
-        # invoke constructor of parent class (threading)
-        super(CheckScheduler, self).__init__()
+        super(CheckScheduler, self).__init__(name='CheckScheduler')
         self.stop_event = threading.Event()
 
         self.status = None
         self.sched = Scheduler(self.status)
         self.dicConfig = config
 
-        # create a nagios push object
         self.nagiosPush = NagiosPush(config)
         self.storageManager = StorageManager()
         self.interpreter = interpreter
 
-        # Event rate:
         self.eventRate = EventRate()
 
     def getEventRate(self):

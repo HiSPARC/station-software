@@ -18,10 +18,10 @@ logger = logging.getLogger('hsmonitor.bufferlistener')
 
 
 class BufferListener(threading.Thread):
-    # the instantiation operation
+
     def __init__(self, config, interpreter):
-        # invoke constructor of parent class (threading)
-        super(BufferListener, self).__init__()
+        super(BufferListener, self).__init__(name='BufferListener')
+
         self.interpreter = interpreter
         self.stop_event = threading.Event()
 
@@ -86,7 +86,6 @@ class BufferListener(threading.Thread):
         sql = "SELECT COUNT(*) FROM message"
         logger.debug('Executing SQL: %s' % sql)
         cursor.execute(sql)
-        logger.debug('Fetching SQL results...')
         count = cursor.fetchone()[0]
         logger.debug('Done.')
         return count
@@ -97,9 +96,8 @@ class BufferListener(threading.Thread):
         sql = ("SELECT message_type_id, message, message_id FROM message "
                "ORDER BY message_id DESC LIMIT %d" %
                int(self.config['poll_limit']))
-        logger.debug('Executing SQL: %s' % sql)
+        logger.debug('Getting messages from buffer database.')
         cursor.execute(sql)
-        logger.debug('Fetching SQL results...')
         messages = cursor.fetchall()
         logger.debug('Selected %d messages.' % len(messages))
         cursor.close()
