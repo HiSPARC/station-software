@@ -76,11 +76,10 @@ class StartStop(object):
         service = self.wmiObj.Win32_Service(Name=self.serviceName)
         if service != []:
             res = service[0].StartService()
-            if res[0] == 0 or res[0] == 10:
+            if res[0] in [0, 10]:
                 result = RUNNING
-                return result
             else:
-                raise Exception(" error code %d" % res)
+                raise Exception("Error code %d" % res)
         else:
             result = EXCEPTION
         return result
@@ -99,7 +98,7 @@ class StartStop(object):
         process = self.wmiObj.Win32_Process(name=self.exeName)
         if process != []:
             if self.command != '':
-                for i in range(1, 3):
+                for _ in range(1, 3):
                     if result == RUNNING:
                         result = self.askStopProcess()
                         return result  # ADL: Should this not be behind if?
@@ -116,24 +115,23 @@ class StartStop(object):
         unused_pid, res = self.wmiObj.Win32_Process.Create(
             CommandLine=self.command, CurrentDirectory=self.currentDirectory,
             ProcessStartupInformation=startup)
-        if res == 0 or res == 10:
-            return STOPPED
+        if res in [0, 10]:
+            result = STOPPED
         else:
-            return RUNNING
+            result = RUNNING
+        return result
 
     def stopService(self):
         result = RUNNING
         service = self.wmiObj.Win32_Service(Name=self.serviceName)
         if service != []:
             res = service[0].StopService()
-            if res[0] == 0 or res[0] == 10 or res[0] == 5:
+            if res[0] in [0, 5, 10]:
                 result = STOPPED
-                return result
             else:
-                raise Exception(": error code %d" % res)
+                raise Exception("Error code %d" % res)
         else:
             result = EXCEPTION
-
         return result
 
     def probeProcess(self):
@@ -194,7 +192,7 @@ class CMDStartStop(StartStop):
             else:
                 log("major fail: r = %d" % r)
                 result = EXCEPTION
-            # for process in self.wmiObj.Win32_Process(name = self.exeName):
+            # for process in self.wmiObj.Win32_Process(name=self.exeName):
             #     print 'processId: %d' % process.ProcessId
             #     if process.Terminate() == 0:
             #         result = STOPPED
