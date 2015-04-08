@@ -1,17 +1,16 @@
 import os
 import sqlite3
 import logging
-
-logger = logging.getLogger('hsmonitor.storagemanager')
-
 from threading import Lock
 from cPickle import dumps, loads
 from time import time
 
 from Subject import Subject
 
+logger = logging.getLogger('hsmonitor.storagemanager')
+
 FILEDIR = "../../persistent/data/hsmonitor"
-FILENAME = "%s/Storage.db" % FILEDIR
+FILENAME = os.path.join(FILEDIR, "Storage.db")
 VACUUMTHRESHOLD = 1000
 
 lock = Lock()
