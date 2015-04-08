@@ -19,11 +19,11 @@ ADMINUPDATE_NAME = "adminUpdater"
 
 logger = logging.getLogger('updater')
 logging.Formatter.converter = time.gmtime
-formatter_file = logging.Formatter('%(asctime)s UTC %(name)s.%(funcName)s.'
+formatter_file = logging.Formatter('%(asctime)s %(name)s.%(funcName)s.'
                                    '%(levelname)s: %(message)s',
                                    '%Y-%m-%d %H:%M:%S')
-formatter_screen = logging.Formatter('%(asctime)s - %(name)s'
-                                     ' - %(levelname)s: %(message)s',
+formatter_screen = logging.Formatter('%(asctime)s UTC - %(name)s - '
+                                     '%(levelname)s: %(message)s',
                                      '%Y-%m-%d %H:%M:%S')
 
 # Logging levels which can be set in the configuration file
@@ -36,7 +36,6 @@ LEVELS = {"notset": logging.NOTSET,
 
 
 class Updater(object):
-    checkerInitialDelay = 0
 
     def __init__(self):
         self.scheduler = sched.scheduler(time.time, time.sleep)
@@ -55,11 +54,6 @@ class Updater(object):
         # Bool determine if there will be an initial delay
         self.checkerInitialDelay = self.config.get(
             'Update', 'CheckerInitialDelay', 0)
-        # Logging level for the two loggers
-        self.log_level_file = self.config.ifgetstr(
-            'Logging', 'FileLevel', 'debug')
-        self.log_level_screen = self.config.ifgetstr(
-            'Logging', 'ScreenLevel', 'info')
 
         # Setup the log mode
         log_dirname = '../../persistent/logs/updater/'
@@ -79,18 +73,17 @@ class Updater(object):
         handler.setFormatter(formatter_screen)
         logger.addHandler(handler)
 
-        if self.log_level_file in LEVELS:
-            logger.handlers[0].setLevel(level=LEVELS[self.log_level_file])
-            logger.info('File logging level set to ' + self.log_level_file)
-        else:
-            logger.warning("Illegal file logging level '%s' in config, "
-                           "defaulting to debug" % self.log_level_file)
-        if self.log_level_screen in LEVELS:
-            logger.handlers[1].setLevel(level=LEVELS[self.log_level_screen])
-            logger.info('Screen logging level set to ' + self.log_level_screen)
-        else:
-            logger.warning("Illegal screen logging level '%s' in config, "
-                           "defaulting to info" % self.log_level_screen)
+        # Logging level for the two loggers
+        for i, target in enumerate(['File', 'Screen']):
+            log_level = self.config.ifgetstr('Logging', '%sLevel' % target,
+                                             'debug')
+            if log_level in LEVELS:
+                logger.handlers[i].setLevel(level=LEVELS[log_level])
+                logger.info('%s logging level set to %s' % (target, log_level))
+            else:
+                logger.warning("Illegal %s logging level '%s' in config, "
+                               "using debug" % (target, log_level))
+
 
     def checkIfUpdateToInstall(self):
         """Check if there is already an admin update to install
@@ -98,22 +91,22 @@ class Updater(object):
         Also check if you are currently in user or admin mode
 
         """
-        isAdmin = checkFiles.checkIfAdmin()
+        is_admin = checkFiles.checkIfAdmin()
         currentAdmin = self.config.get("Version", "CurrentAdmin")
-        currentUser = self.config.get("Version", "CurrentUser")
+        currentUser = self.config.ifgetint("Version", "CurrentUser")
 
-        print "You are Administrator: ", isAdmin
-        print "Current Admin Version: ", currentAdmin
-        print "Current User Version:  ", currentUser
+        logger.info("You are Administrator: " + is_admin)
+        logger.info("Current Admin Version: %s" % currentAdmin)
+        logger.info("Current User Version:  %s" % currentUser)
 
-        if isAdmin:
+        if is_admin:
             location = "../../persistent/downloads"
-            found, fileFound = checkFiles.checkIfNewerFileExists(
+            found, file_found = checkFiles.checkIfNewerFileExists(
                 location, ADMINUPDATE_NAME, int(currentAdmin))
-            # print "found is %s" % found
             if found:
+                logger.info("Found: %s" % file_found)
                 os.system(".\\runAdminUpdate.bat "
-                          "../../persistent/downloads/%s" % fileFound)
+                          "../../persistent/downloads/%s" % file_found)
 
     def calculateInitialDelay(self):
         if self.checkerInitialDelay == 1:

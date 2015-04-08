@@ -1,8 +1,8 @@
 from urllib import urlretrieve
 import re
-import checkFiles
 import logging
 
+import checkFiles
 
 logger = logging.getLogger('updater.downloader')
 

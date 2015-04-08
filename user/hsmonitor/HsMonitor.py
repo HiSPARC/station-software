@@ -36,9 +36,9 @@ from Uploader import Uploader
 from UserExceptions import ThreadCrashError
 
 # Default configuration file path
-CONFIG_INI_PATH1 = "data/config.ini"
-CONFIG_INI_PATH2 = "../../persistent/configuration/config.ini"
-CONFIG_INI_PATH3 = "data/config-password.ini"
+CONFIG_INI = "data/config.ini"
+PERSISTENT_INI = "../../persistent/configuration/config.ini"
+PASSWORD_INI = "data/config-password.ini"
 
 logger = logging.getLogger('hsmonitor')
 logging.Formatter.converter = time.gmtime
@@ -60,54 +60,53 @@ LEVELS = {"notset": logging.NOTSET,
 
 class HsMonitor(object):
 
+    """The HiSPARC Monitor
+
+    This process spawns several threads to perform tasks.
+
+    - BufferListener: read messages from the MySQL database.
+    - CheckScheduler: report status to Nagios.
+    - Uploader: upload message to a datastore server.
+
+    """
+
     def __init__(self):
         # Setup the log mode
         log_dirname = '../../persistent/logs/hsmonitor/'
         # Making sure the directory exists
         if not os.access(log_dirname, os.F_OK):
             os.makedirs(log_dirname)
-        log_filename = 'hsmonitor'
-        log_filename = '%s/%s' % (log_dirname, log_filename)
+        log_filename = os.path.join(log_dirname, 'hsmonitor')
+
         # Add file handler
         handler = TimedConcurrentRotatingFileHandler(
             log_filename, when='midnight', backupCount=14, suffix='log')
         handler.setFormatter(formatter_file)
         logger.addHandler(handler)
+
         # Add handler which prints to the screen
         handler = logging.StreamHandler()
         handler.setFormatter(formatter_screen)
         logger.addHandler(handler)
-        # Default to debugging level if configuration file is missing
+        # Default logging level
         logger.setLevel(level=logging.DEBUG)
 
         # Read the configuration file
-        try:
-            self.cfg = EConfigParser()
-            self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2,
-                           CONFIG_INI_PATH3])
-            log_level_file = self.cfg.ifgetstr('Logging', 'FileLevel', 'debug')
-            log_level_screen = self.cfg.ifgetstr('Logging', 'ScreenLevel',
-                                                 'info')
-            if log_level_file in LEVELS:
-                logger.handlers[0].setLevel(level=LEVELS[log_level_file])
-                logger.info('File logging level set to ' + log_level_file)
+        self.config = EConfigParser()
+        self.config.read([CONFIG_INI, PERSISTENT_INI, PASSWORD_INI])
+        for i, target in enumerate(['File', 'Screen']):
+            log_level = self.config.ifgetstr('Logging', '%sLevel' % target,
+                                          'debug')
+            if log_level in LEVELS:
+                logger.handlers[i].setLevel(level=LEVELS[log_level])
+                logger.info('%s logging level set to %s' % (target, log_level))
             else:
-                logger.warning("Illegal file logging level '%s' in config, "
-                               "defaulting to debug" % log_level_file)
-            if log_level_screen in LEVELS:
-                logger.handlers[1].setLevel(level=LEVELS[log_level_screen])
-                logger.info('Screen logging level set to ' + log_level_screen)
-            else:
-                logger.warning("Illegal screen logging level '%s' in config, "
-                               "defaulting to info" % log_level_screen)
-        except:
-            logger.critical('Cannot open the config file!')
-            return
-        else:
-            logger.info('Initialize variables.')
+                logger.warning("Illegal %s logging level '%s' in config, "
+                               "using debug" % (target, log_level))
 
-            # List of all the threads
-            self.hsThreads = []
+        # List of all the threads
+        self.hsThreads = []
+
         # Assume one server (datastore)
         # if the local is also specified it will be added
         self.numServers = 1
@@ -127,9 +126,9 @@ class HsMonitor(object):
 
             # Check scheduler
             # Get the nagios configuration section from config file
-            nagiosConf = self.cfg.itemsdict('NagiosPush')
+            nagiosConf = self.config.itemsdict('NagiosPush')
             machine = re.search('([a-z0-9]+).zip',
-                                self.cfg.get('Station', 'Certificate'))
+                                self.config.get('Station', 'Certificate'))
             nagiosConf['machine_name'] = machine.group(1)
             checkSched = self.createCheckScheduler(interpr, nagiosConf)
             eventRate = checkSched.getEventRate()
@@ -174,17 +173,20 @@ class HsMonitor(object):
     def createBufferListener(self, interpreter):
         # Get the information from configuration file
         bufferdb = {}
-        bufferdb['host'] = self.cfg.ifgetstr('BufferDB', 'Host', 'localhost')
-        bufferdb['db'] = self.cfg.ifgetstr('BufferDB', 'DB', 'buffer')
-        bufferdb['user'] = self.cfg.ifgetstr('BufferDB', 'Username', "buffer")
-        bufferdb['password'] = self.cfg.ifgetstr('BufferDB', 'Password',
-                                                 "PLACEHOLDER")
-        bufferdb['poll_interval'] = self.cfg.ifgetfloat('BufferDB',
-                                                        'Poll_Interval', 1.0)
-        bufferdb['poll_limit'] = self.cfg.ifgetint('BufferDB', 'Poll_Limit',
-                                                   100)
-        bufferdb['keep_buffer_data'] = self.cfg.ifgetint('BufferDB',
-                                                         'KeepBufferData', 0)
+        bufferdb['host'] = self.config.ifgetstr('BufferDB', 'Host',
+                                                'localhost')
+        bufferdb['db'] = self.config.ifgetstr('BufferDB', 'DB', 'buffer')
+        bufferdb['user'] = self.config.ifgetstr('BufferDB', 'Username',
+                                                "buffer")
+        bufferdb['password'] = self.config.ifgetstr('BufferDB', 'Password',
+                                                    "PLACEHOLDER")
+        bufferdb['poll_interval'] = self.config.ifgetfloat('BufferDB',
+                                                           'Poll_Interval', 1.)
+        bufferdb['poll_limit'] = self.config.ifgetint('BufferDB', 'Poll_Limit',
+                                                      100)
+        bufferdb['keep_buffer_data'] = self.config.ifgetint('BufferDB',
+                                                            'KeepBufferData',
+                                                            0)
 
         # Create an instance of BufferListener class
         buffLis = BufferListener(bufferdb, interpreter)
@@ -195,17 +197,17 @@ class HsMonitor(object):
         return checkSched
 
     def createUploader(self, serverID, section_name, nagiosConf):
-        stationID = self.cfg.get("Station", "Nummer")
-        url = self.cfg.get(section_name, "URL")
-        passw = self.cfg.get("Station", "Password")
-        minbs = self.cfg.ifgetint(section_name, "MinBatchSize", 50)
-        maxbs = self.cfg.ifgetint(section_name, "MaxBatchSize", 50)
+        stationID = self.config.get("Station", "Nummer")
+        url = self.config.get(section_name, "URL")
+        passw = self.config.get("Station", "Password")
+        minbs = self.config.ifgetint(section_name, "MinBatchSize", 50)
+        maxbs = self.config.ifgetint(section_name, "MaxBatchSize", 50)
         if (minbs > maxbs):
             logger.warning("Maximum batch size must be more than minimum "
                            "batch size. Setting maximum=minimum.")
             maxbs = minbs
-        minwait = self.cfg.ifgetfloat(section_name, "MinWait", 1.0)
-        maxwait = self.cfg.ifgetfloat(section_name, "MaxWait", 60.0)
+        minwait = self.config.ifgetfloat(section_name, "MinWait", 1.0)
+        maxwait = self.config.ifgetfloat(section_name, "MaxWait", 60.0)
 
         up = Uploader(serverID, stationID, passw, url, nagiosConf,
                       minwait, maxwait, minbs, maxbs)

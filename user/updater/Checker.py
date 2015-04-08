@@ -3,7 +3,7 @@ import ConfigParser
 import checkFiles
 import urllib2
 import logging
-from cgi import parse_qs
+from urlparse import parse_qs
 from Tkinter import Message, Tk
 
 from Downloader import Downloader
@@ -14,7 +14,7 @@ DISPLAY_GUI_MESSAGES = True
 UPDATE_USER_MODE = 1
 UPDATE_ADMIN_MODE = 2
 
-logger = logging.getLogger('hsmonitor.bufferlistener')
+logger = logging.getLogger('updater.checker')
 
 
 class Checker(object):
@@ -33,7 +33,6 @@ class Checker(object):
         connection = urllib2.urlopen("%s/%s/%s" % (server, currentAdmin,
                                                    currentUser))
         updateInfo = connection.read()
-        print updateInfo
         connection.close()
         return updateInfo
 
@@ -41,17 +40,19 @@ class Checker(object):
         updateDict = parse_qs(updateInfo, strict_parsing=True)
         # updateDict has: mustUpdate, urlUser, newVersionUser, urlAdmin,
         #                 newVersionAdmin
-        downloader = Downloader()
         updates = dict()  # updates has: mustUpdate, userFile, adminFile
 
         mustUpdate = int(updateDict['mustUpdate'][0])
         updates['mustUpdate'] = mustUpdate
 
+        downloader = Downloader()
         location = "../../persistent/downloads"
 
-        if (mustUpdate & UPDATE_ADMIN_MODE):
+        if mustUpdate == 0:
+            logger.info('No update available')
+        elif (mustUpdate & UPDATE_ADMIN_MODE):
             adminURL = updateDict['urlAdmin'][0]
-            print adminURL
+            logger.info('Downloading Admin update: %s' % adminURL)
             adminFile = downloader.downloadUpdate(location, adminURL)
             updates['adminFile'] = adminFile
             logger.info('Administrator update is available called: %s' %
@@ -67,6 +68,7 @@ class Checker(object):
 
         elif (mustUpdate & UPDATE_USER_MODE):
             userURL = updateDict['urlUser'][0]
+            logger.info('Downloading User update: %s' % userURL)
             userFile = downloader.downloadUpdate(location, userURL)
             updates['userFile'] = userFile
             logger.info('User update is available called: %s' % userFile)
@@ -84,7 +86,7 @@ class Checker(object):
             return
         try:
             updates = self.parseAnswerServer(updateInfo)
-            return updates
         except:
             logger.exception('Could not parse answer of the server correctly.')
             return
+        return updates
