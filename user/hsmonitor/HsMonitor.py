@@ -71,6 +71,9 @@ class HsMonitor(object):
     """
 
     def __init__(self):
+        self.config = EConfigParser()
+        self.config.read([CONFIG_INI, PERSISTENT_INI, PASSWORD_INI])
+
         # Setup the log mode
         log_dirname = '../../persistent/logs/hsmonitor/'
         # Making sure the directory exists
@@ -78,9 +81,12 @@ class HsMonitor(object):
             os.makedirs(log_dirname)
         log_filename = os.path.join(log_dirname, 'hsmonitor')
 
+        # Remove any existing handlers
+        logger.handlers = []
+
         # Add file handler
         handler = TimedConcurrentRotatingFileHandler(
-            log_filename, when='midnight', backupCount=14, suffix='log')
+            log_filename, when='midnight', backupCount=14, utc=True)
         handler.setFormatter(formatter_file)
         logger.addHandler(handler)
 
@@ -88,12 +94,11 @@ class HsMonitor(object):
         handler = logging.StreamHandler()
         handler.setFormatter(formatter_screen)
         logger.addHandler(handler)
+
         # Default logging level
         logger.setLevel(level=logging.DEBUG)
 
-        # Read the configuration file
-        self.config = EConfigParser()
-        self.config.read([CONFIG_INI, PERSISTENT_INI, PASSWORD_INI])
+        # Logging level for the handlers
         for i, target in enumerate(['File', 'Screen']):
             log_level = self.config.ifgetstr('Logging', '%sLevel' % target,
                                              'debug')

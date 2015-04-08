@@ -3,13 +3,11 @@ import time
 import random
 import os
 import logging
-
+from logging.handlers import TimedRotatingFileHandler
 import checkFiles
 from Checker import Checker
 
 from EConfigParser import EConfigParser
-from TimedConcurrentLogging import TimedConcurrentRotatingFileHandler
-
 
 CONFIG_INI = "config.ini"
 PERSISTENT_INI = "../../persistent/configuration/config.ini"
@@ -60,9 +58,12 @@ class Updater(object):
             os.makedirs(log_dirname)
         log_filename = os.path.join(log_dirname, 'updater')
 
+        # Remove any existing handlers
+        logger.handlers = []
+
         # Add file handler
-        handler = TimedConcurrentRotatingFileHandler(
-            log_filename, when='midnight', backupCount=14, suffix='log')
+        handler = TimedRotatingFileHandler(log_filename, when='midnight',
+                                           backupCount=14, utc=True)
         handler.setFormatter(formatter_file)
         logger.addHandler(handler)
 
@@ -71,7 +72,10 @@ class Updater(object):
         handler.setFormatter(formatter_screen)
         logger.addHandler(handler)
 
-        # Logging level for the two loggers
+        # Default logging level
+        logger.setLevel(level=logging.DEBUG)
+
+        # Logging level for the handlers
         for i, target in enumerate(['File', 'Screen']):
             log_level = self.config.ifgetstr('Logging', '%sLevel' % target,
                                              'debug')
@@ -130,13 +134,13 @@ class Updater(object):
 
     def performOneUpdateCheck(self):
         delay = self.calculateInitialDelay()
-        self.scheduler.enter(delay, 1, self.checker.checkForUpdates, '')
+        self.scheduler.enter(delay, 1, self.checker.checkForUpdates, [])
         self.scheduler.run()
 
     def performContinuousCheck(self):
         while True:
             self.scheduler.enter(self.timeBetweenChecks, 1,
-                                 self.checker.checkForUpdates, '')
+                                 self.checker.checkForUpdates, [])
             self.scheduler.run()
 
 
@@ -147,7 +151,6 @@ if __name__ == "__main__":
         updater.performOneUpdateCheck()
         updater.performContinuousCheck()
     except KeyboardInterrupt:
-        exit
+        logger.exception("Updating interrupted.")
     except:
-        logger.exception("Updating failed, restart the checker!")
-        exit
+        logger.exception("Updating failed, restart the Updater!")
