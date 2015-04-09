@@ -13,7 +13,7 @@ CRITICAL = 2
 localhost = gethostbyname("127.0.0.1")
 
 
-def checkBufferdb(warn=None, crit=None):
+def check_bufferdb(warn=None, crit=None):
     if warn:
         wmin, wmax = warn
     if crit:

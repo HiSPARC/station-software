@@ -1,6 +1,7 @@
 import sys
+
 sys.path.append('../../user/diagnosticchecks')
-from checks import CRITICAL, checkBufferdb, check_lvusage
+from checks import CRITICAL, check_bufferdb, check_lvusage
 
 
 def parse_range(range):
@@ -29,7 +30,7 @@ def main(argv):
     if function_name == 'bufferdb':
         warn = parse_range(argv[1])
         crit = parse_range(argv[2])
-        retval = checkBufferdb(warn, crit)
+        retval = check_bufferdb(warn, crit)
 
     # labview usage
     elif function_name == 'lvusage':
