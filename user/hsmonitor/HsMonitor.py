@@ -23,6 +23,7 @@ WW: Pathing to pythonshared is removed, since it is no longer required to
 """
 import re
 import os
+import sys
 import time
 import logging
 
@@ -168,7 +169,7 @@ class HsMonitor(object):
 
         except Exception, msg:
             logger.critical("Error HsMonitor: %s" % msg)
-            exit(1)
+            sys.exit(1)
 
     def stopAll(self):
         """Stops all threads."""
