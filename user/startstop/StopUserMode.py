@@ -5,8 +5,12 @@ HiSPARC Detector, HiSPARC Weather, MySQL, HiSPARC Monitor, HiSPARC Updater
 
 """
 
+import logging
+
+import startstop_logger
 from startStop import StartStop, CMDStartStop, status
-from hslog import log, setLogMode, MODE_BOTH
+
+logger = logging.getLogger('startstop.stopuser')
 
 
 def stop_executable(name, exe_name, title=None):
@@ -18,7 +22,7 @@ def stop_executable(name, exe_name, title=None):
 
     """
     try:
-        log("Stopping %s..." % name)
+        logger.info('Stopping %s...', name)
         if title is None:
             handler = StartStop()
         else:
@@ -26,16 +30,15 @@ def stop_executable(name, exe_name, title=None):
             handler.title = title
         handler.exeName = exe_name
         result = handler.stopProcess()
-        log("Status: " + status(result))
+        logger.info('Status: %s', status(result))
     except:
-        log("An exception was generated while stopping %s!" % name)
+        logger.exception('An exception was generated while stopping %s!', name)
 
 
 def stop_executables():
     """Stop the user executables"""
 
-    setLogMode(MODE_BOTH)
-    log("Stopping User-Mode applications...")
+    logger.info('Stopping User-Mode applications...')
 
     stop_executable('HiSPARC Detector', 'hisparcdaq.exe')
     stop_executable('HiSPARC Weather', 'HiSPARC Weather Station.exe')
@@ -45,4 +48,5 @@ def stop_executables():
 
 
 if __name__ == "__main__":
+    startstop_logger.setup()
     stop_executables()

@@ -5,10 +5,12 @@ TightVNC, Nagios, OpenVPN
 
 """
 
-import sys
+import logging
 
+import startstop_logger
 from startStop import StartStop
-from hslog import log, setLogMode, MODE_BOTH
+
+logger = logging.getLogger('startstop.startadmin')
 
 
 def start_service(name, service_name):
@@ -19,26 +21,24 @@ def start_service(name, service_name):
 
     """
     try:
-        log('Starting %s Service' % name)
+        logger.info('Starting %s Service' % name)
         service_handler = StartStop()
         service_handler.serviceName = service_name
         result = service_handler.startService()
         if result == 0:
-            log('Status: running')
+            logger.info('Status: running')
         elif result == 1:
-            log('Status: stopped')
+            logger.info('Status: stopped')
         else:
-            log('The service was not found!')
+            logger.info('The service was not found!')
     except:
-        log('An exception was generated while starting %s:' % name +
-            str(sys.exc_info()[1]))
+        logger.exception('An exception was generated while starting %s', name)
 
 
 def start_admin_services():
     """Start the admin services"""
 
-    setLogMode(MODE_BOTH)
-    log('Starting Admin-Mode applications...')
+    logger.info('Starting Admin-Mode applications...')
 
     start_service('TightVNC', 'tvnserver')
     start_service('Nagios', 'NSClientpp')
@@ -46,4 +46,5 @@ def start_admin_services():
 
 
 if __name__ == "__main__":
+    startstop_logger.setup()
     start_admin_services()

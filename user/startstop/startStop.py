@@ -3,9 +3,11 @@
 import wmi
 import win32con
 import win32gui
+import logging
 
-from hslog import log
 from ctypes import c_ulong, byref, windll
+
+logger = logging.getLogger('startstop.startstop')
 
 RUNNING = 0
 STOPPED = 1
@@ -171,7 +173,7 @@ class CMDStartStop(StartStop):
         return result
 
     def stopProcess(self):
-        print "finding window '%s'.." % self.title
+        logger.debug("Finding window '%s'.." % self.title)
         w = win32gui.FindWindow(None, self.title)
         if w != 0:
             result = RUNNING
@@ -183,17 +185,17 @@ class CMDStartStop(StartStop):
 
             phandle = windll.kernel32.OpenProcess(2035711, 0, pid)
 
-            log("stopping process with pid %d and handle %d..." %
-                (pid, phandle))
+            logger.debug("Stopping process with pid %d and handle %d...",
+                         pid, phandle)
             r = windll.kernel32.TerminateProcess(phandle, 0)
             if r:
-                log("success")
+                logger.debug("success")
                 result = STOPPED
             else:
-                log("major fail: r = %d" % r)
+                logger.debug("major fail: r = %d" % r)
                 result = EXCEPTION
             # for process in self.wmiObj.Win32_Process(name=self.exeName):
-            #     print 'processId: %d' % process.ProcessId
+            #     logger.debug('processId: %d' % process.ProcessId)
             #     if process.Terminate() == 0:
             #         result = STOPPED
         else:
