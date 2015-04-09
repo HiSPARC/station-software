@@ -57,11 +57,11 @@ class Scheduler(object):
                     nagiosPush.sendToNagios(returnValues)
 
                 except StopIteration:
-                    logger.error('JOB STOPPED!')
+                    logger.error('Job stopped!')
                     toremove.append(tid)
 
                 except Exception, msg:
-                    logger.error('Uncatched expection in job: %s. ' % msg)
+                    logger.exception('Uncatched exception in job: %s. ' % msg)
                     logger.error('Restarting...')
                     toremove.append(tid)
                     tostart.append(tid)
