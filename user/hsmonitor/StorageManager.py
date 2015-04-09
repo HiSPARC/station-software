@@ -1,3 +1,12 @@
+"""Access the storage.
+
+This module is made for inserting and extracting events from storage.
+The storage is the SQLite database in which events are stored after
+being read from the buffer (MySQL) database. Events are extracted from
+storage for uploading, when successful the local copy is removed.
+
+"""
+
 import os
 import sqlite3
 import logging
@@ -115,8 +124,8 @@ class StorageManager(Subject):
 
         """
         raw_results = self.getEventsRawSQL(serverID, numEvents)
-        elist = list()
-        eidlist = list()
+        elist = []
+        eidlist = []
         for r in raw_results:
             (eid, blob, unused_uploadedto, unused_datetime) = r
             elist.append(loads(str(blob)))
@@ -184,7 +193,7 @@ class StorageManager(Subject):
         Example: [1,3,4,5] -> '(1,3,4,5)'.
 
         """
-        return "(%s)" % ",".join(["%i" % int(ID) for ID in IDs])
+        return "(%s)" % ",".join(["%d" % int(ID) for ID in IDs])
 
     def setUploaded(self, serverID, eventIDs):
         """Set UploadedTo-field to the serverID to which it was uploaded.

@@ -7,6 +7,12 @@ logger = logging.getLogger('startstop')
 
 
 def setup():
+    """Setup for the startstop logger
+
+    This configures the startstop logger, adding the handlers and
+    setting the log levels.
+
+    """
     logger.setLevel(level=logging.DEBUG)
 
     # Make sure the directory exists

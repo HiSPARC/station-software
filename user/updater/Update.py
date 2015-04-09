@@ -133,11 +133,22 @@ class Updater(object):
             return 0
 
     def performOneUpdateCheck(self):
+        """First check for and update to install
+
+        The first check may be delayed to ensure it occurs during a
+        certain period of the day.
+
+        """
         delay = self.calculateInitialDelay()
         self.scheduler.enter(delay, 1, self.checker.checkForUpdates, [])
         self.scheduler.run()
 
     def performContinuousCheck(self):
+        """Continuously check if there for new updates from the server
+
+        Checks are performed on an interval determined by 'timeBetweenChecks'.
+
+        """
         while True:
             self.scheduler.enter(self.timeBetweenChecks, 1,
                                  self.checker.checkForUpdates, [])

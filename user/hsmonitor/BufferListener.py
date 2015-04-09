@@ -50,6 +50,11 @@ class BufferListener(threading.Thread):
     # run(). The threading.Thread.start() calls threading.Thread.run(), which
     # is always overridden.
     def run(self):
+        """Main loop that continuously looks for new messages in the buffer.
+
+        New messages are parsed by the interpreter and sent to the storage.
+
+        """
         self.interpreter.openStorage()
         logger.debug('Thread started')
         while not self.stop_event.isSet():

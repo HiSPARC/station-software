@@ -1,7 +1,11 @@
+"""Upload Events to the datastore
+
+This module retrieves Events from the storage using the StorageManager
+and uploads the events in batches to the datastore.
+
+"""
+
 import logging
-
-logger = logging.getLogger('hsmonitor.uploader')
-
 from time import sleep, time
 from cPickle import dumps
 from urllib import urlencode
@@ -18,6 +22,8 @@ from StorageManager import StorageManager
 from NagiosPush import NagiosPush
 from NagiosResult import NagiosResult
 from UserExceptions import ThreadCrashError
+
+logger = logging.getLogger('hsmonitor.uploader')
 
 # TODO add observer
 # use BUI's trick to stop a thread
@@ -153,6 +159,8 @@ class Uploader(Observer, Thread):
         return returncode
 
     def run(self):
+        """Main loop that continously polls for new events and uploads them"""
+
         logger.info('%i: Thread started for %s.' % (self.serverID, self.URL))
 
         # Initialize storage manager
