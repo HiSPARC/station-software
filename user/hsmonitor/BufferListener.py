@@ -92,7 +92,6 @@ class BufferListener(threading.Thread):
         logger.debug('Executing SQL: %s' % sql)
         cursor.execute(sql)
         count = cursor.fetchone()[0]
-        logger.debug('Done.')
         return count
 
     def getBufferMessages(self):
@@ -123,5 +122,4 @@ class BufferListener(threading.Thread):
 
         logger.debug('Clear %d events from buffer...' % numcleared)
         self.conn.commit()
-        logger.debug('Done')
         return len(message_ids)
