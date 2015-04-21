@@ -1,11 +1,13 @@
 import sys
 import time
+import calendar
 import logging
 from threading import Lock
 
 from Observer import Observer
 from NagiosResult import NagiosResult
 from StorageManager import StorageManager
+from EConfigParser import EConfigParser
 
 OK = 0
 WARNING = 1
@@ -70,30 +72,19 @@ class TriggerRate(Check):
                 self.nagiosResult.status_code = OK
 
             if self.lastupdate:
-                t = time.strptime(str(self.lastupdate), '%Y-%m-%d %H:%M:%S')
-
                 # Timestamp is in GPS time.  Naively treat it as a local
                 # timestamp, then subtract the LabVIEW-determined offset
-                # between pc clock time (local time) and GPS time.
+                # between pc clock time (UTC time) and GPS time.
 
                 # Read offset from file
-                with open(TIME_DIFF_INI) as f:
-                    d = {}
-                    for line in f:
-                        key, value = line.split('=')
-                        d[key] = value
+                dt_config = EConfigParser()
+                dt_config.read(TIME_DIFF_INI)
+                offset = dt_config.ifgetint('HiSPARC', 'time_difference', 1e6)
 
                 # Naively calculate timestamp and adjust for pc / gps offset
-                t = time.mktime(t)
-                try:
-                    t += int(d['time_difference'])
-                except TypeError:
-                    # Offset is not yet determined
-                    pass
-                except ValueError:
-                    # Offset may be to large
-                    pass
-                # Calculate time difference between trigger and 'now'
+                t = calendar.timegm(self.lastupdate.timetuple())
+                t += offset
+                # Calculate time difference between UTC trigger and 'UTC now'
                 dt = time.time() - t
             else:
                 # Never updated, make dt very large
