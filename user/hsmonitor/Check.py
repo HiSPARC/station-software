@@ -12,7 +12,7 @@ WARNING = 1
 CRITICAL = 2
 UNKNOWN = 3
 
-TIME_DIFF_INI = '../../persistent/configuration/HisparcII.ini'
+TIME_DIFF_INI = '../../persistent/configuration/HiSPARC.ini'
 
 logger = logging.getLogger('hsmonitor.check')
 
