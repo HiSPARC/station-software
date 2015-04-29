@@ -61,7 +61,7 @@ def check_lvusage(warn, crit):
     w = wmi.WMI()
     wmin, wmax = warn
     cmin, cmax = crit
-    LABVIEW_CAPTIONS = ['hisparcdaq.exe', 'HISPAR~1.EXE']
+    LABVIEW_CAPTIONS = ['HiSPARC DAQ.exe', 'HISPAR~1.EXE']
 
     for p in w.Win32_Process():
         if p.Name in LABVIEW_CAPTIONS:

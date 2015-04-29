@@ -234,18 +234,19 @@ Section -AdditionalIcons
   DetailPrint "AdditionalIcons"
   SetShellVarContext all
   CreateDirectory "$SMPROGRAMS\HiSPARC"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\StartHiSPARCSoftware.lnk" "$HisparcDir\persistent\startstopbatch\StartUserMode.bat"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC_ROOT.lnk"         "%windir%\explorer.exe" "$HisparcDir"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Start HiSPARC software.lnk"  "$HisparcDir\persistent\startstopbatch\StartUserMode.bat"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC directory.lnk"       "%windir%\explorer.exe" "$HisparcDir"
   CreateDirectory "$SMPROGRAMS\HiSPARC\Status"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\Status\RunStatus.lnk"     "$HisparcDir\persistent\startstopbatch\RunStatus.bat"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\Status\Diagnostics.lnk"   "$HisparcDir\user\diagnostictool\run_diagnostictool.bat"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\Status\Registry.lnk"      "$HisparcDir\persistent\startstopbatch\HiSPARC_Registry.exe"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Status\Run status.lnk"       "$HisparcDir\persistent\startstopbatch\RunStatus.bat"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Status\Diagnostics.lnk"      "$HisparcDir\user\diagnostictool\run_diagnostictool.bat"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Status\Registry.lnk"         "$HisparcDir\persistent\startstopbatch\HiSPARC_Registry.exe"
   CreateDirectory "$SMPROGRAMS\HiSPARC\Expert"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\DSPMon.lnk"        "$HisparcDir\user\dspmon\DSPMon.exe"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\HiSPARC_DAQ.lnk"   "$HisparcDir\user\hisparcdaq\run_hisparcdaq.bat"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\Uninstall.lnk"     "$HisparcDir\persistent\uninstallers\mainuninst.exe"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\DSPMon.lnk"           "$HisparcDir\user\dspmon\DSPMon.exe"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\HiSPARC DAQ.lnk"      "$HisparcDir\user\hisparcdaq\HiSPARC DAQ.exe"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\HiSPARC Weather.lnk"  "$HisparcDir\user\hisparcdaq\HiSPARC Weather Station.exe"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\Uninstall.lnk"        "$HisparcDir\persistent\uninstallers\mainuninst.exe"
   # Add shortcuts to the startup folder
-  CreateShortCut  "$SMSTARTUP\StartHiSPARCSoftware.lnk"          "$HisparcDir\persistent\startstopbatch\StartUp.bat"
+  CreateShortCut  "$SMSTARTUP\Start HiSPARC software.lnk"           "$HisparcDir\persistent\startstopbatch\StartUp.bat"
 SectionEnd
 
 #

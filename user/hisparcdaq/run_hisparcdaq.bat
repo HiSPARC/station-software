@@ -1,1 +1,0 @@
-@call "%~dp0\..\startstop\runmanually.bat" \user\hisparcdaq hisparcdaq.exe

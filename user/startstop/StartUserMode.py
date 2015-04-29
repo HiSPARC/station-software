@@ -63,10 +63,10 @@ def start():
         logger.info("Starting HiSPARC Detector...")
         if config.getboolean("Detector", "Enabled"):
             handler = StartStop()
-            handler.exeName = "hisparcdaq.exe"
+            handler.exeName = "HiSPARC DAQ.exe"
             handler.currentDirectory = os.path.join(HS_ROOT, "user/hisparcdaq")
             handler.command = os.path.join(HS_ROOT,
-                                           "user/hisparcdaq/hisparcdaq.exe")
+                                           "user/hisparcdaq/HiSPARC DAQ.exe")
 
             res = handler.startProcess()
         else:

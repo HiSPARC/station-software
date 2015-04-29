@@ -58,7 +58,7 @@ def check():
 
     check_app("MySQL", exe_name="mysqld.exe")
     if config.getboolean("Detector", "Enabled"):
-        check_app("HiSPARC Detector", exe_name="hisparcdaq.exe")
+        check_app("HiSPARC Detector", exe_name="HiSPARC DAQ.exe")
     else:
         pStdout("HiSPARC Detector", DISABLED)
     if config.getboolean("Weather", "Enabled"):
