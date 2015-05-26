@@ -70,8 +70,8 @@ class TimedConcurrentRotatingFileHandler(ConcurrentRotatingFileHandler,
                 raise ValueError("Invalid day specified for weekly rollover: "
                                  "%s" % self.when)
             self.dayOfWeek = int(self.when[1])
-            self.suffix = "%Y-%m-%d."+suffix
-            self.extMatch = r"^\d{4}-\d{2}-\d{2}(?=."+suffix+")"
+            self.suffix = "%Y-%m-%d." + suffix
+            self.extMatch = r"^\d{4}-\d{2}-\d{2}(?=." + suffix + ")"
         else:
             raise ValueError("Invalid rollover interval specified: %s" %
                              self.when)
