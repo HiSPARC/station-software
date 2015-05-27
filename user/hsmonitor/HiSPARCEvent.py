@@ -50,8 +50,9 @@ class HiSPARCEvent(BaseHiSPARCEvent):
         self.version, self.database_id, self.data_reduction, \
             self.eventrate, self.num_devices, self.length, \
             gps_second, gps_minute, gps_hour, gps_day, gps_month, gps_year, \
-            self.nanoseconds, self.time_delta, self.trigger_pattern = \
-            self.unpackSeqMessage('>2BBfBH5BH3L')
+            self.nanoseconds, self.time_delta, \
+            trigger_pattern, slv_comparators, _zero_padding = \
+            self.unpackSeqMessage('>2BBfBH5BH2LHBB')
 
         # Try to handle NaNs for eventrate. These are handled differently from
         # platform to platform (i.e. MSVC libraries are screwed). This
@@ -60,8 +61,9 @@ class HiSPARCEvent(BaseHiSPARCEvent):
         if str(self.eventrate) in ['-1.#IND', '1.#INF']:
             self.eventrate = 0
 
-        # Only bits 0-19 are defined, zero the rest to make sure
-        self.trigger_pattern &= 2 ** 20 - 1
+        # Add slave comparators to the trigger pattern
+        # Shift by 16 to add it as bits 16-19 of the trigger pattern.
+        self.trigger_pattern = trigger_pattern + (slv_comparators << 16)
 
         self.datetime = datetime(gps_year, gps_month, gps_day,
                                  gps_hour, gps_minute, gps_second)
