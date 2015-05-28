@@ -82,11 +82,10 @@ class BaseHiSPARCEvent(BaseEvent):
 
         eventdata = []
         for value in self.export_values:
-            is_calculated = value[0]
-            data_uploadcode = value[1]
+            data_uploadcode = value[0]
 
             try:
-                data = self.__getattribute__(value[2])
+                data = self.__getattribute__(value[1])
             except AttributeError:
                 # This is not a legacy message. Therefore, it should contain
                 # all exported variables, but alas, it apparently doesn't.
@@ -101,8 +100,7 @@ class BaseHiSPARCEvent(BaseEvent):
                 # blobvalues are base64-decoded.
                 data = base64.b64encode(data)
 
-            eventdata.append({"calculated": is_calculated,
-                              "data_uploadcode": data_uploadcode,
+            eventdata.append({"data_uploadcode": data_uploadcode,
                               "data": data})
 
         return eventdata
@@ -176,9 +174,8 @@ class BaseWeatherEvent(BaseEvent):
 
         eventdata = []
         for value in self.export_values:
-            eventdata.append({"calculated": value[0],
-                              "data_uploadcode": value[1],
-                              "data": self.__getattribute__(value[2])})
+            eventdata.append({"data_uploadcode": value[0],
+                              "data": self.__getattribute__(value[1])})
 
         return eventdata
 
