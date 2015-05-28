@@ -92,7 +92,8 @@ class HiSPARCEvent(BaseHiSPARCEvent):
             self.slv_tr1 = compress(self.unpack_trace(slv_tr1))
             self.slv_tr2 = compress(self.unpack_trace(slv_tr2))
 
-    def unpack_trace(self, raw_trace):
+    @staticmethod
+    def unpack_trace(raw_trace):
         """Unpack a trace.
 
         Traces are stored in a funny way. We have a 12-bit ADC, so two
