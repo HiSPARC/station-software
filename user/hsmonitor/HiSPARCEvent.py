@@ -127,8 +127,6 @@ class HiSPARCEvent(BaseHiSPARCEvent):
         for i in xrange(0, n, 3):
             trace.append((a[i] << 4) + ((a[i + 1] & 240) >> 4))
             trace.append(((a[i + 1] & 15) << 8) + a[i + 2])
-        trace_str = ""
-        for i in trace:
-            trace_str += str(i) + ","
+        trace_str = ",".join(str(t) for t in trace)
 
         return trace_str

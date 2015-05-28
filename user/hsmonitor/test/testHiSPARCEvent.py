@@ -8,6 +8,24 @@ from HiSPARCEvent import HiSPARCEvent
 
 class TestHiSPARCEvent(unittest.TestCase):
 
+    def pack_trace(self, trace):
+        """Space efficiently pack 12-bit trace values into 8-bit values
+
+        :param trace: list with even number of 12-bit values (0-4095).
+        :return: struct with 1.5 times the length of trace in bytes.
+
+        """
+        byte_trace = []
+        for i in xrange(0, len(trace), 2):
+            # First byte of the first 12 bits
+            byte_trace.append(trace[i] >> 4)
+            # Last 4 bits the first 12 bits and first 4 bits of second 12 bits
+            byte_trace.append(((trace[i] & 15) << 4) + (trace[i + 1] >> 8))
+            # Last byte of the second 12 bits
+            byte_trace.append(trace[i + 1] & 255)
+        packed_trace = struct.pack('%dB' % (len(trace) / 2 * 3), *byte_trace)
+        return packed_trace
+
     def test_unpack_trace(self):
         """Test unpacking a trace
 
@@ -30,18 +48,13 @@ class TestHiSPARCEvent(unittest.TestCase):
                  220, 230, 221, 235, 225, 229, 222, 235, 225, 229, 212,
                  227, 216, 230, 220, 220, 206, 207, 192, 200, 197, 215]
 
-        byte_trace = []
-        for i in xrange(0, len(trace), 2):
-            # First byte of the first 12 bits
-            byte_trace.append(trace[i] >> 4)
-            # Last 4 bits the first 12 bits and first 4 bits of second 12 bits
-            byte_trace.append(((trace[i] & 15) << 4) + (trace[i + 1] >> 8))
-            # Last byte of the second 12 bits
-            byte_trace.append(trace[i + 1] & 255)
-
-        packed_trace = struct.pack('%dB' % (len(trace) / 2 * 3), *byte_trace)
+        packed_trace = self.pack_trace(trace)
         unpacked_trace = HiSPARCEvent.unpack_trace(packed_trace)
-        self.assertEqual(trace, [int(x) for x in unpacked_trace.split(',') if not x == ''])
+        self.assertEqual(trace, [int(x) for x in unpacked_trace.split(',')
+                                 if not x == ''])
+
+        self.assertRaises(Exception, HiSPARCEvent.unpack_trace,
+                          packed_trace[:-1])
 
 
 if __name__ == '__main__':
