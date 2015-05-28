@@ -25,6 +25,7 @@ class HiSPARCEvent(BaseHiSPARCEvent):
             unpack_legacy_message(self)
         else:
             self.unpackMessage()
+            self.check_trailing_bytes()
 
         # get all event data necessary for an upload.
         self.export_values = EventExportValues.export_values[self.uploadCode]

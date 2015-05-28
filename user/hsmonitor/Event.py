@@ -2,8 +2,11 @@
 
 import struct
 import base64
+import logging
 
 import EventExportValues
+
+logger = logging.getLogger('hsmonitor.event')
 
 
 class BaseEvent(object):
@@ -47,11 +50,20 @@ class BaseHiSPARCEvent(BaseEvent):
         # get the message field in the message table
         self.message = message[1]
 
+    def check_trailing_bytes(self):
+        """Check if the struct_offset reached the end of the message"""
+
+        if len(self.message[self._struct_offset:]):
+            logging.warning('Not entire message was parsed, %d bytes left.' %
+                            len(self.message[self._struct_offset:]))
+
     def unpackMessage(self):
+        """This needs to be defined separately for each message type"""
         pass
 
     def parseMessage(self):
         self.unpackMessage()
+        self.check_trailing_bytes()
 
         # get all event data necessary for an upload.
         self.export_values = EventExportValues.export_values[self.uploadCode]
