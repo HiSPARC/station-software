@@ -77,7 +77,7 @@ class HiSPARCEvent(BaseHiSPARCEvent):
             self.mas_baseline2, self.mas_npeaks1, self.mas_npeaks2, \
             self.mas_pulseheight1, self.mas_pulseheight2, self.mas_int1, \
             self.mas_int2, mas_tr1, mas_tr2 = \
-            self.unpackSeqMessage('>8H2L%ds%ds' % (l, l))
+            self.unpackSeqMessage('>8h2l%ds%ds' % (l, l))
 
         self.mas_tr1 = compress(self.unpack_trace(mas_tr1))
         self.mas_tr2 = compress(self.unpack_trace(mas_tr2))
@@ -88,7 +88,7 @@ class HiSPARCEvent(BaseHiSPARCEvent):
                 self.slv_baseline2, self.slv_npeaks1, self.slv_npeaks2, \
                 self.slv_pulseheight1, self.slv_pulseheight2, self.slv_int1, \
                 self.slv_int2, slv_tr1, slv_tr2 = \
-                self.unpackSeqMessage('>8H2L%ds%ds' % (l, l))
+                self.unpackSeqMessage('>8h2l%ds%ds' % (l, l))
 
             self.slv_tr1 = compress(self.unpack_trace(slv_tr1))
             self.slv_tr2 = compress(self.unpack_trace(slv_tr2))
