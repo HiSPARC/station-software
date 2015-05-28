@@ -5,8 +5,16 @@ import struct
 
 from HiSPARCEvent import HiSPARCEvent
 
+from load_message import load_hisparc_message
+
 
 class TestHiSPARCEvent(unittest.TestCase):
+
+    def test_event(self):
+        event = load_hisparc_message('test_data/Event.txt')
+        hisparcevent = HiSPARCEvent([1, event])
+        hisparcevent.uploadCode = 'CIC'
+        eventdata = hisparcevent.parseMessage()
 
     def pack_trace(self, trace):
         """Space efficiently pack 12-bit trace values into 8-bit values
@@ -18,7 +26,7 @@ class TestHiSPARCEvent(unittest.TestCase):
         byte_trace = []
         for i in xrange(0, len(trace), 2):
             # First byte of the first 12 bits
-            byte_trace.append(trace[i] >> 4)
+            byte_trace.append((trace[i] >> 4))
             # Last 4 bits the first 12 bits and first 4 bits of second 12 bits
             byte_trace.append(((trace[i] & 15) << 4) + (trace[i + 1] >> 8))
             # Last byte of the second 12 bits

@@ -54,7 +54,7 @@ class BaseHiSPARCEvent(BaseEvent):
         """Check if the struct_offset reached the end of the message"""
 
         if len(self.message[self._struct_offset:]):
-            logging.warning('Not entire message was parsed, %d bytes left.' %
+            raise Exception('Not entire message was parsed, %d bytes left.' %
                             len(self.message[self._struct_offset:]))
 
     def unpackMessage(self):

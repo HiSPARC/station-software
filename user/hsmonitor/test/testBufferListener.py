@@ -50,5 +50,6 @@ class TestBufferListener(unittest.TestCase):
         self.assertEqual(len(self.event_ids),
                          self.TotalEvents - self.TotalEvents1)
 
+
 if __name__ == '__main__':
     unittest.main()
