@@ -99,6 +99,15 @@ class HiSPARCEvent(BaseHiSPARCEvent):
         datapoints can (and are) stored in 3 bytes. This function unravels
         traces again.
 
+        The for loop loops over sets of 3 bytes. It takes the first and
+        adds the first half of the second byte (by masking it with
+        `bin(240) = 11110000`) to it as the four least significant bits.
+        The first byte is shifted 4 bits to the left and the masked
+        second four to the right. The second half of the second byte is
+        then taken (maked by 00001111) and shifted by a byte and added
+        to the third byte. For example: `00101001 10000110 01000111` is
+        turned into `001010011000` (664) and `011001000111` (1607).
+
         DF: I'm wondering: does the LabVIEW program work hard to accomplish
         this? If so, why do we do this in the first place? The factor 1.5
         in storage space is hardly worth it, especially considering the
@@ -108,12 +117,11 @@ class HiSPARCEvent(BaseHiSPARCEvent):
         certainly not touch it until I do.
 
         """
-
         n = len(raw_trace)
         if n % 3 != 0:
             # return None
             raise Exception("Blob length is not divisible by 3!")
-        a = struct.unpack("%dB" % (n), raw_trace)
+        a = struct.unpack("%dB" % n, raw_trace)
         trace = []
         for i in xrange(0, n, 3):
             trace.append((a[i] << 4) + ((a[i + 1] & 240) >> 4))
