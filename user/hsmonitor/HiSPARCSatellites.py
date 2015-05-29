@@ -30,7 +30,7 @@ class HiSPARCSatellites(BaseHiSPARCEvent):
 
         self.nanoseconds = 0
 
-        self.device_id = self.unpackSeqMessage('>B')
+        device_id = self.unpackSeqMessage('>B')[0]
 
         # The mean values are split over two bytes, the first byte
         # contains the integral part (0-99) and the second byte the

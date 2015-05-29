@@ -84,7 +84,7 @@ class HiSPARCConfig(BaseHiSPARCEvent):
                 self.cfg_slv_ch2_comp_gain, self.cfg_slv_ch2_comp_offset = \
                 self.unpackSeqMessage('>13dB8B2B8d')
         else:
-            # Should the 'missing' attributes also get an assignment?
+            # Should the 'missing' attributes (e.g. password) also be assigned?
             self.cfg_buffer = self.unpackSeqMessage('LVstring')[0]
 
             self.cfg_startmode = self.unpackSeqMessage('>B')[0]
@@ -93,7 +93,6 @@ class HiSPARCConfig(BaseHiSPARCEvent):
                 self.cfg_use_filter_threshold, self.cfg_reduce_data = \
                 self.unpackSeqMessage('>4B')
 
-            # Ignore the filter thresholds and ADC to mV conversion factor
             noise_filter_threshold, data_reduction_threshold, adc_to_mv, \
                 mv_to_adc, adc_baseline = self.unpackSeqMessage('>5d')
 
