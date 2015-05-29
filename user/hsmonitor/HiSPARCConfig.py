@@ -87,7 +87,7 @@ class HiSPARCConfig(BaseHiSPARCEvent):
             # Should the 'missing' attributes also get an assignment?
             self.cfg_buffer = self.unpackSeqMessage('LVstring')[0]
 
-            self.cfg_startmode = self.unpackSeqMessage('>B')
+            self.cfg_startmode = self.unpackSeqMessage('>B')[0]
 
             self.cfg_spare_bytes, self.cfg_use_filter, \
                 self.cfg_use_filter_threshold, self.cfg_reduce_data = \
