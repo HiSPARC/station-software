@@ -130,6 +130,13 @@ export_values = {
         ('SLV_CH1_HIGH', 'slv_ch1_high'),
         ('SLV_CH2_LOW', 'slv_ch2_low'),
         ('SLV_CH2_HIGH', 'slv_ch2_high')],
+    'SAT': [
+        ('MIN_N', 'min_n'),
+        ('MEAN_N', 'mean_n'),
+        ('MAX_N', 'max_n'),
+        ('MIN_SIGNAL', 'min_signal'),
+        ('MEAN_SIGNAL', 'mean_signal'),
+        ('MAX_SIGNAL', 'max_signal')],
     'WTR': [
         ('WTR_TEMP_INSIDE', 'tempInside'),
         ('WTR_TEMP_OUTSIDE', 'tempOutside'),

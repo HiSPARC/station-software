@@ -14,6 +14,7 @@ from HiSPARCError import HiSPARCError
 from HiSPARCConfig import HiSPARCConfig
 from HiSPARCComparator import HiSPARCComparator
 from HiSPARCSingles import HiSPARCSingles
+from HiSPARCSatellites import HiSPARCSatellites
 from WeatherEvent import WeatherEvent
 from WeatherError import WeatherError
 from WeatherConfig import WeatherConfig
@@ -25,6 +26,7 @@ from LightningNoise import LightningNoise
 
 # create a dictionary to store all type_codes of events
 event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP', '5': 'SIN',
+                    '6': 'SAT',
                     '16': 'WTR', '17': 'WER', '18': 'WCG',
                     '32': 'LIT', '33': 'LER', '34': 'LCG', '35': 'LST',
                     '36': 'LNS'}
@@ -58,6 +60,8 @@ class Interpreter(object):
             event = HiSPARCComparator(message)
         elif eventcode == 'SIN':
             event = HiSPARCSingles(message)
+        elif eventcode == 'SAT':
+            event = HiSPARCSatellites(message)
         elif eventcode == 'WTR':
             event = WeatherEvent(message)
         elif eventcode == 'WER':
