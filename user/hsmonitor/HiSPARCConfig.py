@@ -47,6 +47,42 @@ class HiSPARCConfig(BaseHiSPARCEvent):
 
             self.cfg_startmode, self.cfg_delay_screen, self.cfg_delay_check, \
                 self.cfg_delay_error = self.unpackSeqMessage('>B3d')
+
+            self.cfg_mas_ch1_thres_low, self.cfg_mas_ch1_thres_high, \
+                self.cfg_mas_ch2_thres_low, self.cfg_mas_ch2_thres_high, \
+                self.cfg_mas_ch1_inttime, self.cfg_mas_ch2_inttime, \
+                self.cfg_mas_ch1_voltage, self.cfg_mas_ch2_voltage, \
+                self.cfg_mas_ch1_current, self.cfg_mas_ch2_current, \
+                self.cfg_mas_comp_thres_low, self.cfg_mas_comp_thres_high, \
+                self.cfg_mas_max_voltage, self.cfg_mas_reset, \
+                self.cfg_mas_ch1_gain_pos, self.cfg_mas_ch1_gain_neg, \
+                self.cfg_mas_ch2_gain_pos, self.cfg_mas_ch2_gain_neg, \
+                self.cfg_mas_ch1_offset_pos, self.cfg_mas_ch1_offset_neg, \
+                self.cfg_mas_ch2_offset_pos, self.cfg_mas_ch2_offset_neg, \
+                self.cfg_mas_internal_voltage, self.cfg_mas_common_offset, \
+                self.cfg_mas_ch1_adc_gain, self.cfg_mas_ch1_adc_offset, \
+                self.cfg_mas_ch2_adc_gain, self.cfg_mas_ch2_adc_offset, \
+                self.cfg_mas_ch1_comp_gain, self.cfg_mas_ch1_comp_offset, \
+                self.cfg_mas_ch2_comp_gain, self.cfg_mas_ch2_comp_offset = \
+                self.unpackSeqMessage('>13dB8B2B8d')
+
+            self.cfg_slv_ch1_thres_low, self.cfg_slv_ch1_thres_high, \
+                self.cfg_slv_ch2_thres_low, self.cfg_slv_ch2_thres_high, \
+                self.cfg_slv_ch1_inttime, self.cfg_slv_ch2_inttime, \
+                self.cfg_slv_ch1_voltage, self.cfg_slv_ch2_voltage, \
+                self.cfg_slv_ch1_current, self.cfg_slv_ch2_current, \
+                self.cfg_slv_comp_thres_low, self.cfg_slv_comp_thres_high, \
+                self.cfg_slv_max_voltage, self.cfg_slv_reset, \
+                self.cfg_slv_ch1_gain_pos, self.cfg_slv_ch1_gain_neg, \
+                self.cfg_slv_ch2_gain_pos, self.cfg_slv_ch2_gain_neg, \
+                self.cfg_slv_ch1_offset_pos, self.cfg_slv_ch1_offset_neg, \
+                self.cfg_slv_ch2_offset_pos, self.cfg_slv_ch2_offset_neg, \
+                self.cfg_slv_internal_voltage, self.cfg_slv_common_offset, \
+                self.cfg_slv_ch1_adc_gain, self.cfg_slv_ch1_adc_offset, \
+                self.cfg_slv_ch2_adc_gain, self.cfg_slv_ch2_adc_offset, \
+                self.cfg_slv_ch1_comp_gain, self.cfg_slv_ch1_comp_offset, \
+                self.cfg_slv_ch2_comp_gain, self.cfg_slv_ch2_comp_offset = \
+                self.unpackSeqMessage('>13dB8B2B8d')
         else:
             # Should the 'missing' attributes also get an assignment?
             self.cfg_buffer = self.unpackSeqMessage('LVstring')[0]
@@ -58,43 +94,44 @@ class HiSPARCConfig(BaseHiSPARCEvent):
                 self.unpackSeqMessage('>4B')
 
             # Ignore the filter thresholds and ADC to mV conversion factor
-            self.unpackSeqMessage('>5d')
+            noise_filter_threshold, data_reduction_threshold, adc_to_mv, \
+                mv_to_adc, adc_baseline = self.unpackSeqMessage('>5d')
 
             self.cfg_delay_screen, self.cfg_delay_check, \
                 self.cfg_delay_error = self.unpackSeqMessage('>3d')
 
-        self.cfg_mas_ch1_thres_low, self.cfg_mas_ch1_thres_high, \
-            self.cfg_mas_ch2_thres_low, self.cfg_mas_ch2_thres_high, \
-            self.cfg_mas_ch1_inttime, self.cfg_mas_ch2_inttime, \
-            self.cfg_mas_ch1_voltage, self.cfg_mas_ch2_voltage, \
-            self.cfg_mas_ch1_current, self.cfg_mas_ch2_current, \
-            self.cfg_mas_comp_thres_low, self.cfg_mas_comp_thres_high, \
-            self.cfg_mas_max_voltage, self.cfg_mas_reset, \
-            self.cfg_mas_ch1_gain_pos, self.cfg_mas_ch1_gain_neg, \
-            self.cfg_mas_ch2_gain_pos, self.cfg_mas_ch2_gain_neg, \
-            self.cfg_mas_ch1_offset_pos, self.cfg_mas_ch1_offset_neg, \
-            self.cfg_mas_ch2_offset_pos, self.cfg_mas_ch2_offset_neg, \
-            self.cfg_mas_internal_voltage, self.cfg_mas_common_offset, \
-            self.cfg_mas_ch1_adc_gain, self.cfg_mas_ch1_adc_offset, \
-            self.cfg_mas_ch2_adc_gain, self.cfg_mas_ch2_adc_offset, \
-            self.cfg_mas_ch1_comp_gain, self.cfg_mas_ch1_comp_offset, \
-            self.cfg_mas_ch2_comp_gain, self.cfg_mas_ch2_comp_offset = \
-            self.unpackSeqMessage('>13dB8B2B8d')
+            self.cfg_mas_ch1_thres_low, self.cfg_mas_ch1_thres_high, \
+                self.cfg_mas_ch2_thres_low, self.cfg_mas_ch2_thres_high, \
+                self.cfg_mas_ch1_inttime, self.cfg_mas_ch2_inttime, \
+                self.cfg_mas_ch1_voltage, self.cfg_mas_ch2_voltage, \
+                self.cfg_mas_ch1_current, self.cfg_mas_ch2_current, \
+                self.cfg_mas_comp_thres_low, self.cfg_mas_comp_thres_high, \
+                self.cfg_mas_max_voltage, self.cfg_mas_reset, \
+                self.cfg_mas_ch1_adc_gain, self.cfg_mas_ch1_adc_offset, \
+                self.cfg_mas_ch2_adc_gain, self.cfg_mas_ch2_adc_offset, \
+                self.cfg_mas_ch1_comp_gain, self.cfg_mas_ch1_comp_offset, \
+                self.cfg_mas_ch2_comp_gain, self.cfg_mas_ch2_comp_offset , \
+                self.cfg_mas_ch1_gain_pos, self.cfg_mas_ch1_gain_neg, \
+                self.cfg_mas_ch2_gain_pos, self.cfg_mas_ch2_gain_neg, \
+                self.cfg_mas_ch1_offset_pos, self.cfg_mas_ch1_offset_neg, \
+                self.cfg_mas_ch2_offset_pos, self.cfg_mas_ch2_offset_neg, \
+                self.cfg_mas_internal_voltage, self.cfg_mas_common_offset = \
+                self.unpackSeqMessage('>13dB8d8B2B')
 
-        self.cfg_slv_ch1_thres_low, self.cfg_slv_ch1_thres_high, \
-            self.cfg_slv_ch2_thres_low, self.cfg_slv_ch2_thres_high, \
-            self.cfg_slv_ch1_inttime, self.cfg_slv_ch2_inttime, \
-            self.cfg_slv_ch1_voltage, self.cfg_slv_ch2_voltage, \
-            self.cfg_slv_ch1_current, self.cfg_slv_ch2_current, \
-            self.cfg_slv_comp_thres_low, self.cfg_slv_comp_thres_high, \
-            self.cfg_slv_max_voltage, self.cfg_slv_reset, \
-            self.cfg_slv_ch1_gain_pos, self.cfg_slv_ch1_gain_neg, \
-            self.cfg_slv_ch2_gain_pos, self.cfg_slv_ch2_gain_neg, \
-            self.cfg_slv_ch1_offset_pos, self.cfg_slv_ch1_offset_neg, \
-            self.cfg_slv_ch2_offset_pos, self.cfg_slv_ch2_offset_neg, \
-            self.cfg_slv_internal_voltage, self.cfg_slv_common_offset, \
-            self.cfg_slv_ch1_adc_gain, self.cfg_slv_ch1_adc_offset, \
-            self.cfg_slv_ch2_adc_gain, self.cfg_slv_ch2_adc_offset, \
-            self.cfg_slv_ch1_comp_gain, self.cfg_slv_ch1_comp_offset, \
-            self.cfg_slv_ch2_comp_gain, self.cfg_slv_ch2_comp_offset = \
-            self.unpackSeqMessage('>13dB8B2B8d')
+            self.cfg_slv_ch1_thres_low, self.cfg_slv_ch1_thres_high, \
+                self.cfg_slv_ch2_thres_low, self.cfg_slv_ch2_thres_high, \
+                self.cfg_slv_ch1_inttime, self.cfg_slv_ch2_inttime, \
+                self.cfg_slv_ch1_voltage, self.cfg_slv_ch2_voltage, \
+                self.cfg_slv_ch1_current, self.cfg_slv_ch2_current, \
+                self.cfg_slv_comp_thres_low, self.cfg_slv_comp_thres_high, \
+                self.cfg_slv_max_voltage, self.cfg_slv_reset, \
+                self.cfg_slv_ch1_adc_gain, self.cfg_slv_ch1_adc_offset, \
+                self.cfg_slv_ch2_adc_gain, self.cfg_slv_ch2_adc_offset, \
+                self.cfg_slv_ch1_comp_gain, self.cfg_slv_ch1_comp_offset, \
+                self.cfg_slv_ch2_comp_gain, self.cfg_slv_ch2_comp_offset, \
+                self.cfg_slv_ch1_gain_pos, self.cfg_slv_ch1_gain_neg, \
+                self.cfg_slv_ch2_gain_pos, self.cfg_slv_ch2_gain_neg, \
+                self.cfg_slv_ch1_offset_pos, self.cfg_slv_ch1_offset_neg, \
+                self.cfg_slv_ch2_offset_pos, self.cfg_slv_ch2_offset_neg, \
+                self.cfg_slv_internal_voltage, self.cfg_slv_common_offset = \
+                self.unpackSeqMessage('>13dB8d8B2B')
