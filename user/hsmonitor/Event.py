@@ -51,8 +51,13 @@ class BaseHiSPARCEvent(BaseEvent):
         self.message = message[1]
 
     def check_trailing_bytes(self):
-        """Check if the struct_offset reached the end of the message"""
+        """Check if the struct_offset reached the end of the message
 
+        Use in combination with ``unpackSeqMessage``. When (you think)
+        you have read the entire message this will check if there any
+        bytes left.
+
+        """
         if len(self.message[self._struct_offset:]):
             raise Exception('Not entire message was parsed, %d bytes left.' %
                             len(self.message[self._struct_offset:]))
