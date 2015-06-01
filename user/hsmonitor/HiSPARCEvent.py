@@ -51,9 +51,14 @@ class HiSPARCEvent(BaseHiSPARCEvent):
         self.version, self.database_id, self.data_reduction, \
             self.eventrate, self.num_devices, self.length, \
             gps_second, gps_minute, gps_hour, gps_day, gps_month, gps_year, \
-            self.nanoseconds, self.time_delta, \
-            trigger_pattern, slv_comparators, _zero_padding = \
-            self.unpackSeqMessage('>2BBfBH5BH2LHBB')
+            self.nanoseconds, self.time_delta = \
+            self.unpackSeqMessage('>2BBfBH5BH2L')
+
+        self.datetime = datetime(gps_year, gps_month, gps_day,
+                                 gps_hour, gps_minute, gps_second)
+
+        # Length of a single trace
+        l = self.length / 2
 
         # Try to handle NaNs for eventrate. These are handled differently from
         # platform to platform (i.e. MSVC libraries are screwed). This
@@ -64,13 +69,10 @@ class HiSPARCEvent(BaseHiSPARCEvent):
 
         # Add slave comparators to the trigger pattern
         # Shift by 16 to add it as bits 16-19 of the trigger pattern.
+        trigger_pattern, slv_comparators, _zero_padding = \
+            self.unpackSeqMessage('>HBB')
+
         self.trigger_pattern = trigger_pattern + (slv_comparators << 16)
-
-        self.datetime = datetime(gps_year, gps_month, gps_day,
-                                 gps_hour, gps_minute, gps_second)
-
-        # Length of a single trace
-        l = self.length / 2
 
         # Read out and save traces and calculated trace parameters
         self.mas_stdev1, self.mas_stdev2, self.mas_baseline1, \
