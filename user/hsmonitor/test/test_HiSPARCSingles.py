@@ -1,7 +1,6 @@
 import sys
 sys.path.append("..")
 import unittest
-import struct
 
 from HiSPARCSingles import HiSPARCSingles
 

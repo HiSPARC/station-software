@@ -19,6 +19,7 @@ class WeatherEvent(BaseWeatherEvent):
         self.day = self.datetime.day
         self.month = self.datetime.month
         self.year = self.datetime.year
+
         self.tempInside = float(tmp[1])
         self.tempOutside = float(tmp[2])
         self.humidityInside = int(float(tmp[3]))

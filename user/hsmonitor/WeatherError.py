@@ -19,6 +19,7 @@ class WeatherError(BaseWeatherEvent):
         self.day = self.datetime.day
         self.month = self.datetime.month
         self.year = self.datetime.year
+
         self.error_message = tmp[1]
 
         # Get all event data necessary for an upload.
