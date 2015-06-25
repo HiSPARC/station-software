@@ -7,7 +7,7 @@ from WeatherConfig import WeatherConfig
 from load_message import load_weather_message
 
 
-class TestHiSPARCError(unittest.TestCase):
+class TestHiSPARCConfig(unittest.TestCase):
 
     def test_config(self):
         config = load_weather_message('test_data/WeatherConfig.txt')

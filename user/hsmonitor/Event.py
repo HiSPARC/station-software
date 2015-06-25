@@ -154,7 +154,7 @@ class BaseWeatherEvent(BaseEvent):
         elif datastring == 'FALSE':
             return False
         else:
-            raise ValueError('Value is neither TRUE or FALSE.')
+            raise ValueError('Value is neither TRUE nor FALSE.')
 
     def __getattribute__(self, name):
         return object.__getattribute__(self, name)
@@ -166,6 +166,18 @@ class BaseWeatherEvent(BaseEvent):
             return self.datetime.time().isoformat()
         else:
             raise AttributeError(name)
+
+    def check_unread_values(self, split_message):
+        """Check if the message has any elements left
+
+        Use at the end of ``parseMessage``. When (you think)
+        you have read the entire message this will check if there any
+        values left.
+
+        """
+        if len(split_message):
+            raise Exception('Not all values were read, %d values left.' %
+                            len(split_message))
 
     def getEventData(self):
         """Get all event data necessary for an upload.

@@ -1,5 +1,4 @@
 from datetime import datetime
-import time
 
 from Event import BaseWeatherEvent
 import EventExportValues
@@ -10,8 +9,10 @@ class WeatherError(BaseWeatherEvent):
 
     def parseMessage(self):
         tmp = self.message.split("\t")
-        t = time.strptime(tmp[0].strip(), "%Y-%m-%d %H:%M:%S")
-        self.datetime = datetime(t[0], t[1], t[2], t[3], t[4], t[5])
+        tmp.reverse()
+
+        date_fmt = "%Y-%m-%d %H:%M:%S"
+        self.datetime = datetime.strptime(tmp.pop().strip(), date_fmt)
         self.nanoseconds = 0  # Weather is not accurate enough
         self.second = self.datetime.second
         self.minute = self.datetime.minute
@@ -20,7 +21,9 @@ class WeatherError(BaseWeatherEvent):
         self.month = self.datetime.month
         self.year = self.datetime.year
 
-        self.error_message = tmp[1]
+        self.error_message = tmp.pop()
+
+        self.check_unread_values(tmp)
 
         # Get all event data necessary for an upload.
         self.export_values = EventExportValues.export_values[self.uploadCode]
