@@ -4,6 +4,7 @@ import struct
 from datetime import datetime
 from zlib import compress
 import calendar
+import os
 
 from Event import BaseHiSPARCEvent
 from legacy import unpack_legacy_message
@@ -58,7 +59,8 @@ class HiSPARCEvent(BaseHiSPARCEvent):
         self.datetime = datetime(gps_year, gps_month, gps_day,
                                  gps_hour, gps_minute, gps_second)
 
-        with open('TIME_DELTA.txt', 'a') as time_delta_data:
+        output = os.path.expanduser("~/Desktop/TIME_DELTA.txt")
+        with open(output, 'a') as time_delta_data:
             timestamp = calendar.timegm(self.datetime.timetuple())
             time_delta_data.write('%d %d %d' % (timestamp, self.nanoseconds,
                                                 self.time_delta))
