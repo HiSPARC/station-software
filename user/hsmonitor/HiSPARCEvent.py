@@ -54,7 +54,7 @@ class HiSPARCEvent(BaseHiSPARCEvent):
             self.eventrate, self.num_devices, self.length, \
             gps_second, gps_minute, gps_hour, gps_day, gps_month, gps_year, \
             self.nanoseconds, self.time_delta = \
-            self.unpackSeqMessage('>2BBfBH5BH2L')
+            self.unpackSeqMessage('>2BBfBH5BHLl')
 
         self.datetime = datetime(gps_year, gps_month, gps_day,
                                  gps_hour, gps_minute, gps_second)
@@ -62,8 +62,9 @@ class HiSPARCEvent(BaseHiSPARCEvent):
         output = os.path.expanduser("~/Desktop/TIME_DELTA.txt")
         with open(output, 'a') as time_delta_data:
             timestamp = calendar.timegm(self.datetime.timetuple())
-            time_delta_data.write('%d %d %d' % (timestamp, self.nanoseconds,
-                                                self.time_delta))
+            time_delta_data.write('%d%09d\t%d\n' %
+                                  (timestamp, self.nanoseconds,
+                                   self.time_delta))
 
         # Length of a single trace
         l = self.length / 2
