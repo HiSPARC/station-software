@@ -157,7 +157,7 @@ class HsMonitor(object):
                 up2.setNumServer(self.numServers)
             except Exception, msg:
                 logger.debug("Error while parsing local server: %s." % msg)
-                logger.info("Will not upload to a local server.")
+                logger.debug("Will not upload to a local server.")
 
             # Set number of servers for our own StorageManager
             storMan.setNumServer(self.numServers)

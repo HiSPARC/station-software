@@ -59,9 +59,7 @@ class StorageManager(Subject):
         # Compute the all-uploaded mask: the field uploadedTo should contain
         # all 1's for servers that have been uploaded to.
         # For example with 2 servers, allUploadedMask is 0b11 (3).
-        self.allUploadedMask = 0
-        for i in xrange(0, numServer):
-            self.allUploadedMask |= 1 << i
+        self.allUploadedMask = 2 ** numServer - 1
 
     def openConnection(self):
         """Opens a connection to the sql-storage.
@@ -193,7 +191,7 @@ class StorageManager(Subject):
         Example: [1,3,4,5] -> '(1,3,4,5)'.
 
         """
-        return "(%s)" % ",".join(["%d" % int(ID) for ID in IDs])
+        return "(%s)" % ",".join("%d" % int(ID) for ID in IDs)
 
     def setUploaded(self, serverID, eventIDs):
         """Set UploadedTo-field to the serverID to which it was uploaded.
@@ -292,8 +290,8 @@ class StorageManager(Subject):
         self.openConnection()
         c = self.db.cursor()
 
-        logger.debug('Deleting old events which have already been uploaded to '
-                     'all currently specified servers.')
+        logger.info('Deleting events already uploaded to currently specified '
+                    'servers.')
         sql = "SELECT COUNT(*) FROM Event WHERE UploadedTo & ? = ?"
         args = (self.allUploadedMask, self.allUploadedMask)
         c.execute(sql, args)
