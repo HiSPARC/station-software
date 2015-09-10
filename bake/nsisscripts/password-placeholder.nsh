@@ -1,8 +1,8 @@
 #
 #   password-placeholder.nsh ------
 #   Passwords of the different accounts, VNC and local database.
-#   Replace the PLACEHOLDRS with the actual passwords en copy
-#   this file to password.nsh.
+#   Use this as a template for the password.nsh file.
+#   In password.nsh replace the PLACEHOLDERS with the actual passwords.
 #
 !define ADMHISPARC_PASSWORD "PLACEHOLDER"
 !define HISPARC_PASSWORD    "PLACEHOLDER"
