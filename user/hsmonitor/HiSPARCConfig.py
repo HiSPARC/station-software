@@ -109,7 +109,7 @@ class HiSPARCConfig(BaseHiSPARCEvent):
                 self.cfg_mas_ch1_adc_gain, self.cfg_mas_ch1_adc_offset, \
                 self.cfg_mas_ch2_adc_gain, self.cfg_mas_ch2_adc_offset, \
                 self.cfg_mas_ch1_comp_gain, self.cfg_mas_ch1_comp_offset, \
-                self.cfg_mas_ch2_comp_gain, self.cfg_mas_ch2_comp_offset , \
+                self.cfg_mas_ch2_comp_gain, self.cfg_mas_ch2_comp_offset, \
                 self.cfg_mas_ch1_gain_pos, self.cfg_mas_ch1_gain_neg, \
                 self.cfg_mas_ch2_gain_pos, self.cfg_mas_ch2_gain_neg, \
                 self.cfg_mas_ch1_offset_pos, self.cfg_mas_ch1_offset_neg, \
