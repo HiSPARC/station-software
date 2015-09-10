@@ -67,7 +67,6 @@ def start():
             handler.currentDirectory = os.path.join(HS_ROOT, "user/hisparcdaq")
             handler.command = os.path.join(HS_ROOT,
                                            "user/hisparcdaq/HiSPARC DAQ.exe")
-
             res = handler.startProcess()
         else:
             res = DISABLED
@@ -93,8 +92,8 @@ def start():
         logger.exception("An exception was generated while starting "
                          "HiSPARC Weather")
 
-        # Introduce a 20-second pause to let MySQL start completely
-        time.sleep(20)
+    # A 10-second pause to let MySQL start completely
+    time.sleep(10)
 
     try:
         logger.info("Starting HiSPARC Monitor...")
