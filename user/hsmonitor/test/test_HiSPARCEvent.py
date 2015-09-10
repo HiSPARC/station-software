@@ -1,6 +1,7 @@
 import sys
 sys.path.append("..")
 import unittest
+import struct
 
 from HiSPARCEvent import HiSPARCEvent
 
