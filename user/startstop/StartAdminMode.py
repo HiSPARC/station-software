@@ -1,58 +1,50 @@
-import sys
+"""Start the HiSPARC admin services:
+
+These services are started:
+TightVNC, Nagios, OpenVPN
+
+"""
+
+import logging
+
+import startstop_logger
 from startStop import StartStop
-from hslog import log, setLogMode, MODE_BOTH
+
+logger = logging.getLogger('startstop.startadmin')
 
 
-def start():
-    setLogMode(MODE_BOTH)
-    log('\nStarting Admin-Mode applications...')
+def start_service(name, service_name):
+    """Start a service
 
+    :param name: common name for printing
+    :param service_name: name of the Service
+
+    """
     try:
-        # start tightVNC
-        log('Starting TightVNC service...')
-        tightVNCHandler = StartStop()
-        tightVNCHandler.serviceName = 'tvnserver'
-        resTightVNC = tightVNCHandler.startService()
-        if resTightVNC == 0:
-            log('Status:running')
-        elif resTightVNC == 1:
-            log('Status:stopped')
+        logger.info('Starting %s Service' % name)
+        service_handler = StartStop()
+        service_handler.serviceName = service_name
+        result = service_handler.startService()
+        if result == 0:
+            logger.info('Status: running')
+        elif result == 1:
+            logger.info('Status: stopped')
         else:
-            log('The service was not found!')
+            logger.info('The service was not found!')
     except:
-        log('An exception was generated while starting TightVNC:' +
-            str(sys.exc_info()[1]))
+        logger.exception('An exception was generated while starting %s', name)
 
-    try:
-        # start Nagios Service
-        log('Starting Nagios Service')
-        nagiosServHandler = StartStop()
-        nagiosServHandler.serviceName = "NSClientpp"
-        resNagios = nagiosServHandler.startService()
-        if resNagios == 0:
-            log('Status:running')
-        elif resNagios == 1:
-            log('Status:stopped')
-        else:
-            log('The service was not found!')
-    except:
-        log('An exception was generated while starting the Nagios Service:' +
-            str(sys.exc_info()[1]))
 
-    try:
-        # start OpenVpn Service
-        log('Starting OpenVpn Service')
-        openVpnServHandler = StartStop()
-        openVpnServHandler.serviceName = "OpenVPNService"
-        resOpenVpn = openVpnServHandler.startService()
-        if resOpenVpn == 0:
-            log('Status:running')
-        elif resOpenVpn == 1:
-            log('Status:stopped')
-        else:
-            log('The service was not found!')
-    except:
-        log('An exception was generated while starting the OpenVPN Service:' +
-            str(sys.exc_info()[1]))
+def start_admin_services():
+    """Start the admin services"""
 
-start()
+    logger.info('Starting Admin-Mode applications...')
+
+    start_service('TightVNC', 'tvnserver')
+    start_service('Nagios', 'NSClientpp')
+    start_service('OpenVPN', 'OpenVPNService')
+
+
+if __name__ == "__main__":
+    startstop_logger.setup()
+    start_admin_services()

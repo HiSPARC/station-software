@@ -18,8 +18,8 @@
   :: echo setenv.bat: HISPARC_ROOT=%HISPARC_ROOT%
 
   :: append semicolon to %PYTHONPATH% if and only if it already exists
-  if not "%PYTHONPATH%"=="" set PYTHONPATH=%PYTHONPATH%;
-  set PYTHONPATH=%PYTHONPATH%%HISPARC_ROOT%\user\pythonshared
+  if not "%PYTHONPATH%"=="" set PYTHONPATH=;%PYTHONPATH%
+  set PYTHONPATH=%HISPARC_ROOT%\user\pythonshared%PYTHONPATH%
   :: echo setenv.bat: PYTHONPATH=%PYTHONPATH%
 
   :: put HiSPARC's python in front of path

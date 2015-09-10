@@ -1,12 +1,11 @@
 import os
-import sys
 import ConfigParser
 import checkFiles
 import urllib2
-from cgi import parse_qs
+import logging
+from urlparse import parse_qs
 from Tkinter import Message, Tk
 
-from hslog import log, SEVERITY_CRITICAL
 from Downloader import Downloader
 
 CONFIG_INI = "config.ini"
@@ -15,12 +14,15 @@ DISPLAY_GUI_MESSAGES = True
 UPDATE_USER_MODE = 1
 UPDATE_ADMIN_MODE = 2
 
+logger = logging.getLogger('updater.checker')
 
-class Checker:
-    # Internal handle to the database cursor
-    config = ConfigParser.ConfigParser()
+
+class Checker(object):
+
+    """Check for updates"""
 
     def __init__(self):
+        self.config = ConfigParser.ConfigParser()
         self.config.read([CONFIG_INI, PERSISTENT_INI])
 
     def requestCheckFromServer(self):
@@ -31,7 +33,6 @@ class Checker:
         connection = urllib2.urlopen("%s/%s/%s" % (server, currentAdmin,
                                                    currentUser))
         updateInfo = connection.read()
-        print updateInfo
         connection.close()
         return updateInfo
 
@@ -39,20 +40,23 @@ class Checker:
         updateDict = parse_qs(updateInfo, strict_parsing=True)
         # updateDict has: mustUpdate, urlUser, newVersionUser, urlAdmin,
         #                 newVersionAdmin
-        downloader = Downloader()
         updates = dict()  # updates has: mustUpdate, userFile, adminFile
 
         mustUpdate = int(updateDict['mustUpdate'][0])
         updates['mustUpdate'] = mustUpdate
 
+        downloader = Downloader()
         location = "../../persistent/downloads"
 
-        if (mustUpdate & UPDATE_ADMIN_MODE):
+        if mustUpdate == 0:
+            logger.info('No update available')
+        elif (mustUpdate & UPDATE_ADMIN_MODE):
             adminURL = updateDict['urlAdmin'][0]
-            print adminURL
+            logger.info('Downloading Admin update: %s' % adminURL)
             adminFile = downloader.downloadUpdate(location, adminURL)
             updates['adminFile'] = adminFile
-            log('Administrator update is available called: %s' % adminFile)
+            logger.info('Administrator update is available called: %s' %
+                        adminFile)
 
             if DISPLAY_GUI_MESSAGES and not(checkFiles.checkIfAdmin()):
                 root = Tk()
@@ -64,9 +68,10 @@ class Checker:
 
         elif (mustUpdate & UPDATE_USER_MODE):
             userURL = updateDict['urlUser'][0]
+            logger.info('Downloading User update: %s' % userURL)
             userFile = downloader.downloadUpdate(location, userURL)
             updates['userFile'] = userFile
-            log('User update is available called: %s' % userFile)
+            logger.info('User update is available called: %s' % userFile)
             # Run the update to install it.
             # First call a batch file so that Python can be closed.
             os.system(".\\runUserUpdate.bat %s" % userFile)
@@ -77,13 +82,11 @@ class Checker:
         try:
             updateInfo = self.requestCheckFromServer()
         except:
-            log('Could not reach the server to check for updates: : %s' %
-                str(sys.exc_info()[1]), severity=SEVERITY_CRITICAL)
+            logger.exception('Could not reach server to check for updates.')
             return
         try:
             updates = self.parseAnswerServer(updateInfo)
-            return updates
         except:
-            log('Could not parse the answer of the server correctly: %s' %
-                str(sys.exc_info()[1]), severity=SEVERITY_CRITICAL)
+            logger.exception('Could not parse answer of the server correctly.')
             return
+        return updates

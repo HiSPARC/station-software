@@ -6,112 +6,75 @@ import ConfigParser
 from startStop import StartStop, CMDStartStop, status, EXCEPTION, DISABLED
 
 
-def pStdout(app, result):
+def pStdout(name, result):
+    """Pretty print the check results"""
 
-    info = "%(app)-20s: %(stat)s" % {"app": app, "stat": status(result)}
+    info = "%(name)-20s: %(status)s" % {"name": name, "status": status(result)}
     print info
 
 
+def check_app(name, exe_name=None, title=None, service_name=None):
+    """Check if a program or service is running
+
+    :param name: common name for the process.
+    :param exe_name: executable name of the process.
+    :param title: title of the process.
+    :param service_name: name of the service.
+
+    """
+    try:
+        if exe_name is not None:
+            handler = StartStop()
+            handler.exeName = exe_name
+            res = handler.probeProcess()
+        elif title is not None:
+            handler = CMDStartStop()
+            handler.title = title
+            res = handler.probeProcess()
+        elif service_name is not None:
+            handler = StartStop()
+            handler.serviceName = service_name
+            res = handler.probeService()
+        else:
+            raise Exception("exe_name, title or service_name should be given.")
+    except:
+        res = EXCEPTION
+    pStdout(name, res)
+
+
 def check():
-    print "\nChecking User-Mode applications...\n"
+    """Check if the expected User and Admin processes are active"""
 
     HS_ROOT = "%s" % os.getenv("HISPARC_ROOT")
     if HS_ROOT == "":
         print "FATAL: environment variable HISPARC_ROOT not set!"
         return
 
-    configFile = "%s/persistent/configuration/config.ini" % HS_ROOT
+    config_file = os.path.join(HS_ROOT, "persistent/configuration/config.ini")
     config = ConfigParser.ConfigParser()
-    config.read(configFile)
+    config.read(config_file)
 
-    try:
-        # check MySQL
-        app = "MySQL"
-        handler = StartStop()
-        handler.exeName = "mysqld.exe"
-        res = handler.probeProcess()
-    except:
-        res = EXCEPTION
-    pStdout(app, res)
+    print "Checking User-Mode applications..."
 
-    try:
-        # check LabVIEW Detector
-        app = "LabVIEW Detector"
-        if config.getboolean("Detector", "Enabled"):
-            handler = StartStop()
-            handler.exeName = "hisparcdaq.exe"
-            res = handler.probeProcess()
-        else:
-            res = DISABLED
-    except:
-        res = EXCEPTION
-    pStdout(app, res)
+    check_app("MySQL", exe_name="mysqld.exe")
+    if config.getboolean("Detector", "Enabled"):
+        check_app("HiSPARC Detector", exe_name="HiSPARC DAQ.exe")
+    else:
+        pStdout("HiSPARC Detector", DISABLED)
+    if config.getboolean("Weather", "Enabled"):
+        check_app("HiSPARC Weather", exe_name="HiSPARC Weather Station.exe")
+    else:
+        pStdout("HiSPARC Weather", DISABLED)
+    check_app("HiSPARC Monitor", title="HiSPARC Monitor")
+    check_app("HiSPARC Updater", title="HiSPARC Updater")
 
-    try:
-        # check LabVIEW Weather
-        app = "LabVIEW Weather"
-        if config.getboolean("Weather", "Enabled"):
-            handler = StartStop()
-            handler.exeName = "HiSPARC Weather Station.exe"
-            res = handler.probeProcess()
-        else:
-            res = DISABLED
-    except:
-        res = EXCEPTION
-    pStdout(app, res)
+    print
+    print "Checking Admin-Mode services..."
 
-    try:
-        # check HSMonitor
-        app = "HSMonitor"
-        handler = CMDStartStop()
-        handler.title = "HISPARC MONITOR: hsmonitor"
-        res = handler.probeProcess()
-    except:
-        res = EXCEPTION
-    pStdout(app, res)
+    check_app("TightVNC", service_name="tvnserver")
+    check_app("Nagios", service_name="NSClientpp")
+    check_app("OpenVPN", service_name="OpenVPNService")
 
-    try:
-        # check Updater
-        app = "Updater"
-        handler = CMDStartStop()
-        handler.title = "HISPARC Updater: updater"
-        res = handler.probeProcess()
-    except:
-        res = EXCEPTION
-    pStdout(app, res)
 
-    print "\nChecking Admin-Mode services...\n"
-
-    try:
-        # check TightVNC
-        app = "TightVNC"
-        handler = StartStop()
-        handler.serviceName = "tvnserver"
-        res = handler.probeService()
-    except:
-        res = EXCEPTION
-    pStdout(app, res)
-
-    try:
-        # check NAGIOS
-        app = "NAGIOS"
-        handler = StartStop()
-        handler.serviceName = "NSClientpp"
-        res = handler.probeService()
-    except:
-        res = EXCEPTION
-    pStdout(app, res)
-
-    try:
-        # check OpenVPN
-        app = "OpenVPN"
-        handler = StartStop()
-        handler.serviceName = "OpenVPNService"
-        res = handler.probeService()
-    except:
-        res = EXCEPTION
-    pStdout(app, res)
-
-    print "\n"
-
-check()
+if __name__ == "__main__":
+    check()

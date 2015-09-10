@@ -1,6 +1,4 @@
-class Observer:
-    def __init__(self):
-        pass
+class Observer(object):
 
     def notify(self, count):
         pass

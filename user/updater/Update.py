@@ -1,53 +1,113 @@
-import ConfigParser
 import sched
 import time
 import random
 import os
-import sys
-
-sys.path.append("../pythonshared")
-
+import logging
+from logging.handlers import TimedRotatingFileHandler
 import checkFiles
 from Checker import Checker
-from hslog import log, setLogMode, MODE_BOTH, SEVERITY_CRITICAL
+
+from EConfigParser import EConfigParser
 
 CONFIG_INI = "config.ini"
 PERSISTENT_INI = "../../persistent/configuration/config.ini"
 ADMINUPDATE_NAME = "adminUpdater"
 
+logger = logging.getLogger('updater')
+logging.Formatter.converter = time.gmtime
+formatter_file = logging.Formatter('%(asctime)s %(name)s.%(funcName)s.'
+                                   '%(levelname)s: %(message)s',
+                                   '%Y-%m-%d %H:%M:%S')
+formatter_screen = logging.Formatter('%(asctime)s UTC - %(name)s - '
+                                     '%(levelname)s: %(message)s',
+                                     '%Y-%m-%d %H:%M:%S')
 
-class Updater:
-    config = ConfigParser.ConfigParser()
-    timeBetweenChecks = 0  # (in seconds)
-    # Start time of the interval in which checks may be performed on a
-    # day (in seconds) e.g. 0 is midnight, 7200 is 2am
-    timeStartCheckInterval = 0
-    # End time of the interval in which checks may be performed on a
-    # day (in seconds) e.g. 0 is midnight, 7200 is 2am
-    timeStopCheckInterval = 0
-    checkerInitialDelay = 0  # Bool with if there is an initial delay
-    scheduler = sched.scheduler(time.time, time.sleep)
-    checker = Checker()
+# Logging levels which can be set in the configuration file
+LEVELS = {"notset": logging.NOTSET,
+          "debug": logging.DEBUG,
+          "info": logging.INFO,
+          "warning": logging.WARNING,
+          "error": logging.ERROR,
+          "critical": logging.CRITICAL}
 
-    # Check if there is already an update to install in admin mode and if the
-    # user is in admin mode
+
+class Updater(object):
+
+    def __init__(self):
+        self.scheduler = sched.scheduler(time.time, time.sleep)
+        self.checker = Checker()
+        self.config = EConfigParser()
+        self.config.read([CONFIG_INI, PERSISTENT_INI])
+        # Time between checks in seconds
+        self.timeBetweenChecks = self.config.ifgetint(
+            'Update', 'IntervalBetweenChecks', 1800)
+        # Start and stop time of the interval in which checks may be
+        # performed on a day (in seconds since midnight) e.g. 7200 is 2am
+        self.timeStartCheckInterval = self.config.ifgetint(
+            'Update', 'CheckerIntervalStartTime', 0)
+        self.timeStopCheckInterval = self.config.ifgetint(
+            'Update', 'CheckerIntervalStopTime', 24 * 60 * 60)
+        # Bool determine if there will be an initial delay
+        self.checkerInitialDelay = self.config.get(
+            'Update', 'CheckerInitialDelay', 0)
+
+        # Setup the log mode
+        log_dirname = '../../persistent/logs/updater/'
+        # Making sure the directory exists
+        if not os.access(log_dirname, os.F_OK):
+            os.makedirs(log_dirname)
+        log_filename = os.path.join(log_dirname, 'updater')
+
+        # Remove any existing handlers
+        logger.handlers = []
+
+        # Add file handler
+        handler = TimedRotatingFileHandler(log_filename, when='midnight',
+                                           backupCount=14, utc=True)
+        handler.setFormatter(formatter_file)
+        logger.addHandler(handler)
+
+        # Add handler which prints to the screen
+        handler = logging.StreamHandler()
+        handler.setFormatter(formatter_screen)
+        logger.addHandler(handler)
+
+        # Default logging level
+        logger.setLevel(level=logging.DEBUG)
+
+        # Logging level for the handlers
+        for i, target in enumerate(['File', 'Screen']):
+            log_level = self.config.ifgetstr('Logging', '%sLevel' % target,
+                                             'debug')
+            if log_level in LEVELS:
+                logger.handlers[i].setLevel(level=LEVELS[log_level])
+                logger.info('%s logging level set to %s' % (target, log_level))
+            else:
+                logger.warning("Illegal %s logging level '%s' in config, "
+                               "using debug" % (target, log_level))
+
     def checkIfUpdateToInstall(self):
-        isAdmin = checkFiles.checkIfAdmin()
-        currentAdmin = self.config.get("Version", "CurrentAdmin")
-        currentUser = self.config.get("Version", "CurrentUser")
+        """Check if there is already an admin update to install
 
-        print "You are Administrator: ", isAdmin
-        print "Current Admin Version: ", currentAdmin
-        print "Current User Version:  ", currentUser
+        Also check if you are currently in user or admin mode
 
-        if isAdmin:
+        """
+        is_admin = checkFiles.checkIfAdmin()
+        currentAdmin = self.config.ifgetint("Version", "CurrentAdmin", 0)
+        currentUser = self.config.ifgetint("Version", "CurrentUser", 0)
+
+        logger.info("You are Administrator: %s" % is_admin)
+        logger.info("Current Admin Version: %s" % currentAdmin)
+        logger.info("Current User Version:  %s" % currentUser)
+
+        if is_admin:
             location = "../../persistent/downloads"
-            found, fileFound = checkFiles.checkIfNewerFileExists(
+            found, file_found = checkFiles.checkIfNewerFileExists(
                 location, ADMINUPDATE_NAME, int(currentAdmin))
-            # print "found is %s" % found
             if found:
+                logger.info("Found: %s" % file_found)
                 os.system(".\\runAdminUpdate.bat "
-                          "../../persistent/downloads/%s" % fileFound)
+                          "../../persistent/downloads/%s" % file_found)
 
     def calculateInitialDelay(self):
         if self.checkerInitialDelay == 1:
@@ -73,36 +133,35 @@ class Updater:
             return 0
 
     def performOneUpdateCheck(self):
+        """First check for and update to install
+
+        The first check may be delayed to ensure it occurs during a
+        certain period of the day.
+
+        """
         delay = self.calculateInitialDelay()
-        self.scheduler.enter(delay, 1, self.checker.checkForUpdates, '')
+        self.scheduler.enter(delay, 1, self.checker.checkForUpdates, [])
         self.scheduler.run()
 
     def performContinuousCheck(self):
+        """Continuously check if there for new updates from the server
+
+        Checks are performed on an interval determined by 'timeBetweenChecks'.
+
+        """
         while True:
             self.scheduler.enter(self.timeBetweenChecks, 1,
-                                 self.checker.checkForUpdates, '')
+                                 self.checker.checkForUpdates, [])
             self.scheduler.run()
 
-    def __init__(self):
-        self.config.read([CONFIG_INI, PERSISTENT_INI])
-        self.timeBetweenChecks = int(self.config.get('Update',
-                                     'IntervalBetweenChecks'))
-        self.timeStartCheckInterval = int(self.config.get('Update',
-                                          'CheckerIntervalStartTime'))
-        self.timeStopCheckInterval = int(self.config.get('Update',
-                                         'CheckerIntervalStopTime'))
-        self.checkerInitialDelay = int(self.config.get('Update',
-                                       'CheckerInitialDelay'))
 
-try:
-    setLogMode(MODE_BOTH)
-    updater = Updater()
-    updater.checkIfUpdateToInstall()
-    updater.performOneUpdateCheck()
-    updater.performContinuousCheck()
-except KeyboardInterrupt:
-    exit
-except:
-    log("Updating failed due to %s, restart the checker!" %
-        str(sys.exc_info()[1]), severity=SEVERITY_CRITICAL)
-    exit
+if __name__ == "__main__":
+    try:
+        updater = Updater()
+        updater.checkIfUpdateToInstall()
+        updater.performOneUpdateCheck()
+        updater.performContinuousCheck()
+    except KeyboardInterrupt:
+        logger.exception("Updating interrupted.")
+    except:
+        logger.exception("Updating failed, restart the Updater!")

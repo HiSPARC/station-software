@@ -1,4 +1,4 @@
-class Subject:
+class Subject(object):
     def __init__(self):
         self.observers = []
 

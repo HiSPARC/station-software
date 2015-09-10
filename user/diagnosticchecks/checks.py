@@ -13,7 +13,7 @@ CRITICAL = 2
 localhost = gethostbyname("127.0.0.1")
 
 
-def checkBufferdb(warn=None, crit=None):
+def check_bufferdb(warn=None, crit=None):
     if warn:
         wmin, wmax = warn
     if crit:
@@ -61,7 +61,7 @@ def check_lvusage(warn, crit):
     w = wmi.WMI()
     wmin, wmax = warn
     cmin, cmax = crit
-    LABVIEW_CAPTIONS = ['hisparcdaq.exe', 'HISPAR~1.EXE']
+    LABVIEW_CAPTIONS = ['HiSPARC DAQ.exe', 'HISPAR~1.EXE']
 
     for p in w.Win32_Process():
         if p.Name in LABVIEW_CAPTIONS:

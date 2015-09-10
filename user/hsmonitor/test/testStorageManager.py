@@ -5,7 +5,7 @@ from Observer import Observer
 import unittest
 
 
-class Event:
+class Event(object):
     def __init__(self, datetime):
         self.datetime = datetime
 

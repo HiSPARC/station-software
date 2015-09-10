@@ -5,28 +5,42 @@ creates Events from them. The Events are passed on to the StorageManager.
 
 """
 
-from hslog import log
-from CIC import CIC
-from ERR import ERR
-from CFG import CFG
-from CMP import CMP
+import logging
+
+logger = logging.getLogger('hsmonitor.interpreter')
+
+from HiSPARCEvent import HiSPARCEvent
+from HiSPARCError import HiSPARCError
+from HiSPARCConfig import HiSPARCConfig
+from HiSPARCComparator import HiSPARCComparator
+from HiSPARCSingles import HiSPARCSingles
+from HiSPARCSatellites import HiSPARCSatellites
 from WeatherEvent import WeatherEvent
+from WeatherError import WeatherError
+from WeatherConfig import WeatherConfig
+from LightningEvent import LightningEvent
+from LightningError import LightningError
+from LightningConfig import LightningConfig
+from LightningStatus import LightningStatus
+from LightningNoise import LightningNoise
 
 # create a dictionary to store all type_codes of events
-event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP',
-                    '16': 'WTR'}
+event_type_codes = {'1': 'CIC', '2': 'ERR', '3': 'CFG', '4': 'CMP', '5': 'SIN',
+                    '6': 'SAT',
+                    '16': 'WTR', '17': 'WER', '18': 'WCG',
+                    '32': 'LIT', '33': 'LER', '34': 'LCG', '35': 'LST',
+                    '36': 'LNS'}
 
 
-class TriggerRateHolder:
+class TriggerRateHolder(object):
     def __init__(self, triggerRate, date):
         self.triggerRate = triggerRate
         self.date = date
 
 
-class Interpreter:
-    # the instantiation operation
+class Interpreter(object):
+
     def __init__(self, storageManager):
-        # init variables here if needed
         self.storageManager = storageManager
         self.triggerRate = TriggerRateHolder(0, 0)
 
@@ -34,20 +48,39 @@ class Interpreter:
         self.storageManager.openConnection()
 
     def createEvent(self, eventcode, message):
-        # create an event corresponding to the eventcode
+        """Create an event corresponding to the eventcode"""
+
         if eventcode == 'CIC':
-            event = CIC(message)
+            event = HiSPARCEvent(message)
         elif eventcode == 'ERR':
-            event = ERR(message)
+            event = HiSPARCError(message)
         elif eventcode == 'CFG':
-            event = CFG(message)
+            event = HiSPARCConfig(message)
         elif eventcode == 'CMP':
-            event = CMP(message)
+            event = HiSPARCComparator(message)
+        elif eventcode == 'SIN':
+            event = HiSPARCSingles(message)
+        elif eventcode == 'SAT':
+            event = HiSPARCSatellites(message)
         elif eventcode == 'WTR':
             event = WeatherEvent(message)
+        elif eventcode == 'WER':
+            event = WeatherError(message)
+        elif eventcode == 'WCG':
+            event = WeatherConfig(message)
+        elif eventcode == 'LIT':
+            event = LightningEvent(message)
+        elif eventcode == 'LER':
+            event = LightningError(message)
+        elif eventcode == 'LCG':
+            event = LightningConfig(message)
+        elif eventcode == 'LST':
+            event = LightningStatus(message)
+        elif eventcode == 'LNS':
+            event = LightningNoise(message)
         else:
-            log("Interpreter: Unknown message type %s (%d)." %
-                (eventcode, self.type_id), severity=2)
+            logger.warning('Unknown message type %s (%d).' %
+                           (eventcode, message[0]))
             return None
 
         event.uploadCode = eventcode
@@ -68,22 +101,18 @@ class Interpreter:
         can be serialized for transfer via an HTTP POST request.
 
         """
-
         self.eventlist = []
         self.event_ids = []
         self.discard_event_ids = []
         # this variable stores the trigger rate of the recent event
         trigger_rate = TriggerRateHolder(0, 0)
-        log("Interpreter: Parsing %d messages." % len(messages))
+        logger.debug('Parsing %d messages.' % len(messages))
 
         firsttime = True
         for message in messages:
             try:
-                # get the event message code
                 eventcode = event_type_codes['%d' % message[0]]
-                # create an event object
                 event = self.createEvent(eventcode, message)
-                # skip processing event if it is None
                 if event is None:
                     continue
                 # create the event header
@@ -102,15 +131,12 @@ class Interpreter:
                     trigger_rate.date = event.datetime
 
             except Exception, (errormsg):
-                # add parsed event_id into the list of event_ids
                 self.discard_event_ids.append(message[2])
-                log("Interpreter: Event exception (discarding event): %s." %
-                    errormsg, severity=2)
+                logger.error('Event exception (discarding event): %s.' %
+                             errormsg)
             else:
-                # add parsed event into the list of events
                 self.eventlist.append({'header': header,
                                        'datalist': event.data})
-                # add parsed event_id into the list of event_ids
                 self.event_ids.append(message[2])
 
         # set the trigger rate in Storage Manager

@@ -5,9 +5,10 @@ This process creates other objects and threads.
 
 """
 
+import logging
+import logging.handlers
 import sys
 sys.path.append("..")
-from hslog import log, setLogMode, MODE_PRINT
 from EConfigParser import EConfigParser
 import BufferListener
 from Interpreter import Interpreter
@@ -21,21 +22,31 @@ CONFIG_INI_PATH2 = '../../../persistent/configuration/config.ini'
 
 NUMSERVERS = 2  # TODO
 
+logger = logging.getLogger('hsmonitor')
+formatter = logging.Formatter('%(asctime)s %(name)s[%(process)d]'
+                              '.%(funcName)s.%(levelname)s: %(message)s')
 
-class HsMonitor:
+
+class HsMonitor(object):
+
     def __init__(self):
         # setup the log mode
-        setLogMode(MODE_PRINT)
+        file = 'log-testfornagiospushfromhisparc'
+        handler = logging.handlers.TimedRotatingFileHandler(
+            file, when='midnight', backupCount=14)
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(level=logging.DEBUG)
 
         # read the configuration file
         try:
             self.cfg = EConfigParser()
             self.cfg.read([CONFIG_INI_PATH1, CONFIG_INI_PATH2])
         except:
-            log("Cannot open the config file!", severity=2)
+            logger.error("Cannot open the config file!", severity=2)
             return
         else:
-            log("Initilize variables")
+            logger.debug("Initilize variables")
 
             # list of all the threads
             self.hsThreads = []
@@ -59,7 +70,7 @@ class HsMonitor:
         buffLis = BufferListener.BufferListener(bufferdb, interpreter)
 
         if not buffLis:
-            log("Cannot connect to the buffer database!")
+            logger.error("Cannot connect to the buffer database!")
             return None
         # TODO better error handling
 
@@ -116,6 +127,7 @@ def main():
     it = Interpreter(sm)
     checkSched = hsMonitor.createCheckScheduler(it)
     checkSched.run()
+    logging.shutdown()
 
 
 if __name__ == '__main__':

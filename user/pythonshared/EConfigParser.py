@@ -1,18 +1,25 @@
+import logging
 from ConfigParser import ConfigParser
-from hslog import log
+
+logger = logging.getLogger('hsmonitor.econfigparser')
 
 
 class EConfigParser(ConfigParser):
-    # extend the Config parser to make parsing easier
-    def __init__(self):
-        ConfigParser.__init__(self)
+
+    """Extend the Config parser to make parsing easier"""
 
     def ifget(self, section, option, dtype, default):
         if self.has_option(section, option):
-            return dtype(self.get(section, option))
+            try:
+                return dtype(self.get(section, option))
+            except ValueError:
+                logger.warning('Unable to parse option %s.%s, '
+                               'using default: %s' %
+                               (section, option, str(default)))
+                return default
         else:
-            log("ConfigParser: option %s.%s not specified, using default: %s" %
-                (section, option, str(default)))
+            logger.warning('Option %s.%s not specified, using default: %s' %
+                           (section, option, str(default)))
             return default
 
     def ifgetint(self, section, option, default):

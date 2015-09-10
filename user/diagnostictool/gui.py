@@ -51,7 +51,7 @@ class GUI(Tkinter.Frame):
 class MyHandler(logging.Handler):
     def __init__(self, queue):
         self.queue = queue
-        logging.Handler.__init__(self)
+        super(MyHandler, self).__init__()
 
     def emit(self, record):
         queue.put(record.getMessage() + '\n')

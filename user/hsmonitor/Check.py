@@ -1,21 +1,25 @@
 import sys
 import time
+import calendar
+import logging
 from threading import Lock
 
 from Observer import Observer
-from hslog import log
 from NagiosResult import NagiosResult
 from StorageManager import StorageManager
+from EConfigParser import EConfigParser
 
 OK = 0
 WARNING = 1
 CRITICAL = 2
 UNKNOWN = 3
 
-TIME_DIFF_INI = '../../persistent/configuration/HisparcII.ini'
+TIME_DIFF_INI = '../../persistent/configuration/HiSPARC.ini'
+
+logger = logging.getLogger('hsmonitor.check')
 
 
-class Check:
+class Check(object):
     def __init__(self):
         self.nagiosResult = NagiosResult()
         self.nagiosResult.status_code = UNKNOWN
@@ -31,13 +35,13 @@ class Check:
             maxa = float(a[1])
             return (mina, maxa)
         except:
-            log("Check: Wrong arguments given! %s" % (prange,), severity=2)
+            logger.critical('Wrong arguments given! %s' % (prange,))
             sys.exit(CRITICAL)
 
 
 class TriggerRate(Check):
     def __init__(self, interpreter):
-        Check.__init__(self)
+        super(TriggerRate, self).__init__()
         self.nagiosResult.serviceName = "TriggerRate"
         self.interpreter = interpreter
 
@@ -49,8 +53,8 @@ class TriggerRate(Check):
                 critRange = config['triggerrate_crit']
                 crit = self.parse_range(critRange)
             except:
-                log("Check: Unable to read config.ini in %s" %
-                    self.nagiosResult.serviceName, severity=2)
+                logger.critical('Unable to read config.ini in %s' %
+                                self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
@@ -68,30 +72,19 @@ class TriggerRate(Check):
                 self.nagiosResult.status_code = OK
 
             if self.lastupdate:
-                t = time.strptime(str(self.lastupdate), '%Y-%m-%d %H:%M:%S')
-
                 # Timestamp is in GPS time.  Naively treat it as a local
                 # timestamp, then subtract the LabVIEW-determined offset
-                # between pc clock time (local time) and GPS time.
+                # between pc clock time (UTC time) and GPS time.
 
                 # Read offset from file
-                with open(TIME_DIFF_INI) as f:
-                    d = {}
-                    for line in f:
-                        key, value = line.split('=')
-                        d[key] = value
+                dt_config = EConfigParser()
+                dt_config.read(TIME_DIFF_INI)
+                offset = dt_config.ifgetint('HiSPARC', 'time_difference', 1e6)
 
                 # Naively calculate timestamp and adjust for pc / gps offset
-                t = time.mktime(t)
-                try:
-                    t += int(d['time_difference'])
-                except TypeError:
-                    # Offset is not yet determined
-                    pass
-                except ValueError:
-                    # Offset may be to large
-                    pass
-                # Calculate time difference between trigger and 'now'
+                t = calendar.timegm(self.lastupdate.timetuple())
+                t += offset
+                # Calculate time difference between UTC trigger and 'UTC now'
                 dt = time.time() - t
             else:
                 # Never updated, make dt very large
@@ -115,7 +108,7 @@ class TriggerRate(Check):
 
 class StorageSize(Check):
     def __init__(self, storageManager):
-        Check.__init__(self)
+        super(StorageSize, self).__init__()
         self.nagiosResult.serviceName = "StorageSize"
         self.storageManager = storageManager
 
@@ -136,8 +129,8 @@ class StorageSize(Check):
                 critRange = config['storagesize_crit']
                 crit = self.parse_range(critRange)
             except:
-                log("Check: Unable to read config.ini in %s" %
-                    self.nagiosResult.serviceName, severity=2)
+                logger.critical('Unable to read config.ini %s' %
+                                self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 
             wmin, wmax = warn
@@ -163,7 +156,7 @@ class StorageSize(Check):
 
 class EventRate(Check, Observer):
     def __init__(self):
-        Check.__init__(self)
+        super(EventRate, self).__init__()
         self.nagiosResult.serviceName = "EventRate"
         self.eventCount = 0
         self.oldCountTime = 0
@@ -204,7 +197,7 @@ class EventRate(Check, Observer):
 
 class StorageGrowth(Check):
     def __init__(self, storageManager):
-        Check.__init__(self)
+        super(StorageGrowth, self).__init__()
         self.nagiosResult.serviceName = "StorageGrowth"
         self.newStorageSize = 0
         self.oldStorageSize = 0
@@ -218,8 +211,8 @@ class StorageGrowth(Check):
                 warn = float(config['storagegrowth_warn'])
                 crit = float(config['storagegrowth_crit'])
             except:
-                log("Check: Unable to read config.ini in %s" %
-                    self.nagiosResult.serviceName, severity=2)
+                logger.critical('Unable to read config.ini in %s' %
+                                self.nagiosResult.serviceName)
                 self.nagiosResult.status_code = CRITICAL
 
             self.newStorageSize = StorageManager.storagesize

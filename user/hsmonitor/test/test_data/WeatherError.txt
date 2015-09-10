@@ -1,0 +1,1 @@
+2015-06-12 12:12:20	  Start HiSPARC weather station DAQ.

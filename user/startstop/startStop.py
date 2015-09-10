@@ -3,9 +3,11 @@
 import wmi
 import win32con
 import win32gui
+import logging
 
-from hslog import log
 from ctypes import c_ulong, byref, windll
+
+logger = logging.getLogger('startstop.startstop')
 
 RUNNING = 0
 STOPPED = 1
@@ -15,6 +17,7 @@ NOT_INSTALLED = 8
 
 
 def status(result):
+    """Translate result code to a readable string"""
 
     if result == RUNNING:
         status = "running"
@@ -32,7 +35,10 @@ def status(result):
     return status
 
 
-class StartStop:
+class StartStop(object):
+
+    """A class to start and stop programs on Windows"""
+
     exeName = ''
     ShowWindow = win32con.SW_SHOWMINIMIZED
     currentDirectory = ''
@@ -72,11 +78,10 @@ class StartStop:
         service = self.wmiObj.Win32_Service(Name=self.serviceName)
         if service != []:
             res = service[0].StartService()
-            if res[0] == 0 or res[0] == 10:
+            if res[0] in [0, 10]:
                 result = RUNNING
-                return result
             else:
-                raise Exception(" error code %d" % res)
+                raise Exception("Error code %d" % res)
         else:
             result = EXCEPTION
         return result
@@ -95,7 +100,7 @@ class StartStop:
         process = self.wmiObj.Win32_Process(name=self.exeName)
         if process != []:
             if self.command != '':
-                for i in range(1, 3):
+                for _ in range(1, 3):
                     if result == RUNNING:
                         result = self.askStopProcess()
                         return result  # ADL: Should this not be behind if?
@@ -112,24 +117,23 @@ class StartStop:
         unused_pid, res = self.wmiObj.Win32_Process.Create(
             CommandLine=self.command, CurrentDirectory=self.currentDirectory,
             ProcessStartupInformation=startup)
-        if res == 0 or res == 10:
-            return STOPPED
+        if res in [0, 10]:
+            result = STOPPED
         else:
-            return RUNNING
+            result = RUNNING
+        return result
 
     def stopService(self):
         result = RUNNING
         service = self.wmiObj.Win32_Service(Name=self.serviceName)
         if service != []:
             res = service[0].StopService()
-            if res[0] == 0 or res[0] == 10 or res[0] == 5:
+            if res[0] in [0, 5, 10]:
                 result = STOPPED
-                return result
             else:
-                raise Exception(": error code %d" % res)
+                raise Exception("Error code %d" % res)
         else:
             result = EXCEPTION
-
         return result
 
     def probeProcess(self):
@@ -169,7 +173,7 @@ class CMDStartStop(StartStop):
         return result
 
     def stopProcess(self):
-        print "finding window '%s'.." % self.title
+        logger.debug("Finding window '%s'.." % self.title)
         w = win32gui.FindWindow(None, self.title)
         if w != 0:
             result = RUNNING
@@ -181,17 +185,17 @@ class CMDStartStop(StartStop):
 
             phandle = windll.kernel32.OpenProcess(2035711, 0, pid)
 
-            log("stopping process with pid %d and handle %d..." %
-                (pid, phandle))
+            logger.debug("Stopping process with pid %d and handle %d...",
+                         pid, phandle)
             r = windll.kernel32.TerminateProcess(phandle, 0)
             if r:
-                log("success")
+                logger.debug("success")
                 result = STOPPED
             else:
-                log("major fail: r = %d" % r)
+                logger.debug("major fail: r = %d" % r)
                 result = EXCEPTION
-            # for process in self.wmiObj.Win32_Process(name = self.exeName):
-            #     print 'processId: %d' % process.ProcessId
+            # for process in self.wmiObj.Win32_Process(name=self.exeName):
+            #     logger.debug('processId: %d' % process.ProcessId)
             #     if process.Terminate() == 0:
             #         result = STOPPED
         else:

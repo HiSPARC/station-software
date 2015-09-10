@@ -1,14 +1,16 @@
 import time
 import threading
+import logging
 
-from hslog import log
 from Check import EventRate, StorageGrowth, StorageSize, TriggerRate
 from NagiosPush import NagiosPush
 from StorageManager import StorageManager
 from UserExceptions import ThreadCrashError
 
+logger = logging.getLogger('hsmonitor.checkscheduler')
 
-class ScheduledJob:
+
+class ScheduledJob(object):
     def __init__(self, job, jobfunc, interval, args):
         self.job = job
         self.jobfunc = jobfunc
@@ -17,7 +19,7 @@ class ScheduledJob:
         self.last_run = 0
 
 
-class Scheduler:
+class Scheduler(object):
     def __init__(self, status):
         self.jobs = {}
         self.jobcounter = 0
@@ -55,12 +57,12 @@ class Scheduler:
                     nagiosPush.sendToNagios(returnValues)
 
                 except StopIteration:
-                    log("CheckScheduler: JOB STOPPED!", severity=2)
+                    logger.error('Job stopped!')
                     toremove.append(tid)
 
                 except Exception, msg:
-                    log("CheckScheduler: Uncatched exception in job: %s. "
-                        "Restarting..." % msg, severity=2)
+                    logger.exception('Uncatched exception in job: %s. ' % msg)
+                    logger.error('Restarting...')
                     toremove.append(tid)
                     tostart.append(tid)
 
@@ -80,20 +82,17 @@ class Scheduler:
 
 class CheckScheduler(threading.Thread):
     def __init__(self, config, interpreter):
-        # invoke constructor of parent class (threading)
-        threading.Thread.__init__(self)
+        super(CheckScheduler, self).__init__(name='CheckScheduler')
         self.stop_event = threading.Event()
 
         self.status = None
         self.sched = Scheduler(self.status)
         self.dicConfig = config
 
-        # create a nagios push object
         self.nagiosPush = NagiosPush(config)
         self.storageManager = StorageManager()
         self.interpreter = interpreter
 
-        # Event rate:
         self.eventRate = EventRate()
 
     def getEventRate(self):
@@ -118,7 +117,7 @@ class CheckScheduler(threading.Thread):
     # The threading.Thread.start() calls threading.Thread.run(),
     # which is always overridden.
     def run(self):
-        log("CheckScheduler: Thread started!", severity=2)
+        logger.debug('Thread started!')
         self.storageManager.openConnection()
 
         # Trigger rate:
@@ -151,4 +150,4 @@ class CheckScheduler(threading.Thread):
                 break
             except:
                 pass
-        log("CheckScheduler: Thread stopped!", severity=2)
+        logger.warning('Thread stopped!')

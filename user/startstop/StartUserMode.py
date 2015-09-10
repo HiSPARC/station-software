@@ -5,44 +5,43 @@ LabVIEW Detector, LabVIEW Weather, MySQL, HiSPARC Monitor, HiSPARC Updater
 
 """
 
-import sys
 import time
 import os
 import glob
 import win32con
 import ConfigParser
+import logging
 
+import startstop_logger
 from startStop import StartStop, CMDStartStop, status, RUNNING, DISABLED
-from hslog import log, setLogMode, MODE_BOTH
+
+logger = logging.getLogger('startstop.startuser')
 
 
 def start():
-    setLogMode(MODE_BOTH)
-    log("\nStarting User-Mode applications...")
+    logger.info("Starting User-Mode applications...")
 
     HS_ROOT = "%s" % os.getenv("HISPARC_ROOT")
     if HS_ROOT == "":
-        log("FATAL: environment variable HISPARC_ROOT not set!")
+        logger.critical("FATAL: environment variable HISPARC_ROOT not set!")
         return
 
-    configFile = "%s/persistent/configuration/config.ini" % HS_ROOT
+    configFile = os.path.join(HS_ROOT, "persistent/configuration/config.ini")
     config = ConfigParser.ConfigParser()
     config.read(configFile)
 
     try:
-        # start MySQL
-        log("Starting MySQL...")
-        datapath = "%s/persistent/data/mysql" % HS_ROOT
+        logger.info("Starting MySQL...")
+        datapath = os.path.join(HS_ROOT, "persistent/data/mysql")
         binlogs = glob.glob(os.path.join(datapath, "mysql-bin.*"))
         if binlogs:
-            log("Removing stale MySQL binary logs...")
+            logger.info("Removing stale MySQL binary logs...")
             for f in binlogs:
                 os.remove(f)
 
         binary = "mysqld.exe"
-        exeBase = "%s/user/mysql/bin" % HS_ROOT
-        program = "\"%(exec)s/%(binary)s\"" % {"exec": exeBase,
-                                               "binary": binary}
+        # Were the extra quotes in the path string required?
+        program = os.path.join(HS_ROOT, "user/mysql/bin", binary)
 
         handler = StartStop()
         handler.exeName = binary
@@ -56,82 +55,76 @@ def start():
             time.sleep(5)
             # check run-status again
             res = handler.probeProcess()
-        log("Status: " + status(res))
-
+        logger.info("Status: %s", status(res))
     except:
-        log("An exception was generated while starting MySQL: " +
-            str(sys.exc_info()[1]))
+        logger.exception("An exception was generated while starting MySQL")
 
     try:
-        # start LabVIEW detector
-        log("Starting LabVIEW detector...")
+        logger.info("Starting HiSPARC Detector...")
         if config.getboolean("Detector", "Enabled"):
             handler = StartStop()
-            handler.exeName = "hisparcdaq.exe"
-            handler.currentDirectory = "%s/user/hisparcdaq" % HS_ROOT
-            handler.command = "%s/user/hisparcdaq/hisparcdaq.exe" % HS_ROOT
+            handler.exeName = "HiSPARC DAQ.exe"
+            handler.currentDirectory = os.path.join(HS_ROOT, "user/hisparcdaq")
+            handler.command = os.path.join(HS_ROOT,
+                                           "user/hisparcdaq/HiSPARC DAQ.exe")
 
             res = handler.startProcess()
         else:
             res = DISABLED
-        log("Status: " + status(res))
-
+        logger.info("Status: %s", status(res))
     except:
-        log("An exception was generated while starting LabVIEW detector: " +
-            str(sys.exc_info()[1]))
+        logger.exception("An exception was generated while starting "
+                         "HiSPARC Detector")
 
     try:
-        # start LabVIEW weather
-        log("Starting LabVIEW weather...")
+        logger.info("Starting HiSPARC Weather...")
         if config.getboolean("Weather", "Enabled"):
             handler = StartStop()
             handler.exeName = "HiSPARC Weather Station.exe"
-            handler.currentDirectory = "%s/user/hisparcweather" % HS_ROOT
-            handler.command = ("%s/user/hisparcweather/"
-                               "HiSPARC Weather Station.exe" % HS_ROOT)
-
-            res = handler.startProcess()
+            handler.currentDirectory = os.path.join(HS_ROOT,
+                                                    "user/hisparcweather")
+            handler.command = os.path.join(HS_ROOT, "user/hisparcweather",
+                                           "HiSPARC Weather Station.exe")
+            result = handler.startProcess()
         else:
-            res = DISABLED
-        log("Status: " + status(res))
-
+            result = DISABLED
+        logger.info("Status: %s", status(result))
     except:
-        log("An exception was generated while starting LabVIEW weather: " +
-            str(sys.exc_info()[1]))
+        logger.exception("An exception was generated while starting "
+                         "HiSPARC Weather")
 
         # Introduce a 20-second pause to let MySQL start completely
         time.sleep(20)
 
     try:
-        # start HSMonitor
-        log("Starting HSMonitor...")
+        logger.info("Starting HiSPARC Monitor...")
         handler = CMDStartStop()
         handler.exeName = "python.exe"
-        handler.title = "HISPARC MONITOR: hsmonitor"
-        handler.currentDirectory = "%s/user/hsmonitor" % HS_ROOT
-        handler.command = "%s/user/python/python.exe HsMonitor.py" % HS_ROOT
-
-        res = handler.startProcess()
-        log("Status: " + status(res))
-
+        handler.title = "HiSPARC Monitor"
+        handler.currentDirectory = os.path.join(HS_ROOT, "user/hsmonitor")
+        handler.command = ("%s/user/startstop/runmanually.bat "
+                           r"\user\hsmonitor HsMonitor.py" % HS_ROOT)
+        result = handler.startProcess()
+        logger.info("Status: %s", status(result))
     except:
-        log("An exception was generated while starting HSMonitor: " +
-            str(sys.exc_info()[1]))
+        logger.exception("An exception was generated while starting "
+                         "HiSPARC Monitor")
 
     try:
-        # start updater
-        log("Starting Updater...")
+        logger.info("Starting HiSPARC Updater...")
         handler = CMDStartStop()
         handler.exeName = "python.exe"
-        handler.title = "HISPARC Updater: updater"
-        handler.currentDirectory = "%s/user/updater" % HS_ROOT
-        handler.command = "%s/user/python/python.exe Update.py" % HS_ROOT
-
-        res = handler.startProcess()
-        log("Status: " + status(res))
-
+        handler.title = "HiSPARC Updater"
+        handler.currentDirectory = os.path.join(HS_ROOT, "user/updater")
+        handler.command = ("%s/user/startstop/runmanually.bat "
+                           r"\user\updater Update.py" % HS_ROOT)
+        result = handler.startProcess()
+        logger.info("Status: %s", status(result))
     except:
-        log("An exception was generated while starting the Updater: " +
-            str(sys.exc_info()[1]))
+        logger.exception("An exception was generated while starting the "
+                         "HiSPARC Updater")
 
-start()
+
+if __name__ == "__main__":
+    startstop_logger.setup()
+    start()
