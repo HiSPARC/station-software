@@ -1,4 +1,4 @@
-.PHONY: gh-pages
+.PHONY: gh-pages test
 
 gh-pages:
 ifeq ($(strip $(shell git status --porcelain | wc -l)), 0)
@@ -27,3 +27,9 @@ ifeq ($(strip $(shell git status --porcelain | wc -l)), 0)
 else
 	$(error Working tree is not clean, please commit all changes.)
 endif
+
+test:
+	python -m unittest discover -s user/hsmonitor -p test_*.py
+	flake8 --exit-zero --exclude=user/python,user/mysql,doc/,doc-dev/,portalocker.py,cloghandler.py .
+	sphinx-build -anW doc doc/_build/html
+	sphinx-build -anW doc-dev doc-dev/_build/html

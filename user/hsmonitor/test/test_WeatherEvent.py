@@ -14,7 +14,6 @@ class TestHiSPARCEvent(unittest.TestCase):
         weatherevent = WeatherEvent([16, event])
         weatherevent.uploadCode = 'WTR'
         eventdata = weatherevent.parseMessage()
-        print eventdata
 
 if __name__ == '__main__':
     unittest.main()
