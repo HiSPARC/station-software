@@ -99,9 +99,11 @@ class HiSPARCConfig(BaseHiSPARCEvent):
             self.cfg_delay_screen, self.cfg_delay_check, \
                 self.cfg_delay_error = self.unpackSeqMessage('>3d')
 
-            self.cfg_mas_ch1_thres_low, self.cfg_mas_ch1_thres_high, \
-                self.cfg_mas_ch2_thres_low, self.cfg_mas_ch2_thres_high, \
-                self.cfg_mas_ch1_inttime, self.cfg_mas_ch2_inttime, \
+            mas_ch1_thres_low_mv, mas_ch1_thres_high_mv, \
+                mas_ch2_thres_low_mv, mas_ch2_thres_high_mv = \
+                self.unpackSeqMessage('>4d')
+
+            self.cfg_mas_ch1_inttime, self.cfg_mas_ch2_inttime, \
                 self.cfg_mas_ch1_voltage, self.cfg_mas_ch2_voltage, \
                 self.cfg_mas_ch1_current, self.cfg_mas_ch2_current, \
                 self.cfg_mas_comp_thres_low, self.cfg_mas_comp_thres_high, \
@@ -115,11 +117,13 @@ class HiSPARCConfig(BaseHiSPARCEvent):
                 self.cfg_mas_ch1_offset_pos, self.cfg_mas_ch1_offset_neg, \
                 self.cfg_mas_ch2_offset_pos, self.cfg_mas_ch2_offset_neg, \
                 self.cfg_mas_internal_voltage, self.cfg_mas_common_offset = \
-                self.unpackSeqMessage('>13dB8d8B2B')
+                self.unpackSeqMessage('>9dB8d8B2B')
 
-            self.cfg_slv_ch1_thres_low, self.cfg_slv_ch1_thres_high, \
-                self.cfg_slv_ch2_thres_low, self.cfg_slv_ch2_thres_high, \
-                self.cfg_slv_ch1_inttime, self.cfg_slv_ch2_inttime, \
+            slv_ch1_thres_low_mv, slv_ch1_thres_high_mv, \
+                slv_ch2_thres_low_mv, slv_ch2_thres_high_mv = \
+                self.unpackSeqMessage('>4d')
+
+            self.cfg_slv_ch1_inttime, self.cfg_slv_ch2_inttime, \
                 self.cfg_slv_ch1_voltage, self.cfg_slv_ch2_voltage, \
                 self.cfg_slv_ch1_current, self.cfg_slv_ch2_current, \
                 self.cfg_slv_comp_thres_low, self.cfg_slv_comp_thres_high, \
@@ -133,4 +137,20 @@ class HiSPARCConfig(BaseHiSPARCEvent):
                 self.cfg_slv_ch1_offset_pos, self.cfg_slv_ch1_offset_neg, \
                 self.cfg_slv_ch2_offset_pos, self.cfg_slv_ch2_offset_neg, \
                 self.cfg_slv_internal_voltage, self.cfg_slv_common_offset = \
-                self.unpackSeqMessage('>13dB8d8B2B')
+                self.unpackSeqMessage('>9dB8d8B2B')
+
+            self.cfg_mas_ch1_thres_low, self.cfg_mas_ch1_thres_high, \
+                self.cfg_mas_ch2_thres_low, self.cfg_mas_ch2_thres_high, \
+                self.cfg_slv_ch1_thres_low, self.cfg_slv_ch1_thres_high, \
+                self.cfg_slv_ch2_thres_low, self.cfg_slv_ch2_thres_high, = \
+                self.threshold_mv_to_absolute_adc(
+                    mv_to_adc, adc_baseline,
+                    [mas_ch1_thres_low_mv, mas_ch1_thres_high_mv,
+                     mas_ch2_thres_low_mv, mas_ch2_thres_high_mv,
+                     slv_ch1_thres_low_mv, slv_ch1_thres_high_mv,
+                     slv_ch2_thres_low_mv, slv_ch2_thres_high_mv])
+
+    @staticmethod
+    def threshold_mv_to_absolute_adc(mv_to_adc, adc_baseline, mv_thresholds):
+        return [mv_threshold * mv_to_adc + adc_baseline
+                for mv_threshold in mv_thresholds]
