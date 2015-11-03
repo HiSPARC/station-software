@@ -27,5 +27,4 @@
 !define REG_STATION_NUMBER          "StationNumber"
 !define REG_HAS_HISPARC             "HasHiSPARC"
 !define REG_HAS_WEATHER             "HasWeather"
-!define REG_HAS_MAGNETIC            "HasMagnetic"
 !define REG_HAS_LIGHTNING           "HasLightning"

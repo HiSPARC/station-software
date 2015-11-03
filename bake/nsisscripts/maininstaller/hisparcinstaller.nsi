@@ -141,7 +141,6 @@ Section -WriteConfigFile
   # Connected detectors/sensors
   WriteINIStr $ConfigFile Detector      Enabled     $HasHiSPARC
   WriteINIStr $ConfigFile Weather       Enabled     $HasWeatherStation
-  WriteINIStr $ConfigFile EarthMagnetic Enabled     $HasEarthMagnetic
   WriteINIStr $ConfigFile Lightning     Enabled     $HasLightning
 SectionEnd
 
@@ -162,7 +161,6 @@ Section -WriteRegKeys
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_STATION_NUMBER}  $StationNumber
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_HISPARC}     $HasHiSPARC
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_WEATHER}     $HasWeatherStation
-  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_MAGNETIC}    $HasEarthMagnetic
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_LIGHTNING}   $HasLightning
   # HiSPARC environment variable
   WriteRegStr HKLM "${ENVIRONMENT_KEY}" ${HISPARC_ROOT}    $HisparcDir

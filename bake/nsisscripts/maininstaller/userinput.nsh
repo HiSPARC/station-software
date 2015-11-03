@@ -60,8 +60,7 @@ Function userinput3
     ${If} $0 == "success"
         ReadINIStr $HasHiSPARC        "$PLUGINSDIR\userinput3.ini" "Field 2" "State"
         ReadINIStr $HasWeatherStation "$PLUGINSDIR\userinput3.ini" "Field 3" "State"
-        ReadINIStr $HasEarthMagnetic  "$PLUGINSDIR\userinput3.ini" "Field 4" "State"
-        ReadINIStr $HasLightning      "$PLUGINSDIR\userinput3.ini" "Field 5" "State"
+        ReadINIStr $HasLightning      "$PLUGINSDIR\userinput3.ini" "Field 4" "State"
     ${EndIf}
 FunctionEnd
 
