@@ -7,7 +7,6 @@ Var StationNumber
 Var StationPassword
 Var HasHiSPARC
 Var HasWeatherStation
-Var HasEarthMagnetic
 Var HasLightning
 Var CertZip
 Var LDBHOST
