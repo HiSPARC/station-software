@@ -1,8 +1,0 @@
-[Volume Id]
-DistributionGUID={D04F147C-A269-4785-8EDC-4C32330D0125}
-DistPackageGUID={B666143D-5AEB-44AB-B759-A37661F347B2}
-DistributionVersion=8.2.1
-DistributionLanguage=0009,0012,0007,0017,0018,2052
-Volume=1
-ExePath=setup.exe
-UpdateInfoFile=Bin\updateInfo.xml

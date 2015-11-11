@@ -6,6 +6,8 @@
 #             Aug 2012; Uninstaller cleaned and checked, labels renamed
 #             Jan 2013; Release number part of version
 #             Aug 2013; 64-bit architecture support
+#             Sep 2015; DAQ and Weather executables with spaces, :-(
+#             Sep 2015; HiSPARC moved from $INSTDIR\hisparc to $INSTDIR
 #
 
 !include "FileFunc.nsh"
@@ -25,7 +27,7 @@ Name        "${HISPARC_NAME} ${HISPARC_VERSION}"
 OutFile     "${HISPARC_NSIS_RELEASE_DIR}\hisparcInstaller_v${HISPARC_VERSION}.exe"
 InstallDir  "$PROGRAMFILES\${HISPARC_NAME}"
 
-LangString  lsWrongVersion ${LANG_ENGLISH} "HiSPARC runs only on Windows XP or 7."
+LangString  lsWrongVersion ${LANG_ENGLISH} "HiSPARC runs only on Windows XP or higher."
 LangString  lsNoAdmin      ${LANG_ENGLISH} "You have no administrator rights."
 
 ShowInstDetails   show
@@ -96,7 +98,7 @@ FunctionEnd
 
 Section -SetMainVariables
   DetailPrint "SetMainVariables"
-  StrCpy $HisparcDir "$INSTDIR\hisparc"
+  StrCpy $HisparcDir "$INSTDIR"
   StrCpy $ConfigFile "$HisparcDir\persistent\configuration\config.ini"
   CreateDirectory    "$HisparcDir"
   DetailPrint        "HisparcDir: $HisparcDir"

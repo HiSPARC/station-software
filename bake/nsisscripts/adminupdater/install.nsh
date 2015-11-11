@@ -7,6 +7,7 @@
 #   Aug 2013: - 64-bit: only OpenVPN and TightVNC have a true 64-bit executable
 #               Other application still use the 32-bit registry.
 #               OpenVPN, due to a bug in version 2.2.2, as well.
+#   Oct 2015: - only 1 LabView RTE, version 2014 (RH)
 #
 
 #
@@ -32,9 +33,7 @@ Section -CheckExecutables
   Call fileExists
   StrCpy $FileName "$AdminDir\odbcconnector\Install_HiSPARC.bat"
   Call fileExists
-  StrCpy $FileName "$AdminDir\niruntimeinstaller\setup.exe"
-  Call fileExists
-  StrCpy $FileName "$AdminDir\nirte2012\setup.exe"
+  StrCpy $FileName "$AdminDir\nirte2014\setup.exe"
   Call fileExists
   StrCpy $FileName "$AdminDir\ftdi_drivers\dpinst.exe"
   Call fileExists
@@ -171,20 +170,14 @@ SectionEnd
 
 #
 # Install LabVIEW Run-Time-Engine
-# Two versions are installed: 8.2.1 and 2012
+# ONE version is installed: 2014
+# NB: Return code 3010 (0xBC2) means ERROR_SUCCESS_REBOOT_REQUIRED
 #
 Section -LabviewRuntimeSetup
   DetailPrint "admin-LabviewRuntimeSetup"
   SetRegView 32
-  ExecWait '"$AdminDir\niruntimeinstaller\setup.exe" /AcceptLicenses yes /r:n /q' $Result
-  StrCpy $Message "LabVIEW RTE 8.2.1 setup: $Result"
-  DetailPrint $Message
-  ${If} $Result != 3010
-  ${AndIf} $Result != 0
-    MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
-  ${Endif}
-  ExecWait '"$AdminDir\nirte2012\setup.exe" /AcceptLicenses yes /r:n /q' $Result
-  StrCpy $Message "LabVIEW RTE 2012 setup: $Result"
+  ExecWait '"$AdminDir\nirte2014\setup.exe" /AcceptLicenses yes /r:n /q' $Result
+  StrCpy $Message "LabVIEW RTE 2014 setup: $Result"
   DetailPrint $Message
   ${If} $Result != 3010
   ${AndIf} $Result != 0
