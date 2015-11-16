@@ -26,7 +26,8 @@
 
   set HISPARC_RUNMANUAL_PATH=%~1
   set HISPARC_RUNMANUAL_CMD=%~2
-  
+  set HISPARC_RUNMANUAL_NAME=%~3
+
   :: call setenv to set the environment variables and path
   call "%~dp0setenv.bat"
   
@@ -40,19 +41,28 @@
   )
   
   :: actually execute application
-  %HISPARC_RUNMANUAL_DO%
+  if not defined %HISPARC_RUNMANUAL_NAME% (
+    %HISPARC_RUNMANUAL_DO%
+  ) else (
+    :: Start some programs in a new process to allow them to be terminated
+    start %HISPARC_RUNMANUAL_NAME% %HISPARC_RUNMANUAL_DO%
+  )
 
   :: switch back to old drive
   popd
   goto :EOF
 
+
 :python
+
   shift /1
   shift /1
   set HISPARC_RUNMANUAL_DO=python.exe %HISPARC_RUNMANUAL_CMD% %1 %2 %3 %4 %5 %6 %7 %8 %9 
   goto :EOF
 
+
 :exe
+
   shift /1
   shift /1
   set HISPARC_RUNMANUAL_DO=%HISPARC_RUNMANUAL_CMD% %1 %2 %3 %4 %5 %6 %7 %8 %9

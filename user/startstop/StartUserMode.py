@@ -99,10 +99,11 @@ def start():
         logger.info("Starting HiSPARC Monitor...")
         handler = CMDStartStop()
         handler.exeName = "python.exe"
-        handler.title = "HiSPARC Monitor"
+        handler.title = "Start HiSPARC Monitor"
         handler.currentDirectory = os.path.join(HS_ROOT, "user/hsmonitor")
         handler.command = ("%s/user/startstop/runmanually.bat "
-                           r"\user\hsmonitor HsMonitor.py" % HS_ROOT)
+                           r"\user\hsmonitor HsMonitor.py '%s'" %
+                           (HS_ROOT, "HiSPARC Monitor"))
         result = handler.startProcess()
         logger.info("Status: %s", status(result))
     except:
@@ -113,10 +114,11 @@ def start():
         logger.info("Starting HiSPARC Updater...")
         handler = CMDStartStop()
         handler.exeName = "python.exe"
-        handler.title = "HiSPARC Updater"
+        handler.title = "Start HiSPARC Updater"
         handler.currentDirectory = os.path.join(HS_ROOT, "user/updater")
         handler.command = ("%s/user/startstop/runmanually.bat "
-                           r"\user\updater Update.py" % HS_ROOT)
+                           r"\user\updater Update.py '%s'" %
+                           (HS_ROOT, "HiSPARC Updater"))
         result = handler.startProcess()
         logger.info("Status: %s", status(result))
     except:
