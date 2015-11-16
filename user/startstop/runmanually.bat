@@ -16,10 +16,14 @@
 :: program.
 ::
 :: invoke as:
-::   @call "%~dp0..\startstop\runmanually.bat" PATH COMMAND [args]
+::   @call "%~dp0..\startstop\runmanually.bat" NAME PATH COMMAND [args]
 ::
 :: example:
-::   @call "%~dp0..\startstop\runmanually.bat" \user\hsmonitor hsmonitor.py
+::   @call "%~dp0..\startstop\runmanually.bat" "HiSPARC Monitor" \user\hsmonitor hsmonitor.py
+::
+:: set the NAME to 0 to execute the command in the same window
+:: example:
+::   @call "%~dp0..\startstop\runmanually.bat" 0 \user\diagnostictool gui.py
 ::
 
 :main
@@ -41,10 +45,10 @@
   )
   
   :: actually execute application
-  if not defined %HISPARC_RUNMANUAL_NAME% (
+  :: Start programs in a new process to allow them to be terminated
+  if "%HISPARC_RUNMANUAL_NAME%" == "0" (
     %HISPARC_RUNMANUAL_DO%
   ) else (
-    :: Start some programs in a new process to allow them to be terminated
     start %HISPARC_RUNMANUAL_NAME% %HISPARC_RUNMANUAL_DO%
   )
 
@@ -57,12 +61,14 @@
 
   shift /1
   shift /1
+  shift /1
   set HISPARC_RUNMANUAL_DO=python.exe %HISPARC_RUNMANUAL_CMD% %1 %2 %3 %4 %5 %6 %7 %8 %9 
   goto :EOF
 
 
 :exe
 
+  shift /1
   shift /1
   shift /1
   set HISPARC_RUNMANUAL_DO=%HISPARC_RUNMANUAL_CMD% %1 %2 %3 %4 %5 %6 %7 %8 %9

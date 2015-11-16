@@ -95,15 +95,17 @@ def start():
     # A 10-second pause to let MySQL start completely
     time.sleep(10)
 
+    cmd = '%s/user/startstop/runmanually.bat "{name}" "{path}" {cmd}' % HS_ROOT
+
     try:
         logger.info("Starting HiSPARC Monitor...")
         handler = CMDStartStop()
         handler.exeName = "python.exe"
         handler.title = "Start HiSPARC Monitor"
         handler.currentDirectory = os.path.join(HS_ROOT, "user/hsmonitor")
-        handler.command = ("%s/user/startstop/runmanually.bat "
-                           r"\user\hsmonitor HsMonitor.py '%s'" %
-                           (HS_ROOT, "HiSPARC Monitor"))
+        handler.command = cmd.format(name="HiSPARC Monitor",
+                                     path=r"\user\hsmonitor",
+                                     cmd="HsMonitor.py")
         result = handler.startProcess()
         logger.info("Status: %s", status(result))
     except:
@@ -116,9 +118,9 @@ def start():
         handler.exeName = "python.exe"
         handler.title = "Start HiSPARC Updater"
         handler.currentDirectory = os.path.join(HS_ROOT, "user/updater")
-        handler.command = ("%s/user/startstop/runmanually.bat "
-                           r"\user\updater Update.py '%s'" %
-                           (HS_ROOT, "HiSPARC Updater"))
+        handler.command = cmd.format(name="HiSPARC Updater",
+                                     path=r"\user\updater",
+                                     cmd="Update.py")
         result = handler.startProcess()
         logger.info("Status: %s", status(result))
     except:
