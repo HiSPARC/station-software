@@ -28,9 +28,9 @@
 
 :main
 
-  set HISPARC_RUNMANUAL_PATH=%~1
-  set HISPARC_RUNMANUAL_CMD=%~2
-  set HISPARC_RUNMANUAL_NAME=%~3
+  set HISPARC_RUNMANUAL_NAME=%~1
+  set HISPARC_RUNMANUAL_PATH=%~2
+  set HISPARC_RUNMANUAL_CMD=%~3
 
   :: call setenv to set the environment variables and path
   call "%~dp0setenv.bat"
@@ -49,7 +49,7 @@
   if "%HISPARC_RUNMANUAL_NAME%" == "0" (
     %HISPARC_RUNMANUAL_DO%
   ) else (
-    start %HISPARC_RUNMANUAL_NAME% %HISPARC_RUNMANUAL_DO%
+    start "%HISPARC_RUNMANUAL_NAME%" %HISPARC_RUNMANUAL_DO%
   )
 
   :: switch back to old drive
