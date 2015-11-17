@@ -1,2 +1,1 @@
-@title HiSPARC Monitor
-@call "%~dp0\..\startstop\runmanually.bat" \user\hsmonitor HsMonitor.py
+@call "%~dp0\..\startstop\runmanually.bat" "HiSPARC Monitor" \user\hsmonitor HsMonitor.py
