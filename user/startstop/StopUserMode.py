@@ -23,7 +23,7 @@ def stop_executable(name, process_name, cmd=False):
     """
     try:
         logger.info('Stopping %s...', name)
-        if cmd:
+        if not cmd:
             handler = StartStop()
             handler.exeName = process_name
         else:
