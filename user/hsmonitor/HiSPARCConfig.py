@@ -139,6 +139,19 @@ class HiSPARCConfig(BaseHiSPARCEvent):
                 self.cfg_slv_internal_voltage, self.cfg_slv_common_offset = \
                 self.unpackSeqMessage('>9dB8d8B2B')
 
+            if not (mv_to_adc and adc_baseline):
+                # Extract first number from Master string
+                mas_serial = (int(s) for s in self.cfg_mas_version.split()
+                              if s.isdigit()).next()
+                if mas_serial < 300:
+                    # HiSPARC II
+                    mv_to_adc = 1 / -0.57
+                    adc_baseline = 200
+                else:
+                    # HiSPARC III
+                    mv_to_adc = 1 / -0.584
+                    adc_baseline = 30
+
             self.cfg_mas_ch1_thres_low, self.cfg_mas_ch1_thres_high, \
                 self.cfg_mas_ch2_thres_low, self.cfg_mas_ch2_thres_high, \
                 self.cfg_slv_ch1_thres_low, self.cfg_slv_ch1_thres_high, \
@@ -152,5 +165,5 @@ class HiSPARCConfig(BaseHiSPARCEvent):
 
     @staticmethod
     def threshold_mv_to_absolute_adc(mv_to_adc, adc_baseline, mv_thresholds):
-        return [mv_threshold * mv_to_adc + adc_baseline
+        return [round(mv_threshold * mv_to_adc + adc_baseline)
                 for mv_threshold in mv_thresholds]
