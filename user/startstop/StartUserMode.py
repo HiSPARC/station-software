@@ -100,10 +100,10 @@ def start():
     try:
         logger.info("Starting HiSPARC Monitor...")
         handler = CMDStartStop()
-        handler.exeName = "python.exe"
+        handler.windowName = "HiSPARC Monitor"
         handler.title = "Start HiSPARC Monitor"
         handler.currentDirectory = os.path.join(HS_ROOT, "user/hsmonitor")
-        handler.command = cmd.format(name="HiSPARC Monitor",
+        handler.command = cmd.format(name=handler.windowName,
                                      path=r"\user\hsmonitor",
                                      cmd="HsMonitor.py")
         result = handler.startProcess()
@@ -115,10 +115,10 @@ def start():
     try:
         logger.info("Starting HiSPARC Updater...")
         handler = CMDStartStop()
-        handler.exeName = "python.exe"
+        handler.windowName = "HiSPARC Updater"
         handler.title = "Start HiSPARC Updater"
         handler.currentDirectory = os.path.join(HS_ROOT, "user/updater")
-        handler.command = cmd.format(name="HiSPARC Updater",
+        handler.command = cmd.format(name=handler.windowName,
                                      path=r"\user\updater",
                                      cmd="Update.py")
         result = handler.startProcess()

@@ -40,6 +40,7 @@ class StartStop(object):
     """A class to start and stop programs on Windows"""
 
     exeName = ''
+    windowName = ''
     ShowWindow = win32con.SW_SHOWMINIMIZED
     currentDirectory = ''
     command = ''
@@ -160,11 +161,21 @@ class StartStop(object):
 
 class CMDStartStop(StartStop):
 
+    """ Start and stop command line processes
+
+    Set the windowName attribute to the title of the final process. This is
+    used to check if the process is already running, and to find it when it
+    is to be shutdown.
+    Set the title attribute to the same value if the process will remain in
+    its initial window. Otherwise choose a different name.
+
+    """
+
     def __init__(self):
         self.wmiObj = wmi.WMI()
 
     def startProcess(self):
-        w = win32gui.FindWindow(None, self.title)
+        w = win32gui.FindWindow(None, self.windowName)
         result = STOPPED
         if w == 0:
             result = self.spawnProcess()
@@ -173,11 +184,11 @@ class CMDStartStop(StartStop):
         return result
 
     def stopProcess(self):
-        logger.debug("Finding window '%s'.." % self.title)
-        w = win32gui.FindWindow(None, self.title)
+        logger.debug("Finding window '%s'.." % self.windowName)
+        w = win32gui.FindWindow(None, self.windowName)
         if w != 0:
             result = RUNNING
-            win32gui.SetWindowText(w, self.title +
+            win32gui.SetWindowText(w, self.windowName +
                                    ' (shutdown in progress...)')
             dword = c_ulong()
             windll.user32.GetWindowThreadProcessId(w, byref(dword))
@@ -194,16 +205,12 @@ class CMDStartStop(StartStop):
             else:
                 logger.debug("major fail: r = %d" % r)
                 result = EXCEPTION
-            # for process in self.wmiObj.Win32_Process(name=self.exeName):
-            #     logger.debug('processId: %d' % process.ProcessId)
-            #     if process.Terminate() == 0:
-            #         result = STOPPED
         else:
             result = STOPPED
         return result
 
     def probeProcess(self):
-        w = win32gui.FindWindow(None, self.title)
+        w = win32gui.FindWindow(None, self.windowName)
         if w != 0:
             result = RUNNING
         else:
