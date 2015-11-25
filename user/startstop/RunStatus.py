@@ -13,12 +13,12 @@ def pStdout(name, result):
     print info
 
 
-def check_app(name, exe_name=None, title=None, service_name=None):
+def check_app(name, exe_name=None, window_name=None, service_name=None):
     """Check if a program or service is running
 
     :param name: common name for the process.
     :param exe_name: executable name of the process.
-    :param title: title of the process.
+    :param window_name: title of the process.
     :param service_name: name of the service.
 
     """
@@ -27,16 +27,17 @@ def check_app(name, exe_name=None, title=None, service_name=None):
             handler = StartStop()
             handler.exeName = exe_name
             res = handler.probeProcess()
-        elif title is not None:
+        elif window_name is not None:
             handler = CMDStartStop()
-            handler.title = title
+            handler.windowName = window_name
             res = handler.probeProcess()
         elif service_name is not None:
             handler = StartStop()
             handler.serviceName = service_name
             res = handler.probeService()
         else:
-            raise Exception("exe_name, title or service_name should be given.")
+            raise Exception("exe_name, window_name, or service_name should be "
+                            "given.")
     except:
         res = EXCEPTION
     pStdout(name, res)
@@ -65,8 +66,8 @@ def check():
         check_app("HiSPARC Weather", exe_name="HiSPARC Weather Station.exe")
     else:
         pStdout("HiSPARC Weather", DISABLED)
-    check_app("HiSPARC Monitor", title="HiSPARC Monitor")
-    check_app("HiSPARC Updater", title="HiSPARC Updater")
+    check_app("HiSPARC Monitor", window_name="HiSPARC Monitor")
+    check_app("HiSPARC Updater", window_name="HiSPARC Updater")
 
     print
     print "Checking Admin-Mode services..."
