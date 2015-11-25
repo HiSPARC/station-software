@@ -45,16 +45,22 @@ def start():
 
         handler = StartStop()
         handler.exeName = binary
-        handler.ShowWindow = win32con.SW_HIDE
-        handler.command = program
-        handler.currentDirectory = HS_ROOT
-        handler.title = "MySQL server"
-
-        res = handler.startProcess()
+        # Check if MySQL is already running
+        res = handler.probeProcess()
         if res == RUNNING:
-            time.sleep(5)
-            # check run-status again
-            res = handler.probeProcess()
+            delay_monitor = 0
+        else:
+            delay_monitor = 10
+            handler.ShowWindow = win32con.SW_HIDE
+            handler.command = program
+            handler.currentDirectory = HS_ROOT
+            handler.title = "MySQL server"
+
+            res = handler.startProcess()
+            if res == RUNNING:
+                time.sleep(5)
+                # check run-status again
+                res = handler.probeProcess()
         logger.info("Status: %s", status(res))
     except:
         logger.exception("An exception was generated while starting MySQL")
@@ -92,8 +98,8 @@ def start():
         logger.exception("An exception was generated while starting "
                          "HiSPARC Weather")
 
-    # A 10-second pause to let MySQL start completely
-    time.sleep(10)
+    # Pause to let MySQL start completely if it was not already running
+    time.sleep(delay_monitor)
 
     cmd = '%s/user/startstop/runmanually.bat "{name}" "{path}" {cmd}' % HS_ROOT
 
