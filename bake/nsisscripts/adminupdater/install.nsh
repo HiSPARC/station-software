@@ -8,6 +8,8 @@
 #               Other application still use the 32-bit registry.
 #               OpenVPN, due to a bug in version 2.2.2, as well.
 #   Oct 2015: - only 1 LabView RTE, version 2014 (RH)
+#   Nov 2015: - NI-RTE 2014: installation fails sometimes with error 1603 (x643),
+#               but installation seems ok. Error will be ignored.
 #
 
 #
@@ -181,6 +183,7 @@ Section -LabviewRuntimeSetup
   DetailPrint $Message
   ${If} $Result != 3010
   ${AndIf} $Result != 0
+  ${Andif} $Result != 1603
     MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
   ${Endif}
   ${If} $Architecture == "64"

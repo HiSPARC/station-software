@@ -243,7 +243,7 @@ Section -AdditionalIcons
   CreateDirectory "$SMPROGRAMS\HiSPARC\Expert"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\DSPMon.lnk"           "$HisparcDir\user\dspmon\DSPMon.exe"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\HiSPARC DAQ.lnk"      "$HisparcDir\user\hisparcdaq\HiSPARC DAQ.exe"
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\HiSPARC Weather.lnk"  "$HisparcDir\user\hisparcdaq\HiSPARC Weather Station.exe"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\HiSPARC Weather.lnk"  "$HisparcDir\user\hisparcweather\HiSPARC Weather Station.exe"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\Expert\Uninstall.lnk"        "$HisparcDir\persistent\uninstallers\mainuninst.exe"
   # Add shortcuts to the startup folder
   CreateShortCut  "$SMSTARTUP\Start HiSPARC software.lnk"           "$HisparcDir\persistent\startstopbatch\StartUp.bat"
