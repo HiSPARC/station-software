@@ -239,12 +239,13 @@ terminal with a HiSPARC detector pc environment</li>
 <li><p class="first"><strong>Section [mysqld]:</strong> add <tt class="docutils literal"><span class="pre">datadir=/persistent/data/mysql/&quot;</span></tt></p>
 </li>
 <li><p class="first"><strong>Section [mysqld]:</strong> remove comments from following lines:</p>
-<div class="highlight-python"><pre>innodb_buffer_pool_size
+<div class="highlight-python"><div class="highlight"><pre>innodb_buffer_pool_size
 innodb_additional_mem_pool_size
 innodb_log_file_size=10M
 innodb_log_buffer_size
 innodb_flush_log_at_trx_commit
-innodb_lock_wait_timeout</pre>
+innodb_lock_wait_timeout
+</pre></div>
 </div>
 </li>
 <li><p class="first">Especially mind the 10M parameter to <tt class="docutils literal"><span class="pre">innodb_log_file_size</span></tt>, or
@@ -835,7 +836,7 @@ around.  This is much easier to do.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2010, David Fokkema.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>
