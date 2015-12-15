@@ -5,7 +5,7 @@ Installatie van de |hisparc| software
 
 De software bestaat uit één installatiepakket [#OOTI]_.  We raden aan om
 de software te installeren op een moderne pc (32 of 64-bit) met een
-schone installatie van Microsoft Windows XP of Windows 7 (op Windows 8
+schone installatie van Microsoft Windows 7 (op Windows 8
 is de software nog niet getest).  De keuze voor Windows is slechts
 gemaakt omdat een groot aantal systeembeheerders in het voortgezet
 onderwijs alleen ervaring heeft met Windows en een aantal van hen in het
@@ -38,7 +38,10 @@ Benodigdheden
 
 Vóór u aan de installatie begint dient u te beschikken over:
 
-* de HiSPARC software installer, ``hisparcInstaller_v6.11.exe``
+* een eigen beheer account op de PC.
+* er mag geen account met de naam ``hisparc`` of ``admhisparc`` bestaan.
+  Accounts met die namen worden door de installer aangemaakt.
+* de HiSPARC software installer, ``hisparcInstaller_vX.Y.Z.exe``
 * door u clustercoördinator verstrekt:
     * beveiligingscertificaat, bijvoorbeeld: ``sciencepark501.zip``
     * een stationnummer
@@ -73,6 +76,7 @@ Installatieprocedure
 De installatieprocedure is eenvoudig te doorlopen.  Hieronder volgt een
 aantal screenshots van de installer met een korte beschrijving.
 
+
 Welkom
 ^^^^^^
 
@@ -84,6 +88,7 @@ Dit venster spreekt voor zich.
 
    De welkomstpagina van de installer.  Dit is het eerste dat u ziet
    nadat de installer is gestart.
+
 
 Stationgegevens
 ^^^^^^^^^^^^^^^
@@ -98,6 +103,7 @@ klikken en het bestand te selecteren.
    :scale: 85
 
    De installer vraagt om het invullen van de stationgegevens.
+
 
 Lokale database
 ^^^^^^^^^^^^^^^
@@ -118,6 +124,7 @@ leeg.*
    voorhanden om zelf de benodigde serversoftware te installeren.  Op
    aanvraag is alle broncode beschikbaar.
 
+
 Aangesloten detectoren
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -133,6 +140,7 @@ o.a. actuele luchtdruk en temperatuur waarnemingen.
 
    Hier vinkt u de aangesloten detectoren aan.  Dit station beschikt
    alleen over een |hisparc| detector.
+
 
 Installatie
 ^^^^^^^^^^^
@@ -170,6 +178,7 @@ installatie.
    De installatie van de TAP driver (virtuele netwerkkaart voor OpenVPN)
    is niet officieel door Microsoft gecertificeerd.  Daarom moet u
    expliciet toestemming geven voor de installatie.
+
 
 Herstart
 ^^^^^^^^
