@@ -29,8 +29,8 @@
     <link rel="next" title="Configuratie van de HiSPARC software" href="configuratie.html" />
     <link rel="prev" title="Installatie van de HiSPARC electronica" href="hardware-installatie.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -39,14 +39,14 @@
         <li class="right" >
           <a href="hardware-installatie.html" title="Installatie van de HiSPARC electronica"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="installatie-van-de-hisparc-software">
 <h1>Installatie van de HiSPARC software<a class="headerlink" href="#installatie-van-de-hisparc-software" title="Permalink to this headline">¶</a></h1>
@@ -90,15 +90,15 @@ de HiSPARC data in zijn werk gaat, kijk dan op
 <ul>
 <li><p class="first">een eigen beheer account op de PC.</p>
 </li>
-<li><p class="first">er mag geen account met de naam <tt class="docutils literal"><span class="pre">hisparc</span></tt> of <tt class="docutils literal"><span class="pre">admhisparc</span></tt> bestaan.
+<li><p class="first">er mag geen account met de naam <code class="docutils literal"><span class="pre">hisparc</span></code> of <code class="docutils literal"><span class="pre">admhisparc</span></code> bestaan.
 Accounts met die namen worden door de installer aangemaakt.</p>
 </li>
-<li><p class="first">de HiSPARC software installer, <tt class="docutils literal"><span class="pre">hisparcInstaller_vX.Y.Z.exe</span></tt></p>
+<li><p class="first">de HiSPARC software installer, <code class="docutils literal"><span class="pre">hisparcInstaller_vX.Y.Z.exe</span></code></p>
 </li>
 <li><dl class="first docutils">
 <dt>door u clustercoördinator verstrekt:</dt>
 <dd><ul class="first last simple">
-<li>beveiligingscertificaat, bijvoorbeeld: <tt class="docutils literal"><span class="pre">sciencepark501.zip</span></tt></li>
+<li>beveiligingscertificaat, bijvoorbeeld: <code class="docutils literal"><span class="pre">sciencepark501.zip</span></code></li>
 <li>een stationnummer</li>
 <li>een wachtwoord, uniek voor dit station.  Dit wachtwoord wordt
 gebruikt als controle op een vergissing in stationnummers.  Denkt
@@ -112,9 +112,9 @@ aan de clustercoördinator te verstrekken.</li>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">de naam van uw pc zoals gebruikt in ons monitorsysteem
-(<a class="reference internal" href="hardware-installatie.html#nagios-doc"><em>Monitor en controle</em></a>) is gelijk aan de naam van het certificaat, zonder
-de <tt class="docutils literal"><span class="pre">.zip</span></tt> extensie.  Als het certificaat <tt class="docutils literal"><span class="pre">sciencepark501.zip</span></tt> heet,
-dan is de pc-naam <tt class="docutils literal"><span class="pre">sciencepark501</span></tt>.</p>
+(<a class="reference internal" href="hardware-installatie.html#nagios-doc"><span>Monitor en controle</span></a>) is gelijk aan de naam van het certificaat, zonder
+de <code class="docutils literal"><span class="pre">.zip</span></code> extensie.  Als het certificaat <code class="docutils literal"><span class="pre">sciencepark501.zip</span></code> heet,
+dan is de pc-naam <code class="docutils literal"><span class="pre">sciencepark501</span></code>.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -126,9 +126,9 @@ optie <em>Restore  on AC Power Loss</em> de optie <em>Last State</em> te kiezen.
 betekent een herstart bij stroomuitval, maar als de computer handmatig
 uit was gezet, dan blijft hij uit.</p>
 </div>
-<div class="figure align-center">
+<div class="figure align-center" id="id2">
 <a class="reference internal image-reference" href="_images/req-files.png"><img alt="_images/req-files.png" src="_images/req-files.png" style="width: 565.25px; height: 368.9px;" /></a>
-<p class="caption">Een folder met de installer en het beveiligingscertificaat.</p>
+<p class="caption"><span class="caption-text">Een folder met de installer en het beveiligingscertificaat.</span></p>
 </div>
 </div>
 <div class="section" id="installatieprocedure">
@@ -138,10 +138,10 @@ aantal screenshots van de installer met een korte beschrijving.</p>
 <div class="section" id="welkom">
 <h3>Welkom<a class="headerlink" href="#welkom" title="Permalink to this headline">¶</a></h3>
 <p>Dit venster spreekt voor zich.</p>
-<div class="figure align-center">
+<div class="figure align-center" id="id3">
 <a class="reference internal image-reference" href="_images/install-welkom.png"><img alt="_images/install-welkom.png" src="_images/install-welkom.png" style="width: 427.55px; height: 334.05px;" /></a>
-<p class="caption">De welkomstpagina van de installer.  Dit is het eerste dat u ziet
-nadat de installer is gestart.</p>
+<p class="caption"><span class="caption-text">De welkomstpagina van de installer.  Dit is het eerste dat u ziet
+nadat de installer is gestart.</span></p>
 </div>
 </div>
 <div class="section" id="stationgegevens">
@@ -150,9 +150,9 @@ nadat de installer is gestart.</p>
 wachtwoord.  Het beveiligingscertificaat kan geladen worden door ofwel de
 lokatie in te vullen of, handiger, op het knopje naast het veld te
 klikken en het bestand te selecteren.</p>
-<div class="figure align-center">
+<div class="figure align-center" id="id4">
 <a class="reference internal image-reference" href="_images/install-stationgegevens.png"><img alt="_images/install-stationgegevens.png" src="_images/install-stationgegevens.png" style="width: 427.55px; height: 334.05px;" /></a>
-<p class="caption">De installer vraagt om het invullen van de stationgegevens.</p>
+<p class="caption"><span class="caption-text">De installer vraagt om het invullen van de stationgegevens.</span></p>
 </div>
 </div>
 <div class="section" id="lokale-database">
@@ -161,10 +161,10 @@ klikken en het bestand te selecteren.</p>
 data te ontvangen, te verwerken en langdurig op te slaan, dan kunt u hier
 het adres invullen.  <em>Voor vrijwel alle installaties blijft dit veld
 leeg.</em></p>
-<div class="figure align-center">
+<div class="figure align-center" id="id5">
 <a class="reference internal image-reference" href="_images/install-lokaledatabase.png"><img alt="_images/install-lokaledatabase.png" src="_images/install-lokaledatabase.png" style="width: 427.55px; height: 334.05px;" /></a>
-<p class="caption">Het is mogelijk om een lokale database op te geven.  Normaliter blijft
-dit veld leeg.</p>
+<p class="caption"><span class="caption-text">Het is mogelijk om een lokale database op te geven.  Normaliter blijft
+dit veld leeg.</span></p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -180,10 +180,10 @@ Meestal is dit slechts een HiSPARC detector, maar in de toekomst willen
 we op zoveel mogelijk lokaties ook weerstations gebruiken.  Weerstations
 stellen ons in staat om de HiSPARC metingen nauwkeurig te koppelen aan
 o.a. actuele luchtdruk en temperatuur waarnemingen.</p>
-<div class="figure align-center">
+<div class="figure align-center" id="id6">
 <a class="reference internal image-reference" href="_images/install-detectoren.png"><img alt="_images/install-detectoren.png" src="_images/install-detectoren.png" style="width: 427.55px; height: 334.05px;" /></a>
-<p class="caption">Hier vinkt u de aangesloten detectoren aan.  Dit station beschikt
-alleen over een HiSPARC detector.</p>
+<p class="caption"><span class="caption-text">Hier vinkt u de aangesloten detectoren aan.  Dit station beschikt
+alleen over een HiSPARC detector.</span></p>
 </div>
 </div>
 <div class="section" id="installatie">
@@ -208,15 +208,15 @@ zoals de auteurs van de TAP driver, is het niet op te brengen Microsoft
 te betalen voor hun Windows Logo test programma.  Het enige dat dit op
 zou leveren is het niet verschijnen van deze waarschuwing.</p>
 </div>
-<div class="figure align-center">
+<div class="figure align-center" id="id7">
 <a class="reference internal image-reference" href="_images/install-installatie.png"><img alt="_images/install-installatie.png" src="_images/install-installatie.png" style="width: 427.55px; height: 334.05px;" /></a>
-<p class="caption">De installatie is in volle gang.  Dit kan enige tijd duren.</p>
+<p class="caption"><span class="caption-text">De installatie is in volle gang.  Dit kan enige tijd duren.</span></p>
 </div>
-<div class="figure align-center">
+<div class="figure align-center" id="id8">
 <a class="reference internal image-reference" href="_images/install-tapdriver.png"><img alt="_images/install-tapdriver.png" src="_images/install-tapdriver.png" style="width: 336.6px; height: 267.75px;" /></a>
-<p class="caption">De installatie van de TAP driver (virtuele netwerkkaart voor OpenVPN)
+<p class="caption"><span class="caption-text">De installatie van de TAP driver (virtuele netwerkkaart voor OpenVPN)
 is niet officieel door Microsoft gecertificeerd.  Daarom moet u
-expliciet toestemming geven voor de installatie.</p>
+expliciet toestemming geven voor de installatie.</span></p>
 </div>
 </div>
 <div class="section" id="herstart">
@@ -224,11 +224,11 @@ expliciet toestemming geven voor de installatie.</p>
 <p>Na de installatie is het nodig de computer opnieuw op te starten.  Na de
 herstart zal de pc automatisch inloggen met het nieuwe HiSPARC user
 account en zal de detectorsoftware automatisch worden gestart.</p>
-<div class="figure align-center">
+<div class="figure align-center" id="id9">
 <a class="reference internal image-reference" href="_images/install-herstart.png"><img alt="_images/install-herstart.png" src="_images/install-herstart.png" style="width: 493.85px; height: 107.1px;" /></a>
-<p class="caption">De installer vraagt om het herstarten van de computer.  Het is mogelijk
+<p class="caption"><span class="caption-text">De installer vraagt om het herstarten van de computer.  Het is mogelijk
 om dit later te doen, maar voordat de computer opnieuw is opgestart is
-de software niet volledig geïnstalleerd.</p>
+de software niet volledig geïnstalleerd.</span></p>
 </div>
 </div>
 </div>
@@ -274,10 +274,10 @@ netwerkverbindingen zonder problemen werken is het van belang de <em>Local
 Diagnostic Tool</em> te draaien.  Deze vindt u onder <em>Start -&gt; Alle
 Programmma&#8217;s -&gt; HiSPARC -&gt; LocalDiagnosticTool</em> of <em>Start -&gt;
 Programs -&gt; HiSPARC -&gt; Status -&gt; Diagnostics</em>.</p>
-<div class="figure align-center">
+<div class="figure align-center" id="id10">
 <a class="reference internal image-reference" href="_images/localdiagnostictool.png"><img alt="_images/localdiagnostictool.png" src="_images/localdiagnostictool.png" style="width: 568.65px; height: 391.85px;" /></a>
-<p class="caption">Screenshot van de Local Diagnostic Tool.  Op deze PC is alles in orde,
-en er is geen proxy server vereist.</p>
+<p class="caption"><span class="caption-text">Screenshot van de Local Diagnostic Tool.  Op deze PC is alles in orde,
+en er is geen proxy server vereist.</span></p>
 </div>
 <p>Na opstarten van het programma verschijnt een wit tekstscherm waarin de
 resultaten van een aantal controles worden weergegeven.  De samenvatting
@@ -327,7 +327,7 @@ informatie over Python, zie de <a class="reference external" href="http://python
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/header.png" alt="Logo"/>
@@ -357,12 +357,14 @@ informatie over Python, zie de <a class="reference external" href="http://python
   <h4>Next topic</h4>
   <p class="topless"><a href="configuratie.html"
                         title="next chapter">Configuratie van de HiSPARC software</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/software-installatie.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/software-installatie.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -379,7 +381,7 @@ informatie over Python, zie de <a class="reference external" href="http://python
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -388,12 +390,12 @@ informatie over Python, zie de <a class="reference external" href="http://python
         <li class="right" >
           <a href="hardware-installatie.html" title="Installatie van de HiSPARC electronica"
              >previous</a> |</li>
-        <li><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2009-2013, HiSPARC.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

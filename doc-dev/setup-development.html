@@ -29,8 +29,8 @@
     <link rel="next" title="Rebuilding the Development Tree" href="rebuild-tree.html" />
     <link rel="prev" title="Welcome to Detector-Software Developer Documentation!" href="index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -39,14 +39,14 @@
         <li class="right" >
           <a href="index.html" title="Welcome to Detector-Software Developer Documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Detector Software Developer Documentation 1.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Detector Software Developer Documentation 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="setting-up-a-development-environment">
 <h1>Setting up a Development Environment<a class="headerlink" href="#setting-up-a-development-environment" title="Permalink to this headline">¶</a></h1>
@@ -102,9 +102,9 @@ software installation packages.</p>
 </table>
 <p>Steps:</p>
 <ol class="arabic">
-<li><p class="first">Run Command Prompt (Start -&gt; Run -&gt; <tt class="docutils literal"><span class="pre">cmd</span></tt>)</p>
+<li><p class="first">Run Command Prompt (Start -&gt; Run -&gt; <code class="docutils literal"><span class="pre">cmd</span></code>)</p>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:HiSPARC/station-software.git</span> <span class="pre">&lt;checkout-location&gt;</span></tt>.
+<li><p class="first"><code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:HiSPARC/station-software.git</span> <span class="pre">&lt;checkout-location&gt;</span></code>.
 Example:</p>
 <div class="highlight-python"><div class="highlight"><pre>C:\Documents and Settings\David Fokkema&gt;cd &quot;My Documents&quot;
 C:\Documents and Settings\David Fokkema\My Documents&gt;mkdir HiSPARC
@@ -112,10 +112,10 @@ C:\Documents and Settings\David Fokkema\My Documents&gt;git clone git@github.com
 </pre></div>
 </div>
 </li>
-<li><p class="first">Edit <tt class="docutils literal"><span class="pre">\persistent\configuration\startup_settings.bat</span></tt> to your
+<li><p class="first">Edit <code class="docutils literal"><span class="pre">\persistent\configuration\startup_settings.bat</span></code> to your
 personal taste</p>
 </li>
-<li><p class="first">You can now run <tt class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></tt> if you want to start a command
+<li><p class="first">You can now run <code class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></code> if you want to start a command
 terminal with a HiSPARC detector pc environment</p>
 </li>
 </ol>
@@ -149,7 +149,7 @@ terminal with a HiSPARC detector pc environment</p>
 <li><dl class="first docutils">
 <dt><strong>Choose the program you want to use to open the file:</strong> Select Notepad++ and click <em>Open</em>.  If Notepad++ is not in the list, click <em>Browse</em></dt>
 <dd><ol class="first last arabic simple">
-<li>Navigate to <tt class="docutils literal"><span class="pre">Notepad++/notepad++</span></tt> and click <em>Open</em></li>
+<li>Navigate to <code class="docutils literal"><span class="pre">Notepad++/notepad++</span></code> and click <em>Open</em></li>
 <li>Select Notepad++ and click <em>Open</em></li>
 </ol>
 </dd>
@@ -163,9 +163,9 @@ terminal with a HiSPARC detector pc environment</p>
 requires a serial number which is <em>not</em> committed in the repository.</p>
 <p>Installation steps:</p>
 <ol class="arabic simple">
-<li>Copy <tt class="docutils literal"><span class="pre">\admin\niruntimeinstaller\Bin\silent_install.txt</span></tt> to
-<tt class="docutils literal"><span class="pre">\admin\niruntimeinstaller</span></tt> and rename to <tt class="docutils literal"><span class="pre">hisparcspec.ini</span></tt></li>
-<li>Edit <tt class="docutils literal"><span class="pre">hisparcspec.ini</span></tt> and enter user information (serial number)</li>
+<li>Copy <code class="docutils literal"><span class="pre">\admin\niruntimeinstaller\Bin\silent_install.txt</span></code> to
+<code class="docutils literal"><span class="pre">\admin\niruntimeinstaller</span></code> and rename to <code class="docutils literal"><span class="pre">hisparcspec.ini</span></code></li>
+<li>Edit <code class="docutils literal"><span class="pre">hisparcspec.ini</span></code> and enter user information (serial number)</li>
 </ol>
 </div>
 </div>
@@ -174,7 +174,7 @@ requires a serial number which is <em>not</em> committed in the repository.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/header.png" alt="Logo"/>
@@ -196,12 +196,14 @@ requires a serial number which is <em>not</em> committed in the repository.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="rebuild-tree.html"
                         title="next chapter">Rebuilding the Development Tree</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/setup-development.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/setup-development.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -218,7 +220,7 @@ requires a serial number which is <em>not</em> committed in the repository.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -227,12 +229,12 @@ requires a serial number which is <em>not</em> committed in the repository.</p>
         <li class="right" >
           <a href="index.html" title="Welcome to Detector-Software Developer Documentation!"
              >previous</a> |</li>
-        <li><a href="index.html">Detector Software Developer Documentation 1.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Detector Software Developer Documentation 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2010, David Fokkema.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

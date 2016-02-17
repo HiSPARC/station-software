@@ -29,8 +29,8 @@
     <link rel="next" title="Installatie van de HiSPARC software" href="software-installatie.html" />
     <link rel="prev" title="Introductie" href="introductie.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -39,14 +39,14 @@
         <li class="right" >
           <a href="introductie.html" title="Introductie"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="installatie-van-de-hisparc-electronica">
 <h1>Installatie van de HiSPARC electronica<a class="headerlink" href="#installatie-van-de-hisparc-electronica" title="Permalink to this headline">¶</a></h1>
@@ -58,11 +58,11 @@ detectiestation met vier scintillatieplaten.</li>
 </ul>
 <div class="section" id="opstelling-met-twee-skiboxen">
 <h2>Opstelling met twee skiboxen<a class="headerlink" href="#opstelling-met-twee-skiboxen" title="Permalink to this headline">¶</a></h2>
-<p>De HiSPARC II Master elektronica (<a class="reference internal" href="#master-voorkant"><em>Vooraanzicht master</em></a>) integreert snelle signaalverwerking, conversie van
+<p>De HiSPARC II Master elektronica (<a class="reference internal" href="#master-voorkant"><span>Vooraanzicht master</span></a>) integreert snelle signaalverwerking, conversie van
 twee analoge signalen afkomstig van de fotoversterkerbuizen naar digitaal
 formaat, en een precisie GPS, in één behuizing.  De Master verstuurt zijn
 data via een USB verbinding aan de achterzijde (aansluiting aan de linker
-kant in (<a class="reference internal" href="#master-achterkant"><em>Achteraanzicht master</em></a>) naar de data
+kant in (<a class="reference internal" href="#master-achterkant"><span>Achteraanzicht master</span></a>) naar de data
 acquisitie (DAQ) pc.  De rechter USB aansluiting (onder de connector voor
 de GPS antenne) is voor directe communicatie tussen GPS en GPS
 monitorprogramma.  Deze verbinding is uitsluitend voor het verifiëren
@@ -82,78 +82,78 @@ toekomst wordt er ook een mogelijkheid gecreëerd om de gegevens van het
 station voor analyse op te slaan in een locale database.  De analyse
 software kan de gegevens uit zowel de centrale als de locale database
 verwerken.</p>
-<div class="figure align-center" id="master-voorkant">
-<a class="reference internal image-reference" href="_images/kastje-voorkant.jpg"><img alt="_images/kastje-voorkant.jpg" src="_images/kastje-voorkant.jpg" style="width: 600px;" /></a>
-<p class="caption">De voorkant van de HiSPARC II Master; van links naar rechts: groene LED
+<div class="figure align-center" id="id1">
+<span id="master-voorkant"></span><a class="reference internal image-reference" href="_images/kastje-voorkant.jpg"><img alt="_images/kastje-voorkant.jpg" src="_images/kastje-voorkant.jpg" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-text">De voorkant van de HiSPARC II Master; van links naar rechts: groene LED
 voor de voedingsspanning, de gele LED geeft aan of er signalen
 binnenkomen, signaal- en voedingsaansluiting voor fotobuis-1. Midden:
 de inlaat voor de luchtkoeling. Rechts in omgekeerde volgorde:
-voedings- en signaalaansluiting fotobuis-2 en gele signaal LED.</p>
+voedings- en signaalaansluiting fotobuis-2 en gele signaal LED.</span></p>
 </div>
-<div class="figure align-center" id="master-achterkant">
-<a class="reference internal image-reference" href="_images/master-achterkant.jpg"><img alt="_images/master-achterkant.jpg" src="_images/master-achterkant.jpg" style="width: 600px;" /></a>
-<p class="caption">De achterzijde van de HiSPARC II Master; van links naar rechts: USB
+<div class="figure align-center" id="id2">
+<span id="master-achterkant"></span><a class="reference internal image-reference" href="_images/master-achterkant.jpg"><img alt="_images/master-achterkant.jpg" src="_images/master-achterkant.jpg" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-text">De achterzijde van de HiSPARC II Master; van links naar rechts: USB
 aansluiting voor het versturen van de meetgegevens naar de pc, TTL
 aansluiting voor een externe trigger (alleen voor speciale doeleinden),
 twee UTP verbindingen (niet van toepassing), uitgang luchtkoeling,
 aansluiting voedingsadapter (12 Volt DC, 1.5 A), GPS antenne
 aansluiting (rechtsboven) en USB verbinding voor het aanpassen van de
-GPS instellingen.</p>
+GPS instellingen.</span></p>
 </div>
 </div>
 <div class="section" id="opstelling-met-vier-skiboxen">
 <h2>Opstelling met vier skiboxen<a class="headerlink" href="#opstelling-met-vier-skiboxen" title="Permalink to this headline">¶</a></h2>
 <p>Om vier scintillatie detectoren uit te kunnen lezen, moet een tweede
 HiSPARC II unit aangesloten worden. Echter, deze unit &#8211; de Slave &#8211;
-(<a class="reference internal" href="#slave-voorkant"><em>Vooraanzicht slave</em></a>) bezit geen GPS maar is verder
+(<a class="reference internal" href="#slave-voorkant"><span>Vooraanzicht slave</span></a>) bezit geen GPS maar is verder
 identiek aan de Master.  Aan de achterzijde is dan ook geen aansluiting
-voor een GPS-antenne aanwezig (<a class="reference internal" href="#slave-achterkant"><em>Achteraanzicht slave</em></a>).</p>
-<div class="figure align-center" id="slave-voorkant">
-<a class="reference internal image-reference" href="_images/kastje-voorkant.jpg"><img alt="_images/kastje-voorkant.jpg" src="_images/kastje-voorkant.jpg" style="width: 600px;" /></a>
-<p class="caption">De voorkant van de HiSPARC II Master en Slave zijn identiek.</p>
+voor een GPS-antenne aanwezig (<a class="reference internal" href="#slave-achterkant"><span>Achteraanzicht slave</span></a>).</p>
+<div class="figure align-center" id="id3">
+<span id="slave-voorkant"></span><a class="reference internal image-reference" href="_images/kastje-voorkant.jpg"><img alt="_images/kastje-voorkant.jpg" src="_images/kastje-voorkant.jpg" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-text">De voorkant van de HiSPARC II Master en Slave zijn identiek.</span></p>
 </div>
-<div class="figure align-center" id="slave-achterkant">
-<a class="reference internal image-reference" href="_images/slave-achterkant.jpg"><img alt="_images/slave-achterkant.jpg" src="_images/slave-achterkant.jpg" style="width: 600px;" /></a>
-<p class="caption">Data van de HiSPARC II Slave wordt uitgelezen via de linker USB
+<div class="figure align-center" id="id4">
+<span id="slave-achterkant"></span><a class="reference internal image-reference" href="_images/slave-achterkant.jpg"><img alt="_images/slave-achterkant.jpg" src="_images/slave-achterkant.jpg" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-text">Data van de HiSPARC II Slave wordt uitgelezen via de linker USB
 verbinding.  De Slave heeft geen aansluiting voor een GPS antenne kabel
-(rechtsboven); de rechter USB aansluiting is zonder functie.</p>
+(rechtsboven); de rechter USB aansluiting is zonder functie.</span></p>
 </div>
 <p>De Slave wordt via twee korte UTP kabels (kruislings, de lengte mag niet
-veranderd worden!) verbonden met de Master unit (<a class="reference internal" href="#master-slave-combi"><em>Master-Slave
-combinatie</em></a>).  Master en Slave versturen hun data dus
+veranderd worden!) verbonden met de Master unit (<a class="reference internal" href="#master-slave-combi"><span>Master-Slave
+combinatie</span></a>).  Master en Slave versturen hun data dus
 over aparte USB verbindingen (voor beide units is dit de linker connector
 aan de achterzijde).</p>
-<div class="figure align-center" id="master-slave-combi">
-<a class="reference internal image-reference" href="_images/master-slave-achterkant.jpg"><img alt="_images/master-slave-achterkant.jpg" src="_images/master-slave-achterkant.jpg" style="width: 600px;" /></a>
-<p class="caption">Een snelle databus verzorgt de communicatie tussen HiSPARC II Master en
+<div class="figure align-center" id="id5">
+<span id="master-slave-combi"></span><a class="reference internal image-reference" href="_images/master-slave-achterkant.jpg"><img alt="_images/master-slave-achterkant.jpg" src="_images/master-slave-achterkant.jpg" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-text">Een snelle databus verzorgt de communicatie tussen HiSPARC II Master en
 Slave; de verbinding bestaat uit twee kabels die ‘LVDS data in’ en
-‘LVDS data out’ (kruislings) met elkaar verbinden.</p>
+‘LVDS data out’ (kruislings) met elkaar verbinden.</span></p>
 </div>
 </div>
 <div class="section" id="monitor-en-controle">
 <span id="nagios-doc"></span><h2>Monitor en controle<a class="headerlink" href="#monitor-en-controle" title="Permalink to this headline">¶</a></h2>
 <p>De HiSPARC besturingssoftware biedt bovendien de optie om de status
 van de detectoren en pc’s op afstand via internet te controleren
-(<a class="reference internal" href="#nagios"><em>Nagios</em></a>).</p>
-<div class="figure align-center" id="nagios">
-<a class="reference internal image-reference" href="_images/nagios.png"><img alt="_images/nagios.png" src="_images/nagios.png" style="width: 600px;" /></a>
-<p class="caption">Het menu aan de linkerzijde biedt links naar verschillende
-overzichten om de stations te monitoren.</p>
+(<a class="reference internal" href="#nagios"><span>Nagios</span></a>).</p>
+<div class="figure align-center" id="id6">
+<span id="nagios"></span><a class="reference internal image-reference" href="_images/nagios.png"><img alt="_images/nagios.png" src="_images/nagios.png" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-text">Het menu aan de linkerzijde biedt links naar verschillende
+overzichten om de stations te monitoren.</span></p>
 </div>
 <p>Deze status overzicht pagina is te vinden via deze link:</p>
 <p><a class="reference external" href="http://vpn.hisparc.nl/">http://vpn.hisparc.nl/</a></p>
 <p>Selecteer vervolgens een van de stations in het scherm om in meer detail
 te zien wat de status is van dat station. De clustercoördinatoren hebben
 bovendien de mogelijkheid om de instellingen van de detector via een
-‘virtual private network’ (VPN, <a class="reference internal" href="#network-diagram"><em>VPN diagram</em></a>) op
+‘virtual private network’ (VPN, <a class="reference internal" href="#network-diagram"><span>VPN diagram</span></a>) op
 afstand te wijzigen. De toegang tot de pc’s biedt de mogelijkheid om
 snel en efficiënt kritische instellingen te veranderen en software
 updates door te voeren.</p>
-<div class="figure align-center" id="network-diagram">
-<a class="reference internal image-reference" href="_images/network-diagram.png"><img alt="_images/network-diagram.png" src="_images/network-diagram.png" style="width: 600px;" /></a>
-<p class="caption">De software biedt monitor en controle mogelijkheden via een VPN
+<div class="figure align-center" id="id7">
+<span id="network-diagram"></span><a class="reference internal image-reference" href="_images/network-diagram.png"><img alt="_images/network-diagram.png" src="_images/network-diagram.png" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-text">De software biedt monitor en controle mogelijkheden via een VPN
 verbinding. Data van de detector wordt over een gescheiden verbinding
-verzonden.</p>
+verzonden.</span></p>
 </div>
 </div>
 </div>
@@ -162,7 +162,7 @@ verzonden.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/header.png" alt="Logo"/>
@@ -183,12 +183,14 @@ verzonden.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="software-installatie.html"
                         title="next chapter">Installatie van de HiSPARC software</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/hardware-installatie.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/hardware-installatie.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -205,7 +207,7 @@ verzonden.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -214,12 +216,12 @@ verzonden.</p>
         <li class="right" >
           <a href="introductie.html" title="Introductie"
              >previous</a> |</li>
-        <li><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2009-2013, HiSPARC.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

@@ -28,21 +28,21 @@
     <link rel="top" title="Detector Software Developer Documentation 1.1 documentation" href="index.html" />
     <link rel="prev" title="Setting up a Development Environment" href="setup-development.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="setup-development.html" title="Setting up a Development Environment"
              accesskey="P">previous</a></li>
-        <li><a href="index.html">Detector Software Developer Documentation 1.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Detector Software Developer Documentation 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="rebuilding-the-development-tree">
 <h1>Rebuilding the Development Tree<a class="headerlink" href="#rebuilding-the-development-tree" title="Permalink to this headline">¶</a></h1>
@@ -121,13 +121,13 @@ package or two with newer versions.</p>
 -&gt; <em>Checkout</em></li>
 <li><em>Branch source:</em> sftp://&lt;user&gt;&#64;login.nikhef.nl/project/hisparc/bzr/windows-development/trunk/</li>
 <li><em>Local directory where the working tree will be created:</em> Use a
-directory of your choice.  Suggestion: <tt class="docutils literal"><span class="pre">My</span> <span class="pre">Documents/HiSPARC/trunk</span></tt></li>
-<li>Click <em>OK</em>.  You will be asked for your <tt class="docutils literal"><span class="pre">login.nikhef.nl</span></tt> account
+directory of your choice.  Suggestion: <code class="docutils literal"><span class="pre">My</span> <span class="pre">Documents/HiSPARC/trunk</span></code></li>
+<li>Click <em>OK</em>.  You will be asked for your <code class="docutils literal"><span class="pre">login.nikhef.nl</span></code> account
 password several times.</li>
-<li>Copy <tt class="docutils literal"><span class="pre">\persistent\configuration\startup_settings_example.bat</span></tt> to
-<tt class="docutils literal"><span class="pre">\persistent\configuration\startup_settings.bat</span></tt> and edit to your
+<li>Copy <code class="docutils literal"><span class="pre">\persistent\configuration\startup_settings_example.bat</span></code> to
+<code class="docutils literal"><span class="pre">\persistent\configuration\startup_settings.bat</span></code> and edit to your
 personal taste</li>
-<li>You can now run <tt class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></tt> if you want to start a command
+<li>You can now run <code class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></code> if you want to start a command
 terminal with a HiSPARC detector pc environment</li>
 </ol>
 </div>
@@ -160,7 +160,7 @@ terminal with a HiSPARC detector pc environment</li>
 <li><dl class="first docutils">
 <dt><strong>Choose the program you want to use to open the file:</strong> Select Notepad++ and click <em>Open</em>.  If Notepad++ is not in the list, click <em>Browse</em></dt>
 <dd><ol class="first last arabic simple">
-<li>Navigate to <tt class="docutils literal"><span class="pre">Notepad++/notepad++</span></tt> and click <em>Open</em></li>
+<li>Navigate to <code class="docutils literal"><span class="pre">Notepad++/notepad++</span></code> and click <em>Open</em></li>
 <li>Select Notepad++ and click <em>Open</em></li>
 </ol>
 </dd>
@@ -199,13 +199,13 @@ terminal with a HiSPARC detector pc environment</li>
 <li><strong>WinZip Self-Extractor:</strong> Uncheck <em>When done unzipping open
 ``.\setup.exe``</em> and click <em>Unzip</em></li>
 <li>When finished unzipping, click <em>Close</em></li>
-<li>Copy <tt class="docutils literal"><span class="pre">c:\National</span> <span class="pre">Instruments</span> <span class="pre">Downloads\LabVIEW</span> <span class="pre">8.2.1\Runtime</span>
-<span class="pre">Engine</span></tt> to <tt class="docutils literal"><span class="pre">\admin</span></tt></li>
-<li>Rename the <tt class="docutils literal"><span class="pre">\admin\Runtime</span> <span class="pre">Engine</span></tt> folder to
-<tt class="docutils literal"><span class="pre">\admin\niruntimeinstaller</span></tt></li>
-<li>Copy <tt class="docutils literal"><span class="pre">\admin\niruntimeinstaller\Bin\silent_install.txt</span></tt> to
-<tt class="docutils literal"><span class="pre">\admin\niruntimeinstaller</span></tt> and rename to <tt class="docutils literal"><span class="pre">hisparcspec.ini</span></tt></li>
-<li>Edit <tt class="docutils literal"><span class="pre">hisparcspec.ini</span></tt> and enter user information (serial number)</li>
+<li>Copy <code class="docutils literal"><span class="pre">c:\National</span> <span class="pre">Instruments</span> <span class="pre">Downloads\LabVIEW</span> <span class="pre">8.2.1\Runtime</span>
+<span class="pre">Engine</span></code> to <code class="docutils literal"><span class="pre">\admin</span></code></li>
+<li>Rename the <code class="docutils literal"><span class="pre">\admin\Runtime</span> <span class="pre">Engine</span></code> folder to
+<code class="docutils literal"><span class="pre">\admin\niruntimeinstaller</span></code></li>
+<li>Copy <code class="docutils literal"><span class="pre">\admin\niruntimeinstaller\Bin\silent_install.txt</span></code> to
+<code class="docutils literal"><span class="pre">\admin\niruntimeinstaller</span></code> and rename to <code class="docutils literal"><span class="pre">hisparcspec.ini</span></code></li>
+<li>Edit <code class="docutils literal"><span class="pre">hisparcspec.ini</span></code> and enter user information (serial number)</li>
 </ol>
 </div>
 <div class="section" id="mysql-community-server-a-database-server">
@@ -226,17 +226,17 @@ terminal with a HiSPARC detector pc environment</li>
 </table>
 <p>Installation steps:</p>
 <ol class="arabic">
-<li><p class="first">Unzip to <tt class="docutils literal"><span class="pre">\user</span></tt> and rename the <tt class="docutils literal"><span class="pre">mysql-5.1.53-win32</span></tt> folder to
-<tt class="docutils literal"><span class="pre">mysql</span></tt></p>
+<li><p class="first">Unzip to <code class="docutils literal"><span class="pre">\user</span></code> and rename the <code class="docutils literal"><span class="pre">mysql-5.1.53-win32</span></code> folder to
+<code class="docutils literal"><span class="pre">mysql</span></code></p>
 </li>
-<li><p class="first">Copy <tt class="docutils literal"><span class="pre">\user\mysql\my-medium.ini</span></tt> to <tt class="docutils literal"><span class="pre">\user\mysql\my.ini</span></tt></p>
+<li><p class="first">Copy <code class="docutils literal"><span class="pre">\user\mysql\my-medium.ini</span></code> to <code class="docutils literal"><span class="pre">\user\mysql\my.ini</span></code></p>
 </li>
 <li><dl class="first docutils">
-<dt>Edit the <tt class="docutils literal"><span class="pre">my.ini</span></tt> file:</dt>
+<dt>Edit the <code class="docutils literal"><span class="pre">my.ini</span></code> file:</dt>
 <dd><ol class="first last arabic">
-<li><p class="first"><strong>Section [mysqld]:</strong> add <tt class="docutils literal"><span class="pre">basedir=&quot;/user/mysql/&quot;</span></tt></p>
+<li><p class="first"><strong>Section [mysqld]:</strong> add <code class="docutils literal"><span class="pre">basedir=&quot;/user/mysql/&quot;</span></code></p>
 </li>
-<li><p class="first"><strong>Section [mysqld]:</strong> add <tt class="docutils literal"><span class="pre">datadir=/persistent/data/mysql/&quot;</span></tt></p>
+<li><p class="first"><strong>Section [mysqld]:</strong> add <code class="docutils literal"><span class="pre">datadir=/persistent/data/mysql/&quot;</span></code></p>
 </li>
 <li><p class="first"><strong>Section [mysqld]:</strong> remove comments from following lines:</p>
 <div class="highlight-python"><div class="highlight"><pre>innodb_buffer_pool_size
@@ -248,45 +248,45 @@ innodb_lock_wait_timeout
 </pre></div>
 </div>
 </li>
-<li><p class="first">Especially mind the 10M parameter to <tt class="docutils literal"><span class="pre">innodb_log_file_size</span></tt>, or
+<li><p class="first">Especially mind the 10M parameter to <code class="docutils literal"><span class="pre">innodb_log_file_size</span></code>, or
 MySQL will crash on startup.</p>
 </li>
 </ol>
 </dd>
 </dl>
 </li>
-<li><p class="first">Create the <tt class="docutils literal"><span class="pre">\persistent\data</span></tt> folder</p>
+<li><p class="first">Create the <code class="docutils literal"><span class="pre">\persistent\data</span></code> folder</p>
 </li>
-<li><p class="first">Move the <tt class="docutils literal"><span class="pre">\user\mysql\data</span></tt> folder to <tt class="docutils literal"><span class="pre">\persistent\data</span></tt> and
-rename to <tt class="docutils literal"><span class="pre">mysql</span></tt> (you now have a <tt class="docutils literal"><span class="pre">\persistent\data\mysql</span></tt>
+<li><p class="first">Move the <code class="docutils literal"><span class="pre">\user\mysql\data</span></code> folder to <code class="docutils literal"><span class="pre">\persistent\data</span></code> and
+rename to <code class="docutils literal"><span class="pre">mysql</span></code> (you now have a <code class="docutils literal"><span class="pre">\persistent\data\mysql</span></code>
 folder)</p>
 </li>
-<li><p class="first">Run <tt class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></tt>, navigate to <tt class="docutils literal"><span class="pre">\user\mysql\bin</span></tt> and run
-<tt class="docutils literal"><span class="pre">mysqld</span> <span class="pre">--console</span></tt> and keep this window open (this is the <em>MySQL
+<li><p class="first">Run <code class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></code>, navigate to <code class="docutils literal"><span class="pre">\user\mysql\bin</span></code> and run
+<code class="docutils literal"><span class="pre">mysqld</span> <span class="pre">--console</span></code> and keep this window open (this is the <em>MySQL
 Server Console</em>)</p>
 </li>
-<li><p class="first">Run <tt class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></tt>, navigate to <tt class="docutils literal"><span class="pre">\user\mysql\bin</span></tt> and run
-<tt class="docutils literal"><span class="pre">mysql</span> <span class="pre">-u</span> <span class="pre">root</span></tt> and do:</p>
+<li><p class="first">Run <code class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></code>, navigate to <code class="docutils literal"><span class="pre">\user\mysql\bin</span></code> and run
+<code class="docutils literal"><span class="pre">mysql</span> <span class="pre">-u</span> <span class="pre">root</span></code> and do:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li><tt class="docutils literal"><span class="pre">DROP</span> <span class="pre">USER</span> <span class="pre">'';</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">DROP</span> <span class="pre">USER</span> <span class="pre">''&#64;localhost;</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">SET</span> <span class="pre">PASSWORD</span> <span class="pre">FOR</span> <span class="pre">root&#64;localhost</span> <span class="pre">=</span> <span class="pre">PASSWORD('&lt;rootpassword&gt;');</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">SET</span> <span class="pre">PASSWORD</span> <span class="pre">FOR</span> <span class="pre">root&#64;127.0.0.1</span> <span class="pre">=</span> <span class="pre">PASSWORD('&lt;rootpassword&gt;');</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">DROP</span> <span class="pre">DATABASE</span> <span class="pre">test;</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">QUIT;</span></tt></li>
+<li><code class="docutils literal"><span class="pre">DROP</span> <span class="pre">USER</span> <span class="pre">'';</span></code></li>
+<li><code class="docutils literal"><span class="pre">DROP</span> <span class="pre">USER</span> <span class="pre">''&#64;localhost;</span></code></li>
+<li><code class="docutils literal"><span class="pre">SET</span> <span class="pre">PASSWORD</span> <span class="pre">FOR</span> <span class="pre">root&#64;localhost</span> <span class="pre">=</span> <span class="pre">PASSWORD('&lt;rootpassword&gt;');</span></code></li>
+<li><code class="docutils literal"><span class="pre">SET</span> <span class="pre">PASSWORD</span> <span class="pre">FOR</span> <span class="pre">root&#64;127.0.0.1</span> <span class="pre">=</span> <span class="pre">PASSWORD('&lt;rootpassword&gt;');</span></code></li>
+<li><code class="docutils literal"><span class="pre">DROP</span> <span class="pre">DATABASE</span> <span class="pre">test;</span></code></li>
+<li><code class="docutils literal"><span class="pre">QUIT;</span></code></li>
 </ol>
 </div></blockquote>
 </li>
-<li><p class="first">Run <tt class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></tt>, navigate to <tt class="docutils literal"><span class="pre">\user\mysql\bin</span></tt> and run
-<tt class="docutils literal"><span class="pre">mysql</span> <span class="pre">-u</span> <span class="pre">root</span> <span class="pre">-p</span> <span class="pre">&lt;</span> <span class="pre">\buffer.sql</span></tt> and give the root password when
+<li><p class="first">Run <code class="docutils literal"><span class="pre">\hisparc_cmd.bat</span></code>, navigate to <code class="docutils literal"><span class="pre">\user\mysql\bin</span></code> and run
+<code class="docutils literal"><span class="pre">mysql</span> <span class="pre">-u</span> <span class="pre">root</span> <span class="pre">-p</span> <span class="pre">&lt;</span> <span class="pre">\buffer.sql</span></code> and give the root password when
 prompted</p>
 </li>
-<li><p class="first">In the <em>MySQL Server Console</em> window, press <tt class="docutils literal"><span class="pre">Control-C</span></tt> to
+<li><p class="first">In the <em>MySQL Server Console</em> window, press <code class="docutils literal"><span class="pre">Control-C</span></code> to
 correctly shutdown the server</p>
 </li>
-<li><p class="first">In the <tt class="docutils literal"><span class="pre">\persistent\data\mysql</span></tt> folder delete the <tt class="docutils literal"><span class="pre">mysql-bin.*</span></tt>
-files and any <tt class="docutils literal"><span class="pre">*.pid</span></tt> and <tt class="docutils literal"><span class="pre">*.err</span></tt> files if they exist from
+<li><p class="first">In the <code class="docutils literal"><span class="pre">\persistent\data\mysql</span></code> folder delete the <code class="docutils literal"><span class="pre">mysql-bin.*</span></code>
+files and any <code class="docutils literal"><span class="pre">*.pid</span></code> and <code class="docutils literal"><span class="pre">*.err</span></code> files if they exist from
 previous runs of the server</p>
 </li>
 </ol>
@@ -309,9 +309,9 @@ previous runs of the server</p>
 </table>
 <p>Installation steps:</p>
 <ol class="arabic simple">
-<li>Unzip to <tt class="docutils literal"><span class="pre">\admin</span></tt> and rename the
-<tt class="docutils literal"><span class="pre">mysql-connector-odbc-noinstall-5.1.8-win32</span></tt> folder to
-<tt class="docutils literal"><span class="pre">odbcconnector</span></tt></li>
+<li>Unzip to <code class="docutils literal"><span class="pre">\admin</span></code> and rename the
+<code class="docutils literal"><span class="pre">mysql-connector-odbc-noinstall-5.1.8-win32</span></code> folder to
+<code class="docutils literal"><span class="pre">odbcconnector</span></code></li>
 </ol>
 </div>
 <div class="section" id="openvpn">
@@ -333,8 +333,8 @@ previous runs of the server</p>
 <p>Installation steps:</p>
 <ol class="arabic simple">
 <li>Download and run the installer</li>
-<li>Copy the <tt class="docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\OpenVPN</span></tt> folder to <tt class="docutils literal"><span class="pre">\admin</span></tt> and rename
-to <tt class="docutils literal"><span class="pre">openvpn</span></tt></li>
+<li>Copy the <code class="docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\OpenVPN</span></code> folder to <code class="docutils literal"><span class="pre">\admin</span></code> and rename
+to <code class="docutils literal"><span class="pre">openvpn</span></code></li>
 </ol>
 </div>
 <div class="section" id="tightvnc">
@@ -355,7 +355,7 @@ to <tt class="docutils literal"><span class="pre">openvpn</span></tt></li>
 </table>
 <p>Installation steps:</p>
 <ol class="arabic simple">
-<li>Create a <tt class="docutils literal"><span class="pre">\admin\tightvnc</span></tt> folder and unzip the download to this
+<li>Create a <code class="docutils literal"><span class="pre">\admin\tightvnc</span></code> folder and unzip the download to this
 folder</li>
 </ol>
 <div class="admonition note">
@@ -412,12 +412,12 @@ machine, or something similar.</li>
 <p>Installation steps:</p>
 <ol class="arabic simple">
 <li>Unpack the zip file.</li>
-<li>Move the <tt class="docutils literal"><span class="pre">CDM20824_WHQL_Certified</span></tt> folder to <tt class="docutils literal"><span class="pre">\admin</span></tt>.</li>
-<li>Rename the folder to <tt class="docutils literal"><span class="pre">ftdi_drivers</span></tt>.</li>
+<li>Move the <code class="docutils literal"><span class="pre">CDM20824_WHQL_Certified</span></code> folder to <code class="docutils literal"><span class="pre">\admin</span></code>.</li>
+<li>Rename the folder to <code class="docutils literal"><span class="pre">ftdi_drivers</span></code>.</li>
 <li>Copy
-<tt class="docutils literal"><span class="pre">C:\WinDDK\7600.16385.1\redist\DIFx\dpinst\EngMui\x86\dpinst.exe</span></tt> to
-<tt class="docutils literal"><span class="pre">\admin\ftdi_drivers</span></tt>.</li>
-<li>Copy <tt class="docutils literal"><span class="pre">\admin\ftdi_drivers\i386\ftd2xx.dll</span></tt> to <tt class="docutils literal"><span class="pre">\user\hisparcdaq</span></tt>.</li>
+<code class="docutils literal"><span class="pre">C:\WinDDK\7600.16385.1\redist\DIFx\dpinst\EngMui\x86\dpinst.exe</span></code> to
+<code class="docutils literal"><span class="pre">\admin\ftdi_drivers</span></code>.</li>
+<li>Copy <code class="docutils literal"><span class="pre">\admin\ftdi_drivers\i386\ftd2xx.dll</span></code> to <code class="docutils literal"><span class="pre">\user\hisparcdaq</span></code>.</li>
 </ol>
 </div>
 <div class="section" id="gps-monitor-dspmon">
@@ -438,9 +438,9 @@ machine, or something similar.</li>
 </table>
 <p>Installation steps:</p>
 <ol class="arabic simple">
-<li>Create folder <tt class="docutils literal"><span class="pre">\user\dspmon</span></tt>.</li>
-<li>Copy <tt class="docutils literal"><span class="pre">DSPMon_V1-46.exe</span></tt> to <tt class="docutils literal"><span class="pre">\user\dspmon</span></tt>.</li>
-<li>Rename file to <tt class="docutils literal"><span class="pre">DSPMon.exe</span></tt>.</li>
+<li>Create folder <code class="docutils literal"><span class="pre">\user\dspmon</span></code>.</li>
+<li>Copy <code class="docutils literal"><span class="pre">DSPMon_V1-46.exe</span></code> to <code class="docutils literal"><span class="pre">\user\dspmon</span></code>.</li>
+<li>Rename file to <code class="docutils literal"><span class="pre">DSPMon.exe</span></code>.</li>
 </ol>
 </div>
 <div class="section" id="nagios-send-passive-check-results-nsca-client">
@@ -460,10 +460,10 @@ machine, or something similar.</li>
 <p>Installation steps:</p>
 <ol class="arabic simple">
 <li>Unpack zip file.</li>
-<li>Copy <tt class="docutils literal"><span class="pre">send_nsca_win32_bin</span></tt> folder to <tt class="docutils literal"><span class="pre">\user\hsmonitor\data</span></tt>.</li>
-<li>Rename folder to <tt class="docutils literal"><span class="pre">send_nsca_win32</span></tt>.</li>
-<li>Edit <tt class="docutils literal"><span class="pre">\user\hsmonitor\data\send_nsca_win32\send_nsca.cfg</span></tt>: change
-<tt class="docutils literal"><span class="pre">encryption_method=1</span></tt> to <tt class="docutils literal"><span class="pre">encryption_method=0</span></tt>.</li>
+<li>Copy <code class="docutils literal"><span class="pre">send_nsca_win32_bin</span></code> folder to <code class="docutils literal"><span class="pre">\user\hsmonitor\data</span></code>.</li>
+<li>Rename folder to <code class="docutils literal"><span class="pre">send_nsca_win32</span></code>.</li>
+<li>Edit <code class="docutils literal"><span class="pre">\user\hsmonitor\data\send_nsca_win32\send_nsca.cfg</span></code>: change
+<code class="docutils literal"><span class="pre">encryption_method=1</span></code> to <code class="docutils literal"><span class="pre">encryption_method=0</span></code>.</li>
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -490,9 +490,9 @@ not as bad as it seems since everything is sent over the VPN.</p>
 <p>Installation steps:</p>
 <ol class="arabic simple">
 <li>Unpack zip file.</li>
-<li>Enter <tt class="docutils literal"><span class="pre">NSClient++-0.3.8-Win32</span></tt> folder.</li>
-<li>Copy everything, <em>except</em> <tt class="docutils literal"><span class="pre">scripts</span></tt> <em>folder and</em> <tt class="docutils literal"><span class="pre">nsci.ini</span></tt> <em>file</em>, to
-<tt class="docutils literal"><span class="pre">\admin\nsclientpp</span></tt>.</li>
+<li>Enter <code class="docutils literal"><span class="pre">NSClient++-0.3.8-Win32</span></code> folder.</li>
+<li>Copy everything, <em>except</em> <code class="docutils literal"><span class="pre">scripts</span></code> <em>folder and</em> <code class="docutils literal"><span class="pre">nsci.ini</span></code> <em>file</em>, to
+<code class="docutils literal"><span class="pre">\admin\nsclientpp</span></code>.</li>
 </ol>
 </div>
 <div class="section" id="nullsoft-scriptable-install-system-nsis">
@@ -515,8 +515,8 @@ not as bad as it seems since everything is sent over the VPN.</p>
 <ol class="arabic simple">
 <li>Run .exe file.</li>
 <li>Perform a <em>Full</em> installation.</li>
-<li>Copy <tt class="docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\NSIS</span></tt> to <tt class="docutils literal"><span class="pre">\bake</span></tt>.</li>
-<li>Rename <tt class="docutils literal"><span class="pre">NSIS</span></tt> folder to <tt class="docutils literal"><span class="pre">nsis</span></tt>.</li>
+<li>Copy <code class="docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\NSIS</span></code> to <code class="docutils literal"><span class="pre">\bake</span></code>.</li>
+<li>Rename <code class="docutils literal"><span class="pre">NSIS</span></code> folder to <code class="docutils literal"><span class="pre">nsis</span></code>.</li>
 </ol>
 </div>
 <div class="section" id="nsis-unzip-plugin-nsisunz">
@@ -536,7 +536,7 @@ not as bad as it seems since everything is sent over the VPN.</p>
 <p>Installation steps:</p>
 <ol class="arabic simple">
 <li>Open archive.</li>
-<li>Copy <tt class="docutils literal"><span class="pre">Release/nsisunz.dll</span></tt> to <tt class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></tt>.</li>
+<li>Copy <code class="docutils literal"><span class="pre">Release/nsisunz.dll</span></code> to <code class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></code>.</li>
 </ol>
 </div>
 <div class="section" id="nsis-xtinfoplugin">
@@ -556,7 +556,7 @@ not as bad as it seems since everything is sent over the VPN.</p>
 <p>Installation steps:</p>
 <ol class="arabic simple">
 <li>Open archive.</li>
-<li>Copy <tt class="docutils literal"><span class="pre">xtInfoPlugin\xtInfoPlugin.dll</span></tt> to <tt class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></tt>.</li>
+<li>Copy <code class="docutils literal"><span class="pre">xtInfoPlugin\xtInfoPlugin.dll</span></code> to <code class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></code>.</li>
 </ol>
 </div>
 <div class="section" id="nsis-simple-service-plugin-simplesc">
@@ -576,7 +576,7 @@ not as bad as it seems since everything is sent over the VPN.</p>
 <p>Installation steps:</p>
 <ol class="arabic simple">
 <li>Open archive.</li>
-<li>Copy <tt class="docutils literal"><span class="pre">SimpleSC.dll</span></tt> to <tt class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></tt>.</li>
+<li>Copy <code class="docutils literal"><span class="pre">SimpleSC.dll</span></code> to <code class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></code>.</li>
 </ol>
 </div>
 <div class="section" id="nsis-simple-firewall-plugin-simplefc">
@@ -596,7 +596,7 @@ not as bad as it seems since everything is sent over the VPN.</p>
 <p>Installation steps:</p>
 <ol class="arabic simple">
 <li>Open archive.</li>
-<li>Copy <tt class="docutils literal"><span class="pre">SimpleFC.dll</span></tt> to <tt class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></tt>.</li>
+<li>Copy <code class="docutils literal"><span class="pre">SimpleFC.dll</span></code> to <code class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></code>.</li>
 </ol>
 </div>
 <div class="section" id="nsis-access-control-plugin">
@@ -616,7 +616,7 @@ not as bad as it seems since everything is sent over the VPN.</p>
 <p>Installation steps:</p>
 <ol class="arabic simple">
 <li>Open archive.</li>
-<li>Copy <tt class="docutils literal"><span class="pre">AccessControl\Plugins\*.dll</span></tt> to <tt class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></tt>.</li>
+<li>Copy <code class="docutils literal"><span class="pre">AccessControl\Plugins\*.dll</span></code> to <code class="docutils literal"><span class="pre">\bake\nsis\Plugins</span></code>.</li>
 </ol>
 </div>
 <div class="section" id="python">
@@ -713,8 +713,8 @@ be able to compile and run the official package from
 <h2>Finishing Python Installation<a class="headerlink" href="#finishing-python-installation" title="Permalink to this headline">¶</a></h2>
 <p>Steps:</p>
 <ol class="arabic simple">
-<li>Copy <tt class="docutils literal"><span class="pre">C:\Python27</span></tt> to <tt class="docutils literal"><span class="pre">\user</span></tt>.</li>
-<li>Rename <tt class="docutils literal"><span class="pre">Python27</span></tt> folder to <tt class="docutils literal"><span class="pre">python</span></tt>.</li>
+<li>Copy <code class="docutils literal"><span class="pre">C:\Python27</span></code> to <code class="docutils literal"><span class="pre">\user</span></code>.</li>
+<li>Rename <code class="docutils literal"><span class="pre">Python27</span></code> folder to <code class="docutils literal"><span class="pre">python</span></code>.</li>
 </ol>
 <p>Unfortunately, the world of Windows is complex.  The world of Windows
 compilers is even more complex.  You can&#8217;t use binaries (executables or
@@ -746,10 +746,10 @@ Alternatively, you can fix the python installation by copying a few files
 around.  This is much easier to do.</p>
 <p>Steps (continued):</p>
 <ol class="arabic simple">
-<li>Copy <tt class="docutils literal"><span class="pre">msvcr90.dll</span></tt> and <tt class="docutils literal"><span class="pre">Microsoft.VC90.CRT.manifest</span></tt> to
-<tt class="docutils literal"><span class="pre">\user\python\DDLs</span></tt>.</li>
-<li>Copy contents of <tt class="docutils literal"><span class="pre">\user\python\Lib\site-packages\pywin32_system32</span></tt> to
-<tt class="docutils literal"><span class="pre">\user\python</span></tt>.</li>
+<li>Copy <code class="docutils literal"><span class="pre">msvcr90.dll</span></code> and <code class="docutils literal"><span class="pre">Microsoft.VC90.CRT.manifest</span></code> to
+<code class="docutils literal"><span class="pre">\user\python\DDLs</span></code>.</li>
+<li>Copy contents of <code class="docutils literal"><span class="pre">\user\python\Lib\site-packages\pywin32_system32</span></code> to
+<code class="docutils literal"><span class="pre">\user\python</span></code>.</li>
 </ol>
 <p>Now try:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">_tkinter</span>
@@ -763,7 +763,7 @@ around.  This is much easier to do.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/header.png" alt="Logo"/>
@@ -803,12 +803,14 @@ around.  This is much easier to do.</p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="setup-development.html"
                         title="previous chapter">Setting up a Development Environment</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/rebuild-tree.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/rebuild-tree.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -825,18 +827,18 @@ around.  This is much easier to do.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="setup-development.html" title="Setting up a Development Environment"
              >previous</a></li>
-        <li><a href="index.html">Detector Software Developer Documentation 1.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Detector Software Developer Documentation 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2010, David Fokkema.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>
