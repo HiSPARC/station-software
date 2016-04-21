@@ -5,6 +5,7 @@ import struct
 
 from HiSPARCEvent import HiSPARCEvent
 
+from parse_and_check import parse_and_check_data
 from load_message import load_hisparc_message
 
 
@@ -12,9 +13,7 @@ class TestHiSPARCEvent(unittest.TestCase):
 
     def test_event(self):
         event = load_hisparc_message('test_data/Event.txt')
-        hisparcevent = HiSPARCEvent([1, event])
-        hisparcevent.uploadCode = 'CIC'
-        eventdata = hisparcevent.parseMessage()
+        parse_and_check_data(self, event, 1, HiSPARCEvent, 'CIC')
 
     def pack_trace(self, trace):
         """Space efficiently pack 12-bit trace values into 8-bit values

@@ -26,7 +26,10 @@ class WeatherConfig(BaseWeatherEvent):
         self.station_id = int(float(tmp.pop()))
         self.database_name = tmp.pop()
         self.help_url = tmp.pop()
-        stand_alone_mode = self.fix_boolean(tmp.pop())
+
+        # stand_alone_mode
+        self.fix_boolean(tmp.pop())
+
         self.daq_mode = self.fix_boolean(tmp.pop())
         self.latitude = float(tmp.pop())
         self.longitude = float(tmp.pop())

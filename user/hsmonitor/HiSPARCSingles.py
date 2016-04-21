@@ -25,7 +25,8 @@ class HiSPARCSingles(BaseHiSPARCEvent):
 
         self.nanoseconds = 0
 
-        device_id = self.unpackSeqMessage('>B')[0]
+        # device_id
+        self.unpackSeqMessage('>B')[0]
 
         self.mas_ch1_low, self.mas_ch1_high, \
             self.mas_ch2_low, self.mas_ch2_high, \

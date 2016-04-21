@@ -21,7 +21,9 @@ class WeatherEvent(BaseWeatherEvent):
         self.month = self.datetime.month
         self.year = self.datetime.year
 
-        time_difference = float(tmp.pop())
+        # time_difference
+        float(tmp.pop())
+
         self.tempInside = float(tmp.pop())
         self.tempOutside = float(tmp.pop())
         self.humidityInside = int(float(tmp.pop()))
