@@ -1,7 +1,7 @@
 #
 #   HiSPARC admin installer
 #   R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#   Latest Revision: Aug 2013
+#   Latest Revision: Aug 2016 - Set NoLockScreen register to 1 (for Windows 10)
 #
 
 !include FileFunc.nsh
@@ -116,6 +116,8 @@ SectionEnd
 #
 Section -Post
   DetailPrint "admin-Post"
+  # set NoLockScreen (only meaningful for Windows 10)
+  WriteRegDWORD HKLM ${LOCKSCREEN_KEY} ${LOCKSCREEN_REG} 1
   # set admin version
   WriteINIStr $ConfigFile Version CurrentAdmin ${ADMIN_VERSION}
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_ADMIN_VERSION} ${ADMIN_VERSION}

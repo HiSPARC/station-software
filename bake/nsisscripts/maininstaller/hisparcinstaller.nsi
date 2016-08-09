@@ -8,6 +8,7 @@
 #             Aug 2013; 64-bit architecture support
 #             Sep 2015; DAQ and Weather executables with spaces, :-(
 #             Sep 2015; HiSPARC moved from $INSTDIR\hisparc to $INSTDIR
+#             Aug 2016; Extended check on Windows version
 #
 
 !include "FileFunc.nsh"
@@ -27,7 +28,6 @@ Name        "${HISPARC_NAME} ${HISPARC_VERSION}"
 OutFile     "${HISPARC_NSIS_RELEASE_DIR}\hisparcInstaller_v${HISPARC_VERSION}.exe"
 InstallDir  "$PROGRAMFILES\${HISPARC_NAME}"
 
-LangString  lsWrongVersion ${LANG_ENGLISH} "HiSPARC runs only on Windows XP or higher."
 LangString  lsNoAdmin      ${LANG_ENGLISH} "You have no administrator rights."
 
 ShowInstDetails   show
@@ -41,20 +41,17 @@ Function .onInit
   File /r *.ini
 
   # Check Windows version.
-  xtInfoPlugin::IsWindowsME
-  Pop $0
-  xtInfoPlugin::IsWindows98
-  Pop $1
-  xtInfoPlugin::IsWindows95
-  Pop $2
+  Call GetWindowsVersion
+  StrCmp $OkVersion "true" proCeed1
+  StrCmp $OkVersion "false" wrVersion unkVersion
+wrVersion:
+  MessageBox MB_ICONEXCLAMATION "HiSPARC runs only on Windows 7 or higher, not on $WinVersion"
+  Goto noInstall
+unkVersion:
+  MessageBox MB_YESNO|MB_ICONQUESTION "The Windows version $RegVersion is unknown.$\n\
+  Do you want to continue the installation?" IDYES proCeed1 IDNO noInstall
 
-  ${If}   $0 == "true"
-  ${OrIf} $1 == "true"
-  ${OrIf} $2 == "true"
-     MessageBox MB_ICONEXCLAMATION $(lsWrongVersion)
-     Abort $(lsWrongVersion)
-  ${EndIf}
-
+proCeed1:
   # Check if user has administrator rights.
   xtInfoPlugin::IsAdministrator
   Pop $0
@@ -70,11 +67,11 @@ Function .onInit
   StrCmp $0 "0" is32 is64
 is32:
   SetRegView 32
-  Goto proCeed
+  Goto proCeed2
 is64:
   SetRegView 64
   
-proCeed:
+proCeed2:
   ReadRegStr $CurVersion HKLM "${HISPARC_KEY}" ${REG_HISPARC_VERSION}
   StrCmp $CurVersion "" Install
   MessageBox MB_YESNO|MB_ICONQUESTION "It seems HiSPARC version $CurVersion is still installed.$\n\
@@ -94,6 +91,80 @@ Function fileExists
 noFile:
   MessageBox MB_ICONEXCLAMATION "Cannot open $FileName!$\nMAIN-Installation aborted."
   Quit
+FunctionEnd
+
+Function GetWindowsVersion
+  ClearErrors
+  StrCpy $OkVersion "false"  #assumption
+  ReadRegStr $RegVersion HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
+  IfErrors 0 lbl_winnt
+  
+  # we are not NT
+  ReadRegStr $RegVersion HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion" VersionNumber
+  StrCpy $TmpVersion $RegVersion 1
+  StrCmp $TmpVersion "4" 0 lbl_error
+  StrCpy $TmpVersion $RegVersion 3
+  StrCmp $TmpVersion "4.0" lbl_win32_95
+  StrCmp $TmpVersion "4.9" lbl_win32_ME lbl_win32_98
+lbl_win32_95:
+  StrCpy $WinVersion "95"
+  Goto lbl_done
+lbl_win32_98:
+  StrCpy $WinVersion "98"
+  Goto lbl_done
+lbl_win32_ME:
+  StrCpy $WinVersion "ME"
+  Goto lbl_done
+  
+lbl_winnt:
+  StrCpy $TmpVersion $RegVersion 1
+  StrCmp $TmpVersion "3" lbl_winnt_x
+  StrCmp $TmpVersion "4" lbl_winnt_x
+  StrCpy $TmpVersion $RegVersion 3
+  StrCmp $TmpVersion "5.0" lbl_winnt_2000
+  StrCmp $TmpVersion "5.1" lbl_winnt_XP
+  StrCmp $TmpVersion "5.2" lbl_winnt_2003
+  StrCmp $TmpVersion "6.0" lbl_winnt_vista
+  StrCmp $TmpVersion "6.1" lbl_winnt_7
+  StrCmp $TmpVersion "6.2" lbl_winnt_8
+  StrCmp $TmpVersion "6.3" lbl_winnt_81
+  StrCmp $TmpVersion "6.4" lbl_winnt_10 lbl_error
+lbl_winnt_x:
+  StrCpy $WinVersion "NT $RegVersion" 6
+  Goto lbl_done
+lbl_winnt_2000:
+  StrCpy $WinVersion "2000"
+  Goto lbl_done
+lbl_winnt_XP:
+  StrCpy $WinVersion "XP"
+  Goto lbl_done
+lbl_winnt_2003:
+  StrCpy $WinVersion "2003"
+  Goto lbl_done
+lbl_winnt_vista:
+  StrCpy $WinVersion "Vista"
+  Goto lbl_done
+lbl_winnt_7:
+  StrCpy $WinVersion "7"
+  StrCpy $OkVersion "true"
+  Goto lbl_done
+lbl_winnt_8:
+  StrCpy $WinVersion "8"
+  StrCpy $OkVersion "true"
+  Goto lbl_done
+lbl_winnt_81:
+  StrCpy $WinVersion "8.1"
+  StrCpy $OkVersion "true"
+  Goto lbl_done
+lbl_winnt_10:
+  StrCpy $WinVersion "10"
+  StrCpy $OkVersion "true"
+  Goto lbl_done
+  
+lbl_error:
+  StrCpy $WinVersion $RegVersion
+  StrCpy $OkVersion "unknown"
+lbl_done:
 FunctionEnd
 
 Section -SetMainVariables

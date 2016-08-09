@@ -13,6 +13,7 @@ Var OpenVpnDir
 Var Program
 Var Result
 Var FileName
+Var FolderName
 Var Message
 
 # Names of the services
@@ -38,3 +39,13 @@ Var Message
 # LabVIEW definitions
 !define LABVIEW_KEY         "SOFTWARE\National Instruments\Common\Installer"
 !define LABVIEW_DIR         "NIDIR"
+
+# FTDI definitions
+!define FTDI_ENUM_VALUE     "01"
+!define FTDI_ENUM_KEY       "SYSTEM\CurrentControlSet\Control\UsbFlags"
+!define FTDI_ENUM_REG1      "IgnoreHWSerNum04036001"
+!define FTDI_ENUM_REG2      "IgnoreHWSerNum04036010"
+
+# NoLockScreen definitions
+!define LOCKSCREEN_KEY      "SOFTWARE\Policies\Microsoft\Windows\Personalization"
+!define LOCKSCREEN_REG      "NoLockScreen"

@@ -10,6 +10,8 @@
 #   Oct 2015: - only 1 LabView RTE, version 2014 (RH)
 #   Nov 2015: - NI-RTE 2014: installation fails sometimes with error 1603 (x643),
 #               but installation seems ok. Error will be ignored.
+#   Aug 2016: - NI-RTE 2015 and check on folder C:\Users\Public\Documents
+#             - Disable FTDI enumeration
 #
 
 #
@@ -35,7 +37,7 @@ Section -CheckExecutables
   Call fileExists
   StrCpy $FileName "$AdminDir\odbcconnector\Install_HiSPARC.bat"
   Call fileExists
-  StrCpy $FileName "$AdminDir\nirte2014\setup.exe"
+  StrCpy $FileName "$AdminDir\nirte2015\setup.exe"
   Call fileExists
   StrCpy $FileName "$AdminDir\ftdi_drivers\dpinst.exe"
   Call fileExists
@@ -172,14 +174,21 @@ SectionEnd
 
 #
 # Install LabVIEW Run-Time-Engine
-# ONE version is installed: 2014
+# If C:\Users\Public\Documents does not exist, create it.
+# ONE version is installed: 2015
 # NB: Return code 3010 (0xBC2) means ERROR_SUCCESS_REBOOT_REQUIRED
+#     Return code 1603 (0x643) ignored as well
 #
 Section -LabviewRuntimeSetup
   DetailPrint "admin-LabviewRuntimeSetup"
+  StrCpy $FolderName "C:\Users\Public\Documents"
+  ${DirState} $FolderName $Result
+  ${If} $Result < 0
+    CreateDirectory $FolderName
+  ${EndIf}
   SetRegView 32
-  ExecWait '"$AdminDir\nirte2014\setup.exe" /AcceptLicenses yes /r:n /q' $Result
-  StrCpy $Message "LabVIEW RTE 2014 setup: $Result"
+  ExecWait '"$AdminDir\nirte2015\setup.exe" /AcceptLicenses yes /r:n /q' $Result
+  StrCpy $Message "LabVIEW RTE 2015 setup: $Result"
   DetailPrint $Message
   ${If} $Result != 3010
   ${AndIf} $Result != 0
@@ -193,9 +202,12 @@ SectionEnd
 
 #
 # Install FTDI USB drivers
+# Disable COM port enumeration by means of 2 entries in the registry (Aug 2016)
 #
 Section -FTDIDrivers
   DetailPrint "admin-FTDIDrivers"
+  WriteRegBin HKLM ${FTDI_ENUM_KEY} ${FTDI_ENUM_REG1} ${FTDI_ENUM_VALUE}
+  WriteRegBin HKLM ${FTDI_ENUM_KEY} ${FTDI_ENUM_REG2} ${FTDI_ENUM_VALUE}
   ExecWait '"$AdminDir\ftdi_drivers\dpinst.exe" /q' $Result
   DetailPrint "FTDI dpinst: $Result"
 SectionEnd

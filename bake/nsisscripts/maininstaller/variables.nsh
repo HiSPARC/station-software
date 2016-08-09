@@ -15,6 +15,10 @@ Var Result
 Var FileName
 Var Program
 Var CurVersion
+Var RegVersion
+Var WinVersion
+Var OkVersion
+Var TmpVersion
 
 #
 # Windows accounts.
