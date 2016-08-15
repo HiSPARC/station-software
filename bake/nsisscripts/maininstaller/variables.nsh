@@ -19,6 +19,8 @@ Var RegVersion
 Var WinVersion
 Var OkVersion
 Var TmpVersion
+Var Major
+Var Minor
 
 #
 # Windows accounts.

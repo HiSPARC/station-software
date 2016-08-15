@@ -117,6 +117,14 @@ lbl_win32_ME:
   Goto lbl_done
   
 lbl_winnt:
+  ReadRegDWORD $Major HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentMajorVersionNumber
+  IfErrors lbl_winnt2 0
+  ReadRegDWORD $Minor HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentMinorVersionNumber
+  IfErrors lbl_winnt2 0
+  StrCpy $WinVersion "$Major.$Minor"
+  StrCpy $OkVersion "true"
+  Goto lbl_done
+lbl_winnt2:
   StrCpy $TmpVersion $RegVersion 1
   StrCmp $TmpVersion "3" lbl_winnt_x
   StrCmp $TmpVersion "4" lbl_winnt_x
@@ -157,7 +165,7 @@ lbl_winnt_81:
   StrCpy $OkVersion "true"
   Goto lbl_done
 lbl_winnt_10:
-  StrCpy $WinVersion "10"
+  StrCpy $WinVersion "10.0"
   StrCpy $OkVersion "true"
   Goto lbl_done
   
