@@ -1,7 +1,9 @@
 #
 #   uninstaller.nsh ------
 #   Create the admin uninstaller.
-#   Aug 2013: some applications still use the 32-bit registry
+#   Aug 2013: - some applications still use the 32-bit registry
+#   Sep 2016: - OpenVPN version 2.3.12 now for 32 and 64 bits
+#             - OpenVPN and TAP-Windows in separate folders
 #
 
 Function un.onInit
@@ -40,12 +42,15 @@ proCeed:
   DetailPrint "AdminDir: $AdminDir"
   
   ${If} $Architecture == "32"
+    StrCpy $TapWinDir "$AdminDir\tapwindows32"
     StrCpy $OpenVpnDir "$AdminDir\openvpn32"
     StrCpy $TvncFolder "$AdminDir\tightvnc32"
   ${Else}
+    StrCpy $TapWinDir "$AdminDir\tapwindows64"
     StrCpy $OpenVpnDir "$AdminDir\openvpn64"
     StrCpy $TvncFolder "$AdminDir\tightvnc64"
   ${Endif}
+  DetailPrint "TapWinDir: $TapWindDir"
   DetailPrint "OpenVpnDir: $OpenVpnDir"
   DetailPrint "TvncFolder: $TvncFolder"
   Return
@@ -60,22 +65,24 @@ FunctionEnd
 #
 Section un.UninstOpenVPN
   DetailPrint "admin-un.UninstOpenVPN"
-  # OpenVPN 2.2.2 64-bit version, still reads its registry as a 32-bit application
+  # OpenVPN 2.3.12
   SetRegView 32
-  # remove service
-  ExecWait '"$OpenVpnDir\bin\openvpnserv.exe" -remove' $Result
-  DetailPrint "VPN openvpnserv: $Result"
-  # delete reg keys
-  DeleteRegKey HKLM ${OPENVPN_KEY}
-  # remove the tap devices
-  ExecWait '"$OpenVpnDir\bin\tapinstall.exe" remove tap0901' $Result
-  DetailPrint "VPN tapremove: $Result"
-  # remove the folder
-  RMDir /r /REBOOTOK "$AdminDir\openvpn32"
-  RMDir /r /REBOOTOK "$AdminDir\openvpn64"
   ${If} $Architecture == "64"
     SetRegView 64
   ${Endif}
+  # remove service
+  ExecWait '"$OpenVpnDir\bin\openvpnserv.exe" -remove' $Result
+  DetailPrint "OpenVPN openvpnserv: $Result"
+  # delete reg keys
+  DeleteRegKey HKLM ${OPENVPN_KEY}
+  # remove the tap devices
+  ExecWait '"$TapWinDir\bin\tapinstall.exe" remove tap0901' $Result
+  DetailPrint "OpenVPN tapremove: $Result"
+  # remove the folder
+  RMDir /r /REBOOTOK "$AdminDir\tapwindows32"
+  RMDir /r /REBOOTOK "$AdminDir\tapwindows64"
+  RMDir /r /REBOOTOK "$AdminDir\openvpn32"
+  RMDir /r /REBOOTOK "$AdminDir\openvpn64"
 SectionEnd
 
 #

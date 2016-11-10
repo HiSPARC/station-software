@@ -9,6 +9,7 @@
 #             Sep 2015; DAQ and Weather executables with spaces, :-(
 #             Sep 2015; HiSPARC moved from $INSTDIR\hisparc to $INSTDIR
 #             Aug 2016; Extended check on Windows version
+#             Sep 2016; Power management pc and monitor ---> never go to sleep
 #
 
 !include "FileFunc.nsh"
@@ -284,6 +285,10 @@ Section -CreateUserAccounts
   # set accounts so that passwords never expire (RH: June 8 2012)
   ExecWait "net accounts /maxpwage:unlimited"
   SetDetailsPrint both
+  # all: keep pc and monitor alive!
+  ExecWait "powercfg -h off"
+  ExecWait "powercfg -change -standby-timeout-ac 0"
+  ExecWait "powercfg -change -monitor-timeout-ac 0"
 SectionEnd
 
 #

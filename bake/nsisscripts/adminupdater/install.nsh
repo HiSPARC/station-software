@@ -1,17 +1,19 @@
 #
 #   install.nsh ------
 #   Admin installer.
-#   Jan 2013: multiple (2) NI-RunTimeEngines
-#   May 2013: - separate OpenVpn folder for 32-bit and 64-bit
-#             - popup-window in case of error
+#   Jan 2013: - Multiple (2) NI-RunTimeEngines
+#   May 2013: - Separate OpenVpn folder for 32-bit and 64-bit
+#             - Popup-window in case of error
 #   Aug 2013: - 64-bit: only OpenVPN and TightVNC have a true 64-bit executable
 #               Other application still use the 32-bit registry.
 #               OpenVPN, due to a bug in version 2.2.2, as well.
-#   Oct 2015: - only 1 LabView RTE, version 2014 (RH)
+#   Oct 2015: - Only 1 LabView RTE, version 2014 (RH)
 #   Nov 2015: - NI-RTE 2014: installation fails sometimes with error 1603 (x643),
 #               but installation seems ok. Error will be ignored.
 #   Aug 2016: - NI-RTE 2015 and check on folder C:\Users\Public\Documents
 #             - Disable FTDI enumeration
+#   Sep 2016: - OpenVPN version 2.3.12 now for 32 and 64 bits
+#             - OpenVPN and TAP-Windows in separate folders
 #
 
 #
@@ -27,7 +29,7 @@ Section -CheckExecutables
     Quit
   ${Endif}
   
-  StrCpy $FileName "$OpenVpnDir\bin\tapinstall.exe"
+  StrCpy $FileName "$TapWinDir\bin\tapinstall.exe"
   Call fileExists
   StrCpy $FileName "$OpenVpnDir\bin\openvpnserv.exe"
   Call fileExists
@@ -48,8 +50,11 @@ SectionEnd
 #
 Section -OpenVPNSetup
   DetailPrint "admin-OpenVPNSetup"
-  # OpenVPN 2.2.2 64-bit version, still reads its registry as a 32-bit application
+  # OpenVPN 2.3.12
   SetRegView 32
+  ${If} $Architecture == "64"
+    SetRegView 64
+  ${Endif}
   # register
   WriteRegStr HKLM ${OPENVPN_KEY} ""         "$AdminDir"
   WriteRegStr HKLM ${OPENVPN_KEY} config_dir "$OpenVpnDir\config"
@@ -59,8 +64,8 @@ Section -OpenVPNSetup
   WriteRegStr HKLM ${OPENVPN_KEY} log_dir    "$OpenVpnDir\log"
   WriteRegStr HKLM ${OPENVPN_KEY} priority   "NORMAL_PRIORITY_CLASS"
   # install tap driver
-  ExecWait '"$OpenVpnDir\bin\tapinstall.exe" install "$OpenVpnDir\driver\OemWin2k.inf" tap0901' $Result
-  StrCpy $Message "VPN tapinstall: $Result"
+  ExecWait '"$TapWinDir\bin\tapinstall.exe" install "$TapWinDir\driver\OemWin2k.inf" tap0901' $Result
+  StrCpy $Message "OpenVPN tapinstall: $Result"
   DetailPrint $Message
   ${If} $Result != 0
     MessageBox MB_ICONEXCLAMATION "ERROR: $Message"
@@ -74,9 +79,6 @@ Section -OpenVPNSetup
   ${Endif}
   # unzip certificate zip
   nsisunz::UnzipToLog "$CertZip" "$OpenVpnDir\config"
-  ${If} $Architecture == "64"
-    SetRegView 64
-  ${Endif}
 SectionEnd
 
 #
@@ -213,7 +215,7 @@ Section -FTDIDrivers
 SectionEnd
 
 #
-# Post install page. Stratup the services
+# Post install page. Startup the services
 #
 Section -RegisterServices
   DetailPrint "admin-RegisterServices"

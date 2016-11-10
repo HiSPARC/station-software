@@ -1,0 +1,86 @@
+Changelog for Delprof2 by Helge Klein
+
+http://helgeklein.com/free-tools/delprof2-user-profile-deletion-tool
+
+
+Version 1.6.0
+
+a) New features
+
+-  Support for Windows 8, 8.1 and Server 2012 (R2)
+
+================================================
+
+Version 1.5.4
+
+a) Bugfixes
+
+-  Mandatory profiles were not detected as being in use
+
+================================================
+
+Version 1.5.3
+
+a) New features
+
+-  Client side rendering print provider data is now deleted, too.
+
+================================================
+
+Version 1.5.2
+
+a) Bugfixes
+
+-  Fixed incorrect messages "not old enough to be deleted" which happened if: profile age < time zone offset
+   (for negative time zone offsets larger than one, e.g. the USA)
+
+================================================
+
+Version 1.5.1
+
+a) Bugfixes
+
+-  Version 1.5 introduced a bug which prevented Delprof2 from working on Windows XP. This has been fixed.
+
+================================================
+
+Version 1.5
+
+a) New features
+
+-  Inclusion and exclusion of profile directories
+
+-  Delprof2 now also cleans up these registry locations:
+   HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileGuid\<GUID> [where SidString equals the current profile user's SID]
+   HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\<SID>
+   
+-  NTUser.ini can be used instead of NTUser.dat for profile age calculation. This is useful if your antivirus product regularly mounts user
+   profile registry hives, updating their timestamps in the process.
+   
+-  Delprof2 is now digitally signed
+
+-  Changed license. Please consult the product's website for details.
+
+b) Changed features
+
+-  Delprof2 needs the Remote Registry service on remote computers. Added a concise error message if the service is not started
+
+-  When only listing (not deleting) permissions the text printed on the screen now clearly states that fact
+
+-  The Systemprofile was ignored previously, now it is explicitly excluded (just in case)
+
+c) Bugfixes
+
+-  Profiles with "access denied" were not ignored although that was printed on the screen
+
+================================================
+
+Version 1.0.1
+
+a) New features
+
+-  Added unattended mode (invoked with /u on the command line) where Delprof2 does not ask for confirmation
+
+b) Bugfixes
+
+-  Delprof2 did not work on Vista and Server 2008 due to incorrect OS version checking

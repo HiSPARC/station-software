@@ -2,8 +2,11 @@
 #   hs_def.nsh ------
 #   General definition file for the HiSPARC installer.
 #   R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#   Modified: October 2012
+#   Oct 2012: - Modified
+#   Sep 2016: - Windows version added
 #
+
+!define REG_WINDOWS_VERSION         "WinVersion"
 
 !define HISPARC_NAME                "HiSPARC"
 !define HISPARC_PUBLISHER           "Nikhef"

@@ -2,6 +2,10 @@
 #   uninstaller.nsh ------
 #   Create the main uninstaller.
 #   R.Hart@nikhef.nl, Nikhef, Amsterdam
+#   Sep 2016: - OpenVPN version 2.3.12 now for 32 and 64 bits
+#             - OpenVPN and TAP-Windows in separate folders
+#             - Account profiles can only be removed when all user (daughter-)processes have been killed!
+#             - Introduced Delprof2 to remove account profiles
 #
 
 Function un.onInit
@@ -58,9 +62,15 @@ FunctionEnd
 # Uninstall HiSPARC in one big Section
 #
 Section un.RemoveHisparc
+  #
+  # Copy DelProf2 to other location as HiSPARC folders will be removed
+  CreateDirectory $INSTDIR\DelProf2
+  CopyFiles /SILENT $HisparcDir\admin\delprof2\*.exe $INSTDIR\DelProf2
+  #
   # Stop the services
   DetailPrint "un.StopServices"
   ExecWait "$HisparcDir\persistent\startstopbatch\StopAdminMode.bat" $Result
+  #
   # Uninstall the admin software
   DetailPrint "un.UninstallAdmin"
   ExecWait '"$HisparcDir\persistent\uninstallers\adminuninst.exe" /S' $Result
@@ -88,11 +98,20 @@ Section un.RemoveHisparc
   Delete /REBOOTOK "$SMSTARTUP\StartHiSPARCSoftware.lnk"
   # Remove the main uninstaller
   Delete "$HisparcDir\persistent\uninstallers\mainuninst.exe"
-  # Keep the HiSPARC folder or not.
-  MessageBox MB_YESNO|MB_ICONQUESTION "Do you want to keep the HiSPARC program folder?" IDYES keepFolder IDNO removeFolder
-removeFolder:
+  # Give user last opportunity to copy data from HiSPARC directory structure
+  MessageBox MB_ICONINFORMATION|MB_OK "Last chance to save data from HiSPARC folders; OK to continue and delete."
+  # Remove (remainders of) both admhisparc and hisparc profiles and folders with Delprof2 utility
+  ExecWait '"$INSTDIR\DelProf2\DelProf2.exe" /id:${ADMHISPARC_USERNAME} /q /i' $Result
+  ExecWait '"$INSTDIR\DelProf2\DelProf2.exe" /id:${HISPARC_USERNAME} /q /i' $Result
+  # Remove the HiSPARC folder (if still there).
   RMDir /r /REBOOTOK $HisparcDir
-keepFolder:
+  # Remove the DelProf2 folder.
+  RMDir /r /REBOOTOK $INSTDIR\DelProf2
+  # Remove the hisparc user folder (if still there).
+  SetOutPath $TEMP\$INSTDIR
+  SetOutPath $TEMP
+  RMDir /r /REBOOTOK $TEMP\Users\hisparc
+  SetOutPath $INSTDIR
   # Remove HiSPARC key
   DeleteRegKey HKLM "${HISPARC_KEY}"
   DeleteRegKey HKLM "${HISPARC_UNINST_KEY}"

@@ -1,7 +1,10 @@
 #
 #   HiSPARC admin installer
 #   R.Hart@nikhef.nl, NIKHEF, Amsterdam
-#   Latest Revision: Aug 2016 - Set NoLockScreen register to 1 (for Windows 10)
+#   Aug 2016: - Set NoLockScreen register to 1 (for Windows 10)
+#   Sep 2016: - OpenVPN version 2.3.12 now for 32 and 64 bits
+#             - OpenVPN and TAP-Windows in separate folders
+#   Oct 2016: - Windows 10: kill useless apps/services and disable telemetry
 #
 
 !include FileFunc.nsh
@@ -65,12 +68,15 @@ proCeed:
   Call fileExists   # check if certificate exists
   
   ${If} $Architecture == "32"
+    StrCpy $TapWinDir "$AdminDir\tapwindows32"
     StrCpy $OpenVpnDir "$AdminDir\openvpn32"
     StrCpy $TvncFolder "$AdminDir\tightvnc32"
   ${Else}
+    StrCpy $TapWinDir "$AdminDir\tapwindows64"
     StrCpy $OpenVpnDir "$AdminDir\openvpn64"
     StrCpy $TvncFolder "$AdminDir\tightvnc64"
   ${Endif}
+  DetailPrint "TapWinDir: $TapWinDir"
   DetailPrint "OpenVpnDir: $OpenVpnDir"
   DetailPrint "TvncFolder: $TvncFolder"
   
@@ -116,8 +122,18 @@ SectionEnd
 #
 Section -Post
   DetailPrint "admin-Post"
-  # set NoLockScreen (only meaningful for Windows 10)
-  WriteRegDWORD HKLM ${LOCKSCREEN_KEY} ${LOCKSCREEN_REG} 1
+#
+# Following only relevant for Windows 10
+  ReadRegDWORD $Major HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentMajorVersionNumber
+  IfErrors lbl_done 0
+  StrCpy $WinVersion "$Major"
+  ${If} $WinVersion == "10"
+  # this is to overcome new (hidden) security measures touching OpenVPN
+    WriteRegDWORD HKLM ${GUEST_KEY_Path} ${GUEST_KEY} 1
+  # set NoLockScreen
+    WriteRegDWORD HKLM ${LOCKSCREEN_KEY} ${LOCKSCREEN_REG} 1
+  ${Endif}
+  lbl_done:
   # set admin version
   WriteINIStr $ConfigFile Version CurrentAdmin ${ADMIN_VERSION}
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_ADMIN_VERSION} ${ADMIN_VERSION}

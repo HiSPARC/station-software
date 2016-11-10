@@ -2,6 +2,7 @@
 #   variables.nsh ------
 #   Admin installer
 #
+Var WinVersion
 Var HisparcDir
 Var Architecture
 Var AdminDir
@@ -9,12 +10,14 @@ Var NIdir
 Var ConfigFile
 Var CertZip
 Var TvncFolder
+Var TapWinDir
 Var OpenVpnDir
 Var Program
 Var Result
 Var FileName
 Var FolderName
 Var Message
+Var Major
 
 # Names of the services
 !define VPN_SERVICENAME     "OpenVPNService"
@@ -23,6 +26,13 @@ Var Message
 
 # OpenVPN definitions
 !define OPENVPN_KEY         "SOFTWARE\OpenVPN"
+# Registry key to overcome hidden security measure blocking OpenVPN in Windows 10
+!define GUEST_KEY_PATH      "SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"
+!define GUEST_KEY           "AllowInsecureGuestAuth"
+
+# Attempt to kill microsoft spying in Windows 10
+!define SPY_KEY_Path        "SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+!define SPY_KEY             "AllowTelemetry"
 
 # TightVNC definitions
 !define TIGHTVNC_KEY        "SOFTWARE\TightVNC"
