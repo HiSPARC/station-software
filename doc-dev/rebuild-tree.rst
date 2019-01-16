@@ -263,20 +263,8 @@ Installation steps:
 Nagios: Send Passive Check Results (NSCA Client)
 ------------------------------------------------
 
-:Homepage: http://exchange.nagios.org/directory/Addons/Passive-Checks/NSCA-Win32-Client/details
-:Version: Unknown
-:Download: http://exchange.nagios.org/components/com_mtree/attachment.php?link_id=550&cf_id=29
-
-Installation steps:
-
-#. Unpack zip file.
-#. Copy ``send_nsca_win32_bin`` folder to ``\user\hsmonitor\data``.
-#. Rename folder to ``send_nsca_win32``.
-#. Edit ``\user\hsmonitor\data\send_nsca_win32\send_nsca.cfg``: change
-   ``encryption_method=1`` to ``encryption_method=0``.
-
-.. note:: I'd really like to change this to something better.  Still, it is
-          not as bad as it seems since everything is sent over the VPN.
+NSCA has been removed and replaced by NRDP.
+NRDP has been integrated into the hsmonitor. send_ncsa.exe is no longer required.
 
 
 Nagios: Client (NSClient++)
