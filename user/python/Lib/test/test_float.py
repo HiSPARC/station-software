@@ -8,6 +8,7 @@ import operator
 import random
 import fractions
 import sys
+import time
 
 INF = float("inf")
 NAN = float("nan")
@@ -25,6 +26,12 @@ requires_IEEE_754 = unittest.skipUnless(have_getformat and
 #locate file with float format test values
 test_dir = os.path.dirname(__file__) or os.curdir
 format_testfile = os.path.join(test_dir, 'formatfloat_testcases.txt')
+
+class FloatSubclass(float):
+    pass
+
+class OtherFloatSubclass(float):
+    pass
 
 class GeneralFloatCases(unittest.TestCase):
 
@@ -52,14 +59,89 @@ class GeneralFloatCases(unittest.TestCase):
         float('.' + '1'*1000)
         float(unicode('.' + '1'*1000))
 
+    def test_non_numeric_input_types(self):
+        # Test possible non-numeric types for the argument x, including
+        # subclasses of the explicitly documented accepted types.
+        class CustomStr(str): pass
+        class CustomByteArray(bytearray): pass
+        factories = [str, bytearray, CustomStr, CustomByteArray, buffer]
+
+        if test_support.have_unicode:
+            class CustomUnicode(unicode): pass
+            factories += [unicode, CustomUnicode]
+
+        for f in factories:
+            with test_support.check_py3k_warnings(quiet=True):
+                x = f(" 3.14  ")
+            msg = 'x has value %s and type %s' % (x, type(x).__name__)
+            try:
+                self.assertEqual(float(x), 3.14, msg=msg)
+            except TypeError, err:
+                raise AssertionError('For %s got TypeError: %s' %
+                                     (type(x).__name__, err))
+            errmsg = "could not convert"
+            with self.assertRaisesRegexp(ValueError, errmsg, msg=msg), \
+                 test_support.check_py3k_warnings(quiet=True):
+                float(f('A' * 0x10))
+
+    def test_float_buffer(self):
+        with test_support.check_py3k_warnings():
+            self.assertEqual(float(buffer('12.3', 1, 3)), 2.3)
+            self.assertEqual(float(buffer('12.3\x00', 1, 3)), 2.3)
+            self.assertEqual(float(buffer('12.3 ', 1, 3)), 2.3)
+            self.assertEqual(float(buffer('12.3A', 1, 3)), 2.3)
+            self.assertEqual(float(buffer('12.34', 1, 3)), 2.3)
+
+    def check_conversion_to_int(self, x):
+        """Check that int(x) has the correct value and type, for a float x."""
+        n = int(x)
+        if x >= 0.0:
+            # x >= 0 and n = int(x)  ==>  n <= x < n + 1
+            self.assertLessEqual(n, x)
+            self.assertLess(x, n + 1)
+        else:
+            # x < 0 and n = int(x)  ==>  n >= x > n - 1
+            self.assertGreaterEqual(n, x)
+            self.assertGreater(x, n - 1)
+
+        # Result should be an int if within range, else a long.
+        if -sys.maxint-1 <= n <= sys.maxint:
+            self.assertEqual(type(n), int)
+        else:
+            self.assertEqual(type(n), long)
+
+        # Double check.
+        self.assertEqual(type(int(n)), type(n))
+
+    def test_conversion_to_int(self):
+        # Check that floats within the range of an int convert to type
+        # int, not long.  (issue #11144.)
+        boundary = float(sys.maxint + 1)
+        epsilon = 2**-sys.float_info.mant_dig * boundary
+
+        # These 2 floats are either side of the positive int/long boundary on
+        # both 32-bit and 64-bit systems.
+        self.check_conversion_to_int(boundary - epsilon)
+        self.check_conversion_to_int(boundary)
+
+        # These floats are either side of the negative long/int boundary on
+        # 64-bit systems...
+        self.check_conversion_to_int(-boundary - 2*epsilon)
+        self.check_conversion_to_int(-boundary)
+
+        # ... and these ones are either side of the negative long/int
+        # boundary on 32-bit systems.
+        self.check_conversion_to_int(-boundary - 1.0)
+        self.check_conversion_to_int(-boundary - 1.0 + 2*epsilon)
+
     @test_support.run_with_locale('LC_NUMERIC', 'fr_FR', 'de_DE')
     def test_float_with_comma(self):
         # set locale to something that doesn't use '.' for the decimal point
         # float must not accept the locale specific decimal point but
-        # it still has to accept the normal python syntac
+        # it still has to accept the normal python syntax
         import locale
         if not locale.localeconv()['decimal_point'] == ',':
-            return
+            self.skipTest('decimal_point is not ","')
 
         self.assertEqual(float("  3.14  "), 3.14)
         self.assertEqual(float("+3.14  "), 3.14)
@@ -122,6 +204,26 @@ class GeneralFloatCases(unittest.TestCase):
         self.assertAlmostEqual(float(FooUnicode('8')), 9.)
         self.assertAlmostEqual(float(FooStr('8')), 9.)
 
+        class Foo5:
+            def __float__(self):
+                return ""
+        self.assertRaises(TypeError, time.sleep, Foo5())
+
+        # Issue #24731
+        class F:
+            def __float__(self):
+                return OtherFloatSubclass(42.)
+        self.assertAlmostEqual(float(F()), 42.)
+        self.assertIs(type(float(F())), OtherFloatSubclass)
+        self.assertAlmostEqual(FloatSubclass(F()), 42.)
+        self.assertIs(type(FloatSubclass(F())), FloatSubclass)
+
+    def test_is_integer(self):
+        self.assertFalse((1.1).is_integer())
+        self.assertTrue((1.).is_integer())
+        self.assertFalse(float("nan").is_integer())
+        self.assertFalse(float("inf").is_integer())
+
     def test_floatasratio(self):
         for f, ratio in [
                 (0.875, (7, 8)),
@@ -158,8 +260,28 @@ class GeneralFloatCases(unittest.TestCase):
     def assertEqualAndEqualSign(self, a, b):
         # fail unless a == b and a and b have the same sign bit;
         # the only difference from assertEqual is that this test
-        # distingishes -0.0 and 0.0.
+        # distinguishes -0.0 and 0.0.
         self.assertEqual((a, copysign(1.0, a)), (b, copysign(1.0, b)))
+
+    @requires_IEEE_754
+    def test_float_mod(self):
+        # Check behaviour of % operator for IEEE 754 special cases.
+        # In particular, check signs of zeros.
+        mod = operator.mod
+
+        self.assertEqualAndEqualSign(mod(-1.0, 1.0), 0.0)
+        self.assertEqualAndEqualSign(mod(-1e-100, 1.0), 1.0)
+        self.assertEqualAndEqualSign(mod(-0.0, 1.0), 0.0)
+        self.assertEqualAndEqualSign(mod(0.0, 1.0), 0.0)
+        self.assertEqualAndEqualSign(mod(1e-100, 1.0), 1e-100)
+        self.assertEqualAndEqualSign(mod(1.0, 1.0), 0.0)
+
+        self.assertEqualAndEqualSign(mod(-1.0, -1.0), -0.0)
+        self.assertEqualAndEqualSign(mod(-1e-100, -1.0), -1e-100)
+        self.assertEqualAndEqualSign(mod(-0.0, -1.0), -0.0)
+        self.assertEqualAndEqualSign(mod(0.0, -1.0), -0.0)
+        self.assertEqualAndEqualSign(mod(1e-100, -1.0), -1.0)
+        self.assertEqualAndEqualSign(mod(1.0, -1.0), -0.0)
 
     @requires_IEEE_754
     def test_float_pow(self):

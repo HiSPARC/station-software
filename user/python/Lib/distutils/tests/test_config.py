@@ -11,6 +11,7 @@ from distutils.log import set_threshold
 from distutils.log import WARN
 
 from distutils.tests import support
+from test.test_support import run_unittest
 
 PYPIRC = """\
 [distutils]
@@ -88,7 +89,7 @@ class PyPIRCCommandTestCase(support.TempdirManager,
         config = config.items()
         config.sort()
         waited = [('password', 'secret'), ('realm', 'pypi'),
-                  ('repository', 'http://pypi.python.org/pypi'),
+                  ('repository', 'https://upload.pypi.org/legacy/'),
                   ('server', 'server1'), ('username', 'me')]
         self.assertEqual(config, waited)
 
@@ -98,14 +99,14 @@ class PyPIRCCommandTestCase(support.TempdirManager,
         config = config.items()
         config.sort()
         waited = [('password', 'secret'), ('realm', 'pypi'),
-                  ('repository', 'http://pypi.python.org/pypi'),
+                  ('repository', 'https://upload.pypi.org/legacy/'),
                   ('server', 'server-login'), ('username', 'tarek')]
         self.assertEqual(config, waited)
 
     def test_server_empty_registration(self):
         cmd = self._cmd(self.dist)
         rc = cmd._get_rc_file()
-        self.assertTrue(not os.path.exists(rc))
+        self.assertFalse(os.path.exists(rc))
         cmd._store_pypirc('tarek', 'xxx')
         self.assertTrue(os.path.exists(rc))
         f = open(rc)
@@ -119,4 +120,4 @@ def test_suite():
     return unittest.makeSuite(PyPIRCCommandTestCase)
 
 if __name__ == "__main__":
-    unittest.main(defaultTest="test_suite")
+    run_unittest(test_suite())

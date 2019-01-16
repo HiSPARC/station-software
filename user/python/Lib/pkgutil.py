@@ -1,8 +1,5 @@
 """Utilities to support packages."""
 
-# NOTE: This module must remain compatible with Python 2.3, as it is shared
-# by setuptools for distribution with Python 2.3 and up.
-
 import os
 import sys
 import imp
@@ -11,7 +8,7 @@ from types import ModuleType
 
 __all__ = [
     'get_importer', 'iter_importers', 'get_loader', 'find_loader',
-    'walk_packages', 'iter_modules',
+    'walk_packages', 'iter_modules', 'get_data',
     'ImpImporter', 'ImpLoader', 'read_code', 'extend_path',
 ]
 
@@ -194,8 +191,11 @@ class ImpImporter:
 
         yielded = {}
         import inspect
-
-        filenames = os.listdir(self.path)
+        try:
+            filenames = os.listdir(self.path)
+        except OSError:
+            # ignore unreadable directories like import does
+            filenames = []
         filenames.sort()  # handle packages before same-named modules
 
         for fn in filenames:
@@ -208,7 +208,12 @@ class ImpImporter:
 
             if not modname and os.path.isdir(path) and '.' not in fn:
                 modname = fn
-                for fn in os.listdir(path):
+                try:
+                    dircontents = os.listdir(path)
+                except OSError:
+                    # ignore unreadable directories like import does
+                    dircontents = []
+                for fn in dircontents:
                     subname = inspect.getmodulename(fn)
                     if subname=='__init__':
                         ispkg = True
@@ -244,7 +249,8 @@ class ImpLoader:
         return mod
 
     def get_data(self, pathname):
-        return open(pathname, "rb").read()
+        with open(pathname, "rb") as file:
+            return file.read()
 
     def _reopen(self):
         if self.file and self.file.closed:

@@ -237,7 +237,7 @@ class UnixBrowser(BaseBrowser):
                              stdout=(self.redirect_stdout and inout or None),
                              stderr=inout, preexec_fn=setsid)
         if remote:
-            # wait five secons. If the subprocess is not finished, the
+            # wait five seconds. If the subprocess is not finished, the
             # remote invocation has (hopefully) started a new instance.
             time.sleep(1)
             rc = p.poll()
@@ -285,12 +285,10 @@ class Mozilla(UnixBrowser):
     """Launcher class for Mozilla/Netscape browsers."""
 
     raise_opts = ["-noraise", "-raise"]
-
     remote_args = ['-remote', 'openURL(%s%action)']
     remote_action = ""
     remote_action_newwin = ",new-window"
     remote_action_newtab = ",new-tab"
-
     background = True
 
 Netscape = Mozilla
@@ -303,15 +301,25 @@ class Galeon(UnixBrowser):
     remote_args = ['%action', '%s']
     remote_action = "-n"
     remote_action_newwin = "-w"
-
     background = True
+
+
+class Chrome(UnixBrowser):
+    "Launcher class for Google Chrome browser."
+
+    remote_args = ['%action', '%s']
+    remote_action = ""
+    remote_action_newwin = "--new-window"
+    remote_action_newtab = ""
+    background = True
+
+Chromium = Chrome
 
 
 class Opera(UnixBrowser):
     "Launcher class for Opera browser."
 
-    raise_opts = ["", "-raise"]
-
+    raise_opts = ["-noraise", ""]
     remote_args = ['-remote', 'openURL(%s%action)']
     remote_action = ""
     remote_action_newwin = ",new-window"
@@ -445,6 +453,14 @@ class Grail(BaseBrowser):
 
 def register_X_browsers():
 
+    # use xdg-open if around
+    if _iscommand("xdg-open"):
+        register("xdg-open", None, BackgroundBrowser("xdg-open"))
+
+    # The default GNOME3 browser
+    if "GNOME_DESKTOP_SESSION_ID" in os.environ and _iscommand("gvfs-open"):
+        register("gvfs-open", None, BackgroundBrowser("gvfs-open"))
+
     # The default GNOME browser
     if "GNOME_DESKTOP_SESSION_ID" in os.environ and _iscommand("gnome-open"):
         register("gnome-open", None, BackgroundBrowser("gnome-open"))
@@ -453,9 +469,13 @@ def register_X_browsers():
     if "KDE_FULL_SESSION" in os.environ and _iscommand("kfmclient"):
         register("kfmclient", Konqueror, Konqueror("kfmclient"))
 
+    if _iscommand("x-www-browser"):
+        register("x-www-browser", None, BackgroundBrowser("x-www-browser"))
+
     # The Mozilla/Netscape browsers
     for browser in ("mozilla-firefox", "firefox",
                     "mozilla-firebird", "firebird",
+                    "iceweasel", "iceape",
                     "seamonkey", "mozilla", "netscape"):
         if _iscommand(browser):
             register(browser, None, Mozilla(browser))
@@ -475,6 +495,11 @@ def register_X_browsers():
     if _iscommand("skipstone"):
         register("skipstone", None, BackgroundBrowser("skipstone"))
 
+    # Google Chrome/Chromium browsers
+    for browser in ("google-chrome", "chrome", "chromium", "chromium-browser"):
+        if _iscommand(browser):
+            register(browser, None, Chrome(browser))
+
     # Opera, quite popular
     if _iscommand("opera"):
         register("opera", None, Opera("opera"))
@@ -493,6 +518,8 @@ if os.environ.get("DISPLAY"):
 
 # Also try console browsers
 if os.environ.get("TERM"):
+    if _iscommand("www-browser"):
+        register("www-browser", None, GenericBrowser("www-browser"))
     # The Links/elinks browsers <http://artax.karlin.mff.cuni.cz/~mikulas/links/>
     if _iscommand("links"):
         register("links", None, GenericBrowser("links"))
@@ -615,6 +642,7 @@ if sys.platform == 'darwin':
     # (but we prefer using the OS X specific stuff)
     register("safari", None, MacOSXOSAScript('safari'), -1)
     register("firefox", None, MacOSXOSAScript('firefox'), -1)
+    register("chrome", None, MacOSXOSAScript('chrome'), -1)
     register("MacOSX", None, MacOSXOSAScript('default'), -1)
 
 

@@ -3,6 +3,7 @@ from cStringIO import StringIO
 import os
 import sys
 import unittest
+import unittest.test
 
 
 class Test_TestProgram(unittest.TestCase):
@@ -224,7 +225,7 @@ class TestCommandLineArgs(unittest.TestCase):
 
         program.runTests()
 
-        # If initialising raises a type error it should be retried
+        # If initializing raises a type error it should be retried
         # without the new keyword arguments
         self.assertEqual(FakeRunner.initArgs, {})
         self.assertEqual(FakeRunner.test, 'test')

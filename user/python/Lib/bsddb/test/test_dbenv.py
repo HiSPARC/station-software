@@ -7,14 +7,6 @@ from test_all import db, test_support, get_new_environment_path, \
 #----------------------------------------------------------------------
 
 class DBEnv(unittest.TestCase):
-    import sys
-    if sys.version_info < (2, 4) :
-        def assertTrue(self, expr, msg=None):
-            self.failUnless(expr,msg=msg)
-
-        def assertFalse(self, expr, msg=None):
-            self.failIf(expr,msg=msg)
-
     def setUp(self):
         self.homeDir = get_new_environment_path()
         self.env = db.DBEnv()
@@ -25,11 +17,30 @@ class DBEnv(unittest.TestCase):
         test_support.rmtree(self.homeDir)
 
 class DBEnv_general(DBEnv) :
+    def test_get_open_flags(self) :
+        flags = db.DB_CREATE | db.DB_INIT_MPOOL
+        self.env.open(self.homeDir, flags)
+        self.assertEqual(flags, self.env.get_open_flags())
+
+    def test_get_open_flags2(self) :
+        flags = db.DB_CREATE | db.DB_INIT_MPOOL | \
+                db.DB_INIT_LOCK | db.DB_THREAD
+        self.env.open(self.homeDir, flags)
+        self.assertEqual(flags, self.env.get_open_flags())
+
     if db.version() >= (4, 7) :
         def test_lk_partitions(self) :
             for i in [10, 20, 40] :
                 self.env.set_lk_partitions(i)
                 self.assertEqual(i, self.env.get_lk_partitions())
+
+        def test_getset_intermediate_dir_mode(self) :
+            self.assertEqual(None, self.env.get_intermediate_dir_mode())
+            for mode in ["rwx------", "rw-rw-rw-", "rw-r--r--"] :
+                self.env.set_intermediate_dir_mode(mode)
+                self.assertEqual(mode, self.env.get_intermediate_dir_mode())
+            self.assertRaises(db.DBInvalidArgError,
+                    self.env.set_intermediate_dir_mode, "abcde")
 
     if db.version() >= (4, 6) :
         def test_thread(self) :
@@ -43,36 +54,34 @@ class DBEnv_general(DBEnv) :
                 self.env.set_cache_max(0, size)
                 size2 = self.env.get_cache_max()
                 self.assertEqual(0, size2[0])
-                self.assertTrue(size <= size2[1])
-                self.assertTrue(2*size > size2[1])
+                self.assertLessEqual(size, size2[1])
+                self.assertGreater(2*size, size2[1])
 
     if db.version() >= (4, 4) :
         def test_mutex_stat(self) :
             self.env.open(self.homeDir, db.DB_CREATE | db.DB_INIT_MPOOL |
                     db.DB_INIT_LOCK)
             stat = self.env.mutex_stat()
-            self.assertTrue("mutex_inuse_max" in stat)
+            self.assertIn("mutex_inuse_max", stat)
 
         def test_lg_filemode(self) :
             for i in [0600, 0660, 0666] :
                 self.env.set_lg_filemode(i)
                 self.assertEqual(i, self.env.get_lg_filemode())
 
-    if db.version() >= (4, 3) :
-        def test_mp_max_openfd(self) :
-            for i in [17, 31, 42] :
-                self.env.set_mp_max_openfd(i)
-                self.assertEqual(i, self.env.get_mp_max_openfd())
+    def test_mp_max_openfd(self) :
+        for i in [17, 31, 42] :
+            self.env.set_mp_max_openfd(i)
+            self.assertEqual(i, self.env.get_mp_max_openfd())
 
-        def test_mp_max_write(self) :
-            for i in [100, 200, 300] :
-                for j in [1, 2, 3] :
-                    j *= 1000000
-                    self.env.set_mp_max_write(i, j)
-                    v=self.env.get_mp_max_write()
-                    self.assertEqual((i, j), v)
+    def test_mp_max_write(self) :
+        for i in [100, 200, 300] :
+            for j in [1, 2, 3] :
+                j *= 1000000
+                self.env.set_mp_max_write(i, j)
+                v=self.env.get_mp_max_write()
+                self.assertEqual((i, j), v)
 
-    if db.version() >= (4, 2) :
         def test_invalid_txn(self) :
             # This environment doesn't support transactions
             self.assertRaises(db.DBInvalidArgError, self.env.txn_begin)
@@ -115,20 +124,19 @@ class DBEnv_general(DBEnv) :
                 self.assertEqual(i, self.env.get_lk_max_lockers())
 
         def test_lg_regionmax(self) :
-            for i in [128, 256, 1024] :
+            for i in [128, 256, 1000] :
                 i = i*1024*1024
                 self.env.set_lg_regionmax(i)
                 j = self.env.get_lg_regionmax()
-                self.assertTrue(i <= j)
-                self.assertTrue(2*i > j)
+                self.assertLessEqual(i, j)
+                self.assertGreater(2*i, j)
 
         def test_lk_detect(self) :
             flags= [db.DB_LOCK_DEFAULT, db.DB_LOCK_EXPIRE, db.DB_LOCK_MAXLOCKS,
                     db.DB_LOCK_MINLOCKS, db.DB_LOCK_MINWRITE,
                     db.DB_LOCK_OLDEST, db.DB_LOCK_RANDOM, db.DB_LOCK_YOUNGEST]
 
-            if db.version() >= (4, 3) :
-                flags.append(db.DB_LOCK_MAXWRITE)
+            flags.append(db.DB_LOCK_MAXWRITE)
 
             for i in flags :
                 self.env.set_lk_detect(i)
@@ -142,10 +150,10 @@ class DBEnv_general(DBEnv) :
         def test_lg_bsize(self) :
             log_size = 70*1024
             self.env.set_lg_bsize(log_size)
-            self.assertTrue(self.env.get_lg_bsize() >= log_size)
-            self.assertTrue(self.env.get_lg_bsize() < 4*log_size)
+            self.assertGreaterEqual(self.env.get_lg_bsize(), log_size)
+            self.assertLess(self.env.get_lg_bsize(), 4*log_size)
             self.env.set_lg_bsize(4*log_size)
-            self.assertTrue(self.env.get_lg_bsize() >= 4*log_size)
+            self.assertGreaterEqual(self.env.get_lg_bsize(), 4*log_size)
 
         def test_setget_data_dirs(self) :
             dirs = ("a", "b", "c", "d")
@@ -172,8 +180,12 @@ class DBEnv_general(DBEnv) :
             self.env.open(self.homeDir, db.DB_CREATE | db.DB_INIT_MPOOL)
             cachesize = (0, 2*1024*1024, 1)
             self.assertRaises(db.DBInvalidArgError,
-                self.env.set_cachesize, *cachesize)
-            self.assertEqual(cachesize2, self.env.get_cachesize())
+                              self.env.set_cachesize, *cachesize)
+            cachesize3 = self.env.get_cachesize()
+            self.assertEqual(cachesize2[0], cachesize3[0])
+            self.assertEqual(cachesize2[2], cachesize3[2])
+            # In Berkeley DB 5.1, the cachesize can change when opening the Env
+            self.assertLessEqual(cachesize2[1], cachesize3[1])
 
         def test_set_cachesize_dbenv_db(self) :
             # You can not configure the cachesize using
@@ -287,7 +299,7 @@ class DBEnv_log(DBEnv) :
             msg = "This is a test..."
             self.env.log_printf(msg)
             logc = self.env.log_cursor()
-            self.assertTrue(msg in (logc.last()[1]))
+            self.assertIn(msg, logc.last()[1])
 
     if db.version() >= (4, 7) :
         def test_log_config(self) :
@@ -305,7 +317,7 @@ class DBEnv_log_txn(DBEnv) :
         self.env.open(self.homeDir, db.DB_CREATE | db.DB_INIT_MPOOL |
                 db.DB_INIT_LOG | db.DB_INIT_TXN)
 
-    if db.version() >= (4, 5) :
+    if (db.version() >= (4, 5)) and (db.version() < (5, 2)) :
         def test_tx_max(self) :
             txns=[]
             def tx() :
@@ -329,21 +341,21 @@ class DBEnv_log_txn(DBEnv) :
             txn.commit()
             logc = self.env.log_cursor()
             logc.last()  # Skip the commit
-            self.assertTrue(msg in (logc.prev()[1]))
+            self.assertIn(msg, logc.prev()[1])
 
             msg = "This is another test..."
             txn = self.env.txn_begin()
             self.env.log_printf(msg, txn=txn)
             txn.abort()  # Do not store the new message
             logc.last()  # Skip the abort
-            self.assertTrue(msg not in (logc.prev()[1]))
+            self.assertNotIn(msg, logc.prev()[1])
 
             msg = "This is a third test..."
             txn = self.env.txn_begin()
             self.env.log_printf(msg, txn=txn)
             txn.commit()  # Do not store the new message
             logc.last()  # Skip the commit
-            self.assertTrue(msg in (logc.prev()[1]))
+            self.assertIn(msg, logc.prev()[1])
 
 
 class DBEnv_memp(DBEnv):
@@ -360,39 +372,39 @@ class DBEnv_memp(DBEnv):
 
     def test_memp_1_trickle(self) :
         self.db.put("hi", "bye")
-        self.assertTrue(self.env.memp_trickle(100) > 0)
+        self.assertGreater(self.env.memp_trickle(100), 0)
 
 # Preserve the order, do "memp_trickle" test first
     def test_memp_2_sync(self) :
         self.db.put("hi", "bye")
         self.env.memp_sync()  # Full flush
         # Nothing to do...
-        self.assertTrue(self.env.memp_trickle(100) == 0)
+        self.assertEqual(self.env.memp_trickle(100), 0)
 
         self.db.put("hi", "bye2")
         self.env.memp_sync((1, 0))  # NOP, probably
         # Something to do... or not
-        self.assertTrue(self.env.memp_trickle(100) >= 0)
+        self.assertGreaterEqual(self.env.memp_trickle(100), 0)
 
         self.db.put("hi", "bye3")
         self.env.memp_sync((123, 99))  # Full flush
         # Nothing to do...
-        self.assertTrue(self.env.memp_trickle(100) == 0)
+        self.assertEqual(self.env.memp_trickle(100), 0)
 
     def test_memp_stat_1(self) :
         stats = self.env.memp_stat()  # No param
-        self.assertTrue(len(stats)==2)
-        self.assertTrue("cache_miss" in stats[0])
+        self.assertEqual(len(stats), 2)
+        self.assertIn("cache_miss", stats[0])
         stats = self.env.memp_stat(db.DB_STAT_CLEAR)  # Positional param
-        self.assertTrue("cache_miss" in stats[0])
+        self.assertIn("cache_miss", stats[0])
         stats = self.env.memp_stat(flags=0)  # Keyword param
-        self.assertTrue("cache_miss" in stats[0])
+        self.assertIn("cache_miss", stats[0])
 
     def test_memp_stat_2(self) :
         stats=self.env.memp_stat()[1]
-        self.assertTrue(len(stats))==1
-        self.assertTrue("test" in stats)
-        self.assertTrue("page_in" in stats["test"])
+        self.assertEqual(len(stats), 1)
+        self.assertIn("test", stats)
+        self.assertIn("page_in", stats["test"])
 
 class DBEnv_logcursor(DBEnv):
     def setUp(self):
@@ -414,28 +426,28 @@ class DBEnv_logcursor(DBEnv):
         DBEnv.tearDown(self)
 
     def _check_return(self, value) :
-        self.assertTrue(isinstance(value, tuple))
+        self.assertIsInstance(value, tuple)
         self.assertEqual(len(value), 2)
-        self.assertTrue(isinstance(value[0], tuple))
+        self.assertIsInstance(value[0], tuple)
         self.assertEqual(len(value[0]), 2)
-        self.assertTrue(isinstance(value[0][0], int))
-        self.assertTrue(isinstance(value[0][1], int))
-        self.assertTrue(isinstance(value[1], str))
+        self.assertIsInstance(value[0][0], int)
+        self.assertIsInstance(value[0][1], int)
+        self.assertIsInstance(value[1], str)
 
     # Preserve test order
     def test_1_first(self) :
         logc = self.env.log_cursor()
         v = logc.first()
         self._check_return(v)
-        self.assertTrue((1, 1) < v[0])
-        self.assertTrue(len(v[1])>0)
+        self.assertLess((1, 1), v[0])
+        self.assertGreater(len(v[1]), 0)
 
     def test_2_last(self) :
         logc = self.env.log_cursor()
         lsn_first = logc.first()[0]
         v = logc.last()
         self._check_return(v)
-        self.assertTrue(lsn_first < v[0])
+        self.assertLess(lsn_first, v[0])
 
     def test_3_next(self) :
         logc = self.env.log_cursor()
@@ -444,16 +456,16 @@ class DBEnv_logcursor(DBEnv):
         lsn_first = logc.first()[0]
         v = logc.next()
         self._check_return(v)
-        self.assertTrue(lsn_first < v[0])
-        self.assertTrue(lsn_last > v[0])
+        self.assertLess(lsn_first, v[0])
+        self.assertGreater(lsn_last, v[0])
 
         v2 = logc.next()
-        self.assertTrue(v2[0] > v[0])
-        self.assertTrue(lsn_last > v2[0])
+        self.assertGreater(v2[0], v[0])
+        self.assertGreater(lsn_last, v2[0])
 
         v3 = logc.next()
-        self.assertTrue(v3[0] > v2[0])
-        self.assertTrue(lsn_last > v3[0])
+        self.assertGreater(v3[0], v2[0])
+        self.assertGreater(lsn_last, v3[0])
 
     def test_4_prev(self) :
         logc = self.env.log_cursor()
@@ -462,16 +474,16 @@ class DBEnv_logcursor(DBEnv):
         lsn_last = logc.last()[0]
         v = logc.prev()
         self._check_return(v)
-        self.assertTrue(lsn_first < v[0])
-        self.assertTrue(lsn_last > v[0])
+        self.assertLess(lsn_first, v[0])
+        self.assertGreater(lsn_last, v[0])
 
         v2 = logc.prev()
-        self.assertTrue(v2[0] < v[0])
-        self.assertTrue(lsn_first < v2[0])
+        self.assertLess(v2[0], v[0])
+        self.assertLess(lsn_first, v2[0])
 
         v3 = logc.prev()
-        self.assertTrue(v3[0] < v2[0])
-        self.assertTrue(lsn_first < v3[0])
+        self.assertLess(v3[0], v2[0])
+        self.assertLess(lsn_first, v3[0])
 
     def test_5_current(self) :
         logc = self.env.log_cursor()

@@ -6,9 +6,10 @@ import os
 import shutil
 import sys
 import test.test_support
-from test.test_support import captured_stdout
+from test.test_support import captured_stdout, run_unittest
 import unittest
 from distutils.tests import support
+from distutils import log
 
 # setup script that uses __file__
 setup_using___file__ = """\
@@ -36,6 +37,7 @@ class CoreTestCase(support.EnvironGuard, unittest.TestCase):
         self.old_stdout = sys.stdout
         self.cleanup_testfn()
         self.old_argv = sys.argv, sys.argv[:]
+        self.addCleanup(log.set_threshold, log._global_log.threshold)
 
     def tearDown(self):
         sys.stdout = self.old_stdout
@@ -105,4 +107,4 @@ def test_suite():
     return unittest.makeSuite(CoreTestCase)
 
 if __name__ == "__main__":
-    unittest.main(defaultTest="test_suite")
+    run_unittest(test_suite())

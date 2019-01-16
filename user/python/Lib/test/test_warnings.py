@@ -62,6 +62,25 @@ class BaseTest(unittest.TestCase):
         sys.modules['warnings'] = original_warnings
         super(BaseTest, self).tearDown()
 
+class PublicAPITests(BaseTest):
+
+    """Ensures that the correct values are exposed in the
+    public API.
+    """
+
+    def test_module_all_attribute(self):
+        self.assertTrue(hasattr(self.module, '__all__'))
+        target_api = ["warn", "warn_explicit", "showwarning",
+                      "formatwarning", "filterwarnings", "simplefilter",
+                      "resetwarnings", "catch_warnings"]
+        self.assertSetEqual(set(self.module.__all__),
+                            set(target_api))
+
+class CPublicAPITests(PublicAPITests, unittest.TestCase):
+    module = c_warnings
+
+class PyPublicAPITests(PublicAPITests, unittest.TestCase):
+    module = py_warnings
 
 class FilterTests(object):
 
@@ -186,6 +205,18 @@ class FilterTests(object):
             self.assertEqual(str(w[-1].message), text)
             self.assertTrue(w[-1].category is UserWarning)
 
+    def test_message_matching(self):
+        with original_warnings.catch_warnings(record=True,
+                module=self.module) as w:
+            self.module.simplefilter("ignore", UserWarning)
+            self.module.filterwarnings("error", "match", UserWarning)
+            self.assertRaises(UserWarning, self.module.warn, "match")
+            self.assertRaises(UserWarning, self.module.warn, "match prefix")
+            self.module.warn("suffix match")
+            self.assertEqual(w, [])
+            self.module.warn("something completely different")
+            self.assertEqual(w, [])
+
 class CFilterTests(BaseTest, FilterTests):
     module = c_warnings
 
@@ -259,11 +290,10 @@ class WarnTests(unittest.TestCase):
         finally:
             warning_tests.__file__ = filename
 
+    @unittest.skipUnless(hasattr(sys, 'argv'), 'test needs sys.argv')
     def test_missing_filename_main_with_argv(self):
         # If __file__ is not specified and the caller is __main__ and sys.argv
         # exists, then use sys.argv[0] as the file.
-        if not hasattr(sys, 'argv'):
-            return
         filename = warning_tests.__file__
         module_name = warning_tests.__name__
         try:
@@ -320,7 +350,7 @@ class WarnTests(unittest.TestCase):
             sys.argv = argv
 
     def test_warn_explicit_type_errors(self):
-        # warn_explicit() shoud error out gracefully if it is given objects
+        # warn_explicit() should error out gracefully if it is given objects
         # of the wrong types.
         # lineno is expected to be an integer.
         self.assertRaises(TypeError, self.module.warn_explicit,
@@ -530,6 +560,62 @@ class _WarningsTests(BaseTest):
         assert expected_line
         self.assertEqual(second_line, expected_line)
 
+    def test_filename_none(self):
+        # issue #12467: race condition if a warning is emitted at shutdown
+        globals_dict = globals()
+        oldfile = globals_dict['__file__']
+        try:
+            with original_warnings.catch_warnings(module=self.module, record=True) as w:
+                self.module.filterwarnings("always", category=UserWarning)
+                globals_dict['__file__'] = None
+                self.module.warn('test', UserWarning)
+            self.assertEqual(len(w), 1)
+            self.assertEqual(w[0].category, UserWarning)
+            self.assertEqual(str(w[0].message), 'test')
+        finally:
+            globals_dict['__file__'] = oldfile
+
+    def test_stderr_none(self):
+        rc, stdout, stderr = assert_python_ok("-c",
+            "import sys; sys.stderr = None; "
+            "import warnings; warnings.simplefilter('always'); "
+            "warnings.warn('Warning!')")
+        self.assertEqual(stdout, b'')
+        self.assertNotIn(b'Warning!', stderr)
+        self.assertNotIn(b'Error', stderr)
+
+    def test_issue31285(self):
+        # warn_explicit() shouldn't raise a SystemError in case the return
+        # value of get_source() has a bad splitlines() method.
+        class BadLoader:
+            def get_source(self, fullname):
+                class BadSource(str):
+                    def splitlines(self):
+                        return 42
+                return BadSource('spam')
+
+        wmod = self.module
+        with original_warnings.catch_warnings(module=wmod):
+            wmod.filterwarnings('default', category=UserWarning)
+
+            with test_support.captured_stderr() as stderr:
+                wmod.warn_explicit(
+                    'foo', UserWarning, 'bar', 1,
+                    module_globals={'__loader__': BadLoader(),
+                                    '__name__': 'foobar'})
+            self.assertIn('UserWarning: foo', stderr.getvalue())
+
+    @test_support.cpython_only
+    def test_issue31411(self):
+        # warn_explicit() shouldn't raise a SystemError in case
+        # warnings.onceregistry isn't a dictionary.
+        wmod = self.module
+        with original_warnings.catch_warnings(module=wmod):
+            wmod.filterwarnings('once')
+            with test_support.swap_attr(wmod, 'onceregistry', None):
+                with self.assertRaises(TypeError):
+                    wmod.warn_explicit('foo', Warning, 'bar', 1, registry=None)
+
 
 class WarningsDisplayTests(unittest.TestCase):
 
@@ -551,6 +637,63 @@ class WarningsDisplayTests(unittest.TestCase):
         file_line += " for the win!"
         expect = format % (file_name, line_num, category.__name__, message,
                             file_line)
+        self.assertEqual(expect, self.module.formatwarning(message,
+                                    category, file_name, line_num, file_line))
+
+    @test_support.requires_unicode
+    def test_formatwarning_unicode_msg(self):
+        message = u"msg"
+        category = Warning
+        file_name = os.path.splitext(warning_tests.__file__)[0] + '.py'
+        line_num = 3
+        file_line = linecache.getline(file_name, line_num).strip()
+        format = "%s:%s: %s: %s\n  %s\n"
+        expect = format % (file_name, line_num, category.__name__, message,
+                            file_line)
+        self.assertEqual(expect, self.module.formatwarning(message,
+                                                category, file_name, line_num))
+        # Test the 'line' argument.
+        file_line += " for the win!"
+        expect = format % (file_name, line_num, category.__name__, message,
+                            file_line)
+        self.assertEqual(expect, self.module.formatwarning(message,
+                                    category, file_name, line_num, file_line))
+
+    @test_support.requires_unicode
+    @unittest.skipUnless(test_support.FS_NONASCII, 'need test_support.FS_NONASCII')
+    def test_formatwarning_unicode_msg_nonascii_filename(self):
+        message = u"msg"
+        category = Warning
+        unicode_file_name = test_support.FS_NONASCII + u'.py'
+        file_name = unicode_file_name.encode(sys.getfilesystemencoding())
+        line_num = 3
+        file_line = 'spam'
+        format = "%s:%s: %s: %s\n  %s\n"
+        expect = format % (file_name, line_num, category.__name__, str(message),
+                            file_line)
+        self.assertEqual(expect, self.module.formatwarning(message,
+                                    category, file_name, line_num, file_line))
+        message = u"\xb5sg"
+        expect = format % (unicode_file_name, line_num, category.__name__, message,
+                            file_line)
+        self.assertEqual(expect, self.module.formatwarning(message,
+                                    category, file_name, line_num, file_line))
+
+    @test_support.requires_unicode
+    def test_formatwarning_unicode_msg_nonascii_fileline(self):
+        message = u"msg"
+        category = Warning
+        file_name = 'file.py'
+        line_num = 3
+        file_line = 'sp\xe4m'
+        format = "%s:%s: %s: %s\n  %s\n"
+        expect = format % (file_name, line_num, category.__name__, str(message),
+                            file_line)
+        self.assertEqual(expect, self.module.formatwarning(message,
+                                    category, file_name, line_num, file_line))
+        message = u"\xb5sg"
+        expect = format % (file_name, line_num, category.__name__, message,
+                            unicode(file_line, 'latin1'))
         self.assertEqual(expect, self.module.formatwarning(message,
                                     category, file_name, line_num, file_line))
 
@@ -657,7 +800,7 @@ class CatchWarningTests(BaseTest):
         # Explicit tests for the test_support convenience wrapper
         wmod = self.module
         if wmod is not sys.modules['warnings']:
-            return
+            self.skipTest('module to test is not loaded warnings module')
         with test_support.check_warnings(quiet=False) as w:
             self.assertEqual(w.warnings, [])
             wmod.simplefilter("always")

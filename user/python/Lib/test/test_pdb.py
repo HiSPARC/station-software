@@ -3,10 +3,82 @@
 
 import imp
 import sys
+import os
+import unittest
+import subprocess
+import textwrap
 
 from test import test_support
 # This little helper class is essential for testing pdb under doctest.
 from test_doctest import _FakeInput
+
+
+class PdbTestCase(unittest.TestCase):
+
+    def run_pdb(self, script, commands):
+        """Run 'script' lines with pdb and the pdb 'commands'."""
+        filename = 'main.py'
+        with open(filename, 'w') as f:
+            f.write(textwrap.dedent(script))
+        self.addCleanup(test_support.unlink, filename)
+        cmd = [sys.executable, '-m', 'pdb', filename]
+        stdout = stderr = None
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                                   stdin=subprocess.PIPE,
+                                   stderr=subprocess.STDOUT,
+                                   )
+        stdout, stderr = proc.communicate(commands)
+        proc.stdout.close()
+        proc.stdin.close()
+        return stdout, stderr
+
+    def test_issue13183(self):
+        script = """
+            from bar import bar
+
+            def foo():
+                bar()
+
+            def nope():
+                pass
+
+            def foobar():
+                foo()
+                nope()
+
+            foobar()
+        """
+        commands = """
+            from bar import bar
+            break bar
+            continue
+            step
+            step
+            quit
+        """
+        bar = """
+            def bar():
+                pass
+        """
+        with open('bar.py', 'w') as f:
+            f.write(textwrap.dedent(bar))
+        self.addCleanup(test_support.unlink, 'bar.py')
+        self.addCleanup(test_support.unlink, 'bar.pyc')
+        stdout, stderr = self.run_pdb(script, commands)
+        self.assertTrue(
+            any('main.py(5)foo()->None' in l for l in stdout.splitlines()),
+            'Fail to step into the caller after a return')
+
+    def test_issue16180(self):
+        # A syntax error in the debuggee.
+        script = "def f: pass\n"
+        commands = ''
+        expected = "SyntaxError:"
+        stdout, stderr = self.run_pdb(script, commands)
+        self.assertIn(expected, stdout,
+            '\n\nExpected:\n{}\nGot:\n{}\n'
+            'Fail to handle a syntax error in the debuggee.'
+            .format(expected, stdout))
 
 
 class PdbTestInput(object):
@@ -52,6 +124,108 @@ def test_pdb_displayhook():
     3
     4
     (Pdb) continue
+    """
+
+def test_pdb_breakpoint_commands():
+    """Test basic commands related to breakpoints.
+
+    >>> def test_function():
+    ...     import pdb; pdb.Pdb().set_trace()
+    ...     print(1)
+    ...     print(2)
+    ...     print(3)
+    ...     print(4)
+
+    First, need to clear bdb state that might be left over from previous tests.
+    Otherwise, the new breakpoints might get assigned different numbers.
+
+    >>> from bdb import Breakpoint
+    >>> Breakpoint.next = 1
+    >>> Breakpoint.bplist = {}
+    >>> Breakpoint.bpbynumber = [None]
+
+    Now test the breakpoint commands.  NORMALIZE_WHITESPACE is needed because
+    the breakpoint list outputs a tab for the "stop only" and "ignore next"
+    lines, which we don't want to put in here.
+
+    >>> with PdbTestInput([  # doctest: +NORMALIZE_WHITESPACE
+    ...     'break 3',
+    ...     'disable 1',
+    ...     'ignore 1 10',
+    ...     'condition 1 1 < 2',
+    ...     'break 4',
+    ...     'break 4',
+    ...     'break',
+    ...     'clear 3',
+    ...     'break',
+    ...     'condition 1',
+    ...     'enable 1',
+    ...     'clear 1',
+    ...     'commands 2',
+    ...     'print 42',
+    ...     'end',
+    ...     'continue',  # will stop at breakpoint 2 (line 4)
+    ...     'clear',     # clear all!
+    ...     'y',
+    ...     'tbreak 5',
+    ...     'continue',  # will stop at temporary breakpoint
+    ...     'break',     # make sure breakpoint is gone
+    ...     'continue',
+    ... ]):
+    ...    test_function()
+    > <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>(3)test_function()
+    -> print(1)
+    (Pdb) break 3
+    Breakpoint 1 at <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>:3
+    (Pdb) disable 1
+    (Pdb) ignore 1 10
+    Will ignore next 10 crossings of breakpoint 1.
+    (Pdb) condition 1 1 < 2
+    (Pdb) break 4
+    Breakpoint 2 at <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>:4
+    (Pdb) break 4
+    Breakpoint 3 at <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>:4
+    (Pdb) break
+    Num Type         Disp Enb   Where
+    1   breakpoint   keep no    at <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>:3
+            stop only if 1 < 2
+            ignore next 10 hits
+    2   breakpoint   keep yes   at <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>:4
+    3   breakpoint   keep yes   at <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>:4
+    (Pdb) clear 3
+    Deleted breakpoint 3
+    (Pdb) break
+    Num Type         Disp Enb   Where
+    1   breakpoint   keep no    at <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>:3
+            stop only if 1 < 2
+            ignore next 10 hits
+    2   breakpoint   keep yes   at <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>:4
+    (Pdb) condition 1
+    Breakpoint 1 is now unconditional.
+    (Pdb) enable 1
+    (Pdb) clear 1
+    Deleted breakpoint 1
+    (Pdb) commands 2
+    (com) print 42
+    (com) end
+    (Pdb) continue
+    1
+    42
+    > <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>(4)test_function()
+    -> print(2)
+    (Pdb) clear
+    Clear all breaks? y
+    (Pdb) tbreak 5
+    Breakpoint 4 at <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>:5
+    (Pdb) continue
+    2
+    Deleted breakpoint 4
+    > <doctest test.test_pdb.test_pdb_breakpoint_commands[0]>(5)test_function()
+    -> print(3)
+    (Pdb) break
+    (Pdb) continue
+    3
+    4
     """
 
 
@@ -138,6 +312,14 @@ def test_pdb_continue_in_bottomframe():
     ...     print(3)
     ...     print(4)
 
+    First, need to clear bdb state that might be left over from previous tests.
+    Otherwise, the new breakpoints might get assigned different numbers.
+
+    >>> from bdb import Breakpoint
+    >>> Breakpoint.next = 1
+    >>> Breakpoint.bplist = {}
+    >>> Breakpoint.bpbynumber = [None]
+
     >>> with PdbTestInput([
     ...     'next',
     ...     'break 7',
@@ -167,11 +349,38 @@ def test_pdb_continue_in_bottomframe():
     4
     """
 
+class ModuleInitTester(unittest.TestCase):
+
+    def test_filename_correct(self):
+        """
+        In issue 7750, it was found that if the filename has a sequence that
+        resolves to an escape character in a Python string (such as \t), it
+        will be treated as the escaped character.
+        """
+        # the test_fn must contain something like \t
+        # on Windows, this will create 'test_mod.py' in the current directory.
+        # on Unix, this will create '.\test_mod.py' in the current directory.
+        test_fn = '.\\test_mod.py'
+        code = 'print("testing pdb")'
+        with open(test_fn, 'w') as f:
+            f.write(code)
+        self.addCleanup(os.remove, test_fn)
+        cmd = [sys.executable, '-m', 'pdb', test_fn,]
+        proc = subprocess.Popen(cmd,
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            )
+        stdout, stderr = proc.communicate('quit\n')
+        self.assertIn(code, stdout, "pdb munged the filename")
+
 
 def test_main():
     from test import test_pdb
     test_support.run_doctest(test_pdb, verbosity=True)
-
+    test_support.run_unittest(
+        PdbTestCase,
+        ModuleInitTester)
 
 if __name__ == '__main__':
     test_main()

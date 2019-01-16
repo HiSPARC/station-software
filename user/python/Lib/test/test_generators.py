@@ -383,7 +383,8 @@ From the Iterators list, about the types of these things.
 <type 'generator'>
 >>> [s for s in dir(i) if not s.startswith('_')]
 ['close', 'gi_code', 'gi_frame', 'gi_running', 'next', 'send', 'throw']
->>> print i.next.__doc__
+>>> from test.test_support import HAVE_DOCSTRINGS
+>>> print(i.next.__doc__ if HAVE_DOCSTRINGS else 'x.next() -> the next value, or raise StopIteration')
 x.next() -> the next value, or raise StopIteration
 >>> iter(i) is i
 True
@@ -1093,7 +1094,7 @@ class Queens:
 
         # For each square, compute a bit vector of the columns and
         # diagonals it covers, and for each row compute a function that
-        # generates the possiblities for the columns in that row.
+        # generates the possibilities for the columns in that row.
         self.rowgenerators = []
         for i in rangen:
             rowuses = [(1L << j) |                  # column ordinal
@@ -1523,13 +1524,7 @@ Yield by itself yields None:
 [None]
 
 
-
-An obscene abuse of a yield expression within a generator expression:
-
->>> list((yield 21) for i in range(4))
-[21, None, 21, None, 21, None, 21, None]
-
-And a more sane, but still weird usage:
+Yield is allowed only in the outermost iterable in generator expression:
 
 >>> def f(): list(i for i in [(yield 26)])
 >>> type(f())
@@ -1570,7 +1565,7 @@ SyntaxError: 'yield' outside function
 >>> def f(): return lambda x=(yield): 1
 Traceback (most recent call last):
   ...
-SyntaxError: 'return' with argument inside generator (<doctest test.test_generators.__test__.coroutine[22]>, line 1)
+SyntaxError: 'return' with argument inside generator (<doctest test.test_generators.__test__.coroutine[21]>, line 1)
 
 >>> def f(): x = yield = y
 Traceback (most recent call last):
@@ -1783,7 +1778,7 @@ enclosing function a generator:
 >>> type(f())
 <type 'generator'>
 
->>> def f(): x=(i for i in (yield) if (yield))
+>>> def f(): x=(i for i in (yield) if i)
 >>> type(f())
 <type 'generator'>
 

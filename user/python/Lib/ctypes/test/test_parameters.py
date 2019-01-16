@@ -1,4 +1,6 @@
 import unittest, sys
+from ctypes.test import need_symbol
+import test.support
 
 class SimpleTypesTestCase(unittest.TestCase):
 
@@ -36,10 +38,9 @@ class SimpleTypesTestCase(unittest.TestCase):
         self.assertEqual(CVOIDP.from_param("abc"), "abcabc")
         self.assertEqual(CCHARP.from_param("abc"), "abcabcabcabc")
 
-        try:
-            from ctypes import c_wchar_p
-        except ImportError:
-            return
+    @need_symbol('c_wchar_p')
+    def test_subclasses_c_wchar_p(self):
+        from ctypes import c_wchar_p
 
         class CWCHARP(c_wchar_p):
             def from_param(cls, value):
@@ -55,7 +56,7 @@ class SimpleTypesTestCase(unittest.TestCase):
         # c_char_p.from_param on a Python String packs the string
         # into a cparam object
         s = "123"
-        self.assertTrue(c_char_p.from_param(s)._obj is s)
+        self.assertIs(c_char_p.from_param(s)._obj, s)
 
         # new in 0.9.1: convert (encode) unicode to ascii
         self.assertEqual(c_char_p.from_param(u"123")._obj, "123")
@@ -66,15 +67,11 @@ class SimpleTypesTestCase(unittest.TestCase):
         # calling c_char_p.from_param with a c_char_p instance
         # returns the argument itself:
         a = c_char_p("123")
-        self.assertTrue(c_char_p.from_param(a) is a)
+        self.assertIs(c_char_p.from_param(a), a)
 
+    @need_symbol('c_wchar_p')
     def test_cw_strings(self):
-        from ctypes import byref
-        try:
-            from ctypes import c_wchar_p
-        except ImportError:
-##            print "(No c_wchar_p)"
-            return
+        from ctypes import byref, c_wchar_p
         s = u"123"
         if sys.platform == "win32":
             self.assertTrue(c_wchar_p.from_param(s)._obj is s)
@@ -144,9 +141,6 @@ class SimpleTypesTestCase(unittest.TestCase):
         self.assertRaises(TypeError, LPINT.from_param, c_long*3)
         self.assertRaises(TypeError, LPINT.from_param, c_uint*3)
 
-##    def test_performance(self):
-##        check_perf()
-
     def test_noctypes_argtype(self):
         import _ctypes_test
         from ctypes import CDLL, c_void_p, ArgumentError
@@ -181,6 +175,36 @@ class SimpleTypesTestCase(unittest.TestCase):
         # ArgumentError: argument 1: ValueError: 99
         self.assertRaises(ArgumentError, func, 99)
 
+    def test_abstract(self):
+        from ctypes import (Array, Structure, Union, _Pointer,
+                            _SimpleCData, _CFuncPtr)
+
+        self.assertRaises(TypeError, Array.from_param, 42)
+        self.assertRaises(TypeError, Structure.from_param, 42)
+        self.assertRaises(TypeError, Union.from_param, 42)
+        self.assertRaises(TypeError, _CFuncPtr.from_param, 42)
+        self.assertRaises(TypeError, _Pointer.from_param, 42)
+        self.assertRaises(TypeError, _SimpleCData.from_param, 42)
+
+    @test.support.cpython_only
+    def test_issue31311(self):
+        # __setstate__ should neither raise a SystemError nor crash in case
+        # of a bad __dict__.
+        from ctypes import Structure
+
+        class BadStruct(Structure):
+            @property
+            def __dict__(self):
+                pass
+        with self.assertRaises(TypeError):
+            BadStruct().__setstate__({}, b'foo')
+
+        class WorseStruct(Structure):
+            @property
+            def __dict__(self):
+                1/0.0
+        with self.assertRaises(ZeroDivisionError):
+            WorseStruct().__setstate__({}, b'foo')
 
 ################################################################
 

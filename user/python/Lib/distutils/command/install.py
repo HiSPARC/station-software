@@ -6,7 +6,7 @@ from distutils import log
 
 # This module should be kept compatible with Python 2.1.
 
-__revision__ = "$Id: install.py 80804 2010-05-05 19:09:31Z ronald.oussoren $"
+__revision__ = "$Id$"
 
 import sys, os, string
 from types import *
@@ -265,8 +265,8 @@ class install (Command):
 
         if self.user and (self.prefix or self.exec_prefix or self.home or
                 self.install_base or self.install_platbase):
-            raise DistutilsOptionError("can't combine user with with prefix/"
-                                       "exec_prefix/home or install_(plat)base")
+            raise DistutilsOptionError("can't combine user with prefix, "
+                                       "exec_prefix/home, or install_(plat)base")
 
         # Next, stuff that's wrong (or dubious) only on certain platforms.
         if os.name != "posix":

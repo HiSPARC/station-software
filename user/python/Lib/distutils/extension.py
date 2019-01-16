@@ -3,7 +3,7 @@
 Provides the Extension class, used to describe C/C++ extension
 modules in setup scripts."""
 
-__revision__ = "$Id: extension.py 86238 2010-11-06 04:06:18Z eric.araujo $"
+__revision__ = "$Id$"
 
 import os, string, sys
 from types import *

@@ -137,6 +137,25 @@ class TestTranforms(unittest.TestCase):
         asm = dis_single('a="x"*1000')
         self.assertIn('(1000)', asm)
 
+    def test_binary_subscr_on_unicode(self):
+        # unicode strings don't get optimized
+        asm = dis_single('u"foo"[0]')
+        self.assertNotIn("(u'f')", asm)
+        self.assertIn('BINARY_SUBSCR', asm)
+        asm = dis_single('u"\u0061\uffff"[1]')
+        self.assertNotIn("(u'\\uffff')", asm)
+        self.assertIn('BINARY_SUBSCR', asm)
+
+        # out of range
+        asm = dis_single('u"fuu"[10]')
+        self.assertIn('BINARY_SUBSCR', asm)
+        # non-BMP char (see #5057)
+        asm = dis_single('u"\U00012345"[0]')
+        self.assertIn('BINARY_SUBSCR', asm)
+        asm = dis_single('u"\U00012345abcdef"[3]')
+        self.assertIn('BINARY_SUBSCR', asm)
+
+
     def test_folding_of_unaryops_on_constants(self):
         for line, elem in (
             ('`1`', "('1')"),                       # unary convert

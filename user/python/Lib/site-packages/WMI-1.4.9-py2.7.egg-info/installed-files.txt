@@ -1,0 +1,11 @@
+..\..\..\Scripts\wmitest.cmd
+..\..\..\Scripts\wmitest.master.ini
+..\..\..\Scripts\wmitest.py
+..\..\..\Scripts\wmiweb.py
+..\..\..\readme.txt
+..\wmi.py
+..\wmi.pyc
+PKG-INFO
+SOURCES.txt
+dependency_links.txt
+top_level.txt

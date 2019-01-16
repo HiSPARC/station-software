@@ -93,6 +93,10 @@ class DictReader:
         self.line_num = self.reader.line_num
         return self._fieldnames
 
+    # Issue 20004: Because DictReader is a classic class, this setter is
+    # ignored.  At this point in 2.7's lifecycle, it is too late to change the
+    # base class for fear of breaking working code.  If you want to change
+    # fieldnames without overwriting the getter, set _fieldnames directly.
     @fieldnames.setter
     def fieldnames(self, value):
         self._fieldnames = value
@@ -140,8 +144,8 @@ class DictWriter:
         if self.extrasaction == "raise":
             wrong_fields = [k for k in rowdict if k not in self.fieldnames]
             if wrong_fields:
-                raise ValueError("dict contains fields not in fieldnames: " +
-                                 ", ".join(wrong_fields))
+                raise ValueError("dict contains fields not in fieldnames: "
+                                 + ", ".join([repr(x) for x in wrong_fields]))
         return [rowdict.get(key, self.restval) for key in self.fieldnames]
 
     def writerow(self, rowdict):
@@ -213,7 +217,7 @@ class Sniffer:
         matches = []
         for restr in ('(?P<delim>[^\w\n"\'])(?P<space> ?)(?P<quote>["\']).*?(?P=quote)(?P=delim)', # ,".*?",
                       '(?:^|\n)(?P<quote>["\']).*?(?P=quote)(?P<delim>[^\w\n"\'])(?P<space> ?)',   #  ".*?",
-                      '(?P<delim>>[^\w\n"\'])(?P<space> ?)(?P<quote>["\']).*?(?P=quote)(?:$|\n)',  # ,".*?"
+                      '(?P<delim>[^\w\n"\'])(?P<space> ?)(?P<quote>["\']).*?(?P=quote)(?:$|\n)',   # ,".*?"
                       '(?:^|\n)(?P<quote>["\']).*?(?P=quote)(?:$|\n)'):                            #  ".*?" (no delim, no space)
             regexp = re.compile(restr, re.DOTALL | re.MULTILINE)
             matches = regexp.findall(data)
@@ -261,8 +265,9 @@ class Sniffer:
 
         # if we see an extra quote between delimiters, we've got a
         # double quoted format
-        dq_regexp = re.compile(r"((%(delim)s)|^)\W*%(quote)s[^%(delim)s\n]*%(quote)s[^%(delim)s\n]*%(quote)s\W*((%(delim)s)|$)" % \
-                               {'delim':delim, 'quote':quotechar}, re.MULTILINE)
+        dq_regexp = re.compile(
+                               r"((%(delim)s)|^)\W*%(quote)s[^%(delim)s\n]*%(quote)s[^%(delim)s\n]*%(quote)s\W*((%(delim)s)|$)" % \
+                               {'delim':re.escape(delim), 'quote':quotechar}, re.MULTILINE)
 
 
 
@@ -281,7 +286,7 @@ class Sniffer:
         an all or nothing approach, so we allow for small variations in this
         number.
           1) build a table of the frequency of each character on every line.
-          2) build a table of freqencies of this frequency (meta-frequency?),
+          2) build a table of frequencies of this frequency (meta-frequency?),
              e.g.  'x occurred 5 times in 10 rows, 6 times in 1000 rows,
              7 times in 2 rows'
           3) use the mode of the meta-frequency to determine the /expected/

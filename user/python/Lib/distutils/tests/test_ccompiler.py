@@ -4,7 +4,8 @@ import unittest
 from test.test_support import captured_stdout
 
 from distutils.ccompiler import (gen_lib_options, CCompiler,
-                                 get_default_compiler, customize_compiler)
+                                 get_default_compiler)
+from distutils.sysconfig import customize_compiler
 from distutils import debug
 from distutils.tests import support
 
@@ -22,6 +23,30 @@ class FakeCompiler(object):
         return "-l" + lib
 
 class CCompilerTestCase(support.EnvironGuard, unittest.TestCase):
+
+    def test_set_executables(self):
+        class MyCCompiler(CCompiler):
+            executables = {'compiler': '', 'compiler_cxx': '', 'linker': ''}
+
+        compiler = MyCCompiler()
+
+        # set executable as list
+        compiler.set_executables(compiler=['env', 'OMPI_MPICC=clang', 'mpicc'])
+        self.assertEqual(compiler.compiler, ['env',
+                                             'OMPI_MPICC=clang',
+                                             'mpicc'])
+
+        # set executable as string
+        compiler.set_executables(compiler_cxx='env OMPI_MPICXX=clang++ mpicxx')
+        self.assertEqual(compiler.compiler_cxx, ['env',
+                                                 'OMPI_MPICXX=clang++',
+                                                 'mpicxx'])
+
+        # set executable as unicode string
+        compiler.set_executables(linker=u'env OMPI_MPICXX=clang++ mpiCC')
+        self.assertEqual(compiler.linker, [u'env',
+                                           u'OMPI_MPICXX=clang++',
+                                           u'mpiCC'])
 
     def test_gen_lib_options(self):
         compiler = FakeCompiler()
@@ -54,12 +79,9 @@ class CCompilerTestCase(support.EnvironGuard, unittest.TestCase):
         finally:
             debug.DEBUG = False
 
+    @unittest.skipUnless(get_default_compiler() == 'unix',
+                         'not testing if default compiler is not unix')
     def test_customize_compiler(self):
-
-        # not testing if default compiler is not unix
-        if get_default_compiler() != 'unix':
-            return
-
         os.environ['AR'] = 'my_ar'
         os.environ['ARFLAGS'] = '-arflags'
 

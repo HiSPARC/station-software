@@ -8,6 +8,12 @@ The watcher tests spawn temporary processes and temporary
 logical drives. These may get left behind.
 """
 
+#
+# TODO:
+# - Test for negative timezone
+# - Test for share name with embedded single quote
+#
+
 import os, sys
 import datetime
 try:
@@ -425,24 +431,28 @@ class TestClass (TestWMI):
 
 class TestWatcher (TestWMI):
 
-  def test_creation (self):
+  def new_letter (self):
+    return \
+      set ("%s:" % chr (i) for i in range (ord ('A'), 1 + ord ('Z'))).\
+      difference (d.DeviceID for d in self.connection.Win32_LogicalDisk ()).\
+      pop ()
 
-    def _create (new_letter):
-      here = os.path.dirname (os.path.abspath (__file__))
-      win32file.DefineDosDevice (0, new_letter, here)
-      try:
-        #
-        # This sleep is needed for the WMI pollster to react
-        #
-        time.sleep (2)
-      finally:
-        win32file.DefineDosDevice (2, new_letter, here)
-
+  @staticmethod
+  def create (new_letter):
+    print "about to create drive with letter", new_letter
+    here = os.path.dirname (os.path.abspath (__file__))
+    win32file.DefineDosDevice (0, new_letter, here)
     try:
-      new_letter = \
-        set ("%s:" % chr (i) for i in range (ord ('A'), 1 + ord ('Z'))).\
-        difference (d.DeviceID for d in self.connection.Win32_LogicalDisk ()).\
-        pop ()
+      #
+      # This sleep is needed for the WMI pollster to react
+      #
+      time.sleep (2)
+    finally:
+      win32file.DefineDosDevice (2, new_letter, here)
+
+  def test_creation (self):
+    try:
+      new_letter = self.new_letter ()
     except KeyError:
       warnings.warn ("Unable to find a spare drive letter to map.")
       return
@@ -451,7 +461,22 @@ class TestWatcher (TestWMI):
       notification_type="Creation",
       DeviceID=new_letter
     )
-    t = threading.Timer (2, _create, (new_letter,))
+    t = threading.Timer (2, self.create, (new_letter,))
+    t.start ()
+    found_disk = watcher (timeout_ms=20000)
+    self.assert_ (isinstance (found_disk, wmi._wmi_object))
+    self.assertEqual (found_disk.Caption, new_letter)
+    t.join ()
+
+  def test_event_with_no_params (self):
+    try:
+      new_letter = self.new_letter ()
+    except KeyError:
+      warnings.warn ("Unable to find a spare drive letter to map.")
+      return
+
+    watcher = self.connection.Win32_LogicalDisk.watch_for ()
+    t = threading.Timer (2, self.create, (new_letter,))
     t.start ()
     found_disk = watcher (timeout_ms=20000)
     self.assert_ (isinstance (found_disk, wmi._wmi_object))
@@ -464,6 +489,7 @@ class TestWatcher (TestWMI):
 
   def test_invalid_notification_types (self):
     self.assertRaises (wmi.x_wmi, self.connection.Win32_LogicalDisk.watch_for, notification_type="***")
+
 
   def do_not_test_extrinsic_event (self):
 

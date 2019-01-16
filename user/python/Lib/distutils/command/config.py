@@ -9,14 +9,14 @@ configure-like tasks: "try to compile this C code", or "figure out where
 this header file lives".
 """
 
-__revision__ = "$Id: config.py 77704 2010-01-23 09:23:15Z tarek.ziade $"
+__revision__ = "$Id$"
 
 import os
 import re
 
 from distutils.core import Command
 from distutils.errors import DistutilsExecError
-from distutils.ccompiler import customize_compiler
+from distutils.sysconfig import customize_compiler
 from distutils import log
 
 LANG_EXT = {'c': '.c', 'c++': '.cxx'}

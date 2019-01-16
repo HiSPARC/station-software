@@ -59,6 +59,15 @@ class TestSFbugs(unittest.TestCase):
         diff_gen = difflib.unified_diff([], [])
         self.assertRaises(StopIteration, diff_gen.next)
 
+    def test_matching_blocks_cache(self):
+        # Issue #21635
+        s = difflib.SequenceMatcher(None, "abxcd", "abcd")
+        first = s.get_matching_blocks()
+        second = s.get_matching_blocks()
+        self.assertEqual(second[0].size, 2)
+        self.assertEqual(second[1].size, 2)
+        self.assertEqual(second[2].size, 0)
+
     def test_added_tab_hint(self):
         # Check fix for bug #1488943
         diff = list(difflib.Differ().compare(["\tI am a buggy"],["\t\tI am a bug"]))
@@ -219,13 +228,74 @@ class TestOutputFormat(unittest.TestCase):
         cd = difflib.context_diff(*args, lineterm='')
         self.assertEqual(list(cd)[0:2], ["*** Original", "--- Current"])
 
+    def test_range_format_unified(self):
+        # Per the diff spec at http://www.unix.org/single_unix_specification/
+        spec = '''\
+           Each <range> field shall be of the form:
+             %1d", <beginning line number>  if the range contains exactly one line,
+           and:
+            "%1d,%1d", <beginning line number>, <number of lines> otherwise.
+           If a range is empty, its beginning line number shall be the number of
+           the line just before the range, or 0 if the empty range starts the file.
+        '''
+        fmt = difflib._format_range_unified
+        self.assertEqual(fmt(3,3), '3,0')
+        self.assertEqual(fmt(3,4), '4')
+        self.assertEqual(fmt(3,5), '4,2')
+        self.assertEqual(fmt(3,6), '4,3')
+        self.assertEqual(fmt(0,0), '0,0')
+
+    def test_range_format_context(self):
+        # Per the diff spec at http://www.unix.org/single_unix_specification/
+        spec = '''\
+           The range of lines in file1 shall be written in the following format
+           if the range contains two or more lines:
+               "*** %d,%d ****\n", <beginning line number>, <ending line number>
+           and the following format otherwise:
+               "*** %d ****\n", <ending line number>
+           The ending line number of an empty range shall be the number of the preceding line,
+           or 0 if the range is at the start of the file.
+
+           Next, the range of lines in file2 shall be written in the following format
+           if the range contains two or more lines:
+               "--- %d,%d ----\n", <beginning line number>, <ending line number>
+           and the following format otherwise:
+               "--- %d ----\n", <ending line number>
+        '''
+        fmt = difflib._format_range_context
+        self.assertEqual(fmt(3,3), '3')
+        self.assertEqual(fmt(3,4), '4')
+        self.assertEqual(fmt(3,5), '4,5')
+        self.assertEqual(fmt(3,6), '4,6')
+        self.assertEqual(fmt(0,0), '0')
+
+class TestJunkAPIs(unittest.TestCase):
+    def test_is_line_junk_true(self):
+        for line in ['#', '  ', ' #', '# ', ' # ', '']:
+            self.assertTrue(difflib.IS_LINE_JUNK(line), repr(line))
+
+    def test_is_line_junk_false(self):
+        for line in ['##', ' ##', '## ', 'abc ', 'abc #', 'Mr. Moose is up!']:
+            self.assertFalse(difflib.IS_LINE_JUNK(line), repr(line))
+
+    def test_is_line_junk_REDOS(self):
+        evil_input = ('\t' * 1000000) + '##'
+        self.assertFalse(difflib.IS_LINE_JUNK(evil_input))
+
+    def test_is_character_junk_true(self):
+        for char in [' ', '\t']:
+            self.assertTrue(difflib.IS_CHARACTER_JUNK(char), repr(char))
+
+    def test_is_character_junk_false(self):
+        for char in ['a', '#', '\n', '\f', '\r', '\v']:
+            self.assertFalse(difflib.IS_CHARACTER_JUNK(char), repr(char))
 
 def test_main():
     difflib.HtmlDiff._default_prefix = 0
     Doctests = doctest.DocTestSuite(difflib)
     run_unittest(
         TestWithAscii, TestAutojunk, TestSFpatches, TestSFbugs,
-        TestOutputFormat, Doctests)
+        TestOutputFormat, TestJunkAPIs)
 
 if __name__ == '__main__':
     test_main()

@@ -12,11 +12,26 @@ class Tee:
     def __init__(self, file):
         self.f = file
     def write(self, what):
-        self.f.write(what)
+        if self.f is not None:
+            try:
+                self.f.write(what.replace("\n", "\r\n"))
+            except IOError:
+                pass
         tee_f.write(what)
     def flush(self):
-        self.f.flush()
+        if self.f is not None:
+            try:
+                self.f.flush()
+            except IOError:
+                pass
         tee_f.flush()
+
+# For some unknown reason, when running under bdist_wininst we will start up
+# with sys.stdout as None but stderr is hooked up. This work-around allows
+# bdist_wininst to see the output we write and display it at the end of
+# the install.
+if sys.stdout is None:
+    sys.stdout = sys.stderr
 
 sys.stderr = Tee(sys.stderr)
 sys.stdout = Tee(sys.stdout)
@@ -55,7 +70,7 @@ except NameError:
     def get_root_hkey():
         try:
             winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
-                           root_key_name, winreg.KEY_CREATE_SUB_KEY)
+                           root_key_name, 0, winreg.KEY_CREATE_SUB_KEY)
             return winreg.HKEY_LOCAL_MACHINE
         except OSError, details:
             # Either not exist, or no permissions to create subkey means
@@ -148,8 +163,7 @@ def LoadSystemModule(lib_dir, modname):
     filename = "%s%d%d%s.dll" % \
                (modname, sys.version_info[0], sys.version_info[1], suffix)
     filename = os.path.join(lib_dir, "pywin32_system32", filename)
-    mod = imp.load_module(modname, None, filename, 
-                          ('.dll', 'rb', imp.C_EXTENSION))
+    mod = imp.load_dynamic(modname, filename)
 
 
 def SetPyKeyVal(key_name, value_name, value):
@@ -441,30 +455,6 @@ def install():
     except Exception, details:
         print details
 
-    # Check the MFC dll exists - it is doesn't, point them at it
-    # (I should install it, but its a bit tricky with distutils)
-    # Unfortunately, this is quite likely on Windows XP and MFC71.dll
-    if sys.hexversion < 0x2040000:
-        mfc_dll = "mfc42.dll"
-    elif sys.hexversion < 0x2060000:
-        mfc_dll = "mfc71.dll"
-    else:
-        mfc_dll = "mfc90.dll"
-    try:
-        # It might be next to pythonwin itself (which is where setup.py
-        # currently arranges for it to be installed...)
-        if not os.path.isfile(os.path.join(lib_dir, "pythonwin", mfc_dll)):
-            win32api.SearchPath(None, mfc_dll)
-    except win32api.error:
-        print "*" * 20, "WARNING", "*" * 20
-        print "It appears that the MFC DLL '%s' is not installed" % (mfc_dll,)
-        print "Pythonwin will not work without this DLL, and I haven't had the"
-        print "time to package it in with the installer."
-        print
-        print "You can download this DLL from:"
-        print "http://starship.python.net/crew/mhammond/win32/"
-        print "*" * 50
-
     # importing win32com.client ensures the gen_py dir created - not strictly
     # necessary to do now, but this makes the installation "complete"
     try:
@@ -558,12 +548,23 @@ def uninstall():
 def usage():
     msg = \
 """%s: A post-install script for the pywin32 extensions.
-    
-This should be run automatically after installation, but if it fails you
-can run it again with a '-install' parameter, to ensure the environment
+
+Typical usage:
+
+> python pywin32_postinstall.py -install
+
+If you installed pywin32 via a .exe installer, this should be run
+automatically after installation, but if it fails you can run it again.
+
+If you installed pywin32 via PIP, you almost certainly need to run this to
+setup the environment correctly.
+
+Execute with script with a '-install' parameter, to ensure the environment
 is setup correctly.
 
-Additional Options:
+Options:
+  -install  : Configure the Python environment correctly for pywin32.
+  -remove   : Try and remove everything that was installed or copied.
   -wait pid : Wait for the specified process to terminate before starting.
   -silent   : Don't display the "Abort/Retry/Ignore" dialog for files in use.
   -quiet    : Don't display progress messages.

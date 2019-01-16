@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: iso-8859-1 -*-
-# Originally written by Barry Warsaw <barry@zope.com>
+# Originally written by Barry Warsaw <barry@python.org>
 #
 # Minimally patched to make it even more xgettext compatible
 # by Peter Funk <pf@artcom-gmbh.de>
@@ -208,6 +208,7 @@ escapes = []
 
 def make_escapes(pass_iso8859):
     global escapes
+    escapes = [chr(i) for i in range(256)]
     if pass_iso8859:
         # Allow iso-8859 characters to pass through so that e.g. 'msgid
         # "Höhe"' would result not result in 'msgid "H\366he"'.  Otherwise we
@@ -215,11 +216,9 @@ def make_escapes(pass_iso8859):
         mod = 128
     else:
         mod = 256
-    for i in range(256):
-        if 32 <= (i % mod) <= 126:
-            escapes.append(chr(i))
-        else:
-            escapes.append("\\%03o" % i)
+    for i in range(mod):
+        if not(32 <= i <= 126):
+            escapes[i] = "\\%03o" % i
     escapes[ord('\\')] = '\\\\'
     escapes[ord('\t')] = '\\t'
     escapes[ord('\r')] = '\\r'
@@ -260,25 +259,6 @@ def normalize(s):
 def containsAny(str, set):
     """Check whether 'str' contains ANY of the chars in 'set'"""
     return 1 in [c in str for c in set]
-
-
-def _visit_pyfiles(list, dirname, names):
-    """Helper for getFilesForName()."""
-    # get extension for python source files
-    if not globals().has_key('_py_ext'):
-        global _py_ext
-        _py_ext = [triple[0] for triple in imp.get_suffixes()
-                   if triple[2] == imp.PY_SOURCE][0]
-
-    # don't recurse into CVS directories
-    if 'CVS' in names:
-        names.remove('CVS')
-
-    # add all *.py files to list
-    list.extend(
-        [os.path.join(dirname, file) for file in names
-         if os.path.splitext(file)[1] == _py_ext]
-        )
 
 
 def _get_modpkg_path(dotted_name, pathlist=None):
@@ -341,7 +321,20 @@ def getFilesForName(name):
     if os.path.isdir(name):
         # find all python files in directory
         list = []
-        os.path.walk(name, _visit_pyfiles, list)
+        # get extension for python source files
+        if '_py_ext' not in globals():
+            global _py_ext
+            _py_ext = [triple[0] for triple in imp.get_suffixes()
+                       if triple[2] == imp.PY_SOURCE][0]
+        for root, dirs, files in os.walk(name):
+            # don't recurse into CVS directories
+            if 'CVS' in dirs:
+                dirs.remove('CVS')
+            # add all *.py files to list
+            list.extend(
+                [os.path.join(root, file) for file in files
+                 if os.path.splitext(file)[1] == _py_ext]
+                )
         return list
     elif os.path.exists(name):
         # a single file
@@ -483,7 +476,7 @@ class TokenEater:
                             '# File: %(filename)s, line: %(lineno)d') % d
                 elif options.locationstyle == options.GNU:
                     # fit as many locations on one line, as long as the
-                    # resulting line length doesn't exceeds 'options.width'
+                    # resulting line length doesn't exceed 'options.width'
                     locline = '#:'
                     for filename, lineno in v:
                         d = {'filename': filename, 'lineno': lineno}
@@ -593,7 +586,7 @@ def main():
                 fp.close()
 
     # calculate escapes
-    make_escapes(options.escape)
+    make_escapes(not options.escape)
 
     # calculate all keywords
     options.keywords.extend(default_keywords)

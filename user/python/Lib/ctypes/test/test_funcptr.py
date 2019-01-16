@@ -75,7 +75,7 @@ class CFuncPtrTestCase(unittest.TestCase):
         ##                  "lpfnWndProc", WNDPROC_2(wndproc))
         # instead:
 
-        self.assertTrue(WNDPROC is WNDPROC_2)
+        self.assertIs(WNDPROC, WNDPROC_2)
         # 'wndclass.lpfnWndProc' leaks 94 references.  Why?
         self.assertEqual(wndclass.lpfnWndProc(1, 2, 3, 4), 10)
 
@@ -122,6 +122,11 @@ class CFuncPtrTestCase(unittest.TestCase):
         self.assertEqual(strtok(None, "\n"), "b")
         self.assertEqual(strtok(None, "\n"), "c")
         self.assertEqual(strtok(None, "\n"), None)
+
+    def test_abstract(self):
+        from ctypes import _CFuncPtr
+
+        self.assertRaises(TypeError, _CFuncPtr, 13, "name", 42, "iid")
 
 if __name__ == '__main__':
     unittest.main()

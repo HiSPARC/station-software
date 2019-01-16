@@ -4,7 +4,7 @@ Implements the Distutils 'build_clib' command, to build a C/C++ library
 that is included in the module distribution and needed by an extension
 module."""
 
-__revision__ = "$Id: build_clib.py 84610 2010-09-07 22:18:34Z eric.araujo $"
+__revision__ = "$Id$"
 
 
 # XXX this module has *lots* of code ripped-off quite transparently from
@@ -19,7 +19,7 @@ __revision__ = "$Id: build_clib.py 84610 2010-09-07 22:18:34Z eric.araujo $"
 import os
 from distutils.core import Command
 from distutils.errors import DistutilsSetupError
-from distutils.ccompiler import customize_compiler
+from distutils.sysconfig import customize_compiler
 from distutils import log
 
 def show_compilers():

@@ -1,8 +1,8 @@
-"""RPC Implemention, originally written for the Python Idle IDE
+"""RPC Implementation, originally written for the Python Idle IDE
 
 For security reasons, GvR requested that Idle's Python execution server process
 connect to the Idle process, which listens for the connection.  Since Idle has
-has only one client per server, this was not a limitation.
+only one client per server, this was not a limitation.
 
    +---------------------------------+ +-------------+
    | SocketServer.BaseRequestHandler | | SocketIO    |
@@ -144,7 +144,7 @@ class SocketIO(object):
 
     def exithook(self):
         "override for specific exit action"
-        os._exit()
+        os._exit(0)
 
     def debug(self, *args):
         if not self.debugging:
@@ -332,10 +332,7 @@ class SocketIO(object):
                 n = self.sock.send(s[:BUFSIZE])
             except (AttributeError, TypeError):
                 raise IOError, "socket no longer exists"
-            except socket.error:
-                raise
-            else:
-                s = s[n:]
+            s = s[n:]
 
     buffer = ""
     bufneed = 4
