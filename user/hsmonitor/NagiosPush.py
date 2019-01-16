@@ -1,58 +1,84 @@
 import logging
+import json
+
+import requests
+from requests.exceptions import ConnectionError, Timeout
 
 logger = logging.getLogger('hsmonitor.nagiospush')
 
-from time import sleep, time
-from subprocess import Popen, PIPE
 
-TIMEOUT = 10
-
-
-class TimeoutException(Exception):
-    pass
+NRDP_TOKEN = 'nrdp4hisp'  # not secret because used inside VPN
 
 
 class NagiosPush(object):
+    """send service status (passive checkresult) to nagios using NRDP"""
+
     def __init__(self, config):
-        self.host = config["host"]
-        self.port = int(config["port"])
+        self.url = self._getNRDPUrl(config)
         self.machine_name = config["machine_name"]
 
     def sendToNagios(self, nagiosResult):
-        reportMessage = {}
-        reportMessage['reportCode'] = nagiosResult.status_code
-        reportMessage['textMessage'] = nagiosResult.description
-        reportMessage['send_nscaPath'] = "data\\send_nsca_win32\\"
-        reportMessage['nagiosServer'] = self.host  # Server IP
-        reportMessage['serverPort'] = self.port
-        reportMessage['hostComputer'] = self.machine_name  # On Nagios server
-        reportMessage['serviceName'] = nagiosResult.serviceName
+        """HTTP POST service status to nagios server"""
 
-        send_nsca_command = ("echo %s,%s,%s,%s | %ssend_nsca -H %s -p %d -c "
-                             "%ssend_nsca.cfg -d ," %
-                             (reportMessage['hostComputer'],
-                              reportMessage['serviceName'],
-                              reportMessage['reportCode'],
-                              reportMessage['textMessage'],
-                              reportMessage['send_nscaPath'],
-                              reportMessage['nagiosServer'],
-                              reportMessage['serverPort'],
-                              reportMessage['send_nscaPath']))
+        params = {
+           'token': NRDP_TOKEN,
+           'cmd': 'submitcheck',
+           'JSONDATA': self._createNRDPJSON(nagiosResult),
+        }
 
-        v = Popen(send_nsca_command, shell=True, stdout=PIPE)
-        t0 = time()
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
         try:
-            while v.poll() is None:
-                elapsed_time = time() - t0
-                if elapsed_time >= TIMEOUT:
-                    raise TimeoutException("Process won't quit!")
-                sleep(1)
-        except TimeoutException:
-            v.kill()
-            res = "send_nsca_command failed"
+            requests.post(self.url, params=params, headers=headers, timeout=1)
+        except (ConnectionError, Timeout) as exc:
+            logger.warning('Unable to upload status for service %s (%s)'
+                           % (nagiosResult.serviceName, exc))
         else:
-            res = v.communicate()[0]
-        logger.debug('Check %s: Status code: %i, Status description: %s.\n'
-                     '\t %s.' % (nagiosResult.serviceName,
-                                 nagiosResult.status_code,
-                                 nagiosResult.description, res))
+            logger.debug('Check %s: Status code: %i, Status description: %s.\n'
+                         % (nagiosResult.serviceName,
+                            nagiosResult.status_code,
+                            nagiosResult.description))
+
+    def _createNRDPJSON(self, nagiosResult):
+        """create JSON payload for NRDP passive checkresult"""
+
+        nrdp_json = {
+            "checkresults": [
+                {
+                    "checkresult": {
+                        "type": "service",
+                        "checktype": "passive"
+                    },
+                    "hostname": -1,
+                    "servicename": -1,
+                    "state": -1,
+                    "output": -1
+                }
+            ]
+        }
+
+        nrdp_json['checkresults'][0]['hostname'] = self.machine_name
+        nrdp_json['checkresults'][0]['servicename'] = nagiosResult.serviceName
+        nrdp_json['checkresults'][0]['state'] = nagiosResult.status_code
+        nrdp_json['checkresults'][0]['output'] = nagiosResult.description
+
+        return json.dumps(nrdp_json)
+
+    def _getNRDPUrl(self, config):
+        """get NRDP URL from config
+
+        if url is missing from config: create it from NSCA hostname
+        for backwards compatibility.
+        If no config, try hardcoded tietar VPN IP.
+
+        """
+        url = config.get('url', None)
+
+        if url is None:
+            nsca_host = config.get('host', '194.171.82.1')
+            url = 'http://{}/nrdp'.format(nsca_host)
+
+        logger.debug('Nagios NRDP URL: %s.' % url)
+        return url
