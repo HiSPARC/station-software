@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 """Test script for the bsddb C module by Roger E. Masse
    Adapted to unittest format and expanded scope by Raymond Hettinger
 """
@@ -47,10 +46,7 @@ class TestBSDDB(unittest.TestCase):
         self.assertIn('discovered', self.f.values())
 
     def test_close_and_reopen(self):
-        if self.fname is None:
-            # if we're using an in-memory only db, we can't reopen it
-            # so finish here.
-            return
+        self.assertIsNotNone(self.fname)
         self.f.close()
         self.f = self.openmethod[0](self.fname, 'w')
         for k, v in self.d.iteritems():
@@ -176,7 +172,7 @@ class TestBSDDB(unittest.TestCase):
 
     def test_first_while_deleting(self):
         # Test for bug 1725856
-        self.assertTrue(len(self.d) >= 2, "test requires >=2 items")
+        self.assertGreaterEqual(len(self.d), 2, "test requires >=2 items")
         for _ in self.d:
             key = self.f.first()[0]
             del self.f[key]
@@ -184,7 +180,7 @@ class TestBSDDB(unittest.TestCase):
 
     def test_last_while_deleting(self):
         # Test for bug 1725856's evil twin
-        self.assertTrue(len(self.d) >= 2, "test requires >=2 items")
+        self.assertGreaterEqual(len(self.d), 2, "test requires >=2 items")
         for _ in self.d:
             key = self.f.last()[0]
             del self.f[key]
@@ -201,7 +197,7 @@ class TestBSDDB(unittest.TestCase):
     def test_has_key(self):
         for k in self.d:
             self.assertTrue(self.f.has_key(k))
-        self.assertTrue(not self.f.has_key('not here'))
+        self.assertFalse(self.f.has_key('not here'))
 
     def test_clear(self):
         self.f.clear()
@@ -275,7 +271,7 @@ class TestBSDDB(unittest.TestCase):
 
         self.assertEqual(nc1, nc2)
         self.assertEqual(nc1, nc4)
-        self.assertTrue(nc3 == nc1+1)
+        self.assertEqual(nc3, nc1+1)
 
     def test_popitem(self):
         k, v = self.f.popitem()
@@ -309,8 +305,7 @@ class TestBSDDB(unittest.TestCase):
             self.assertEqual(self.f[k], v)
 
     def test_keyordering(self):
-        if self.openmethod[0] is not bsddb.btopen:
-            return
+        self.assertIs(self.openmethod[0], bsddb.btopen)
         keys = self.d.keys()
         keys.sort()
         self.assertEqual(self.f.first()[0], keys[0])
@@ -327,18 +322,33 @@ class TestBTree_InMemory(TestBSDDB):
     fname = None
     openmethod = [bsddb.btopen]
 
+    # if we're using an in-memory only db, we can't reopen it
+    test_close_and_reopen = None
+
 class TestBTree_InMemory_Truncate(TestBSDDB):
     fname = None
     openflag = 'n'
     openmethod = [bsddb.btopen]
 
+    # if we're using an in-memory only db, we can't reopen it
+    test_close_and_reopen = None
+
 class TestHashTable(TestBSDDB):
     fname = test_support.TESTFN
     openmethod = [bsddb.hashopen]
 
+    # keyordering is specific to btopen method
+    test_keyordering = None
+
 class TestHashTable_InMemory(TestBSDDB):
     fname = None
     openmethod = [bsddb.hashopen]
+
+    # if we're using an in-memory only db, we can't reopen it
+    test_close_and_reopen = None
+
+    # keyordering is specific to btopen method
+    test_keyordering = None
 
 ##         # (bsddb.rnopen,'Record Numbers'), 'put' for RECNO for bsddb 1.85
 ##         #                                   appears broken... at least on

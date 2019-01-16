@@ -57,7 +57,11 @@ class OutputWindow(EditorWindow):
     # Our own right-button menu
 
     rmenu_specs = [
-        ("Go to file/line", "<<goto-file-line>>"),
+        ("Cut", "<<cut>>", "rmenu_check_cut"),
+        ("Copy", "<<copy>>", "rmenu_check_copy"),
+        ("Paste", "<<paste>>", "rmenu_check_paste"),
+        (None, None, None),
+        ("Go to file/line", "<<goto-file-line>>", None),
     ]
 
     file_line_pats = [
@@ -92,7 +96,7 @@ class OutputWindow(EditorWindow):
                     "No special line",
                     "The line you point at doesn't look like "
                     "a valid file name followed by a line number.",
-                    master=self.text)
+                    parent=self.text)
                 return
         filename, lineno = result
         edit = self.flist.open(filename)

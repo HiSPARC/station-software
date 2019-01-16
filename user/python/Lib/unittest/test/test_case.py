@@ -1,5 +1,6 @@
 import difflib
 import pprint
+import pickle
 import re
 import sys
 
@@ -8,7 +9,7 @@ from test import test_support
 
 import unittest
 
-from .support import (
+from unittest.test.support import (
     TestEquality, TestHashing, LoggingResult, ResultWithNoStartTestRunStopTestRun
 )
 
@@ -292,7 +293,7 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
             def test(self):
                 pass
 
-        self.assertTrue(Foo('test').failureException is AssertionError)
+        self.assertIs(Foo('test').failureException, AssertionError)
 
     # "This class attribute gives the exception raised by the test() method.
     # If a test framework needs to use a specialized exception, possibly to
@@ -310,7 +311,7 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
 
             failureException = RuntimeError
 
-        self.assertTrue(Foo('test').failureException is RuntimeError)
+        self.assertIs(Foo('test').failureException, RuntimeError)
 
 
         Foo('test').run(result)
@@ -333,7 +334,7 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
 
             failureException = RuntimeError
 
-        self.assertTrue(Foo('test').failureException is RuntimeError)
+        self.assertIs(Foo('test').failureException, RuntimeError)
 
 
         Foo('test').run(result)
@@ -606,7 +607,7 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
             msg = e.args[0]
         else:
             self.fail('assertSequenceEqual did not fail.')
-        self.assertTrue(len(msg) < len(diff))
+        self.assertLess(len(msg), len(diff))
         self.assertIn(omitted, msg)
 
         self.maxDiff = len(diff) * 2
@@ -616,7 +617,7 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
             msg = e.args[0]
         else:
             self.fail('assertSequenceEqual did not fail.')
-        self.assertTrue(len(msg) > len(diff))
+        self.assertGreater(len(msg), len(diff))
         self.assertNotIn(omitted, msg)
 
         self.maxDiff = None
@@ -626,7 +627,7 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
             msg = e.args[0]
         else:
             self.fail('assertSequenceEqual did not fail.')
-        self.assertTrue(len(msg) > len(diff))
+        self.assertGreater(len(msg), len(diff))
         self.assertNotIn(omitted, msg)
 
     def testTruncateMessage(self):
@@ -667,6 +668,42 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
         else:
             self.fail('assertMultiLineEqual did not fail')
 
+    def testAssertEqual_diffThreshold(self):
+        # check threshold value
+        self.assertEqual(self._diffThreshold, 2**16)
+        # disable madDiff to get diff markers
+        self.maxDiff = None
+
+        # set a lower threshold value and add a cleanup to restore it
+        old_threshold = self._diffThreshold
+        self._diffThreshold = 2**8
+        self.addCleanup(lambda: setattr(self, '_diffThreshold', old_threshold))
+
+        # under the threshold: diff marker (^) in error message
+        s = u'x' * (2**7)
+        with self.assertRaises(self.failureException) as cm:
+            self.assertEqual(s + 'a', s + 'b')
+        self.assertIn('^', str(cm.exception))
+        self.assertEqual(s + 'a', s + 'a')
+
+        # over the threshold: diff not used and marker (^) not in error message
+        s = u'x' * (2**9)
+        # if the path that uses difflib is taken, _truncateMessage will be
+        # called -- replace it with explodingTruncation to verify that this
+        # doesn't happen
+        def explodingTruncation(message, diff):
+            raise SystemError('this should not be raised')
+        old_truncate = self._truncateMessage
+        self._truncateMessage = explodingTruncation
+        self.addCleanup(lambda: setattr(self, '_truncateMessage', old_truncate))
+
+        s1, s2 = s + 'a', s + 'b'
+        with self.assertRaises(self.failureException) as cm:
+            self.assertEqual(s1, s2)
+        self.assertNotIn('^', str(cm.exception))
+        self.assertEqual(str(cm.exception), '%r != %r' % (s1, s2))
+        self.assertEqual(s + 'a', s + 'a')
+
     def testAssertItemsEqual(self):
         a = object()
         self.assertItemsEqual([1, 2, 3], [3, 2, 1])
@@ -686,20 +723,19 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
 
         # Test that sequences of unhashable objects can be tested for sameness:
         self.assertItemsEqual([[1, 2], [3, 4], 0], [False, [3, 4], [1, 2]])
-        with test_support.check_warnings(quiet=True) as w:
-            # hashable types, but not orderable
-            self.assertRaises(self.failureException, self.assertItemsEqual,
-                              [], [divmod, 'x', 1, 5j, 2j, frozenset()])
-            # comparing dicts raises a py3k warning
-            self.assertItemsEqual([{'a': 1}, {'b': 2}], [{'b': 2}, {'a': 1}])
-            # comparing heterogenous non-hashable sequences raises a py3k warning
-            self.assertItemsEqual([1, 'x', divmod, []], [divmod, [], 'x', 1])
-            self.assertRaises(self.failureException, self.assertItemsEqual,
-                              [], [divmod, [], 'x', 1, 5j, 2j, set()])
-            # fail the test if warnings are not silenced
-            if w.warnings:
-                self.fail('assertItemsEqual raised a warning: ' +
-                          str(w.warnings[0]))
+        # Test that iterator of unhashable objects can be tested for sameness:
+        self.assertItemsEqual(iter([1, 2, [], 3, 4]),
+                              iter([1, 2, [], 3, 4]))
+
+        # hashable types, but not orderable
+        self.assertRaises(self.failureException, self.assertItemsEqual,
+                          [], [divmod, 'x', 1, 5j, 2j, frozenset()])
+        # comparing dicts
+        self.assertItemsEqual([{'a': 1}, {'b': 2}], [{'b': 2}, {'a': 1}])
+        # comparing heterogenous non-hashable sequences
+        self.assertItemsEqual([1, 'x', divmod, []], [divmod, [], 'x', 1])
+        self.assertRaises(self.failureException, self.assertItemsEqual,
+                          [], [divmod, [], 'x', 1, 5j, 2j, set()])
         self.assertRaises(self.failureException, self.assertItemsEqual,
                           [[1]], [[2]])
 
@@ -711,6 +747,24 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
         self.assertRaises(self.failureException, self.assertItemsEqual,
                           [1, {'b': 2}, None, True], [{'b': 2}, True, None])
 
+        # Same elements which don't reliably compare, in
+        # different order, see issue 10242
+        a = [{2,4}, {1,2}]
+        b = a[::-1]
+        self.assertItemsEqual(a, b)
+
+        # test utility functions supporting assertItemsEqual()
+
+        diffs = set(unittest.util._count_diff_all_purpose('aaabccd', 'abbbcce'))
+        expected = {(3,1,'a'), (1,3,'b'), (1,0,'d'), (0,1,'e')}
+        self.assertEqual(diffs, expected)
+
+        diffs = unittest.util._count_diff_all_purpose([[]], [])
+        self.assertEqual(diffs, [(1, 0, [])])
+
+        diffs = set(unittest.util._count_diff_hashable('aaabccd', 'abbbcce'))
+        expected = {(3,1,'a'), (1,3,'b'), (1,0,'d'), (0,1,'e')}
+        self.assertEqual(diffs, expected)
 
     def testAssertSetEqual(self):
         set1 = set()
@@ -900,6 +954,47 @@ test case
         self.assertRaises(self.failureException, self.assertRegexpMatches,
                           'saaas', r'aaaa')
 
+    def testAssertRaisesCallable(self):
+        class ExceptionMock(Exception):
+            pass
+        def Stub():
+            raise ExceptionMock('We expect')
+        self.assertRaises(ExceptionMock, Stub)
+        # A tuple of exception classes is accepted
+        self.assertRaises((ValueError, ExceptionMock), Stub)
+        # *args and **kwargs also work
+        self.assertRaises(ValueError, int, '19', base=8)
+        # Failure when no exception is raised
+        with self.assertRaises(self.failureException):
+            self.assertRaises(ExceptionMock, lambda: 0)
+        # Failure when another exception is raised
+        with self.assertRaises(ExceptionMock):
+            self.assertRaises(ValueError, Stub)
+
+    def testAssertRaisesContext(self):
+        class ExceptionMock(Exception):
+            pass
+        def Stub():
+            raise ExceptionMock('We expect')
+        with self.assertRaises(ExceptionMock):
+            Stub()
+        # A tuple of exception classes is accepted
+        with self.assertRaises((ValueError, ExceptionMock)) as cm:
+            Stub()
+        # The context manager exposes caught exception
+        self.assertIsInstance(cm.exception, ExceptionMock)
+        self.assertEqual(cm.exception.args[0], 'We expect')
+        # *args and **kwargs also work
+        with self.assertRaises(ValueError):
+            int('19', base=8)
+        # Failure when no exception is raised
+        with self.assertRaises(self.failureException):
+            with self.assertRaises(ExceptionMock):
+                pass
+        # Failure when another exception is raised
+        with self.assertRaises(ExceptionMock):
+            self.assertRaises(ValueError, Stub)
+
     def testAssertRaisesRegexp(self):
         class ExceptionMock(Exception):
             pass
@@ -924,6 +1019,12 @@ test case
                 self.failureException, '^Exception not raised$',
                 self.assertRaisesRegexp, Exception, u'x',
                 lambda: None)
+
+    def testAssertRaisesRegexpInvalidRegexp(self):
+        # Issue 20145.
+        class MyExc(Exception):
+            pass
+        self.assertRaises(TypeError, self.assertRaisesRegexp, MyExc, lambda: True)
 
     def testAssertRaisesRegexpMismatch(self):
         def Stub():
@@ -998,6 +1099,72 @@ test case
 
         # This shouldn't blow up
         deepcopy(test)
+
+    def testKeyboardInterrupt(self):
+        def _raise(self=None):
+            raise KeyboardInterrupt
+        def nothing(self):
+            pass
+
+        class Test1(unittest.TestCase):
+            test_something = _raise
+
+        class Test2(unittest.TestCase):
+            setUp = _raise
+            test_something = nothing
+
+        class Test3(unittest.TestCase):
+            test_something = nothing
+            tearDown = _raise
+
+        class Test4(unittest.TestCase):
+            def test_something(self):
+                self.addCleanup(_raise)
+
+        for klass in (Test1, Test2, Test3, Test4):
+            with self.assertRaises(KeyboardInterrupt):
+                klass('test_something').run()
+
+    def testSystemExit(self):
+        def _raise(self=None):
+            raise SystemExit
+        def nothing(self):
+            pass
+
+        class Test1(unittest.TestCase):
+            test_something = _raise
+
+        class Test2(unittest.TestCase):
+            setUp = _raise
+            test_something = nothing
+
+        class Test3(unittest.TestCase):
+            test_something = nothing
+            tearDown = _raise
+
+        class Test4(unittest.TestCase):
+            def test_something(self):
+                self.addCleanup(_raise)
+
+        for klass in (Test1, Test2, Test3, Test4):
+            result = unittest.TestResult()
+            klass('test_something').run(result)
+            self.assertEqual(len(result.errors), 1)
+            self.assertEqual(result.testsRun, 1)
+
+    def testPickle(self):
+        # Issue 10326
+
+        # Can't use TestCase classes defined in Test class as
+        # pickle does not work with inner classes
+        test = unittest.TestCase('run')
+        for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
+
+            # blew up prior to fix
+            pickled_test = pickle.dumps(test, protocol=protocol)
+
+            unpickled_test = pickle.loads(pickled_test)
+            self.assertEqual(test, unpickled_test)
 
 
 if __name__ == '__main__':

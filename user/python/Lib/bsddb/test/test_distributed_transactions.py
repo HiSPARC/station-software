@@ -7,13 +7,6 @@ import unittest
 from test_all import db, test_support, get_new_environment_path, \
         get_new_database_path
 
-try :
-    a=set()
-except : # Python 2.3
-    from sets import Set as set
-else :
-    del a
-
 from test_all import verbose
 
 #----------------------------------------------------------------------
@@ -37,15 +30,11 @@ class DBTxn_distributed(unittest.TestCase):
         self.db = db.DB(self.dbenv)
         self.db.set_re_len(db.DB_GID_SIZE)
         if must_open_db :
-            if db.version() >= (4,2) :
-                txn=self.dbenv.txn_begin()
-                self.db.open(self.filename,
-                        db.DB_QUEUE, db.DB_CREATE | db.DB_THREAD, 0666,
-                        txn=txn)
-                txn.commit()
-            else :
-                self.db.open(self.filename,
-                        db.DB_QUEUE, db.DB_CREATE | db.DB_THREAD, 0666)
+            txn=self.dbenv.txn_begin()
+            self.db.open(self.filename,
+                    db.DB_QUEUE, db.DB_CREATE | db.DB_THREAD, 0666,
+                    txn=txn)
+            txn.commit()
 
     def setUp(self) :
         self.homeDir = get_new_environment_path()
@@ -90,7 +79,7 @@ class DBTxn_distributed(unittest.TestCase):
         recovered_txns=self.dbenv.txn_recover()
         self.assertEqual(self.num_txns,len(recovered_txns))
         for gid,txn in recovered_txns :
-            self.assertTrue(gid in txns)
+            self.assertIn(gid, txns)
         del txn
         del recovered_txns
 
@@ -133,7 +122,7 @@ class DBTxn_distributed(unittest.TestCase):
     # Be sure there are not pending transactions.
     # Check also database size.
         recovered_txns=self.dbenv.txn_recover()
-        self.assertTrue(len(recovered_txns)==0)
+        self.assertEqual(len(recovered_txns), 0)
         self.assertEqual(len(committed_txns),self.db.stat()["nkeys"])
 
 class DBTxn_distributedSYNC(DBTxn_distributed):

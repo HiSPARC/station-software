@@ -70,13 +70,6 @@ class TestABC(unittest.TestCase):
         self.assertFalse(issubclass(OldstyleClass, A))
         self.assertFalse(issubclass(A, OldstyleClass))
 
-    def test_type_has_no_abstractmethods(self):
-        # type pretends not to have __abstractmethods__.
-        self.assertRaises(AttributeError, getattr, type, "__abstractmethods__")
-        class meta(type):
-            pass
-        self.assertRaises(AttributeError, getattr, meta, "__abstractmethods__")
-
     def test_isinstance_class(self):
         class A:
             __metaclass__ = abc.ABCMeta
@@ -215,6 +208,7 @@ class TestABC(unittest.TestCase):
         C()
         self.assertEqual(B.counter, 1)
 
+    @test_support.requires_type_collecting
     def test_cache_leak(self):
         # See issue #2521.
         class A(object):

@@ -2,6 +2,7 @@
 import unittest
 import UserDict
 import test_support
+import sys
 
 
 class BasicTestMappingProtocol(unittest.TestCase):
@@ -209,8 +210,12 @@ class BasicTestMappingProtocol(unittest.TestCase):
         d.update(SimpleUserDict())
         i1 = d.items()
         i2 = self.reference.items()
-        i1.sort()
-        i2.sort()
+
+        def safe_sort_key(kv):
+            k, v = kv
+            return id(type(k)), id(type(v)), k, v
+        i1.sort(key=safe_sort_key)
+        i2.sort(key=safe_sort_key)
         self.assertEqual(i1, i2)
 
         class Exc(Exception): pass
@@ -343,7 +348,7 @@ class TestMappingProtocol(BasicTestMappingProtocol):
         self.assertTrue(not d.has_key('a'))
         d = self._full_mapping({'a': 1, 'b': 2})
         k = d.keys()
-        k.sort()
+        k.sort(key=lambda k: (id(type(k)), k))
         self.assertEqual(k, ['a', 'b'])
 
         self.assertRaises(TypeError, d.has_key)
@@ -640,6 +645,14 @@ class TestHashMappingProtocol(TestMappingProtocol):
 
         d = self._full_mapping({1: BadRepr()})
         self.assertRaises(Exc, repr, d)
+
+    def test_repr_deep(self):
+        d = self._empty_mapping()
+        for i in range(sys.getrecursionlimit() + 100):
+            d0 = d
+            d = self._empty_mapping()
+            d[1] = d0
+        self.assertRaises(RuntimeError, repr, d)
 
     def test_le(self):
         self.assertTrue(not (self._empty_mapping() < self._empty_mapping()))

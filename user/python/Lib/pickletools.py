@@ -185,7 +185,7 @@ class ArgumentDescriptor(object):
         assert isinstance(name, str)
         self.name = name
 
-        assert isinstance(n, int) and (n >= 0 or
+        assert isinstance(n, (int, long)) and (n >= 0 or
                                        n in (UP_TO_NEWLINE,
                                              TAKEN_FROM_ARGUMENT1,
                                              TAKEN_FROM_ARGUMENT4))
@@ -804,7 +804,7 @@ stackslice = StackObject(
                  obtype=StackObject,
                  doc="""An object representing a contiguous slice of the stack.
 
-                 This is used in conjuction with markobject, to represent all
+                 This is used in conjunction with markobject, to represent all
                  of the stack following the topmost markobject.  For example,
                  the POP_MARK opcode changes the stack from
 
@@ -873,7 +873,7 @@ class OpcodeInfo(object):
             assert isinstance(x, StackObject)
         self.stack_after = stack_after
 
-        assert isinstance(proto, int) and 0 <= proto <= 2
+        assert isinstance(proto, (int, long)) and 0 <= proto <= 2
         self.proto = proto
 
         assert isinstance(doc, str)
@@ -1370,7 +1370,7 @@ opcodes = [
       proto=0,
       doc="""Read an object from the memo and push it on the stack.
 
-      The index of the memo object to push is given by the newline-teriminated
+      The index of the memo object to push is given by the newline-terminated
       decimal string following.  BINGET and LONG_BINGET are space-optimized
       versions.
       """),
@@ -1929,7 +1929,7 @@ def dis(pickle, out=None, memo=None, indentlevel=4):
 
     stack = []          # crude emulation of unpickler stack
     if memo is None:
-        memo = {}       # crude emulation of unpicker memo
+        memo = {}       # crude emulation of unpickler memo
     maxproto = -1       # max protocol number seen
     markstack = []      # bytecode positions of MARK opcodes
     indentchunk = ' ' * indentlevel

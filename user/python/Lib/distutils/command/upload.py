@@ -10,7 +10,7 @@ import urlparse
 import cStringIO as StringIO
 from hashlib import md5
 
-from distutils.errors import DistutilsOptionError
+from distutils.errors import DistutilsError, DistutilsOptionError
 from distutils.core import PyPIRCCommand
 from distutils.spawn import spawn
 from distutils import log
@@ -55,7 +55,9 @@ class upload(PyPIRCCommand):
 
     def run(self):
         if not self.distribution.dist_files:
-            raise DistutilsOptionError("No dist file created in earlier command")
+            msg = ("Must create and upload files in one command "
+                   "(e.g. setup.py sdist upload)")
+            raise DistutilsOptionError(msg)
         for command, pyversion, filename in self.distribution.dist_files:
             self.upload_file(command, pyversion, filename)
 
@@ -136,8 +138,8 @@ class upload(PyPIRCCommand):
 
         # Build up the MIME payload for the POST data
         boundary = '--------------GHSKFJDLGDS7543FJKLFHRE75642756743254'
-        sep_boundary = '\n--' + boundary
-        end_boundary = sep_boundary + '--'
+        sep_boundary = '\r\n--' + boundary
+        end_boundary = sep_boundary + '--\r\n'
         body = StringIO.StringIO()
         for key, value in data.items():
             # handle multiple entries for the same name
@@ -151,14 +153,11 @@ class upload(PyPIRCCommand):
                     fn = ""
 
                 body.write(sep_boundary)
-                body.write('\nContent-Disposition: form-data; name="%s"'%key)
+                body.write('\r\nContent-Disposition: form-data; name="%s"' % key)
                 body.write(fn)
-                body.write("\n\n")
+                body.write("\r\n\r\n")
                 body.write(value)
-                if value and value[-1] == '\r':
-                    body.write('\n')  # write an extra newline (lurve Macs)
         body.write(end_boundary)
-        body.write("\n")
         body = body.getvalue()
 
         self.announce("Submitting %s to %s" % (filename, self.repository), log.INFO)
@@ -176,9 +175,12 @@ class upload(PyPIRCCommand):
             result = urlopen(request)
             status = result.getcode()
             reason = result.msg
+            if self.show_response:
+                msg = '\n'.join(('-' * 75, result.read(), '-' * 75))
+                self.announce(msg, log.INFO)
         except socket.error, e:
             self.announce(str(e), log.ERROR)
-            return
+            raise
         except HTTPError, e:
             status = e.code
             reason = e.msg
@@ -187,8 +189,6 @@ class upload(PyPIRCCommand):
             self.announce('Server response (%s): %s' % (status, reason),
                           log.INFO)
         else:
-            self.announce('Upload failed (%s): %s' % (status, reason),
-                          log.ERROR)
-        if self.show_response:
-            msg = '\n'.join(('-' * 75, r.read(), '-' * 75))
-            self.announce(msg, log.INFO)
+            msg = 'Upload failed (%s): %s' % (status, reason)
+            self.announce(msg, log.ERROR)
+            raise DistutilsError(msg)

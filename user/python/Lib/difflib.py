@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 """
 Module difflib -- helpers for computing deltas between objects.
 
@@ -525,8 +523,8 @@ class SequenceMatcher:
             non_adjacent.append((i1, j1, k1))
 
         non_adjacent.append( (la, lb, 0) )
-        self.matching_blocks = non_adjacent
-        return map(Match._make, self.matching_blocks)
+        self.matching_blocks = map(Match._make, non_adjacent)
+        return self.matching_blocks
 
     def get_opcodes(self):
         """Return list of 5-tuples describing how to turn a into b.
@@ -586,7 +584,7 @@ class SequenceMatcher:
     def get_grouped_opcodes(self, n=3):
         """ Isolate change clusters by eliminating ranges with no changes.
 
-        Return a generator of groups with upto n lines of context.
+        Return a generator of groups with up to n lines of context.
         Each group is in the same format as returned by get_opcodes().
 
         >>> from pprint import pprint
@@ -1105,7 +1103,7 @@ class Differ:
 
 import re
 
-def IS_LINE_JUNK(line, pat=re.compile(r"\s*#?\s*$").match):
+def IS_LINE_JUNK(line, pat=re.compile(r"\s*(?:#\s*)?$").match):
     r"""
     Return 1 for ignorable line: iff `line` is blank or contains a single '#'.
 
@@ -1139,6 +1137,21 @@ def IS_CHARACTER_JUNK(ch, ws=" \t"):
 
     return ch in ws
 
+
+########################################################################
+###  Unified Diff
+########################################################################
+
+def _format_range_unified(start, stop):
+    'Convert range to the "ed" format'
+    # Per the diff spec at http://www.unix.org/single_unix_specification/
+    beginning = start + 1     # lines start numbering with one
+    length = stop - start
+    if length == 1:
+        return '{}'.format(beginning)
+    if not length:
+        beginning -= 1        # empty ranges begin at line just before the range
+    return '{},{}'.format(beginning, length)
 
 def unified_diff(a, b, fromfile='', tofile='', fromfiledate='',
                  tofiledate='', n=3, lineterm='\n'):
@@ -1184,24 +1197,44 @@ def unified_diff(a, b, fromfile='', tofile='', fromfiledate='',
     started = False
     for group in SequenceMatcher(None,a,b).get_grouped_opcodes(n):
         if not started:
-            fromdate = '\t%s' % fromfiledate if fromfiledate else ''
-            todate = '\t%s' % tofiledate if tofiledate else ''
-            yield '--- %s%s%s' % (fromfile, fromdate, lineterm)
-            yield '+++ %s%s%s' % (tofile, todate, lineterm)
             started = True
-        i1, i2, j1, j2 = group[0][1], group[-1][2], group[0][3], group[-1][4]
-        yield "@@ -%d,%d +%d,%d @@%s" % (i1+1, i2-i1, j1+1, j2-j1, lineterm)
+            fromdate = '\t{}'.format(fromfiledate) if fromfiledate else ''
+            todate = '\t{}'.format(tofiledate) if tofiledate else ''
+            yield '--- {}{}{}'.format(fromfile, fromdate, lineterm)
+            yield '+++ {}{}{}'.format(tofile, todate, lineterm)
+
+        first, last = group[0], group[-1]
+        file1_range = _format_range_unified(first[1], last[2])
+        file2_range = _format_range_unified(first[3], last[4])
+        yield '@@ -{} +{} @@{}'.format(file1_range, file2_range, lineterm)
+
         for tag, i1, i2, j1, j2 in group:
             if tag == 'equal':
                 for line in a[i1:i2]:
                     yield ' ' + line
                 continue
-            if tag == 'replace' or tag == 'delete':
+            if tag in ('replace', 'delete'):
                 for line in a[i1:i2]:
                     yield '-' + line
-            if tag == 'replace' or tag == 'insert':
+            if tag in ('replace', 'insert'):
                 for line in b[j1:j2]:
                     yield '+' + line
+
+
+########################################################################
+###  Context Diff
+########################################################################
+
+def _format_range_context(start, stop):
+    'Convert range to the "ed" format'
+    # Per the diff spec at http://www.unix.org/single_unix_specification/
+    beginning = start + 1     # lines start numbering with one
+    length = stop - start
+    if not length:
+        beginning -= 1        # empty ranges begin at line just before the range
+    if length <= 1:
+        return '{}'.format(beginning)
+    return '{},{}'.format(beginning, beginning + length - 1)
 
 # See http://www.unix.org/single_unix_specification/
 def context_diff(a, b, fromfile='', tofile='',
@@ -1247,38 +1280,36 @@ def context_diff(a, b, fromfile='', tofile='',
       four
     """
 
+    prefix = dict(insert='+ ', delete='- ', replace='! ', equal='  ')
     started = False
-    prefixmap = {'insert':'+ ', 'delete':'- ', 'replace':'! ', 'equal':'  '}
     for group in SequenceMatcher(None,a,b).get_grouped_opcodes(n):
         if not started:
-            fromdate = '\t%s' % fromfiledate if fromfiledate else ''
-            todate = '\t%s' % tofiledate if tofiledate else ''
-            yield '*** %s%s%s' % (fromfile, fromdate, lineterm)
-            yield '--- %s%s%s' % (tofile, todate, lineterm)
             started = True
+            fromdate = '\t{}'.format(fromfiledate) if fromfiledate else ''
+            todate = '\t{}'.format(tofiledate) if tofiledate else ''
+            yield '*** {}{}{}'.format(fromfile, fromdate, lineterm)
+            yield '--- {}{}{}'.format(tofile, todate, lineterm)
 
-        yield '***************%s' % (lineterm,)
-        if group[-1][2] - group[0][1] >= 2:
-            yield '*** %d,%d ****%s' % (group[0][1]+1, group[-1][2], lineterm)
-        else:
-            yield '*** %d ****%s' % (group[-1][2], lineterm)
-        visiblechanges = [e for e in group if e[0] in ('replace', 'delete')]
-        if visiblechanges:
+        first, last = group[0], group[-1]
+        yield '***************' + lineterm
+
+        file1_range = _format_range_context(first[1], last[2])
+        yield '*** {} ****{}'.format(file1_range, lineterm)
+
+        if any(tag in ('replace', 'delete') for tag, _, _, _, _ in group):
             for tag, i1, i2, _, _ in group:
                 if tag != 'insert':
                     for line in a[i1:i2]:
-                        yield prefixmap[tag] + line
+                        yield prefix[tag] + line
 
-        if group[-1][4] - group[0][3] >= 2:
-            yield '--- %d,%d ----%s' % (group[0][3]+1, group[-1][4], lineterm)
-        else:
-            yield '--- %d ----%s' % (group[-1][4], lineterm)
-        visiblechanges = [e for e in group if e[0] in ('replace', 'insert')]
-        if visiblechanges:
+        file2_range = _format_range_context(first[3], last[4])
+        yield '--- {} ----{}'.format(file2_range, lineterm)
+
+        if any(tag in ('replace', 'insert') for tag, _, _, _, _ in group):
             for tag, _, _, j1, j2 in group:
                 if tag != 'delete':
                     for line in b[j1:j2]:
-                        yield prefixmap[tag] + line
+                        yield prefix[tag] + line
 
 def ndiff(a, b, linejunk=None, charjunk=IS_CHARACTER_JUNK):
     r"""
@@ -1328,7 +1359,7 @@ def _mdiff(fromlines, tolines, context=None, linejunk=None,
     linejunk -- passed on to ndiff (see ndiff documentation)
     charjunk -- passed on to ndiff (see ndiff documentation)
 
-    This function returns an interator which returns a tuple:
+    This function returns an iterator which returns a tuple:
     (from line tuple, to line tuple, boolean flag)
 
     from/to line tuple -- (line num, line text)
@@ -1456,7 +1487,7 @@ def _mdiff(fromlines, tolines, context=None, linejunk=None,
                 yield _make_line(lines,'-',0), None, True
                 continue
             elif s.startswith(('--?+', '--+', '- ')):
-                # in delete block and see a intraline change or unchanged line
+                # in delete block and see an intraline change or unchanged line
                 # coming: yield the delete line and then blanks
                 from_line,to_line = _make_line(lines,'-',0), None
                 num_blanks_to_yield,num_blanks_pending = num_blanks_pending-1,0
@@ -1714,7 +1745,7 @@ class HtmlDiff(object):
             line = line.replace(' ','\0')
             # expand tabs into spaces
             line = line.expandtabs(self._tabsize)
-            # relace spaces from expanded tabs back into tab characters
+            # replace spaces from expanded tabs back into tab characters
             # (we'll replace them with markup after we do differencing)
             line = line.replace(' ','\t')
             return line.replace('\0',' ').rstrip('\n')
@@ -1930,7 +1961,7 @@ class HtmlDiff(object):
         self._make_prefix()
 
         # change tabs to spaces before it gets more difficult after we insert
-        # markkup
+        # markup
         fromlines,tolines = self._tab_newline_replace(fromlines,tolines)
 
         # create diffs iterator which generates side by side from/to data

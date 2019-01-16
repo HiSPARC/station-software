@@ -25,8 +25,9 @@ Options:
         Display version information and exit.
 """
 
-import sys
 import os
+import sys
+import ast
 import getopt
 import struct
 import array
@@ -143,7 +144,7 @@ def make(filename, outfile):
         # This is a message with plural forms
         elif l.startswith('msgid_plural'):
             if section != ID:
-                print >> sys.stderr, 'msgid_plural not preceeded by msgid on %s:%d' %\
+                print >> sys.stderr, 'msgid_plural not preceded by msgid on %s:%d' %\
                     (infile, lno)
                 sys.exit(1)
             l = l[12:]
@@ -170,8 +171,7 @@ def make(filename, outfile):
         l = l.strip()
         if not l:
             continue
-        # XXX: Does this always follow Python escape semantics?
-        l = eval(l)
+        l = ast.literal_eval(l)
         if section == ID:
             msgid += l
         elif section == STR:

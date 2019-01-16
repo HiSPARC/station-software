@@ -1,4 +1,4 @@
-"""Simple XML-RPC Server.
+r"""Simple XML-RPC Server.
 
 This module can be used to create simple XML-RPC servers
 by creating a server and either installing functions, a
@@ -188,7 +188,7 @@ class SimpleXMLRPCDispatcher:
         are considered private and will not be called by
         SimpleXMLRPCServer.
 
-        If a registered function matches a XML-RPC request, then it
+        If a registered function matches an XML-RPC request, then it
         will be called instead of the registered instance.
 
         If the optional allow_dotted_names argument is true and the
@@ -246,7 +246,7 @@ class SimpleXMLRPCDispatcher:
         marshalled data. For backwards compatibility, a dispatch
         function can be provided as an argument (see comment in
         SimpleXMLRPCRequestHandler.do_POST) but overriding the
-        existing method through subclassing is the prefered means
+        existing method through subclassing is the preferred means
         of changing method dispatch behavior.
         """
 
@@ -486,7 +486,10 @@ class SimpleXMLRPCRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             L = []
             while size_remaining:
                 chunk_size = min(size_remaining, max_chunk_size)
-                L.append(self.rfile.read(chunk_size))
+                chunk = self.rfile.read(chunk_size)
+                if not chunk:
+                    break
+                L.append(chunk)
                 size_remaining -= len(L[-1])
             data = ''.join(L)
 
@@ -701,4 +704,5 @@ if __name__ == '__main__':
     server = SimpleXMLRPCServer(("localhost", 8000))
     server.register_function(pow)
     server.register_function(lambda x,y: x+y, 'add')
+    server.register_multicall_functions()
     server.serve_forever()

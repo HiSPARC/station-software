@@ -6,6 +6,7 @@ import weakref
 import copy
 import cPickle as pickle
 import random
+import struct
 
 BIG = 100000
 
@@ -136,6 +137,15 @@ class TestBasic(unittest.TestCase):
         d = deque([1, 2, 3, m, 4, 5])
         m.d = d
         self.assertRaises(RuntimeError, d.count, 3)
+
+        # test issue11004
+        # block advance failed after rotation aligned elements on right side of block
+        d = deque([None]*16)
+        for i in range(len(d)):
+            d.rotate(-1)
+        d.rotate(1)
+        self.assertEqual(d.count(1), 0)
+        self.assertEqual(d.count(None), 16)
 
     def test_comparisons(self):
         d = deque('xabc'); d.popleft()
@@ -319,7 +329,7 @@ class TestBasic(unittest.TestCase):
         d.clear()
         self.assertEqual(len(d), 0)
         self.assertEqual(list(d), [])
-        d.clear()               # clear an emtpy deque
+        d.clear()               # clear an empty deque
         self.assertEqual(list(d), [])
 
     def test_remove(self):
@@ -508,6 +518,21 @@ class TestBasic(unittest.TestCase):
             gc.collect()
             self.assertTrue(ref() is None, "Cycle was not collected")
 
+    check_sizeof = test_support.check_sizeof
+
+    @test_support.cpython_only
+    def test_sizeof(self):
+        BLOCKLEN = 62
+        basesize = test_support.calcobjsize('2P3PlPP')
+        blocksize = struct.calcsize('%dP2P' % BLOCKLEN)
+        self.assertEqual(object.__sizeof__(deque()), basesize)
+        check = self.check_sizeof
+        check(deque(), basesize + blocksize)
+        check(deque('a'), basesize + blocksize)
+        check(deque('a' * (BLOCKLEN // 2)), basesize + blocksize)
+        check(deque('a' * (BLOCKLEN // 2 + 1)), basesize + 2 * blocksize)
+        check(deque('a' * (42 * BLOCKLEN)), basesize + 43 * blocksize)
+
 class TestVariousIteratorArgs(unittest.TestCase):
 
     def test_constructor(self):
@@ -575,11 +600,12 @@ class TestSubclass(unittest.TestCase):
         self.assertEqual(type(d), type(e))
         self.assertEqual(list(d), list(e))
 
-        s = pickle.dumps(d)
-        e = pickle.loads(s)
-        self.assertNotEqual(id(d), id(e))
-        self.assertEqual(type(d), type(e))
-        self.assertEqual(list(d), list(e))
+        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+            s = pickle.dumps(d, proto)
+            e = pickle.loads(s)
+            self.assertNotEqual(id(d), id(e))
+            self.assertEqual(type(d), type(e))
+            self.assertEqual(list(d), list(e))
 
         d = Deque('abcde', maxlen=4)
 
@@ -591,11 +617,12 @@ class TestSubclass(unittest.TestCase):
         self.assertEqual(type(d), type(e))
         self.assertEqual(list(d), list(e))
 
-        s = pickle.dumps(d)
-        e = pickle.loads(s)
-        self.assertNotEqual(id(d), id(e))
-        self.assertEqual(type(d), type(e))
-        self.assertEqual(list(d), list(e))
+        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+            s = pickle.dumps(d, proto)
+            e = pickle.loads(s)
+            self.assertNotEqual(id(d), id(e))
+            self.assertEqual(type(d), type(e))
+            self.assertEqual(list(d), list(e))
 
 ##    def test_pickle(self):
 ##        d = Deque('abc')
@@ -641,6 +668,10 @@ class TestSubclassWithKwargs(unittest.TestCase):
     def test_subclass_with_kwargs(self):
         # SF bug #1486663 -- this used to erroneously raise a TypeError
         SubclassWithKwargs(newarg=1)
+
+    def test_free_after_iterating(self):
+        # For now, bypass tests that require slicing
+        self.skipTest("Exhausted deque iterator doesn't free a deque")
 
 #==============================================================================
 

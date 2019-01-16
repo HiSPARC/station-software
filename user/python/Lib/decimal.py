@@ -21,11 +21,11 @@
 This is a Py2.3 implementation of decimal floating point arithmetic based on
 the General Decimal Arithmetic Specification:
 
-    www2.hursley.ibm.com/decimal/decarith.html
+    http://speleotrove.com/decimal/decarith.html
 
 and IEEE standard 854-1987:
 
-    www.cs.berkeley.edu/~ejr/projects/754/private/drafts/854-1987/dir.html
+    http://en.wikipedia.org/wiki/IEEE_854-1987
 
 Decimal floating point has finite precision with arbitrarily large bounds.
 
@@ -136,7 +136,6 @@ __all__ = [
 
 __version__ = '1.70'    # Highest version of the spec this complies with
 
-import copy as _copy
 import math as _math
 import numbers as _numbers
 
@@ -225,7 +224,7 @@ class InvalidOperation(DecimalException):
 class ConversionSyntax(InvalidOperation):
     """Trying to convert badly formed string.
 
-    This occurs and signals invalid-operation if an string is being
+    This occurs and signals invalid-operation if a string is being
     converted to a number and it does not conform to the numeric string
     syntax.  The result is [0,qNaN].
     """
@@ -1049,12 +1048,11 @@ class Decimal(object):
         return sign + intpart + fracpart + exp
 
     def to_eng_string(self, context=None):
-        """Convert to engineering-type string.
+        """Convert to a string, using engineering notation if an exponent is needed.
 
-        Engineering notation has an exponent which is a multiple of 3, so there
-        are up to 3 digits left of the decimal place.
-
-        Same rules for when in exponential and when as a value as in __str__.
+        Engineering notation has an exponent which is a multiple of 3.  This
+        can leave up to 3 digits to the left of the decimal place and may
+        require the addition of either one or two trailing zeros.
         """
         return self.__str__(eng=True, context=context)
 
@@ -1068,34 +1066,37 @@ class Decimal(object):
             if ans:
                 return ans
 
-        if not self:
-            # -Decimal('0') is Decimal('0'), not Decimal('-0')
+        if context is None:
+            context = getcontext()
+
+        if not self and context.rounding != ROUND_FLOOR:
+            # -Decimal('0') is Decimal('0'), not Decimal('-0'), except
+            # in ROUND_FLOOR rounding mode.
             ans = self.copy_abs()
         else:
             ans = self.copy_negate()
 
-        if context is None:
-            context = getcontext()
         return ans._fix(context)
 
     def __pos__(self, context=None):
         """Returns a copy, unless it is a sNaN.
 
-        Rounds the number (if more then precision digits)
+        Rounds the number (if more than precision digits)
         """
         if self._is_special:
             ans = self._check_nans(context=context)
             if ans:
                 return ans
 
-        if not self:
-            # + (-0) = 0
+        if context is None:
+            context = getcontext()
+
+        if not self and context.rounding != ROUND_FLOOR:
+            # + (-0) = 0, except in ROUND_FLOOR rounding mode.
             ans = self.copy_abs()
         else:
             ans = Decimal(self)
 
-        if context is None:
-            context = getcontext()
         return ans._fix(context)
 
     def __abs__(self, round=True, context=None):
@@ -1578,7 +1579,13 @@ class Decimal(object):
 
     def __float__(self):
         """Float representation."""
-        return float(str(self))
+        if self._isnan():
+            if self.is_snan():
+                raise ValueError("Cannot convert signaling NaN to float")
+            s = "-nan" if self._sign else "nan"
+        else:
+            s = str(self)
+        return float(s)
 
     def __int__(self):
         """Converts self to an int, truncating if necessary."""
@@ -1680,7 +1687,7 @@ class Decimal(object):
                 self = _dec_from_triple(self._sign, '1', exp_min-1)
                 digits = 0
             rounding_method = self._pick_rounding_function[context.rounding]
-            changed = getattr(self, rounding_method)(digits)
+            changed = rounding_method(self, digits)
             coeff = self._int[:digits] or '0'
             if changed > 0:
                 coeff = str(int(coeff)+1)
@@ -1719,8 +1726,6 @@ class Decimal(object):
 
         # here self was representable to begin with; return unchanged
         return Decimal(self)
-
-    _pick_rounding_function = {}
 
     # for each of the rounding functions below:
     #   self is a finite, nonzero Decimal
@@ -1787,6 +1792,17 @@ class Decimal(object):
             return self._round_down(prec)
         else:
             return -self._round_down(prec)
+
+    _pick_rounding_function = dict(
+        ROUND_DOWN = _round_down,
+        ROUND_UP = _round_up,
+        ROUND_HALF_UP = _round_half_up,
+        ROUND_HALF_DOWN = _round_half_down,
+        ROUND_HALF_EVEN = _round_half_even,
+        ROUND_CEILING = _round_ceiling,
+        ROUND_FLOOR = _round_floor,
+        ROUND_05UP = _round_05up,
+    )
 
     def fma(self, other, third, context=None):
         """Fused multiply-add.
@@ -1930,9 +1946,9 @@ class Decimal(object):
         nonzero.  For efficiency, other._exp should not be too large,
         so that 10**abs(other._exp) is a feasible calculation."""
 
-        # In the comments below, we write x for the value of self and
-        # y for the value of other.  Write x = xc*10**xe and y =
-        # yc*10**ye.
+        # In the comments below, we write x for the value of self and y for the
+        # value of other.  Write x = xc*10**xe and abs(y) = yc*10**ye, with xc
+        # and yc positive integers not divisible by 10.
 
         # The main purpose of this method is to identify the *failure*
         # of x**y to be exactly representable with as little effort as
@@ -1940,13 +1956,12 @@ class Decimal(object):
         # eliminate the possibility of x**y being exact.  Only if all
         # these tests are passed do we go on to actually compute x**y.
 
-        # Here's the main idea.  First normalize both x and y.  We
-        # express y as a rational m/n, with m and n relatively prime
-        # and n>0.  Then for x**y to be exactly representable (at
-        # *any* precision), xc must be the nth power of a positive
-        # integer and xe must be divisible by n.  If m is negative
-        # then additionally xc must be a power of either 2 or 5, hence
-        # a power of 2**n or 5**n.
+        # Here's the main idea.  Express y as a rational number m/n, with m and
+        # n relatively prime and n>0.  Then for x**y to be exactly
+        # representable (at *any* precision), xc must be the nth power of a
+        # positive integer and xe must be divisible by n.  If y is negative
+        # then additionally xc must be a power of either 2 or 5, hence a power
+        # of 2**n or 5**n.
         #
         # There's a limit to how small |y| can be: if y=m/n as above
         # then:
@@ -2018,21 +2033,43 @@ class Decimal(object):
                     return None
                 # now xc is a power of 2; e is its exponent
                 e = _nbits(xc)-1
-                # find e*y and xe*y; both must be integers
-                if ye >= 0:
-                    y_as_int = yc*10**ye
-                    e = e*y_as_int
-                    xe = xe*y_as_int
-                else:
-                    ten_pow = 10**-ye
-                    e, remainder = divmod(e*yc, ten_pow)
-                    if remainder:
-                        return None
-                    xe, remainder = divmod(xe*yc, ten_pow)
-                    if remainder:
-                        return None
 
-                if e*65 >= p*93: # 93/65 > log(10)/log(5)
+                # We now have:
+                #
+                #   x = 2**e * 10**xe, e > 0, and y < 0.
+                #
+                # The exact result is:
+                #
+                #   x**y = 5**(-e*y) * 10**(e*y + xe*y)
+                #
+                # provided that both e*y and xe*y are integers.  Note that if
+                # 5**(-e*y) >= 10**p, then the result can't be expressed
+                # exactly with p digits of precision.
+                #
+                # Using the above, we can guard against large values of ye.
+                # 93/65 is an upper bound for log(10)/log(5), so if
+                #
+                #   ye >= len(str(93*p//65))
+                #
+                # then
+                #
+                #   -e*y >= -y >= 10**ye > 93*p/65 > p*log(10)/log(5),
+                #
+                # so 5**(-e*y) >= 10**p, and the coefficient of the result
+                # can't be expressed in p digits.
+
+                # emax >= largest e such that 5**e < 10**p.
+                emax = p*93//65
+                if ye >= len(str(emax)):
+                    return None
+
+                # Find -e*y and -xe*y; both must be integers
+                e = _decimal_lshift_exact(e * yc, ye)
+                xe = _decimal_lshift_exact(xe * yc, ye)
+                if e is None or xe is None:
+                    return None
+
+                if e > emax:
                     return None
                 xc = 5**e
 
@@ -2046,19 +2083,20 @@ class Decimal(object):
                 while xc % 5 == 0:
                     xc //= 5
                     e -= 1
-                if ye >= 0:
-                    y_as_integer = yc*10**ye
-                    e = e*y_as_integer
-                    xe = xe*y_as_integer
-                else:
-                    ten_pow = 10**-ye
-                    e, remainder = divmod(e*yc, ten_pow)
-                    if remainder:
-                        return None
-                    xe, remainder = divmod(xe*yc, ten_pow)
-                    if remainder:
-                        return None
-                if e*3 >= p*10: # 10/3 > log(10)/log(2)
+
+                # Guard against large values of ye, using the same logic as in
+                # the 'xc is a power of 2' branch.  10/3 is an upper bound for
+                # log(10)/log(2).
+                emax = p*10//3
+                if ye >= len(str(emax)):
+                    return None
+
+                e = _decimal_lshift_exact(e * yc, ye)
+                xe = _decimal_lshift_exact(xe * yc, ye)
+                if e is None or xe is None:
+                    return None
+
+                if e > emax:
                     return None
                 xc = 2**e
             else:
@@ -2492,8 +2530,8 @@ class Decimal(object):
         if digits < 0:
             self = _dec_from_triple(self._sign, '1', exp-1)
             digits = 0
-        this_function = getattr(self, self._pick_rounding_function[rounding])
-        changed = this_function(digits)
+        this_function = self._pick_rounding_function[rounding]
+        changed = this_function(self, digits)
         coeff = self._int[:digits] or '0'
         if changed == 1:
             coeff = str(int(coeff)+1)
@@ -3625,6 +3663,8 @@ class Decimal(object):
         if self._is_special:
             sign = _format_sign(self._sign, spec)
             body = str(self.copy_abs())
+            if spec['type'] == '%':
+                body += '%'
             return _format_align(sign, body, spec)
 
         # a type of None defaults to 'g' or 'G', depending on context
@@ -3704,18 +3744,6 @@ _numbers.Number.register(Decimal)
 
 
 ##### Context class #######################################################
-
-
-# get rounding method function:
-rounding_functions = [name for name in Decimal.__dict__.keys()
-                                    if name.startswith('_round_')]
-for name in rounding_functions:
-    # name is like _round_half_even, goes to the global ROUND_HALF_EVEN value.
-    globalname = name[1:].upper()
-    val = globals()[globalname]
-    Decimal._pick_rounding_function[val] = name
-
-del name, val, globalname, rounding_functions
 
 class _ContextManager(object):
     """Context manager class to support localcontext().
@@ -5310,9 +5338,29 @@ class Context(object):
             return r
 
     def to_eng_string(self, a):
-        """Converts a number to a string, using scientific notation.
+        """Convert to a string, using engineering notation if an exponent is needed.
+
+        Engineering notation has an exponent which is a multiple of 3.  This
+        can leave up to 3 digits to the left of the decimal place and may
+        require the addition of either one or two trailing zeros.
 
         The operation is not affected by the context.
+
+        >>> ExtendedContext.to_eng_string(Decimal('123E+1'))
+        '1.23E+3'
+        >>> ExtendedContext.to_eng_string(Decimal('123E+3'))
+        '123E+3'
+        >>> ExtendedContext.to_eng_string(Decimal('123E-10'))
+        '12.3E-9'
+        >>> ExtendedContext.to_eng_string(Decimal('-123E-12'))
+        '-123E-12'
+        >>> ExtendedContext.to_eng_string(Decimal('7E-7'))
+        '700E-9'
+        >>> ExtendedContext.to_eng_string(Decimal('7E+1'))
+        '70'
+        >>> ExtendedContext.to_eng_string(Decimal('0E+1'))
+        '0.00E+3'
+
         """
         a = _convert_other(a, raiseit=True)
         return a.to_eng_string(context=self)
@@ -5462,6 +5510,27 @@ def _nbits(n, correction = {
         raise ValueError("The argument to _nbits should be nonnegative.")
     hex_n = "%x" % n
     return 4*len(hex_n) - correction[hex_n[0]]
+
+def _decimal_lshift_exact(n, e):
+    """ Given integers n and e, return n * 10**e if it's an integer, else None.
+
+    The computation is designed to avoid computing large powers of 10
+    unnecessarily.
+
+    >>> _decimal_lshift_exact(3, 4)
+    30000
+    >>> _decimal_lshift_exact(300, -999999999)  # returns None
+
+    """
+    if n == 0:
+        return 0
+    elif e >= 0:
+        return n * 10**e
+    else:
+        # val_n = largest power of 10 dividing n.
+        str_n = str(abs(n))
+        val_n = len(str_n) - len(str_n.rstrip('0'))
+        return None if val_n < -e else n // 10**-e
 
 def _sqrt_nearest(n, a):
     """Closest integer to the square root of the positive integer n.  a is
@@ -5984,13 +6053,16 @@ def _parse_format_specifier(format_spec, _localeconv=None):
         format_dict['decimal_point'] = '.'
 
     # record whether return type should be str or unicode
-    format_dict['unicode'] = isinstance(format_spec, unicode)
+    try:
+        format_dict['unicode'] = isinstance(format_spec, unicode)
+    except NameError:
+        format_dict['unicode'] = False
 
     return format_dict
 
 def _format_align(sign, body, spec):
     """Given an unpadded, non-aligned numeric string 'body' and sign
-    string 'sign', add padding and aligment conforming to the given
+    string 'sign', add padding and alignment conforming to the given
     format specifier dictionary 'spec' (as produced by
     parse_format_specifier).
 

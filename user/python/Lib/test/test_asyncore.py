@@ -7,9 +7,10 @@ import sys
 import time
 import warnings
 import errno
+import struct
 
 from test import test_support
-from test.test_support import TESTFN, run_unittest, unlink
+from test.test_support import TESTFN, run_unittest, unlink, HOST
 from StringIO import StringIO
 
 try:
@@ -17,7 +18,6 @@ try:
 except ImportError:
     threading = None
 
-HOST = test_support.HOST
 
 class dummysocket:
     def __init__(self):
@@ -330,7 +330,7 @@ class DispatcherTests(unittest.TestCase):
         if hasattr(os, 'strerror'):
             self.assertEqual(err, os.strerror(errno.EPERM))
         err = asyncore._strerror(-1)
-        self.assertIn("unknown error", err.lower())
+        self.assertTrue(err != "")
 
 
 class dispatcherwithsend_noread(asyncore.dispatcher_with_send):
@@ -398,7 +398,8 @@ class DispatcherWithSendTests_UsePoll(DispatcherWithSendTests):
 class FileWrapperTest(unittest.TestCase):
     def setUp(self):
         self.d = "It's not dead, it's sleeping!"
-        file(TESTFN, 'w').write(self.d)
+        with file(TESTFN, 'w') as h:
+            h.write(self.d)
 
     def tearDown(self):
         unlink(TESTFN)
@@ -441,6 +442,19 @@ class FileWrapperTest(unittest.TestCase):
         asyncore.loop(timeout=0.01, use_poll=True, count=2)
         self.assertEqual(b"".join(data), self.d)
 
+    def test_close_twice(self):
+        fd = os.open(TESTFN, os.O_RDONLY)
+        f = asyncore.file_wrapper(fd)
+        os.close(fd)
+
+        os.close(f.fd)  # file_wrapper dupped fd
+        with self.assertRaises(OSError):
+            f.close()
+
+        self.assertEqual(f.fd, -1)
+        # calling close twice should not fail
+        f.close()
+
 
 class BaseTestHandler(asyncore.dispatcher):
 
@@ -482,8 +496,9 @@ class TCPServer(asyncore.dispatcher):
         return self.socket.getsockname()[:2]
 
     def handle_accept(self):
-        sock, addr = self.accept()
-        self.handler(sock)
+        pair = self.accept()
+        if pair is not None:
+            self.handler(pair[0])
 
     def handle_error(self):
         raise
@@ -604,6 +619,9 @@ class BaseTestAPI(unittest.TestCase):
         # Note: this might fail on some platforms as OOB data is
         # tenuously supported and rarely used.
 
+        if sys.platform == "darwin" and self.use_poll:
+            self.skipTest("poll may fail on macOS; see issue #28087")
+
         class TestClient(BaseClient):
             def handle_expt(self):
                 self.flag = True
@@ -701,6 +719,27 @@ class BaseTestAPI(unittest.TestCase):
                                                  socket.SO_REUSEADDR))
         finally:
             sock.close()
+
+    @unittest.skipUnless(threading, 'Threading required for this test.')
+    @test_support.reap_threads
+    def test_quick_connect(self):
+        # see: http://bugs.python.org/issue10340
+        server = TCPServer()
+        t = threading.Thread(target=lambda: asyncore.loop(timeout=0.1, count=500))
+        t.start()
+        self.addCleanup(t.join)
+
+        for x in xrange(20):
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(.2)
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER,
+                         struct.pack('ii', 1, 0))
+            try:
+                s.connect(server.address)
+            except socket.error:
+                pass
+            finally:
+                s.close()
 
 
 class TestAPI_UseSelect(BaseTestAPI):

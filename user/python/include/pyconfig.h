@@ -148,7 +148,11 @@ WIN32 is still required for the locale module.
 #define COMPILER _Py_PASTE_VERSION("64 bit (Itanium)")
 #define MS_WINI64
 #elif defined(_M_X64) || defined(_M_AMD64)
+#ifdef __INTEL_COMPILER
+#define COMPILER ("[ICC v." _Py_STRINGIZE(__INTEL_COMPILER) " 64 bit (amd64) with MSC v." _Py_STRINGIZE(_MSC_VER) " CRT]")
+#else
 #define COMPILER _Py_PASTE_VERSION("64 bit (AMD64)")
+#endif /* __INTEL_COMPILER */
 #define MS_WINX64
 #else
 #define COMPILER _Py_PASTE_VERSION("64 bit (Unknown)")
@@ -204,7 +208,11 @@ typedef _W64 int ssize_t;
 
 #if defined(MS_WIN32) && !defined(MS_WIN64)
 #ifdef _M_IX86
+#ifdef __INTEL_COMPILER
+#define COMPILER ("[ICC v." _Py_STRINGIZE(__INTEL_COMPILER) " 32 bit (Intel) with MSC v." _Py_STRINGIZE(_MSC_VER) " CRT]")
+#else
 #define COMPILER _Py_PASTE_VERSION("32 bit (Intel)")
+#endif /* __INTEL_COMPILER */
 #else
 #define COMPILER _Py_PASTE_VERSION("32 bit (Unknown)")
 #endif
@@ -217,7 +225,11 @@ typedef int pid_t;
 #define Py_IS_INFINITY(X) (!_finite(X) && !_isnan(X))
 #define Py_IS_FINITE(X) _finite(X)
 #define copysign _copysign
+
+/* VS 2010 and above already defines hypot as _hypot */
+#if _MSC_VER < 1600
 #define hypot _hypot
+#endif
 
 #endif /* _MSC_VER */
 
@@ -342,7 +354,7 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 #	define SIZEOF_FPOS_T 8
 #	define SIZEOF_HKEY 8
 #	define SIZEOF_SIZE_T 8
-/* configure.in defines HAVE_LARGEFILE_SUPPORT iff HAVE_LONG_LONG,
+/* configure.ac defines HAVE_LARGEFILE_SUPPORT iff HAVE_LONG_LONG,
    sizeof(off_t) > sizeof(long), and sizeof(PY_LONG_LONG) >= sizeof(off_t).
    On Win64 the second condition is not true, but if fpos_t replaces off_t
    then this is true. The uses of HAVE_LARGEFILE_SUPPORT imply that Win64
@@ -356,7 +368,7 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 #	define SIZEOF_FPOS_T 8
 #	define SIZEOF_HKEY 4
 #	define SIZEOF_SIZE_T 4
-	/* MS VS2005 changes time_t to an 64-bit type on all platforms */
+	/* MS VS2005 changes time_t to a 64-bit type on all platforms */
 #	if defined(_MSC_VER) && _MSC_VER >= 1400
 #	define SIZEOF_TIME_T 8
 #	else
@@ -434,6 +446,11 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 
 /* Define to 1 if you have the `copysign' function. */
 #define HAVE_COPYSIGN 1
+
+/* Define to 1 if you have the `round' function. */
+#if _MSC_VER >= 1800
+#define HAVE_ROUND 1
+#endif
 
 /* Define to 1 if you have the `isinf' macro. */
 #define HAVE_DECL_ISINF 1
@@ -642,6 +659,9 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 #ifndef MS_WINCE
 #define HAVE_WCSCOLL 1
 #endif
+
+/* Define if the zlib library has inflateCopy */
+#define HAVE_ZLIB_COPY 1
 
 /* Define if you have the <dlfcn.h> header file.  */
 /* #undef HAVE_DLFCN_H */

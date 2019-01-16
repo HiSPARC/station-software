@@ -24,6 +24,7 @@ class Bdb:
         self.skip = set(skip) if skip else None
         self.breaks = {}
         self.fncache = {}
+        self.frame_returning = None
 
     def canonic(self, filename):
         if filename == "<" + filename[1:-1] + ">":
@@ -82,7 +83,11 @@ class Bdb:
 
     def dispatch_return(self, frame, arg):
         if self.stop_here(frame) or frame == self.returnframe:
-            self.user_return(frame, arg)
+            try:
+                self.frame_returning = frame
+                self.user_return(frame, arg)
+            finally:
+                self.frame_returning = None
             if self.quitting: raise BdbQuit
         return self.trace_dispatch
 
@@ -186,6 +191,14 @@ class Bdb:
 
     def set_step(self):
         """Stop after one line of code."""
+        # Issue #13183: pdb skips frames after hitting a breakpoint and running
+        # step commands.
+        # Restore the trace function in the caller (that may not have been set
+        # for performance reasons) when returning from the current frame.
+        if self.frame_returning:
+            caller_frame = self.frame_returning.f_back
+            if caller_frame and not caller_frame.f_trace:
+                caller_frame.f_trace = self.trace_dispatch
         self._set_stopinfo(None, None)
 
     def set_next(self, frame):
@@ -250,6 +263,12 @@ class Bdb:
             list.append(lineno)
         bp = Breakpoint(filename, lineno, temporary, cond, funcname)
 
+    def _prune_breaks(self, filename, lineno):
+        if (filename, lineno) not in Breakpoint.bplist:
+            self.breaks[filename].remove(lineno)
+        if not self.breaks[filename]:
+            del self.breaks[filename]
+
     def clear_break(self, filename, lineno):
         filename = self.canonic(filename)
         if not filename in self.breaks:
@@ -261,10 +280,7 @@ class Bdb:
         # pair, then remove the breaks entry
         for bp in Breakpoint.bplist[filename, lineno][:]:
             bp.deleteMe()
-        if (filename, lineno) not in Breakpoint.bplist:
-            self.breaks[filename].remove(lineno)
-        if not self.breaks[filename]:
-            del self.breaks[filename]
+        self._prune_breaks(filename, lineno)
 
     def clear_bpbynumber(self, arg):
         try:
@@ -277,7 +293,8 @@ class Bdb:
             return 'Breakpoint number (%d) out of range' % number
         if not bp:
             return 'Breakpoint (%d) already deleted' % number
-        self.clear_break(bp.file, bp.line)
+        bp.deleteMe()
+        self._prune_breaks(bp.file, bp.line)
 
     def clear_all_file_breaks(self, filename):
         filename = self.canonic(filename)

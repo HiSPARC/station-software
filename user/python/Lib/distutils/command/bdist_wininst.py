@@ -3,7 +3,7 @@
 Implements the Distutils 'bdist_wininst' command: create a windows installer
 exe-program."""
 
-__revision__ = "$Id: bdist_wininst.py 86238 2010-11-06 04:06:18Z eric.araujo $"
+__revision__ = "$Id$"
 
 import sys
 import os
@@ -71,7 +71,7 @@ class bdist_wininst (Command):
         self.dist_dir = None
         self.bitmap = None
         self.title = None
-        self.skip_build = 0
+        self.skip_build = None
         self.install_script = None
         self.pre_install_script = None
         self.user_access_control = None
@@ -80,6 +80,8 @@ class bdist_wininst (Command):
 
 
     def finalize_options (self):
+        self.set_undefined_options('bdist', ('skip_build', 'skip_build'))
+
         if self.bdist_dir is None:
             if self.skip_build and self.plat_name:
                 # If build is skipped and plat_name is overridden, bdist will
@@ -89,8 +91,10 @@ class bdist_wininst (Command):
                 # next the command will be initialized using that name
             bdist_base = self.get_finalized_command('bdist').bdist_base
             self.bdist_dir = os.path.join(bdist_base, 'wininst')
+
         if not self.target_version:
             self.target_version = ""
+
         if not self.skip_build and self.distribution.has_ext_modules():
             short_version = get_python_version()
             if self.target_version and self.target_version != short_version:

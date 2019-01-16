@@ -4,7 +4,11 @@ For now, tests just new or changed functionality.
 
 """
 
+import copy
+import pickle
+import sys
 import unittest
+import warnings
 from test import test_support
 
 class BufferTests(unittest.TestCase):
@@ -20,6 +24,35 @@ class BufferTests(unittest.TestCase):
                 for step in indices[1:]:
                     self.assertEqual(b[start:stop:step],
                                      s[start:stop:step])
+
+    def test_newbuffer_interface(self):
+        # Test that the buffer object has the new buffer interface
+        # as used by the memoryview object
+        s = "".join(chr(c) for c in list(range(255, -1, -1)))
+        b = buffer(s)
+        m = memoryview(b) # Should not raise an exception
+        self.assertEqual(m.tobytes(), s)
+
+    def test_large_buffer_size_and_offset(self):
+        data = bytearray('hola mundo')
+        buf = buffer(data, sys.maxsize, sys.maxsize)
+        self.assertEqual(buf[:4096], "")
+
+    def test_copy(self):
+        buf = buffer(b'abc')
+        with self.assertRaises(TypeError), warnings.catch_warnings():
+            warnings.filterwarnings('ignore', ".*buffer", DeprecationWarning)
+            copy.copy(buf)
+
+    @test_support.cpython_only
+    def test_pickle(self):
+        buf = buffer(b'abc')
+        for proto in range(2):
+            with self.assertRaises(TypeError):
+                pickle.dumps(buf, proto)
+        with test_support.check_py3k_warnings(
+                (".*buffer", DeprecationWarning)):
+            pickle.dumps(buf, 2)
 
 
 def test_main():
