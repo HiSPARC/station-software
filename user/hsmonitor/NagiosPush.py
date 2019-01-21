@@ -48,7 +48,9 @@ class NagiosPush(object):
         try:
             requests.post(self.url, params=params, headers=headers, timeout=5)
         except (ConnectionError, Timeout) as exc:
-            logger.warning('Unable to upload status for service %s (%s)'
+            logger.warning('Unable to upload status for service %s'
+                           % nagiosResult.serviceName)
+            logger.debug('Unable to upload status for service %s (%s)'
                            % (nagiosResult.serviceName, exc))
         else:
             logger.debug('Check %s: Status code: %i, Status description: %s.\n'
