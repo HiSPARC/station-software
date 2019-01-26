@@ -41,7 +41,7 @@ def stop_admin_services():
     logger.info('Stopping Admin-Mode applications...')
 
     stop_service('TightVNC', 'tvnserver')
-    stop_service('Nagios', 'NSClientpp')
+    stop_service('Nagios', 'nscp')
     stop_service('OpenVPN', 'OpenVPNService')
 
 

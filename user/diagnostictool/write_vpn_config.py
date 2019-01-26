@@ -13,7 +13,7 @@ def write_config():
     proxy_settings.run()
 
     logger.debug("Updating both 32 and 64-bit config")
-    dst_dirs = ['../../admin/openvpn64/config', '../../admin/openvpn32/config']
+    dst_dirs = ['../../admin/openvpn/x64/config', '../../admin/openvpn/x32/config']
     config_name = 'hisparc.ovpn'
     for dst_dir in dst_dirs:
         config = os.path.join(dst_dir, config_name)

@@ -41,7 +41,7 @@ def start_admin_services():
     logger.info('Starting Admin-Mode applications...')
 
     start_service('TightVNC', 'tvnserver')
-    start_service('Nagios', 'NSClientpp')
+    start_service('Nagios', 'nscp')
     start_service('OpenVPN', 'OpenVPNService')
 
 

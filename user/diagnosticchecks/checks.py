@@ -3,8 +3,7 @@ import MySQLdb
 from socket import gethostbyname
 import ConfigParser
 
-CONFIG_INI1 = "../../user/hsmonitor/data/config.ini"
-CONFIG_INI2 = "../../user/hsmonitor/data/config-password.ini"
+CONFIG_INI = "../../../user/hsmonitor/data/config.ini"
 
 OK = 0
 WARNING = 1
@@ -22,7 +21,7 @@ def check_bufferdb(warn=None, crit=None):
     config = ConfigParser.ConfigParser()
 
     try:
-        config.read([CONFIG_INI1, CONFIG_INI2])
+        config.read([CONFIG_INI])
         host = config.get('BufferDB', 'Host')
         user = config.get('BufferDB', 'Username')
         pwd = config.get('BufferDB', 'Password')

@@ -73,7 +73,7 @@ def check():
     print "Checking Admin-Mode services..."
 
     check_app("TightVNC", service_name="tvnserver")
-    check_app("Nagios", service_name="NSClientpp")
+    check_app("Nagios", service_name="nscp")
     check_app("OpenVPN", service_name="OpenVPNService")
 
 
