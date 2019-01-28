@@ -1,0 +1,41 @@
+﻿# If you want to fill this file with all available options run the following command:
+#   nscp settings --generate --add-defaults --load-all
+# If you want to activate a module and bring in all its options use:
+#   nscp settings --activate-module <MODULE NAME> --add-defaults
+# For details run: nscp settings --help
+#
+[/modules]
+CheckLogFile=enabled
+CheckSystem=enabled
+CheckDisk=enabled
+NSClientServer=enabled
+NRPEServer=enabled
+CheckEventLog=enabled
+Checkhelpers=enabled
+LUAScript=enabled
+CheckExternalScripts=enabled
+NRPEClient=enabled
+#
+[/settings/NSClient/server]
+allowed hosts=194.171.82.1
+port=12489
+password=
+#
+[/settings/NRPE/server]
+allow arguments=true
+allow nasty characters=true
+allowed hosts=194.171.82.1
+port=5666
+timeout=60
+ssl=false
+insecure=true
+#
+[/settings/NRPE/client/handlers]
+check_other=-H 192.168.0.1 -p 5666 -c remote_command -a arguments
+#
+[/settings/external scripts]
+allow arguments=true
+#
+[/settings/external scripts/scripts]
+check_buffersize=check_bufferdb.bat $ARG1$ $ARG2$
+check_lvusage=check_lvusage.bat $ARG1$ $ARG2$

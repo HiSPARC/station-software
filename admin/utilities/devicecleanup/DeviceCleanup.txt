@@ -1,0 +1,68 @@
+
+DeviceCleanup V0.7.1.0 - Removes non-present devices from the Windows device management
+Freeware by Uwe Sieber - www.uwe-sieber.de
+
+Works under Window 2000, XP and higher
+
+On x64 Windows only the x64 release can delete devices.
+
+
+All devices listed by DeviceCleanup are currently not present, usually they have the problem
+code 45 which is CM_PROB_PHANTOM, "The devinst currently exists only in the registry".
+
+You can select one, multiple or all devices and remove them. If the device is attached again
+it will be detected as new.
+
+The 'last used' time comes from the write time of the device's registry key
+under HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum
+
+On some Windows the times are set on startup or even while it is running every few hours,
+so all devices seem to have the same age. On a Windows 7 the Sysinternal ProcessMonitor
+shows a recurring RegSetKeySecurity caused by a svchost.exe hosting the PlugPlay service
+every 11 hours 45 minutes. No idea what is causing it. I you want to check yourself:
+Set a filter "operation is RegSetKeySecurity" and set the option "Filter -> Drop filtered
+events", otherwise your pagefile (or other backing file) gets flooded in no time.
+
+On most Windows the time is set when the device gets active, so it makes sense to use this as
+'last used' time.
+
+Non-PnP devices and 'soft' devices are not listed because they are not automatically reinstalled.
+These are devices whose ID begins with
+- HTREE\ROOT\
+- ROOT\
+- SW\{
+
+If you want to delete them, use the Windows Device Manager.
+                                                           
+For removing devices admin privileges are required, otherwise you get an access denied error.
+
+Since regular device management functions are used, any removed device's CoInstallers are called
+as planned, so you might loose for instance custom Explorer icons for card reader volumes. Just
+have the card reader attached while executing DriveCleanup to prevent this.
+
+
+
+A command line version is available too:
+http://www.uwe-sieber.de/misc_tools_e.html#devicecleanupcmd
+
+
+
+Licence: Freeware
+
+Allowed:
+- usage in any environment, including commercial
+- include in software products, including commercial
+- include on CD/DVD of computer magazines
+- making available for download by means of package managers
+
+Not allowed:
+- modify any of the files
+- offer for download by means of a "downloader" software
+
+
+
+Uwe Sieber, mail@uwe-sieber.de
+June 2017
+
+
+
