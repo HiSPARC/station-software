@@ -1,10 +1,34 @@
+#########################################################################################
+#
+# HiSPARC Installer Creator
+# Code to create the HiSPARC installer
+# Called from:  - bake.py
+# Calls:        - nsis compiler
+#
+# R.Hart@nikhef.nl, NIKHEF, Amsterdam
+# vaneijk@nikhef.nl, NIKHEF, Amsterdam
+#
+#########################################################################################
+#
+# What this code does:
+# - Compile .nsi file
+#
+#########################################################################################
+#
+#     2013: - HiSPARC Installer Creator version 1.0
+# Jul 2017: - HiSPARC Installer Creator version 2.0
+#           - NSIS 3.01
+#
+#########################################################################################
+
 import subprocess
 
+# Set path for nsis directory
 NSISPATH = "./nsis"
 
 
 class nsiHandling(object):
-
+# Compile nsis file
     def __init__(self):
         self.nsisExe = "%s/makensis.exe" % NSISPATH
 

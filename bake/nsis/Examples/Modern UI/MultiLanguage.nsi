@@ -10,6 +10,9 @@
 ;--------------------------------
 ;General
 
+  ;Properly display all languages (Installer will not work on Windows 95, 98 or ME!)
+  Unicode true
+
   ;Name and file
   Name "Modern UI Test"
   OutFile "MultiLanguage.exe"
@@ -27,6 +30,9 @@
 ;Interface Settings
 
   !define MUI_ABORTWARNING
+
+  ;Show all languages, despite user's codepage
+  !define MUI_LANGDLL_ALLLANGUAGES
 
 ;--------------------------------
 ;Language Selection Dialog Settings
@@ -106,6 +112,15 @@
   !insertmacro MUI_LANGUAGE "Afrikaans"
   !insertmacro MUI_LANGUAGE "Catalan"
   !insertmacro MUI_LANGUAGE "Esperanto"
+  !insertmacro MUI_LANGUAGE "Asturian"
+  !insertmacro MUI_LANGUAGE "Basque"
+  !insertmacro MUI_LANGUAGE "Pashto"
+  !insertmacro MUI_LANGUAGE "ScotsGaelic"
+  !insertmacro MUI_LANGUAGE "Georgian"
+  !insertmacro MUI_LANGUAGE "Vietnamese"
+  !insertmacro MUI_LANGUAGE "Welsh"
+  !insertmacro MUI_LANGUAGE "Armenian"
+  !insertmacro MUI_LANGUAGE "Corsican"
 
 ;--------------------------------
 ;Reserve Files
