@@ -24,6 +24,7 @@
 # Jul 2017: - Cosmetics
 #           - Firewall rule for mysqld added
 # Apr 2018: - Copy latest version of FTDI dll from driver installation to LabView folder
+# Feb 2019: - Made User Installer 'silent'
 #
 #########################################################################################
 
@@ -48,6 +49,10 @@ Var FileName
 Name        "HiSPARC ${HS_USER_UNPACKER} ${USER_VERSION}"
 OutFile     "${HISPARC_NSIS_RELEASE_DIR}\${HS_USER_UNPACKER}_v${USER_VERSION}.exe"
 InstallDir  "$UserDir"
+
+#
+# User Installer has become silent
+SilentInstall silent
 
 ShowInstDetails   show
 ShowUninstDetails show
