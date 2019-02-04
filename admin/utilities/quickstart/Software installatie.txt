@@ -1,0 +1,98 @@
+﻿Instructies installatie HiSPARC software versie 9.13.x (oktober 2018)
+
+De installatie kan alleen met 'administrator'-rechten uitgevoerd worden!
+
+De installatiesoftware is vooralsnog alleen getest voor Windows10 64-bits pc's!
+Probeer niet te installeren onder een Windows versie lager dan 10!
+
+Om problemen te voorkomen:
+
+- zorg voor een 'schone' Windows 10 installatie
+- strip de toeters en bellen van Windows en installeer zo weinig mogelijk andere software.
+- aan te raden: vervang Windows Internet Explorer door bijvoorbeeld Mozilla Firefox
+  (en schakel vervolgens de Windows internet browser uit). Helaas moet dit voor iedere gebruiker
+  opnieuw gedaan worden.
+- zorg dat de laatste Windows updates zijn geïnstalleerd
+- schakel anti-virus programma's tijdens installatie uit en test of deze later geen invloed
+  hebben op het functioneren van de HiSPARC software
+
+Er mogen GEEN gebruikers/administrators op de pc aanwezig zijn met de namen:
+
+- hisparc
+- admhisparc
+
+Deze gebruikersnamen zijn gereserveerd en worden automatisch door de HiSPARC
+installatie software aangemaakt
+
+Verander de instellingen in de bios van de pc zodat de pc weer AUTOMATISCH
+OPSTART na een stroomuitval (handig als dit in het weekend of tijdens de vakantie
+gebeurt; de HiSPARC software start dan weer automatisch zelf op)
+
+Zet de zip-file met het certificaat op de desktop (niet uitpakken!)
+
+- Dubbel-klik de installer
+
+- Vul in:
+  - Stationnummer
+  - Password (dit password zorgt ervoor dat het opsturen van de data naar Nikhef goed verloopt.
+    Het password is uniek voor ieder station en mag niet zonder overleg (beheer@hisparc.nl)
+    veranderd worden
+  - Selecteer certificaat (pak de zip-file niet uit!)
+
+Vervolgschermen:
+  - Selecteer alleen die 'sensoren' die daadwerkelijk geïnstalleerd zijn (kosmische straling/
+    weerstation/bliksem detector). Een sensor kan altijd later toegevoegd worden...
+
+Tijdens installatie kan een scherm getoond worden waarbij toestemming voor de installatie van een
+onderdeel gevraagd wordt. Sta dit toe!
+
+De installatie neemt enige tijd in beslag en lijkt op ongeveer 80% van de ‘voortgangsbalk' te
+blijven steken. Dit is correct. Er wordt een programma (LabVIEW Runtime Engine) in de achtergrond
+geïnstalleerd dat veel tijd vergt. Dit kan ook tegen het einde van de voortgangsbalk optreden.
+
+De installatie wordt afgerond met een reboot van de pc. Na reboot wordt automatisch ingelogged
+onder de gebruiker 'hisparc'. Als de installatie correct verlopen is, dan start de HiSPARC software
+nu automatisch op (het password voor gebruiker hisparc is !Usr4hisp ). hisparc is een reguliere
+gebruiker zonder administratie rechten.
+
+---> de naam van gebruiker 'hisparc' mag NIET veranderd worden!
+---> het password voor gebruiker 'hisparc' (!Usr4hisp) mag NIET veranderd worden!
+---> de naam van administrator 'admhisparc' mag NIET veranderd worden!
+---> het password voor gebruiker 'admhisparc' mag NIET veranderd worden
+       (admhisparc is een exclusief account voor onze beheersfuncties en
+       om eventueel hulp-op-afstand te kunnen bieden)!
+
+In sommige gevallen wordt nu ook weer gevraagd om toestemming voor het draaien van een programma/
+maken verbinding. Sta dit toe (administratierechten nodig!).
+Maak nu de verbinding met de HiSPARC elektronica unit(s) en laat Windows eventueel zoeken
+naar updates voor de USB drivers. Het kan enige tijd nemen voordat deze drivers geïnstalleerd zijn.
+Dit lijkt in de praktijk afhankelijk te zijn van het type pc.
+
+Stel nu de juiste waarden in voor de correcte werking van GPS en elektronica; zie:
+(deze instructies zijn helaas - nog niet - helemaal up-to-date, maar wijzen zichzelf)
+
+http://docs.hisparc.nl/station-software/doc/index.html
+
+Deze instructies zijn ook beschikbaar als pdf document (handig om bij de pc te leggen):
+
+http://docs.hisparc.nl/station-software/doc/HiSPARCsoftware.pdf
+
+Belangrijk! Zorg dat de locatie poort 443 (alleen) naar buiten open heeft staan en dat OpenVPN niet geblokkeerd
+wordt door de firewall van de locatie (dus niet de PC!)
+
+Stel Windows updates zo in dat niet regelmatig op willekeurige momenten de pc opnieuw opgestart wordt
+(dit ook om problemen te voorkomen; we zien te vaak dat er updates worden rondgestrooid die soms onverwachte
+en ongewenste neveneffecten kunnen hebben voor de HiSPARC software).
+Je kunt altijd updates met de hand uitvoeren (zorg voor een herstelpunt,
+zodat bij problemen met de HiSPARC software de update weer ongedaan kan worden gemaakt)
+
+Bij problemen of vragen, zie:
+
+http://docs.hisparc.nl/maintenance/index.html
+
+of neem contact op via:
+
+beheer@hisparc.nl
+
+Houd (hang op in plastic map) dit document evt. in papiervorm bij de HiSPARC pc/opstelling)
+
