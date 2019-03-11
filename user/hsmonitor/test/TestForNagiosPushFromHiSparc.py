@@ -5,6 +5,8 @@ This process creates other objects and threads.
 
 """
 
+import re
+
 import logging
 import logging.handlers
 import sys
@@ -79,6 +81,12 @@ class HsMonitor(object):
     def createCheckScheduler(self, interpreter):
         # get the nagios configuration section from config file
         nagiosConf = self.cfg.itemsdict('NagiosPush')
+        machine = re.search('([a-z0-9]+).zip',
+                                self.cfg.get('Station', 'Certificate'))
+        if machine is None:
+            nagiosConf['machine_name'] = 'test32bit'
+        else:
+            nagiosConf['machine_name'] = machine.group(1)
         checkSched = CheckScheduler(nagiosConf, interpreter)
         return checkSched
 
