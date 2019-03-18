@@ -7,15 +7,13 @@ from requests.exceptions import ConnectionError, Timeout
 logger = logging.getLogger('hsmonitor.nagiospush')
 
 
-NRDP_TOKEN = 'nrdp4hisp'  # not secret because used inside VPN
-
-
 class NagiosPush(object):
     """send service status (passive checkresult) to nagios using NRDP"""
 
     def __init__(self, config):
-        self.url = self._getNRDPUrl(config)
+        self.url, self.backup_url = self._getNRDPUrl(config)
         self.machine_name = config["machine_name"]
+        self.nrdp_token = config["nrdp_token"]
 
     def sendToNagios(self, nagiosResult):
         """HTTP POST service status to nagios server"""
@@ -36,7 +34,7 @@ class NagiosPush(object):
         }
 
         params = {
-           'token': NRDP_TOKEN,
+           'token': self.nrdp_token,
            'cmd': 'submitcheck',
            'JSONDATA': json.dumps(nrdp_json),
         }
@@ -52,6 +50,10 @@ class NagiosPush(object):
                            % nagiosResult.serviceName)
             logger.debug('Unable to upload status for service %s (%s)'
                            % (nagiosResult.serviceName, exc))
+            # try other url on next attempt
+            self.url, self.backup_url = self.backup_url, self.url
+            logger.debug('Switching NRDP URLs. Next attempt will use %s'
+                         % self.url)
         else:
             logger.debug('Check %s: Status code: %i, Status description: %s.\n'
                          % (nagiosResult.serviceName,
@@ -59,18 +61,13 @@ class NagiosPush(object):
                             nagiosResult.description))
 
     def _getNRDPUrl(self, config):
-        """get NRDP URL from config
+        """get NRDP URLs from config
 
-        if url is missing from config: create it from NSCA hostname
-        for backwards compatibility.
-        If no config, try hardcoded tietar VPN IP.
+        if url is missing from config assume default.
 
         """
-        url = config.get('url', None)
+        url = config.get('URL', 'http://194.171.82.1/nrdp')
+        backup_url = config.get('Backup_URL', 'http://vpn.hisparc.nl/nrdp')
 
-        if url is None:
-            nsca_host = config.get('host', '194.171.82.1')
-            url = 'http://{}/nrdp'.format(nsca_host)
-
-        logger.debug('Nagios NRDP URL: %s.' % url)
-        return url
+        logger.debug('Nagios NRDP URL: %s / %s.' % (url, backup_url))
+        return url, backup_url

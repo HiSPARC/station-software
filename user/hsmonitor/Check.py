@@ -76,16 +76,20 @@ class TriggerRate(Check):
                 # timestamp, then subtract the LabVIEW-determined offset
                 # between pc clock time (UTC time) and GPS time.
 
-                # Read offset from file
+                # Read offset from DAQ config.
+                # This offset is (DAQ GPS time - PC clock time).
+                # (the number of seconds GPS time is ahead of the PC clock)
+                # Note: this offset changed sign between v3 and v4 of the DAQ
                 dt_config = EConfigParser()
                 dt_config.read(TIME_DIFF_INI)
                 offset = dt_config.ifgetint('HiSPARC', 'time_difference', 1e6)
 
-                # Naively calculate timestamp and adjust for pc / gps offset
-                t = calendar.timegm(self.lastupdate.timetuple())
-                t += offset
-                # Calculate time difference between UTC trigger and 'UTC now'
-                dt = time.time() - t
+                # calculate event (trigger) time and transform to local PC time
+                t_trigger = calendar.timegm(self.lastupdate.timetuple())
+                t_trigger -= offset
+
+                # Calculate time difference between current and trigger time
+                dt = time.time() - t_trigger
             else:
                 # Never updated, make dt very large
                 dt = 1e6
