@@ -30,8 +30,10 @@
 # Aug 2016: - Set NoLockScreen register to 1 (Windows 10 specific)
 # Jul 2017: - Introduce uniform naming convention service directories
 #           - Renamed interface ---> interface2
-# Oct 2017  - Drivers included for Davis WeatherLinks (Serial and USB)
-#           - NI-RTE (a dedicated installer in LabView is created)             (x32)
+# Oct 2017: - Drivers included for Davis WeatherLinks (Serial and USB)
+#           - NI-RTE (a dedicated installer in LabView is created)                  (x32)
+# Mar 2019: - 'Çheck HiSPARC Status' added as Scheduled Task
+#           - UAC for PowerShell and Task Scheduler (Windows 10) requires elevated prompt
 #
 #########################################################################################
 
@@ -63,6 +65,13 @@ Function .onInit
   Pop $0
   ${If} $0 == "false"
     MessageBox MB_ICONEXCLAMATION "You have no administrator rights!$\nAdmin-Installer aborted."
+    Quit
+  ${EndIf}
+# AdminInstaller requires elevated administrator rights
+  UserInfo::GetAccountType
+  Pop $0
+  ${If} $0 != "admin" ;Require elevated admin rights on NT4+
+    MessageBox MB_ICONEXCLAMATION "Windows UAC shield requires elevated administrator rights - run as administrator -!$\nAdmin-Installer aborted."
     Quit
   ${EndIf}
 # Check for 32/64-bit architecture
@@ -108,7 +117,8 @@ proCeed:
     StrCpy $DelProfDir "$AdminDir\delprof2\x32"
     StrCpy $PL2303Dir "$AdminDir\pl2303"
     StrCpy $CP210XDir "$AdminDir\cp210x\x32"
-    StrCpy $UtilDir "$AdminDir\utilities"
+    StrCpy $UTILDir "$AdminDir\utilities"
+    StrCpy $TASKDir "$AdminDir\scheduletask"
   ${Else}
     StrCpy $OpenVPNDir "$AdminDir\openvpn\x64"
     StrCpy $TightVNCDir "$AdminDir\tightvnc\x64"
@@ -119,7 +129,8 @@ proCeed:
     StrCpy $DelProfDir "$AdminDir\delprof2\x32"
     StrCpy $PL2303Dir "$AdminDir\pl2303"
     StrCpy $CP210XDir "$AdminDir\cp210x\x64"
-    StrCpy $UtilDir "$AdminDir\utilities"
+    StrCpy $UTILDir "$AdminDir\utilities"
+    StrCpy $TASKDir "$AdminDir\scheduletask"
   ${Endif}
   DetailPrint "OpenVPNDir: $OpenVPNDir"
   DetailPrint "TightVNCDir: $TightVNCDir"
@@ -130,7 +141,8 @@ proCeed:
   DetailPrint "DelProfDir: $DelProfDir"
   DetailPrint "PL2303Dir: $PL2303Dir"
   DetailPrint "CP210XDir: $CP210XDir"
-  DetailPrint "UtilDir: $UtilDir"
+  DetailPrint "UTILDir: $UTILDir"
+  DetailPrint "TASKDir: $TASKDir"
   Return
 noReg:
   MessageBox MB_ICONEXCLAMATION "FATAL: Registry entry ${REG_PATH} not set or defined!$\nAdmin-Installer aborted."

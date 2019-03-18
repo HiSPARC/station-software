@@ -1,7 +1,7 @@
 """Start the HiSPARC user executables:
 
 These applications are started:
-LabVIEW Detector, LabVIEW Weather, MySQL, HiSPARC Monitor, HiSPARC Updater
+LabVIEW DAQ, LabVIEW Weather, LabVIEW Lightning, MySQL, HiSPARC Monitor, HiSPARC Updater
 
 """
 
@@ -97,6 +97,23 @@ def start():
     except:
         logger.exception("An exception was generated while starting "
                          "HiSPARC Weather")
+
+    try:
+        logger.info("Starting HiSPARC Lightning...")
+        if config.getboolean("Lightning", "Enabled"):
+            handler = StartStop()
+            handler.exeName = "HiSPARC Lightning Detector.exe"
+            handler.currentDirectory = os.path.join(HS_ROOT,
+                                                    "user/hisparclightning")
+            handler.command = os.path.join(HS_ROOT, "user/hisparclightning",
+                                           "HiSPARC Lightning Detector.exe")
+            result = handler.startProcess()
+        else:
+            result = DISABLED
+        logger.info("Status: %s", status(result))
+    except:
+        logger.exception("An exception was generated while starting "
+                         "HiSPARC Lightning")
 
     # Pause to let MySQL start completely if it was not already running
     time.sleep(delay_monitor)

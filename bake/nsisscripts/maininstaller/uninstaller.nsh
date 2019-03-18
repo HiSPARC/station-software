@@ -83,7 +83,7 @@ Function un.onUninstSuccess
   MessageBox MB_YESNO|MB_ICONQUESTION "$(^Name) was successfully removed from your computer!$\n\
   Do you wish to reboot the system now?" IDYES reBoot IDNO noReboot
 reBoot:
-  ExecWait "shutdown /r /f /t 3"
+  ExecWait "shutdown /g /f -t 0"
 noReboot:
 FunctionEnd
 

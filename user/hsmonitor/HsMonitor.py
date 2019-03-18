@@ -1,14 +1,14 @@
 """The main HiSPARC monitor process, it creates other objects and threads.
 
-DF: Unfortunately, I think the UML model of this system is not entirely
-    correct. For example, this creates several instances of our StorageManager
-    class. It has its own class, that's good, but I think it should also have
-    just one instance. At the moment, there are three instances: the HsMonitor
-    one, which doubles as an instance for the BufferListener and which contains
-    the observers, and one for each uploader, which handle the actual data
-    storage. As a result of this, we have four (!) instances of a numServers
-    variable, which *all* need to have the exact same value and thus need to be
-    updated when there is a change in the number of uploaders.
+DF:  Unfortunately, I think the UML model of this system is not entirely
+     correct. For example, this creates several instances of our StorageManager
+     class. It has its own class, that's good, but I think it should also have
+     just one instance. At the moment, there are three instances: the HsMonitor
+     one, which doubles as an instance for the BufferListener and which contains
+     the observers, and one for each uploader, which handle the actual data
+     storage. As a result of this, we have four (!) instances of a numServers
+     variable, which *all* need to have the exact same value and thus need to be
+     updated when there is a change in the number of uploaders.
 
 ADL: Check how the HsMonitor is started, what is the 'working directory'?
 
@@ -17,8 +17,10 @@ RH:  The working directory: HISPARC_ROOT/user/hsmonitor
      It is not inherited if called by the Startup*.bat files from
      persistent/startstopbatch.
 
-WW: Pathing to pythonshared is removed, since it is no longer required to
-    use hslog.py.
+WW:  Pathing to pythonshared is removed, since it is no longer required to
+     use hslog.py.
+
+BvE: Comment out option 'Local server'
 
 """
 import re
@@ -148,16 +150,16 @@ class HsMonitor(object):
             up.setNumServer(self.numServers)
 
             # Try local server
-            try:
-                up2 = self.createUploader(1, "Upload-local", nagiosConf)
-                self.hsThreads.append(up2)
-                storMan.addObserver(up2)
-                self.numServers += 1
-                up.setNumServer(self.numServers)
-                up2.setNumServer(self.numServers)
-            except Exception, msg:
-                logger.debug("Error while parsing local server: %s." % msg)
-                logger.debug("Will not upload to a local server.")
+            #try:
+            #    up2 = self.createUploader(1, "Upload-local", nagiosConf)
+            #    self.hsThreads.append(up2)
+            #    storMan.addObserver(up2)
+            #    self.numServers += 1
+            #    up.setNumServer(self.numServers)
+            #    up2.setNumServer(self.numServers)
+            #except Exception, msg:
+            #    logger.debug("Error while parsing local server: %s." % msg)
+            #    logger.debug("Will not upload to a local server.")#
 
             # Set number of servers for our own StorageManager
             storMan.setNumServer(self.numServers)

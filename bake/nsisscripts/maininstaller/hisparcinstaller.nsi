@@ -46,6 +46,8 @@
 # Apr 2018: - Admin version 9 and higher: Windows 10 only!
 #           - Serialise startup of applications; interval: 1 second
 #           - Modified reboot menu
+# Feb 2019: - Lightning Detector LabView software added
+#           - Replaced $HasLightning by $HasLightningDetector
 #
 #########################################################################################
 
@@ -117,7 +119,7 @@ Section -WriteConfigFile
 # Active detectors/sensors attached to the station
   WriteINIStr $ConfigFile Detector      Enabled     $HasHiSPARC
   WriteINIStr $ConfigFile Weather       Enabled     $HasWeatherStation
-  WriteINIStr $ConfigFile Lightning     Enabled     $HasLightning
+  WriteINIStr $ConfigFile Lightning     Enabled     $HasLightningDetector
 SectionEnd
 
 Section -WriteRegKeys
@@ -136,7 +138,7 @@ Section -WriteRegKeys
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_STATION_NUMBER}  $StationNumber
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_HISPARC}     $HasHiSPARC
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_WEATHER}     $HasWeatherStation
-  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_LIGHTNING}   $HasLightning
+  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_LIGHTNING}   $HasLightningDetector
 # HiSPARC environment parameter
   WriteRegStr HKLM "${ENVIRONMENT_KEY}" ${HISPARC_ROOT}    $HisparcDir
 SectionEnd
@@ -211,6 +213,7 @@ Section -AdditionalIcons
   CreateShortCut  "$SMPROGRAMS\HiSPARC\TrimbleVTS.lnk"              "$HisparcDir\user\dspmon\TrimbleVTS.exe"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC DAQ.lnk"             "$HisparcDir\user\hisparcdaq\HiSPARC DAQ.exe"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC Weather.lnk"         "$HisparcDir\user\hisparcweather\HiSPARC Weather Station.exe"
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC Lightning.lnk"       "$HisparcDir\user\hisparclightning\HiSPARC Lightning Detector.exe"
 # Add uninstaller shortcut to startup menu
   Sleep 3000
   CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC Uninstall.lnk"       "$HisparcDir\persistent\uninstallers\mainuninst.exe"
@@ -237,10 +240,11 @@ Section -ReBoot
 # Chose to (not) reboot the PC...
   DetailPrint "ReBoot"
   AccessControl::GrantOnFile "$HisparcDir" "(BU)" "FullAccess"
+  HideWindow
   MessageBox MB_YESNO|MB_ICONQUESTION "Do you wish to restart the PC?$\n\
   On reboot Windows automatically activates the hisparc user account and DAQ." IDYES reBoot IDNO noReboot
 reBoot:
-  ExecWait "shutdown /g /f /t 3"
+  ExecWait "shutdown /g /f -t 0"
 noReboot:
 SectionEnd
 
@@ -355,6 +359,13 @@ Function .onInit
   Pop $0
   ${If} $0 == "false"
     MessageBox MB_ICONEXCLAMATION "You have no administrator rights!$\nMain-Installation aborted."
+    Quit
+  ${EndIf}
+# mainIstaller requires elevated administrator rights
+  UserInfo::GetAccountType
+  Pop $0
+  ${If} $0 != "admin" ;Require elevated admin rights on NT4+
+    MessageBox MB_ICONEXCLAMATION "Windows UAC shield requires elevated administrator rights - run as administrator -!$\nMain-Installation aborted."
     Quit
   ${EndIf}
 # Check Windows OS version

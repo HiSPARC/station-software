@@ -1,7 +1,7 @@
 """Stop the HiSPARC user executables.
 
 These applications are stopped:
-HiSPARC Detector, HiSPARC Weather, MySQL, HiSPARC Monitor, HiSPARC Updater
+HiSPARC DAQ, HiSPARC Weather, HiSPARC Lightning, MySQL, HiSPARC Monitor, HiSPARC Updater
 
 """
 
@@ -42,6 +42,7 @@ def stop_executables():
 
     stop_executable('HiSPARC Detector', 'HiSPARC DAQ.exe')
     stop_executable('HiSPARC Weather', 'HiSPARC Weather Station.exe')
+    stop_executable('HiSPARC Lightning', 'HiSPARC Lightning Detector.exe')
     stop_executable('MySQL', 'mysqld.exe')
     stop_executable('HiSPARC Monitor', 'HiSPARC Monitor', cmd=True)
     stop_executable('HiSPARC Updater', 'HiSPARC Updater', cmd=True)

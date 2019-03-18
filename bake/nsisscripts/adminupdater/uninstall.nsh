@@ -13,15 +13,16 @@
 # Aug 2013: - Some applications still use the 32-bit registry
 # Sep 2016: - OpenVPN now for 32 and 64 bits
 # Jul 2017: - Introduce uniform naming convention service directories
-#           - FTDI USB drivers                                            (x32 and x64)
-# Oct 2017: - PL2303 driver for Davis Serial-to-USB cable                 (x32 and x64)
-#           - CP210x driver for Davis Weather Station interface           (x32 and x64)
-# Apr 2018: - Remove FTDI drivers                                         (x32 and x64)
-#           - Remove Prolific PL2303 Serial-to-USB driver                 (x32 and x64)
-#           - Remove SiLabs CP210X USB driver                             (x32 and x64)
-#           - Remove NSClient++ (.msi)                                    (x32 and x64)
-#           - IVI-Foundation removal tool version 5.8.0 for NI-Visa       (x32)
-#           - Remaining Nat. Instr. and IVI-Visa folders will be removed  (x32 and x64)
+#           - FTDI USB drivers                                              (x32 and x64)
+# Oct 2017: - PL2303 driver for Davis Serial-to-USB cable                   (x32 and x64)
+#           - CP210x driver for Davis Weather Station interface             (x32 and x64)
+# Apr 2018: - Remove FTDI drivers                                           (x32 and x64)
+#           - Remove Prolific PL2303 Serial-to-USB driver                   (x32 and x64)
+#           - Remove SiLabs CP210X USB driver                               (x32 and x64)
+#           - Remove NSClient++ (.msi)                                      (x32 and x64)
+#           - IVI-Foundation removal tool version 5.8.0 for NI-Visa         (x32)
+#           - Remaining Nat. Instr. and IVI-Visa folders will be removed    (x32 and x64)
+# Mar 2019: - Delete 'HiSPARCStatus' from Scheduled Task(s) in Windows 10
 #
 #########################################################################################
 
@@ -76,9 +77,10 @@ proCeed:
     StrCpy $NIRTEDir "$AdminDir\nirte\x32"
     StrCpy $FTDIDir "$AdminDir\ftdi_drivers\x32"
     StrCpy $DelProfDir "$AdminDir\delprof2\x32"
-    StrCpy $PL2303Dir "$AdminDir\pl2303\x32"
+    StrCpy $PL2303Dir "$AdminDir\pl2303"
     StrCpy $CP210XDir "$AdminDir\cp210x\x32"
-    StrCpy $UtilDir "$AdminDir\utilities"
+    StrCpy $UTILDir "$AdminDir\utilities"
+    StrCpy $TASKDir "$AdminDir\scheduletask"
   ${Else}
     StrCpy $OpenVPNDir "$AdminDir\openvpn\x64"
     StrCpy $TightVNCDir "$AdminDir\tightvnc\x64"
@@ -87,9 +89,10 @@ proCeed:
     StrCpy $NIRTEDir "$AdminDir\nirte\x32"
     StrCpy $FTDIDir "$AdminDir\ftdi_drivers\x64"
     StrCpy $DelProfDir "$AdminDir\delprof2\x32"
-    StrCpy $PL2303Dir "$AdminDir\pl2303\x32"
+    StrCpy $PL2303Dir "$AdminDir\pl2303"
     StrCpy $CP210XDir "$AdminDir\cp210x\x64"
-    StrCpy $UtilDir "$AdminDir\utilities"
+    StrCpy $UTILDir "$AdminDir\utilities"
+    StrCpy $TASKDir "$AdminDir\scheduletask"
   ${Endif}
   DetailPrint "OpenVPNDir: $OpenVPNDir"
   DetailPrint "TightVNCDir: $TightVNCDir"
@@ -100,7 +103,8 @@ proCeed:
   DetailPrint "DelProfDir: $DelProfDir"
   DetailPrint "PL2303Dir: $PL2303Dir"
   DetailPrint "CP210XDir: $CP210XDir"
-  DetailPrint "UtilDir: $UtilDir"
+  DetailPrint "UTILDir: $UtilDir"
+  DetailPrint "TASKDir: $TASKDir"
   Return
 noReg:
   MessageBox MB_ICONEXCLAMATION "FATAL: Registry entry ${REG_PATH} not set or defined!$\nAdmin-Uninstaller aborted."
@@ -135,7 +139,6 @@ Section un.UninstOpenVPN
 #
 # Uninstall OpenVPN and TAP-Windows virtual ethernet driver
   DetailPrint "admin-un.UninstOpenVPN"
-#
 # Remove OpenVPN service
   ExecWait '"$OpenVPNDir\bin\openvpnserv2.exe" -remove' $Result
   Sleep 3000
@@ -164,8 +167,9 @@ SectionEnd
 
 Section un.UninstTightVNC
 #
-# Remove TightVNC service
+# Uninstall TightVNC
   DetailPrint "admin-un.UninstTightVNC"
+# Remove TightVNC service
   ExecWait '"$TightVNCDir\${VNC_EXENAME}.exe" -remove -silent' $Result
   Sleep 3000
   StrCpy $Message "Uninstall TightVNC server: $Result"
@@ -199,9 +203,21 @@ Section un.UninstNSCP
   RMDir /r /REBOOTOK "$NSCPDir"
 SectionEnd
 
+Section un.UninstTask
+# Delete task(s) from Windows Task Scheduler (UAC: requires elevated permission/prompt)
+# This is tricky: execute .bat --> calls PowerShell --> calls PowerShell to delete task from Windows Task Scheduler
+  ExecWait '"$TASKDir\${TASK1_DELETE}.bat"' $Result
+  Sleep 3000
+  StrCpy $Message "Uninstall TASK1: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "TASK1 ERROR: $Message"
+  ${Endif}
+SectionEnd
+
 Section un.UninstODBC
 #
-# Remove ODBC database connector?
+# Remove ODBC database connector
 # ODBC x32 only!
   SetRegView 32
 # Delete registry keys
@@ -296,8 +312,7 @@ Section un.UninstNIRTE
   ${Endif}
 # Delete registry key
   DeleteRegKey HKLM "SOFTWARE\National Instruments"
-
-  SectionEnd
+SectionEnd
 
 Section un.UninstFTDI
 #
@@ -353,8 +368,8 @@ SectionEnd
 Section un.UninstCP210X
 #
 # Uninstall Silabs CP210x VCP USB driver
-  DetailPrint "admin-CP210XSetup"
-# Install driver
+  DetailPrint "admin-un.UninstCP210X"
+# Uninstall driver
   ExecWait '"$CP210XDir\${CP210X_EXENAME}.exe /u silabser.inf /d /q /se" /q' $Result
   Sleep 3000
   StrCpy $Message "Uninstall SiLabs CP210X VCP USB driver: $Result"

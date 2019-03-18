@@ -66,6 +66,10 @@ def check():
         check_app("HiSPARC Weather", exe_name="HiSPARC Weather Station.exe")
     else:
         pStdout("HiSPARC Weather", DISABLED)
+    if config.getboolean("Lightning", "Enabled"):
+        check_app("HiSPARC Lightning", exe_name="HiSPARC Lightning Detector.exe")
+    else:
+        pStdout("HiSPARC Lightning", DISABLED)
     check_app("HiSPARC Monitor", window_name="HiSPARC Monitor")
     check_app("HiSPARC Updater", window_name="HiSPARC Updater")
 

@@ -14,46 +14,49 @@
 #
 #########################################################################################
 #
-# Jan 2013: - Multiple (2) NI-RunTimeEngines                              (x32)
+# Jan 2013: - Multiple (2) NI-RunTimeEngines                                (x32)
 # May 2013: - Separate OpenVPN folder for 32-bit and 64-bit
 #           - Popup-window in case of error
 #           - 64-bit: TightVNC has now a true 64-bit executable
 # Aug 2013: - 64-bit OpenVPN, due to a bug in version 2.2.2, remains
 #             the 32 bits version
 #           - Some applications still use the 32-bit registry
-#           - NSClient++ version 0.3.7                                    (x32)
-#           - ODBC version 5.1                                            (x32)
-# Oct 2015: - Only 1 LabView RTE, version 2014                            (x32)
+#           - NSClient++ version 0.3.7                                      (x32)
+#           - ODBC version 5.1                                              (x32)
+# Oct 2015: - Only 1 LabView RTE, version 2014                              (x32)
 # Nov 2015: - NI-RTE 2014: installation fails sometimes with error 1603
 #             but installation seems ok. Error will be ignored
 # Aug 2016: - NI-RTE 2015 (x32) and check on folder
 #             C:\Users\Public\Documents
 #           - Disable FTDI COM port enumeration
-# Jul 2017: - OpenVPN version 2.4.3                                       (x32 and x64)
-#           - OpenVPN now requires .NET 4.0 full version                  (x32 and x64)
-#           - TAP version 9.0.0.21                                        (x32 and x64)
-#           - TightVNC version 2.8.8.0                                    (x32 and x64)
-#           - NI-RTE 2016                                                 (x32)
-#           - FTDI drivers version 2.12.26                                (x32 and x64)
-#           - Delprof2 version 1.6.0                                      (x32 and x64)
+# Jul 2017: - OpenVPN version 2.4.3                                         (x32 and x64)
+#           - OpenVPN now requires .NET 4.0 full version                    (x32 and x64)
+#           - TAP version 9.0.0.21                                          (x32 and x64)
+#           - TightVNC version 2.8.8.0                                      (x32 and x64)
+#           - NI-RTE 2016                                                   (x32)
+#           - FTDI drivers version 2.12.26                                  (x32 and x64)
+#           - Delprof2 version 1.6.0                                        (x32 and x64)
 #           - Introduce uniform naming convention service directories
-# Oct 2017: - Prolific PL2303 Serial-to-USB driver 3.8.12.0               (x32 and x64)
-#           - SiLabs CP210X USB driver 6.7.4                              (x32 and x64)
-#           - NI-RTE 2017 (a dedicated installer in LabView is created)   (x32)
-# Apr 2018  - OpenVPN version 2.4.5                                       (x32 and x64)
-#           - TAP version 9.21.2                                          (x32 and x64)
-#           - NSClient++ version 0.5.2.35 (.msi)                          (x32 and x64)
-#           - NI-RTE 2017SP1 (a dedicated installer in LabView is created)(x32)
-#           - FTDI drivers version 2.12.28                                (x32 and x64)
-#           - Prolific PL2303 Serial-to-USB driver 3.8.18.0               (x32 and x64)
-#           - SiLabs CP210X USB driver 6.8.0.1951                         (x32 and x64)
-#           - IVI-Foundation removal tool version 5.8.0 for NI-Visa       (x32)
+# Oct 2017: - Prolific PL2303 Serial-to-USB driver 3.8.12.0                 (x32 and x64)
+#           - SiLabs CP210X USB driver 6.7.4                                (x32 and x64)
+#           - NI-RTE 2017 (a dedicated installer in LabView is created)     (x32)
+# Apr 2018  - OpenVPN version 2.4.5                                         (x32 and x64)
+#           - TAP version 9.21.2                                            (x32 and x64)
+#           - NSClient++ version 0.5.2.35 (.msi)                            (x32 and x64)
+#           - NI-RTE 2017SP1 (a dedicated installer in LabView is created)  (x32)
+#           - FTDI drivers version 2.12.28                                  (x32 and x64)
+#           - Prolific PL2303 Serial-to-USB driver 3.8.18.0                 (x32 and x64)
+#           - SiLabs CP210X USB driver 6.8.0.1951                           (x32 and x64)
+#           - IVI-Foundation removal tool version 5.8.0 for NI-Visa         (x32)
 #           - Check every 60 seconds whether the OpenVPN, TightVNC and
 #             NSClient++ services are running. If not try to restart
 #             This procedure continues for 15 mins, then a pc-reboot is
 #             initiated.
-# Aug 2018  - OpenVPN version 2.4.6                                       (x32 and x64)
-#           - TightVNC version 2.8.11.0                                   (x32 and x64)
+# Aug 2018  - OpenVPN version 2.4.6                                         (x32 and x64)
+#           - TightVNC version 2.8.11.0                                     (x32 and x64)
+# Feb 2019: - Python 2.7.15                                                 (x32)
+# Mar 2019: - 'HiSPARCStatus' added as Scheduled Task in Windows 10
+#           - Prolific PL2303 Serial-to-USB driver 3.8.25.0                 (x32 and x64)
 #
 #########################################################################################
 
@@ -82,6 +85,11 @@ Section -InstallServices
 # ODBC database connector
   StrCpy $FileName "$ODBCDir\${INSTALL_BAT}.bat"
   Call fileExists
+# Visual studio redistribution for ODBC
+  StrCpy $FileName "$ODBCDir\${VCRE32_EXENAME}.exe"
+  Call fileExists
+  StrCpy $FileName "$ODBCDir\${VCRE64_EXENAME}.exe"
+  Call fileExists
 # National Instruments Run Time Engine
   StrCpy $FileName "$NIRTEDir\${NIRTE_EXENAME}.exe"
   Call fileExists
@@ -99,6 +107,9 @@ Section -InstallServices
   Call fileExists
 # SiLabs CP210X driver
   StrCpy $FileName "$CP210XDir\${CP210X_EXENAME}.exe"
+  Call fileExists
+# Schedule Task1
+  StrCpy $FileName "$TASKDir\${TASK1_CREATE}.bat"
   Call fileExists
 SectionEnd
 
@@ -364,6 +375,19 @@ Section -CP210XSetup
 # NB: Return code 3010 (0xBC2) means ERROR_SUCCESS_REBOOT_REQUIRED
   ${AndIf} $Result != 3010
     MessageBox MB_ICONEXCLAMATION "SiLabsCP210X VCP USB driver ERROR: $Message"
+  ${Endif}
+SectionEnd
+
+Section -TaskSetup
+# Install task for Windows Task Scheduler (UAC: requires elevated permission/prompt)
+# This is tricky: execute .bat --> calls PowerShell --> calls PowerShell to insert task in Windows Task Scheduler
+# The Windows Task Scheduler executes .bat that executes Python code in which the status of services is checked
+  ExecWait '"$TASKDir\${TASK1_CREATE}.bat"' $Result
+  Sleep 3000
+  StrCpy $Message "Install TASK1: $Result"
+  DetailPrint $Message
+  ${If} $Result != 0
+    MessageBox MB_ICONEXCLAMATION "TASK1 ERROR: $Message"
   ${Endif}
 SectionEnd
 

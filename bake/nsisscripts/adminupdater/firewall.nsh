@@ -26,6 +26,7 @@
 # Apr 2018: - When installing HiSPARC package, reset firewall to default
 #           - Make more extensive use of 'netsh advfirewall' instructions
 #           - Avoid re-installation firewall rule duplication: reset firewall to default
+# Mar 2019: - Reset firewall to default when uninstalling HiSPARC software
 #
 #########################################################################################
 
@@ -64,4 +65,13 @@ Section un.FirewallRules
   SimpleFC::RemovePort  5666 6
   SimpleFC::RemovePort 12489 6
   SimpleFC::RemovePort  5900 6
+# Check if the firewall is running...
+  SimpleFC::IsFirewallServiceRunning
+  Pop $1
+  ${If} $1 == 0
+# Windows firewall is not running; switch on!
+    ExecWait 'netsh advfirewall firewall set all profiles state on'
+  ${EndIf}
+# Restore Windows firewall to default settings
+  ExecWait 'netsh advfirewall reset'
 SectionEnd

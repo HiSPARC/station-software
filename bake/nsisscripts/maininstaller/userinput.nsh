@@ -17,6 +17,7 @@
 # Apr 2013: - Main parameters are mandatory
 # Jul 2017: - MUI2 2.0 ---> interface.nsh ---> interface2.nsh
 # Apr 2018: - Remove local database from user interface
+# Feb 2019: - Replaced $HasLightning by $HasLightningDetector
 #
 #########################################################################################
 
@@ -58,9 +59,9 @@ Function userinput3
   Pop $0
 # Read the settings
   ${If} $0 == "success"
-    ReadINIStr $HasHiSPARC        "$PLUGINSDIR\userinput3.ini" "Field 2" "State"
-    ReadINIStr $HasWeatherStation "$PLUGINSDIR\userinput3.ini" "Field 3" "State"
-    ReadINIStr $HasLightning      "$PLUGINSDIR\userinput3.ini" "Field 4" "State"
+    ReadINIStr $HasHiSPARC           "$PLUGINSDIR\userinput3.ini" "Field 2" "State"
+    ReadINIStr $HasWeatherStation    "$PLUGINSDIR\userinput3.ini" "Field 3" "State"
+    ReadINIStr $HasLightningDetector "$PLUGINSDIR\userinput3.ini" "Field 4" "State"
   ${EndIf}
 FunctionEnd
 

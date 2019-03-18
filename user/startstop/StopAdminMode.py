@@ -1,7 +1,7 @@
 """Stop the HiSPARC admin services:
 
-These services are stopped:
-TightVNC, Nagios, OpenVPN
+     These services are stopped:
+     TightVNC, Nagios, OpenVPN
 
 """
 
