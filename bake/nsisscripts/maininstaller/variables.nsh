@@ -18,7 +18,7 @@
 # Jul 2017: - Add variable 'WinVersion'
 #           - Introduce uniform naming convention service directories
 #           - Add key to disable LockScreen (Windows 10 specific)
-# Feb 2019: - Replaced $HasLightning by $HasLightningDetector
+# Feb 2019: - Replaced $HasHiSPARC by $HasDAQ
 #
 #########################################################################################
 
@@ -32,9 +32,9 @@ Var ConfigFile
 Var StationNumber
 Var StationPassword
 Var LDBHOST
-Var HasHiSPARC
-Var HasWeatherStation
-Var HasLightningDetector
+Var HasDAQ
+Var HasWeather
+Var HasLightning
 Var Program
 Var CpuName
 Var OkVersion

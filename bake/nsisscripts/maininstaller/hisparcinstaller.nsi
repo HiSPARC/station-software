@@ -47,7 +47,7 @@
 #           - Serialise startup of applications; interval: 1 second
 #           - Modified reboot menu
 # Feb 2019: - Lightning Detector LabView software added
-#           - Replaced $HasLightning by $HasLightningDetector
+#           - Replaced $HasHiSPARC by $HasDAQ
 #
 #########################################################################################
 
@@ -117,9 +117,9 @@ Section -WriteConfigFile
   WriteINIStr $ConfigFile Station       Certificate $CertZip
   WriteINIStr $ConfigFile Upload        LocalDBUrl  $LDBHOST
 # Active detectors/sensors attached to the station
-  WriteINIStr $ConfigFile Detector      Enabled     $HasHiSPARC
-  WriteINIStr $ConfigFile Weather       Enabled     $HasWeatherStation
-  WriteINIStr $ConfigFile Lightning     Enabled     $HasLightningDetector
+  WriteINIStr $ConfigFile DAQ           Enabled     $HasDAQ
+  WriteINIStr $ConfigFile Weather       Enabled     $HasWeather
+  WriteINIStr $ConfigFile Lightning     Enabled     $HasLightning
 SectionEnd
 
 Section -WriteRegKeys
@@ -136,9 +136,9 @@ Section -WriteRegKeys
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_RELEASE}         "${RELEASE}"
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_RELEASE_DATE}    "${RELEASE_DATE}"
   WriteRegStr HKLM "${HISPARC_KEY}" ${REG_STATION_NUMBER}  $StationNumber
-  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_HISPARC}     $HasHiSPARC
-  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_WEATHER}     $HasWeatherStation
-  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_LIGHTNING}   $HasLightningDetector
+  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_DAQ}         $HasDAQ
+  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_WEATHER}     $HasWeather
+  WriteRegStr HKLM "${HISPARC_KEY}" ${REG_HAS_LIGHTNING}   $HasLightning
 # HiSPARC environment parameter
   WriteRegStr HKLM "${ENVIRONMENT_KEY}" ${HISPARC_ROOT}    $HisparcDir
 SectionEnd
@@ -374,7 +374,7 @@ Function .onInit
   StrCmp $OkVersion "false" wrVersion unkVersion
 wrVersion:
 # Non-valid OS version
-  MessageBox MB_ICONEXCLAMATION "HiSPARC runs only on Windows OS 7-SP1 or higher, not on $WinVersion"
+  MessageBox MB_ICONEXCLAMATION "HiSPARC runs only on Windows OS 10 or higher, not on $WinVersion"
   Goto noInstall
 unkVersion:
 # Unknown OS version

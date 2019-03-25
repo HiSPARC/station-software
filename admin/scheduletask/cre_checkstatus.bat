@@ -45,4 +45,4 @@ if '%1'=='ELEV' (del "%vbsGetPrivileges%" 1>nul 2>nul  &  shift /1)
 ::::::::::::::::::::::::::::
 REM Run shell as admin
 SET PowerShellScriptPath=.\cre_checkstatus.ps1
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& {Start-Process PowerShell -ArgumentList '-NoProfile -InputFormat None -ExecutionPolicy Bypass ""%PowerShellScriptPath%""' -Verb RunAs}" -Verb RunAs;
+PowerShell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "& {Start-Process PowerShell -ArgumentList '-NoProfile -InputFormat None -ExecutionPolicy Bypass -WindowStyle Hidden ""%PowerShellScriptPath%""' -Verb RunAs}" -Verb RunAs;

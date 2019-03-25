@@ -1,4 +1,8 @@
-"""Determine status of the HiSPARC user processes and admin services."""
+"""Determine status of the HiSPARC user processes and admin services.
+
+BvE: Replaced 'Detector' by 'DAQ'.
+
+"""
 
 import os
 import ConfigParser
@@ -58,10 +62,10 @@ def check():
     print "Checking User-Mode applications..."
 
     check_app("MySQL", exe_name="mysqld.exe")
-    if config.getboolean("Detector", "Enabled"):
-        check_app("HiSPARC Detector", exe_name="HiSPARC DAQ.exe")
+    if config.getboolean("DAQ", "Enabled"):
+        check_app("HiSPARC DAQ", exe_name="HiSPARC DAQ.exe")
     else:
-        pStdout("HiSPARC Detector", DISABLED)
+        pStdout("HiSPARC DAQ", DISABLED)
     if config.getboolean("Weather", "Enabled"):
         check_app("HiSPARC Weather", exe_name="HiSPARC Weather Station.exe")
     else:

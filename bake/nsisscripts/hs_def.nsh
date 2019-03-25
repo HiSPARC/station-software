@@ -38,6 +38,6 @@
 !define REG_RELEASE                 "Release"
 !define REG_RELEASE_DATE            "ReleaseDate"
 !define REG_STATION_NUMBER          "StationNumber"
-!define REG_HAS_HISPARC             "HasHiSPARC"
+!define REG_HAS_DAQ                 "HasDAQ"
 !define REG_HAS_WEATHER             "HasWeather"
 !define REG_HAS_LIGHTNING           "HasLightning"

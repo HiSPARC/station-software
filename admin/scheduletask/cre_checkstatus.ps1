@@ -1,6 +1,6 @@
 $executable = "%HiSPARC_ROOT%\persistent\startstopbatch\CheckStatus.bat"
 $action = New-ScheduledTaskAction -execute $executable
-$trigger =  New-ScheduledTaskTrigger -Daily -At 3:00
+$trigger =  New-ScheduledTaskTrigger -Daily -At 2:00
 $taskname = "HiSPARCStatus"
 $description = "Reboot computer if one or more HiSPARC processes/services are not running"
 $principal = New-ScheduledTaskPrincipal -UserID $(whoami) -LogonType S4U -RunLevel Highest

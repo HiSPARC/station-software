@@ -197,7 +197,7 @@ class BaseWeatherEvent(BaseEvent):
         return eventdata
 
 
-class BaseLightningEvent(BaseWeatherEvent):
+class BaseLightningEvent(BaseEvent):
 
     """Process lightning detector messages from a buffer."""
 

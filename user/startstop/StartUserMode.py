@@ -2,6 +2,8 @@
 
 These applications are started:
 LabVIEW DAQ, LabVIEW Weather, LabVIEW Lightning, MySQL, HiSPARC Monitor, HiSPARC Updater
+BvE: Replaced 'Detector' by 'DAQ'.
+     Minimize 'HiSPARC Monitor' and 'HiSPARC Updater' windows
 
 """
 
@@ -17,6 +19,8 @@ from startStop import StartStop, CMDStartStop, status, RUNNING, DISABLED
 
 logger = logging.getLogger('startstop.startuser')
 
+toplist = []
+winlist = []
 
 def start():
     logger.info("Starting User-Mode applications...")
@@ -66,8 +70,8 @@ def start():
         logger.exception("An exception was generated while starting MySQL")
 
     try:
-        logger.info("Starting HiSPARC Detector...")
-        if config.getboolean("Detector", "Enabled"):
+        logger.info("Starting HiSPARC DAQ...")
+        if config.getboolean("DAQ", "Enabled"):
             handler = StartStop()
             handler.exeName = "HiSPARC DAQ.exe"
             handler.currentDirectory = os.path.join(HS_ROOT, "user/hisparcdaq")
@@ -79,10 +83,10 @@ def start():
         logger.info("Status: %s", status(res))
     except:
         logger.exception("An exception was generated while starting "
-                         "HiSPARC Detector")
+                         "HiSPARC DAQ")
 
     try:
-        logger.info("Starting HiSPARC Weather...")
+        logger.info("Starting HiSPARC Weather Station...")
         if config.getboolean("Weather", "Enabled"):
             handler = StartStop()
             handler.exeName = "HiSPARC Weather Station.exe"
@@ -96,10 +100,10 @@ def start():
         logger.info("Status: %s", status(result))
     except:
         logger.exception("An exception was generated while starting "
-                         "HiSPARC Weather")
+                         "HiSPARC Weather Station")
 
     try:
-        logger.info("Starting HiSPARC Lightning...")
+        logger.info("Starting HiSPARC Lightning Detector...")
         if config.getboolean("Lightning", "Enabled"):
             handler = StartStop()
             handler.exeName = "HiSPARC Lightning Detector.exe"
@@ -113,7 +117,7 @@ def start():
         logger.info("Status: %s", status(result))
     except:
         logger.exception("An exception was generated while starting "
-                         "HiSPARC Lightning")
+                         "HiSPARC Lightning Detector")
 
     # Pause to let MySQL start completely if it was not already running
     time.sleep(delay_monitor)
@@ -131,6 +135,8 @@ def start():
                                      cmd="HsMonitor.py")
         result = handler.startProcess()
         logger.info("Status: %s", status(result))
+        #Minimize window
+        handler.ShowWindow = win32con.SW_HIDE
     except:
         logger.exception("An exception was generated while starting "
                          "HiSPARC Monitor")
@@ -146,6 +152,8 @@ def start():
                                      cmd="Update.py")
         result = handler.startProcess()
         logger.info("Status: %s", status(result))
+        #Minimize window
+        handler.ShowWindow = win32con.SW_HIDE
     except:
         logger.exception("An exception was generated while starting the "
                          "HiSPARC Updater")
