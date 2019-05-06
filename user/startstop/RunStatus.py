@@ -1,31 +1,36 @@
-"""Determine status of the HiSPARC user processes and admin services.
-
-BvE: Replaced 'Detector' by 'DAQ'.
-
-"""
+#########################################################################################
+#
+# HiSPARC menu option
+# Code checks at runtime whether all HiSPARC User processes and Admin services are
+# running. Result is printed in CMD window.
+# Called from:  - /user/startstop/runmanually.bat
+#
+# vaneijk@nikhef.nl, NIKHEF, Amsterdam
+#
+#########################################################################################
+#
+# Mar 2019: - Replaced 'Detector' by 'DAQ'
+#
+#########################################################################################
 
 import os
 import ConfigParser
 
 from startStop import StartStop, CMDStartStop, status, EXCEPTION, DISABLED
 
-
 def pStdout(name, result):
-    """Pretty print the check results"""
 
+    # User initiated check results are ('pretty') printed in CMD window
     info = "%(name)-20s: %(status)s" % {"name": name, "status": status(result)}
     print info
 
-
 def check_app(name, exe_name=None, window_name=None, service_name=None):
-    """Check if a program or service is running
 
-    :param name: common name for the process.
-    :param exe_name: executable name of the process.
-    :param window_name: title of the process.
-    :param service_name: name of the service.
-
-    """
+    # Check if a program or service is running:
+    #   param name:         common name for the process,
+    #   param exe_name:     executable name of the process,
+    #   param window_name:  title of the process,
+    #   param service_name: name of the service.
     try:
         if exe_name is not None:
             handler = StartStop()
@@ -46,21 +51,19 @@ def check_app(name, exe_name=None, window_name=None, service_name=None):
         res = EXCEPTION
     pStdout(name, res)
 
-
 def check():
-    """Check if the expected User and Admin processes are active"""
 
+    # Check if HiSPARC scheduled User programs and Admin services are active
     HS_ROOT = "%s" % os.getenv("HISPARC_ROOT")
     if HS_ROOT == "":
         print "FATAL: environment variable HISPARC_ROOT not set!"
         return
-
+    # Check individual programs (selected in config file)/processes
     config_file = os.path.join(HS_ROOT, "persistent/configuration/config.ini")
     config = ConfigParser.ConfigParser()
     config.read(config_file)
-
+    # Get status programs
     print "Checking User-Mode applications..."
-
     check_app("MySQL", exe_name="mysqld.exe")
     if config.getboolean("DAQ", "Enabled"):
         check_app("HiSPARC DAQ", exe_name="HiSPARC DAQ.exe")
@@ -76,14 +79,12 @@ def check():
         pStdout("HiSPARC Lightning", DISABLED)
     check_app("HiSPARC Monitor", window_name="HiSPARC Monitor")
     check_app("HiSPARC Updater", window_name="HiSPARC Updater")
-
     print
+    # Get status services
     print "Checking Admin-Mode services..."
-
     check_app("TightVNC", service_name="tvnserver")
     check_app("Nagios", service_name="nscp")
     check_app("OpenVPN", service_name="OpenVPNService")
-
 
 if __name__ == "__main__":
     check()

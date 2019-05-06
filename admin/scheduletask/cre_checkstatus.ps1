@@ -1,4 +1,4 @@
-$executable = "%HiSPARC_ROOT%\persistent\startstopbatch\CheckStatus.bat"
+$executable = '"%HiSPARC_ROOT%\admin\scheduletask\CheckStatus.bat"'
 $action = New-ScheduledTaskAction -execute $executable
 $trigger =  New-ScheduledTaskTrigger -Daily -At 2:00
 $taskname = "HiSPARCStatus"

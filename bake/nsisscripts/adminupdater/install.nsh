@@ -380,7 +380,7 @@ SectionEnd
 
 Section -TaskSetup
 # Install task for Windows Task Scheduler (UAC: requires elevated permission/prompt)
-# This is tricky: execute .bat --> calls PowerShell --> calls PowerShell to insert task in Windows Task Scheduler
+# This is tricky: execute .bat --> calls PowerShell --> calls PowerShell to insert task into Windows Task Scheduler
 # The Windows Task Scheduler executes .bat that executes Python code in which the status of services is checked
   ExecWait '"$TASKDir\${TASK1_CREATE}.bat"' $Result
   Sleep 3000

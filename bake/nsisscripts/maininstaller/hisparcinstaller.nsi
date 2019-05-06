@@ -46,8 +46,10 @@
 # Apr 2018: - Admin version 9 and higher: Windows 10 only!
 #           - Serialise startup of applications; interval: 1 second
 #           - Modified reboot menu
-# Feb 2019: - Lightning Detector LabView software added
+# Apr 2019: - Lightning Detector LabView software added
 #           - Replaced $HasHiSPARC by $HasDAQ
+#           - Place internet instruction files at desktop (NL & UK)
+#           - Place 'uninstall' shortcut at desktop
 #
 #########################################################################################
 
@@ -103,7 +105,7 @@ Section -CopyFilesForInstall
   CreateDirectory "$HisparcDir\persistent\uninstallers"
 # Copy (unique) station certificate to the right location
   CopyFiles $CertZip "$HisparcDir\persistent\configuration"
-SectionEnd
+  SectionEnd
 
 Section -WriteConfigFile
 #
@@ -151,6 +153,10 @@ Section -AdminInstallation
   Call fileExists
   StrCpy $Program $FileName
   ExecWait '"$Program" /S' $Result
+# Copy HiSPARC internet requirements to desktop of administrator (only)
+  SetShellVarContext current
+  CopyFiles "$HisparcDir\admin\utilities\docs\HiSPARCInternet-NL.pdf" "$DESKTOP\HiSPARCInternet-NL.pdf"
+  CopyFiles "$HisparcDir\admin\utilities\docs\HiSPARCInternet-UK.pdf" "$DESKTOP\HiSPARCInternet-UK.pdf"
 SectionEnd
 
 Section -UserInstallation
@@ -214,11 +220,14 @@ Section -AdditionalIcons
   CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC DAQ.lnk"             "$HisparcDir\user\hisparcdaq\HiSPARC DAQ.exe"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC Weather.lnk"         "$HisparcDir\user\hisparcweather\HiSPARC Weather Station.exe"
   CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC Lightning.lnk"       "$HisparcDir\user\hisparclightning\HiSPARC Lightning Detector.exe"
-# Add uninstaller shortcut to startup menu
   Sleep 3000
-  CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC Uninstall.lnk"       "$HisparcDir\persistent\uninstallers\mainuninst.exe"
 # Add shortcut to the startup folder; after autologon the HiSPARC software will automatically be launched
   CreateShortCut  "$SMSTARTUP\Start HiSPARC software.lnk"           "$HisparcDir\persistent\startstopbatch\StartUp.bat"
+# Add uninstaller shortcut to startup menu...
+  CreateShortCut  "$SMPROGRAMS\HiSPARC\HiSPARC Uninstall.lnk"       "$HisparcDir\persistent\uninstallers\mainuninst.exe"
+# ...and on desktop of administrator (only)
+  SetShellVarContext current
+  CreateShortCut  "$DESKTOP\HiSPARC Uninstall.lnk"                  "$HisparcDir\persistent\uninstallers\mainuninst.exe"
 SectionEnd
 
 Section -Post
@@ -231,6 +240,9 @@ Section -Post
   WriteRegStr HKLM "${HISPARC_UNINST_KEY}" "DisplayVersion"  "${HISPARC_VERSION}"
   WriteRegStr HKLM "${HISPARC_UNINST_KEY}" "URLInfoAbout"    "${HISPARC_WEB_SITE}"
   WriteRegStr HKLM "${HISPARC_UNINST_KEY}" "Publisher"       "${HISPARC_PUBLISHER}"
+# Remove temporary directory for dedicated runtime engine
+  IfFileExists "$HisparcDir\..\..\Users\vaneijk\*.*" 0 +2
+    RMDir /r /REBOOTOK "$HisparcDir\..\..\Users\vaneijk"
 SectionEnd
 
 !include uninstaller.nsh

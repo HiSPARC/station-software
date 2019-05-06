@@ -23,7 +23,8 @@
 #           - Changed Windows 10 driver install utility
 #           - IVI-Foundation removal tool version 5.8.0 added for NI-Visa
 #           - Generic (un)installer name added
-# Mar 2019: - Add Scheduled Task(s) parameters
+# Apr 2019: - Add Scheduled Task(s) parameters
+#           - quickstart folder added
 #
 #########################################################################################
 
@@ -127,7 +128,7 @@ Var UTILDir
 # Create/delete task(s) for Windows Task Scheduler
 Var TASKDir
 !define TASK1_CREATE        "cre_checkstatus"
-!define TASK1_EXENAME       "checkstatus"
+!define TASK1_EXENAME       "CheckStatus"
 !define TASK1_DELETE        "del_checkstatus"
 
 #

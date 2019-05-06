@@ -32,7 +32,7 @@
 #           - Renamed interface ---> interface2
 # Oct 2017: - Drivers included for Davis WeatherLinks (Serial and USB)
 #           - NI-RTE (a dedicated installer in LabView is created)                  (x32)
-# Mar 2019: - 'Çheck HiSPARC Status' added as Scheduled Task
+# Apr 2019: - 'Çheck HiSPARC Status' added as Scheduled Task
 #           - UAC for PowerShell and Task Scheduler (Windows 10) requires elevated prompt
 #
 #########################################################################################

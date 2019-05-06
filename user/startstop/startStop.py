@@ -1,4 +1,15 @@
-"""Start, stop and check the necessary processes and services for HiSPARC."""
+#########################################################################################
+#
+# Start, stop and check the necessary processes and services for HiSPARC.
+#
+# tkooij@nikhef.nl, NIKHEF, Amsterdam
+# vaneijk@nikhef.nl, NIKHEF, Amsterdam
+#
+#########################################################################################
+#
+# Apr 2019: - probeProcess extended by searching for string, as of installer 9.15.2
+#
+#########################################################################################
 
 import wmi
 import win32con
@@ -15,10 +26,8 @@ EXCEPTION = 2
 DISABLED = 4
 NOT_INSTALLED = 8
 
-
 def status(result):
-    """Translate result code to a readable string"""
-
+    # Translate result code to a readable string
     if result == RUNNING:
         status = "running"
     elif result == STOPPED:
@@ -36,9 +45,7 @@ def status(result):
 
 
 class StartStop(object):
-
-    """A class to start and stop programs on Windows"""
-
+    # A class to start and stop programs on Windows
     exeName = ''
     windowName = ''
     ShowWindow = win32con.SW_SHOWMINIMIZED
@@ -138,6 +145,7 @@ class StartStop(object):
         return result
 
     def probeProcess(self):
+        # Find process name
         process = self.wmiObj.Win32_Process(name=self.exeName)
         if process != []:
             result = RUNNING
@@ -146,6 +154,7 @@ class StartStop(object):
         return result
 
     def probeService(self):
+        # Find service name
         service = self.wmiObj.Win32_Service(Name=self.serviceName)
         if service != []:
             service = self.wmiObj.Win32_Service(Name=self.serviceName,
@@ -160,17 +169,12 @@ class StartStop(object):
 
 
 class CMDStartStop(StartStop):
-
-    """ Start and stop command line processes
-
-    Set the windowName attribute to the title of the final process. This is
-    used to check if the process is already running, and to find it when it
-    is to be shutdown.
-    Set the title attribute to the same value if the process will remain in
-    its initial window. Otherwise choose a different name.
-
-    """
-
+    # Start and stop command line processes
+    # Set the windowName attribute to the title of the final process. This is
+    # used to check if the process is already running, and to find it when it
+    # is to be shutdown.
+    # Set the title attribute to the same value if the process will remain in
+    # its initial window. Otherwise choose a different name.
     def __init__(self):
         self.wmiObj = wmi.WMI()
 
@@ -210,9 +214,22 @@ class CMDStartStop(StartStop):
         return result
 
     def probeProcess(self):
+        # Find window name
         w = win32gui.FindWindow(None, self.windowName)
+        window_name = self.windowName
         if w != 0:
             result = RUNNING
         else:
-            result = STOPPED
+            def callback(h, extra):
+                # Check if name is part of the string
+                if window_name in win32gui.GetWindowText(h):
+                    extra.append(h)
+                return True
+            extra = []
+            win32gui.EnumWindows(callback, extra)
+            if extra: w = extra[0]
+            if w !=0:
+                result = RUNNING
+            else:
+                result = STOPPED
         return result

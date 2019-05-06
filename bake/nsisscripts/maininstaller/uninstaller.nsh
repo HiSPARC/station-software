@@ -19,7 +19,9 @@
 #             have been killed!
 #           - Introduced Delprof2 to remove account profiles
 # Jul 2017: - Cosmetics
-# Apr 2018: - Modified reboot menu
+# Apr 2019: - Modified reboot menu
+#           - Delete 'uninstall' shortcut at desktop
+#           - Delete internet instruction files from desktop (NL & UK)
 #
 #########################################################################################
 
@@ -57,7 +59,6 @@ Section un.RemoveHisparc
   Delete /REBOOTOK "$SMSTARTUP\Start HiSPARC software.lnk"
 # Remove the main uninstaller
   Delete "$HisparcDir\persistent\uninstallers\mainuninst.exe"
-# Give user last opportunity to copy data from HiSPARC directory structure
 # Remove (remainders of) both admhisparc and hisparc profiles and folders with Delprof2 utility
   ExecWait '"$INSTDIR\DelProf2\DelProf2.exe" /id:${ADMHISPARC_USERNAME} /q /i' $Result
   ExecWait '"$INSTDIR\DelProf2\DelProf2.exe" /id:${HISPARC_USERNAME} /q /i' $Result
@@ -70,10 +71,16 @@ Section un.RemoveHisparc
   SetOutPath $TEMP
   RMDir /r /REBOOTOK $TEMP\Users\hisparc
   SetOutPath $INSTDIR
-# Remove HiSPARC keys
+# Remove HiSPARC keys...
   DeleteRegKey HKLM "${HISPARC_KEY}"
   DeleteRegKey HKLM "${HISPARC_UNINST_KEY}"
   SetAutoClose true
+# ...delete desktop shortcut for uninstaller...
+  SetShellVarContext current
+  Delete "$DESKTOP\HiSPARC Uninstall.lnk"
+# ...and remove instruction files HiSPARC internet requirements (NL & UK)
+  Delete "$DESKTOP\HiSPARCInternet-NL.pdf"
+  Delete "$DESKTOP\HiSPARCInternet-UK.pdf"
 SectionEnd
 
 Function un.onUninstSuccess

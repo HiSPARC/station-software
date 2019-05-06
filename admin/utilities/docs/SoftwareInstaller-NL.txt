@@ -16,7 +16,7 @@ Om problemen te voorkomen:
 - schakel anti-virus programma's tijdens installatie uit en test of deze later geen invloed
   hebben op het functioneren van de HiSPARC software
 
-Er mogen GEEN gebruikers/administrators op de PC aanwezig zijn met de namen:
+BELANGRIJK: Er mogen GEEN gebruikers/administrators zijn met de namen:
 
 - hisparc
 - admhisparc
@@ -52,18 +52,19 @@ geïnstalleerd dat veel tijd vergt. Dit kan ook tegen het einde van de voortgang
 
 De installatie wordt afgerond met een reboot van de PC. Na reboot wordt automatisch ingelogged
 onder de gebruiker 'hisparc'. Als de installatie correct verlopen is, dan start de HiSPARC software
-nu automatisch op (het password voor gebruiker hisparc is !Usr4hisp ). hisparc is een reguliere
-gebruiker zonder administratie rechten.
+nu automatisch op. Het password voor gebruiker hisparc is
+
+!Usr4hisp  (de gebruiker 'hisparc' heeft geen administratie rechten!)
 
 ---> De naam van gebruiker 'hisparc' mag NIET veranderd worden!
 ---> Het password voor gebruiker 'hisparc' (!Usr4hisp) mag NIET veranderd worden!
 ---> De naam van administrator 'admhisparc' mag NIET veranderd worden!
 ---> Het password voor gebruiker 'admhisparc' mag NIET veranderd worden
-       (admhisparc is een exclusief account voor onze beheersfuncties en
-       om eventueel hulp-op-afstand te kunnen bieden)! Dit verloopt via een beveiligde verbinding met encriptie.
+       (admhisparc is een exclusief account voor onze beheersfuncties en om eventueel hulp-op-afstand
+       te kunnen bieden)! Dit verloopt via een beveiligde verbinding met encriptie.
 
 In sommige gevallen wordt nu ook weer gevraagd om toestemming voor het draaien van een programma/
-maken verbinding. Sta dit toe (administratierechten nodig!).
+maken verbinding. Sta dit toe (let op: administratierechten nodig!).
 
 Maak nu de verbinding met de HiSPARC elektronica unit(s) en laat Windows eventueel zoeken
 naar updates voor de USB drivers. Het kan enige tijd nemen voordat deze drivers geïnstalleerd zijn.
@@ -80,10 +81,9 @@ http://docs.hisparc.nl/station-software/doc/HiSPARCsoftware.pdf
 Belangrijk! Zorg dat de locatie poort 443 (alleen) naar buiten open heeft staan en dat OpenVPN niet geblokkeerd
 wordt door de firewall van de locatie (dit is dus niet de firewall van de PC!)
 
-Stel Windows updates zo in dat niet regelmatig op willekeurige momenten de PC opnieuw opgestart wordt
-(dit ook om problemen te voorkomen; we zien regelmatig dat er updates worden rondgestrooid die soms onverwachte
-en ongewenste neveneffecten kunnen hebben voor de HiSPARC software. Met dank aan microsoft).
-Je kunt altijd updates met de hand uitvoeren (zorg voor een herstelpunt,
+Stel Windows updates zo in dat niet regelmatig de PC opnieuw opgestart wordt (dit ook om problemen te voorkomen;
+we zien dat updates incidenteel onverwachte en ongewenste neveneffecten hebben op de HiSPARC software.
+Met dank aan microsoft!). Updates kunnen altijd met de hand uitgevoerd worden (zorg voor een herstelpunt,
 zodat bij problemen met de HiSPARC software de update weer ongedaan kan worden gemaakt)
 
 Bij problemen of vragen, zie:
