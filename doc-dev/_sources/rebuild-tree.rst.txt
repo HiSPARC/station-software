@@ -263,20 +263,8 @@ Installation steps:
 Nagios: Send Passive Check Results (NSCA Client)
 ------------------------------------------------
 
-:Homepage: http://exchange.nagios.org/directory/Addons/Passive-Checks/NSCA-Win32-Client/details
-:Version: Unknown
-:Download: http://exchange.nagios.org/components/com_mtree/attachment.php?link_id=550&cf_id=29
-
-Installation steps:
-
-#. Unpack zip file.
-#. Copy ``send_nsca_win32_bin`` folder to ``\user\hsmonitor\data``.
-#. Rename folder to ``send_nsca_win32``.
-#. Edit ``\user\hsmonitor\data\send_nsca_win32\send_nsca.cfg``: change
-   ``encryption_method=1`` to ``encryption_method=0``.
-
-.. note:: I'd really like to change this to something better.  Still, it is
-          not as bad as it seems since everything is sent over the VPN.
+NSCA has been removed and replaced by NRDP.
+NRDP has been integrated into the hsmonitor. send_ncsa.exe is no longer required.
 
 
 Nagios: Client (NSClient++)
@@ -380,9 +368,9 @@ Python
 ------
 
 :Homepage: http://python.org/
-:Version: 2.7.1
+:Version: 2.7.15
 :Download: http://www.python.org/download/
-:Direct Link: http://www.python.org/ftp/python/2.7.1/python-2.7.1.msi
+:Direct Link: http://www.python.org/ftp/python/2.7.15/python-2.7.15.msi
 
 Installation steps:
 
@@ -390,47 +378,41 @@ Installation steps:
    package).
 
 
-Python for Windows Extensions (pywin32)
----------------------------------------
+Python packages from PyPI
+-------------------------
 
-:Homepage: http://sourceforge.net/projects/pywin32/
-:Version: Build 216
-:Download: http://sourceforge.net/projects/pywin32/files/pywin32/
-:Direct Link: http://sourceforge.net/projects/pywin32/files/pywin32/Build216/pywin32-216.win32-py2.7.exe/download
+The python installation requires the following packages:
 
-Installation steps:
+ - pywin32
+ - wmi
+ - requests
+ - MySQLdb  # installed from wheel below
 
-#. Default installation.
+ Installation steps:
 
-
-Windows Management Instrumentation for Python (Python-WMI)
-----------------------------------------------------------
-
-:Homepage: http://timgolden.me.uk/python/wmi/index.html
-:Version: 1.4.6
-:Download: http://timgolden.me.uk/python/wmi/index.html#where-do-i-get-it
-:Direct Link: http://timgolden.me.uk/python/downloads/WMI-1.4.6.win32.exe
-
-Installation steps:
-
-#. Default installation.
+#. ``cd \Python2.7``
+#. ``set PYTHONNOUSERSITE=True``
+#. ``python lib\site.py`` make sure `ENABLE_USER_SITE=False`
+#. ``python -m pip --upgrade``
+#. ``python -m pip install pywin32 wmi requests``
 
 
-MySQL for Python (MySQLdb)
---------------------------
+Python MySQLdb package
+----------------------
 
-:Homepage: http://www.lfd.uci.edu/~gohlke/pythonlibs/
-:Version: 1.2.3
-:Download: http://www.lfd.uci.edu/~gohlke/pythonlibs/
+:Homepage: https://github.com/farcepest/MySQLdb1
+:Version: 1.2.5
+:Download: https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysql-python
+:Direct Link: MySQL_python‑1.2.5‑cp27‑none‑win32.whl
 
-.. note:: Since I don't own Microsoft Visual Studio, I can't compile the
-          MySQL extension module myself.  If you *do* own MSVC, you might
-          be able to compile and run the official package from
-          http://pypi.python.org/pypi/MySQL-python/.
+The mysqldb-python package from PyPI requires MSVC 9.0 to install (build).
+To circumvent, we can download a wheel from Christoph Gohlke's site.
 
 Installation steps:
 
-#. Default installation.
+#. Download the wheel. (Direct link blocked by javascript on website)
+#. Install: ``python -m pip install MySQL_python‑1.2.5‑cp27‑none‑win32.whl``
+#. Remove wheel file.
 
 
 Finishing Python Installation
@@ -440,44 +422,3 @@ Steps:
 
 #. Copy ``C:\Python27`` to ``\user``.
 #. Rename ``Python27`` folder to ``python``.
-
-Unfortunately, the world of Windows is complex.  The world of Windows
-compilers is even more complex.  You can't use binaries (executables or
-DLLs) from different compilers or even compiler versions together.  For
-instance, you can't import a Python module containing compiled code when
-it is compiled with a different compiler than Python itself.  Since
-Windows installations commonly don't *have* a compiler, this can be a pain
-and breaks installers.  What's more: compile code with Microsoft Visual
-C++ and install it on a machine *without* Microsoft Visual C++ and it may
-not work out of the box.  For instance, try this::
-
-    >>> import _tkinter
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    ImportError: DLL load failed: This application has failed to start
-    because the application configuration is incorrect. Reinstalling the
-    application may fix this problem.
-    >>> import win32api
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    ImportError: DLL load failed: The specified module could not be found.
-
-This not only happens with Tkinter and PyWin32, but also with several
-other packages that are used by the HiSPARC software.  Just trying to
-import _tkinter is an easy check to see if things are ok.  For Python
-2.7.1, the error can be resolved by installing the Microsoft Visual C++
-2008 Redistributable package.  Don't try another version, it won't work.
-Alternatively, you can fix the python installation by copying a few files
-around.  This is much easier to do.
-
-Steps (continued):
-
-#. Copy ``msvcr90.dll`` and ``Microsoft.VC90.CRT.manifest`` to
-   ``\user\python\DDLs``.
-#. Copy contents of ``\user\python\Lib\site-packages\pywin32_system32`` to
-   ``\user\python``.
-
-Now try::
-
-    >>> import _tkinter
-    >>> import win32api

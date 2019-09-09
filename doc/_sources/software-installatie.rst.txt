@@ -19,13 +19,6 @@ niet de mankracht.
    zijn uw meetgegevens ONBRUIKBAAR.**  Als u deze handleiding stap voor
    stap volgt, dan komt u vanzelf aan de configuratie toe.
 
-.. note:: Op het Science Park en de TU/E maken we gebruik van
-   Asus EEE PC's.  Deze pc's zijn goedkoop, hebben voldoende geheugen,
-   zijn energiezuinig, compact en snel genoeg voor onze doeleinden.  Deze
-   mini pc's werden geleverd met Microsoft Windows XP Home en ook dat is
-   voldoende.  Let wel: een monitor wordt *niet* meegeleverd; een toetsenbord
-   en muis soms ook niet.
-
 .. note:: Alle broncode van de software is beschikbaar.  Wilt u zelf met
    |labview| (de broncode van de data acquisitie software) aan de slag of
    zijn uw leerlingen geïnteresseerd in hoe het verwerken en uploaden van

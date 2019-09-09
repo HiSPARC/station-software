@@ -1,35 +1,25 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Installatie van de HiSPARC electronica &mdash; HiSPARC software 6.11 documentation</title>
-    
+    <title>Installatie van de HiSPARC electronica &#8212; HiSPARC software 6.11 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/hisparc_style.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '6.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="_static/hisparc_style.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="HiSPARC software 6.11 documentation" href="index.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Installatie van de HiSPARC software" href="software-installatie.html" />
     <link rel="prev" title="Introductie" href="introductie.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -39,7 +29,7 @@
         <li class="right" >
           <a href="introductie.html" title="Introductie"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -58,11 +48,11 @@ detectiestation met vier scintillatieplaten.</li>
 </ul>
 <div class="section" id="opstelling-met-twee-skiboxen">
 <h2>Opstelling met twee skiboxen<a class="headerlink" href="#opstelling-met-twee-skiboxen" title="Permalink to this headline">¶</a></h2>
-<p>De HiSPARC II Master elektronica (<a class="reference internal" href="#master-voorkant"><span>Vooraanzicht master</span></a>) integreert snelle signaalverwerking, conversie van
+<p>De HiSPARC II Master elektronica (<a class="reference internal" href="#master-voorkant"><span class="std std-ref">Vooraanzicht master</span></a>) integreert snelle signaalverwerking, conversie van
 twee analoge signalen afkomstig van de fotoversterkerbuizen naar digitaal
 formaat, en een precisie GPS, in één behuizing.  De Master verstuurt zijn
 data via een USB verbinding aan de achterzijde (aansluiting aan de linker
-kant in (<a class="reference internal" href="#master-achterkant"><span>Achteraanzicht master</span></a>) naar de data
+kant in (<a class="reference internal" href="#master-achterkant"><span class="std std-ref">Achteraanzicht master</span></a>) naar de data
 acquisitie (DAQ) pc.  De rechter USB aansluiting (onder de connector voor
 de GPS antenne) is voor directe communicatie tussen GPS en GPS
 monitorprogramma.  Deze verbinding is uitsluitend voor het verifiëren
@@ -75,8 +65,8 @@ instellen van de GPS als de diverse opties die het HiSPARC II
 besturingsprogramma biedt.  Het LabVIEW programma is verantwoordelijk
 voor het verzamelen en tevens het doorsturen van de meetgegevens naar een
 locaal buffer op de harde schijf van de data acquisitie pc.  De gegevens
-in deze locale buffer worden regelmatig door een tweede programma &#8211; dat
-onafhankelijk van het LabVIEW programma draait &#8211; naar de centrale
+in deze locale buffer worden regelmatig door een tweede programma – dat
+onafhankelijk van het LabVIEW programma draait – naar de centrale
 (MySQL) database bij het Nikhef in Amsterdam gestuurd.  In de nabije
 toekomst wordt er ook een mogelijkheid gecreëerd om de gegevens van het
 station voor analyse op te slaan in een locale database.  De analyse
@@ -104,10 +94,10 @@ GPS instellingen.</span></p>
 <div class="section" id="opstelling-met-vier-skiboxen">
 <h2>Opstelling met vier skiboxen<a class="headerlink" href="#opstelling-met-vier-skiboxen" title="Permalink to this headline">¶</a></h2>
 <p>Om vier scintillatie detectoren uit te kunnen lezen, moet een tweede
-HiSPARC II unit aangesloten worden. Echter, deze unit &#8211; de Slave &#8211;
-(<a class="reference internal" href="#slave-voorkant"><span>Vooraanzicht slave</span></a>) bezit geen GPS maar is verder
+HiSPARC II unit aangesloten worden. Echter, deze unit – de Slave –
+(<a class="reference internal" href="#slave-voorkant"><span class="std std-ref">Vooraanzicht slave</span></a>) bezit geen GPS maar is verder
 identiek aan de Master.  Aan de achterzijde is dan ook geen aansluiting
-voor een GPS-antenne aanwezig (<a class="reference internal" href="#slave-achterkant"><span>Achteraanzicht slave</span></a>).</p>
+voor een GPS-antenne aanwezig (<a class="reference internal" href="#slave-achterkant"><span class="std std-ref">Achteraanzicht slave</span></a>).</p>
 <div class="figure align-center" id="id3">
 <span id="slave-voorkant"></span><a class="reference internal image-reference" href="_images/kastje-voorkant.jpg"><img alt="_images/kastje-voorkant.jpg" src="_images/kastje-voorkant.jpg" style="width: 600px;" /></a>
 <p class="caption"><span class="caption-text">De voorkant van de HiSPARC II Master en Slave zijn identiek.</span></p>
@@ -119,7 +109,7 @@ verbinding.  De Slave heeft geen aansluiting voor een GPS antenne kabel
 (rechtsboven); de rechter USB aansluiting is zonder functie.</span></p>
 </div>
 <p>De Slave wordt via twee korte UTP kabels (kruislings, de lengte mag niet
-veranderd worden!) verbonden met de Master unit (<a class="reference internal" href="#master-slave-combi"><span>Master-Slave
+veranderd worden!) verbonden met de Master unit (<a class="reference internal" href="#master-slave-combi"><span class="std std-ref">Master-Slave
 combinatie</span></a>).  Master en Slave versturen hun data dus
 over aparte USB verbindingen (voor beide units is dit de linker connector
 aan de achterzijde).</p>
@@ -134,7 +124,7 @@ Slave; de verbinding bestaat uit twee kabels die ‘LVDS data in’ en
 <span id="nagios-doc"></span><h2>Monitor en controle<a class="headerlink" href="#monitor-en-controle" title="Permalink to this headline">¶</a></h2>
 <p>De HiSPARC besturingssoftware biedt bovendien de optie om de status
 van de detectoren en pc’s op afstand via internet te controleren
-(<a class="reference internal" href="#nagios"><span>Nagios</span></a>).</p>
+(<a class="reference internal" href="#nagios"><span class="std std-ref">Nagios</span></a>).</p>
 <div class="figure align-center" id="id6">
 <span id="nagios"></span><a class="reference internal image-reference" href="_images/nagios.png"><img alt="_images/nagios.png" src="_images/nagios.png" style="width: 600px;" /></a>
 <p class="caption"><span class="caption-text">Het menu aan de linkerzijde biedt links naar verschillende
@@ -145,7 +135,7 @@ overzichten om de stations te monitoren.</span></p>
 <p>Selecteer vervolgens een van de stations in het scherm om in meer detail
 te zien wat de status is van dat station. De clustercoördinatoren hebben
 bovendien de mogelijkheid om de instellingen van de detector via een
-‘virtual private network’ (VPN, <a class="reference internal" href="#network-diagram"><span>VPN diagram</span></a>) op
+‘virtual private network’ (VPN, <a class="reference internal" href="#network-diagram"><span class="std std-ref">VPN diagram</span></a>) op
 afstand te wijzigen. De toegang tot de pc’s biedt de mogelijkheid om
 snel en efficiënt kritische instellingen te veranderen en software
 updates door te voeren.</p>
@@ -167,7 +157,7 @@ verzonden.</span></p>
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/header.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Installatie van de HiSPARC electronica</a><ul>
 <li><a class="reference internal" href="#opstelling-met-twee-skiboxen">Opstelling met twee skiboxen</a></li>
@@ -186,21 +176,20 @@ verzonden.</span></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/hardware-installatie.txt"
+      <li><a href="_sources/hardware-installatie.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -216,12 +205,12 @@ verzonden.</span></p>
         <li class="right" >
           <a href="introductie.html" title="Introductie"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2009-2013, HiSPARC.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2009-2013, HiSPARC.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

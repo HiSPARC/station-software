@@ -1,35 +1,25 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Installatie van de HiSPARC software &mdash; HiSPARC software 6.11 documentation</title>
-    
+    <title>Installatie van de HiSPARC software &#8212; HiSPARC software 6.11 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/hisparc_style.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '6.11',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="_static/hisparc_style.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="HiSPARC software 6.11 documentation" href="index.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Configuratie van de HiSPARC software" href="configuratie.html" />
     <link rel="prev" title="Installatie van de HiSPARC electronica" href="hardware-installatie.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -39,7 +29,7 @@
         <li class="right" >
           <a href="hardware-installatie.html" title="Installatie van de HiSPARC electronica"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -56,25 +46,16 @@ schone installatie van Microsoft Windows 7 (op Windows 8
 is de software nog niet getest).  De keuze voor Windows is slechts
 gemaakt omdat een groot aantal systeembeheerders in het voortgezet
 onderwijs alleen ervaring heeft met Windows en een aantal van hen in het
-verleden aangaf geen Linux pc&#8217;s toe te staan op het schoolnetwerk.  Voor
+verleden aangaf geen Linux pc’s toe te staan op het schoolnetwerk.  Voor
 het ondersteunen van meer dan één besturingssysteem hebben we helaas
 niet de mankracht.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Vóór uiteindelijk gebruik is het nodig de HiSPARC data
 acquisitie software na installatie te configureren!  Zie
-<a class="reference internal" href="configuratie.html"><em>Configuratie van de HiSPARC software</em></a>.  <strong>Als u deze stap (per ongeluk) overslaat, dan
+<a class="reference internal" href="configuratie.html"><span class="doc">Configuratie van de HiSPARC software</span></a>.  <strong>Als u deze stap (per ongeluk) overslaat, dan
 zijn uw meetgegevens ONBRUIKBAAR.</strong>  Als u deze handleiding stap voor
 stap volgt, dan komt u vanzelf aan de configuratie toe.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Op het Science Park en de TU/E maken we gebruik van
-Asus EEE PC&#8217;s.  Deze pc&#8217;s zijn goedkoop, hebben voldoende geheugen,
-zijn energiezuinig, compact en snel genoeg voor onze doeleinden.  Deze
-mini pc&#8217;s werden geleverd met Microsoft Windows XP Home en ook dat is
-voldoende.  Let wel: een monitor wordt <em>niet</em> meegeleverd; een toetsenbord
-en muis soms ook niet.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -87,18 +68,15 @@ de HiSPARC data in zijn werk gaat, kijk dan op
 <div class="section" id="benodigdheden">
 <h2>Benodigdheden<a class="headerlink" href="#benodigdheden" title="Permalink to this headline">¶</a></h2>
 <p>Vóór u aan de installatie begint dient u te beschikken over:</p>
-<ul>
-<li><p class="first">een eigen beheer account op de PC.</p>
-</li>
-<li><p class="first">er mag geen account met de naam <code class="docutils literal"><span class="pre">hisparc</span></code> of <code class="docutils literal"><span class="pre">admhisparc</span></code> bestaan.
-Accounts met die namen worden door de installer aangemaakt.</p>
-</li>
-<li><p class="first">de HiSPARC software installer, <code class="docutils literal"><span class="pre">hisparcInstaller_vX.Y.Z.exe</span></code></p>
-</li>
+<ul class="simple">
+<li>een eigen beheer account op de PC.</li>
+<li>er mag geen account met de naam <code class="docutils literal notranslate"><span class="pre">hisparc</span></code> of <code class="docutils literal notranslate"><span class="pre">admhisparc</span></code> bestaan.
+Accounts met die namen worden door de installer aangemaakt.</li>
+<li>de HiSPARC software installer, <code class="docutils literal notranslate"><span class="pre">hisparcInstaller_vX.Y.Z.exe</span></code></li>
 <li><dl class="first docutils">
 <dt>door u clustercoördinator verstrekt:</dt>
-<dd><ul class="first last simple">
-<li>beveiligingscertificaat, bijvoorbeeld: <code class="docutils literal"><span class="pre">sciencepark501.zip</span></code></li>
+<dd><ul class="first last">
+<li>beveiligingscertificaat, bijvoorbeeld: <code class="docutils literal notranslate"><span class="pre">sciencepark501.zip</span></code></li>
 <li>een stationnummer</li>
 <li>een wachtwoord, uniek voor dit station.  Dit wachtwoord wordt
 gebruikt als controle op een vergissing in stationnummers.  Denkt
@@ -112,9 +90,9 @@ aan de clustercoördinator te verstrekken.</li>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">de naam van uw pc zoals gebruikt in ons monitorsysteem
-(<a class="reference internal" href="hardware-installatie.html#nagios-doc"><span>Monitor en controle</span></a>) is gelijk aan de naam van het certificaat, zonder
-de <code class="docutils literal"><span class="pre">.zip</span></code> extensie.  Als het certificaat <code class="docutils literal"><span class="pre">sciencepark501.zip</span></code> heet,
-dan is de pc-naam <code class="docutils literal"><span class="pre">sciencepark501</span></code>.</p>
+(<a class="reference internal" href="hardware-installatie.html#nagios-doc"><span class="std std-ref">Monitor en controle</span></a>) is gelijk aan de naam van het certificaat, zonder
+de <code class="docutils literal notranslate"><span class="pre">.zip</span></code> extensie.  Als het certificaat <code class="docutils literal notranslate"><span class="pre">sciencepark501.zip</span></code> heet,
+dan is de pc-naam <code class="docutils literal notranslate"><span class="pre">sciencepark501</span></code>.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -202,7 +180,7 @@ installatie.</p>
 <p class="first admonition-title">Note</p>
 <p class="last">Het is <em>noodzakelijk</em> dat u toestemming geeft voor de
 installatie van de TAP driver.  In tegenstelling tot wat de
-waarschuwing sterk suggereert zijn hieraan geen risico&#8217;s verbonden.
+waarschuwing sterk suggereert zijn hieraan geen risico’s verbonden.
 Voor programmeurs die hun software gratis ter beschikking stellen,
 zoals de auteurs van de TAP driver, is het niet op te brengen Microsoft
 te betalen voor hun Windows Logo test programma.  Het enige dat dit op
@@ -248,7 +226,7 @@ detectorstatistieken.  De monitor stelt ons in staat direct te weten
 wanneer een detector of detector pc niet meer goed functioneert.</li>
 <li><em>HiSPARC Updater</em> voor het controleren van HiSPARC software updates.
 Dit stelt ons in staat om nieuwe detector software direct op alle
-detector pc&#8217;s te installeren.</li>
+detector pc’s te installeren.</li>
 </ul>
 <p>Het starten van <em>MySQL</em> zorgt voor een waarschuwing door de <em>Windows
 Firewall</em>. Dit is geen enkel probleem, en we raden u aan de
@@ -272,7 +250,7 @@ Updater blijven draaien!</em></p>
 <p>Om te controleren of de installatie succesvol is verlopen en alle
 netwerkverbindingen zonder problemen werken is het van belang de <em>Local
 Diagnostic Tool</em> te draaien.  Deze vindt u onder <em>Start -&gt; Alle
-Programmma&#8217;s -&gt; HiSPARC -&gt; LocalDiagnosticTool</em> of <em>Start -&gt;
+Programmma’s -&gt; HiSPARC -&gt; LocalDiagnosticTool</em> of <em>Start -&gt;
 Programs -&gt; HiSPARC -&gt; Status -&gt; Diagnostics</em>.</p>
 <div class="figure align-center" id="id10">
 <a class="reference internal image-reference" href="_images/localdiagnostictool.png"><img alt="_images/localdiagnostictool.png" src="_images/localdiagnostictool.png" style="width: 568.65px; height: 391.85px;" /></a>
@@ -296,7 +274,7 @@ volledige uitvoer van de controles.  U kunt uw mail sturen naar
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Vóór uiteindelijk gebruik is het nodig de HiSPARC data
-acquisitie software te configureren! Zie <a class="reference internal" href="configuratie.html"><em>Configuratie van de HiSPARC software</em></a>.</p>
+acquisitie software te configureren! Zie <a class="reference internal" href="configuratie.html"><span class="doc">Configuratie van de HiSPARC software</span></a>.</p>
 </div>
 <p class="rubric">Footnotes</p>
 <table class="docutils footnote" frame="void" id="ooti" rules="none">
@@ -332,7 +310,7 @@ informatie over Python, zie de <a class="reference external" href="http://python
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/header.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Installatie van de HiSPARC software</a><ul>
 <li><a class="reference internal" href="#benodigdheden">Benodigdheden</a></li>
@@ -360,21 +338,20 @@ informatie over Python, zie de <a class="reference external" href="http://python
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/software-installatie.txt"
+      <li><a href="_sources/software-installatie.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -390,12 +367,12 @@ informatie over Python, zie de <a class="reference external" href="http://python
         <li class="right" >
           <a href="hardware-installatie.html" title="Installatie van de HiSPARC electronica"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">HiSPARC software 6.11 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2009-2013, HiSPARC.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2009-2013, HiSPARC.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>
