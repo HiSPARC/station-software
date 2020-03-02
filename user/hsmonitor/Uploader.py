@@ -8,9 +8,7 @@ and uploads the events in batches to the datastore.
 import logging
 from time import sleep, time
 from cPickle import dumps
-from urllib import urlencode
-from urllib2 import urlopen, HTTPError, URLError
-import socket
+import requests
 from threading import Thread, Semaphore, Event
 try:
     from hashlib import md5
@@ -32,8 +30,10 @@ BATCHSIZE = 100
 MINWAIT = 1  # minimum time to wait in seconds after a failed attempt
 MAXWAIT = 60  # maximum time to wait in seconds after a failed attempt
 
-# To make sure there is no timeout set at socket level
-socket.setdefaulttimeout(None)
+# requests (connection, read) timeout
+# timeout quickly on connections, but wait for response after upload
+# a long ReadTimeout prevents duplicate events (see issue #2) 
+TIMEOUT = (3, 600)
 
 
 class Uploader(Observer, Thread):
@@ -135,26 +135,28 @@ class Uploader(Observer, Thread):
     def __upload(self, elist):
         """Upload a list of events to the database server."""
 
-        data = dumps(elist)
-        checksum = md5(data).hexdigest()
+        elist_data = dumps(elist)
+        checksum = md5(elist_data).hexdigest()
 
-        params = urlencode({'station_id': self.stationID,
-                            'password': self.password,
-                            'data': data,
-                            'checksum': checksum})
+        data = {
+            'station_id': self.stationID,
+            'password': self.password,
+            'data': elist_data,
+            'checksum': checksum
+        }
 
         # Open the connection and send our data. Exceptions are caught
         # explicitly to make sure we understand the implications of errors.
         try:
-            f = urlopen(self.URL, params)
-        except (URLError, HTTPError), msg:
-            # For example: connection refused or internal server error
-            returncode = str(msg)
-        except Exception, msg:
+            r = requests.post(self.URL, data=data, timeout=TIMEOUT)
+        except (requests.Timeout, requests.ConnectionError) as exc:
+            returncode = ('Connection error in function'
+                          '__upload: %s' % str(exc))
+        except Exception as exc:
             returncode = ('Uncatched exception occured in function '
-                          '__upload: %s' % str(msg))
+                          '__upload: %s' % str(exc))
         else:
-            returncode = f.read()
+            returncode = r.text
 
         return returncode
 
