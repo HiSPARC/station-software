@@ -67,7 +67,7 @@ class HiSPARCEvent(BaseHiSPARCEvent):
         if str(self.eventrate) in ['-1.#IND', '1.#INF']:
             self.eventrate = 0
 
-        # Add slave comparators to the trigger pattern
+        # Add secondary comparators to the trigger pattern
         # Shift by 16 to add it as bits 16-19 of the trigger pattern.
         trigger_pattern, slv_comparators, _zero_padding = \
             self.unpackSeqMessage('>HBB')
@@ -84,7 +84,7 @@ class HiSPARCEvent(BaseHiSPARCEvent):
         self.mas_tr1 = compress(self.unpack_trace(mas_tr1))
         self.mas_tr2 = compress(self.unpack_trace(mas_tr2))
 
-        # Read out and save slave data as well, if available
+        # Read out and save secondary data as well, if available
         if self.num_devices > 1:
             self.slv_stdev1, self.slv_stdev2, self.slv_baseline1, \
                 self.slv_baseline2, self.slv_npeaks1, self.slv_npeaks2, \

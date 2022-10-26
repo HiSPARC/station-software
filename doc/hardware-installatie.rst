@@ -5,19 +5,19 @@ Installatie van de |hisparc| electronica
 
 De HiSPARC II elektronica kan in twee configuraties toegepast worden:
 
-* een enkele ‘Master’ unit voor het uitlezen van twee skiboxen.
-* Een Master- in combinatie met een ‘Slave-unit’, geschikt voor een
-  detectiestation met vier scintillatieplaten. 
+* een enkele ‘Primary’ unit voor het uitlezen van twee skiboxen.
+* Een Primary- in combinatie met een ‘Secondary-unit’, geschikt voor een
+  detectiestation met vier scintillatieplaten.
 
 Opstelling met twee skiboxen
 ----------------------------
 
-De HiSPARC II Master elektronica (:ref:`Vooraanzicht master
-<master-voorkant>`) integreert snelle signaalverwerking, conversie van
+De HiSPARC II Primary elektronica (:ref:`Vooraanzicht primary
+<primary-voorkant>`) integreert snelle signaalverwerking, conversie van
 twee analoge signalen afkomstig van de fotoversterkerbuizen naar digitaal
-formaat, en een precisie GPS, in één behuizing.  De Master verstuurt zijn
+formaat, en een precisie GPS, in één behuizing.  De Primary verstuurt zijn
 data via een USB verbinding aan de achterzijde (aansluiting aan de linker
-kant in (:ref:`Achteraanzicht master <master-achterkant>`) naar de data
+kant in (:ref:`Achteraanzicht primary <primary-achterkant>`) naar de data
 acquisitie (DAQ) pc.  De rechter USB aansluiting (onder de connector voor
 de GPS antenne) is voor directe communicatie tussen GPS en GPS
 monitorprogramma.  Deze verbinding is uitsluitend voor het verifiëren
@@ -38,23 +38,23 @@ station voor analyse op te slaan in een locale database.  De analyse
 software kan de gegevens uit zowel de centrale als de locale database
 verwerken.
 
-.. _master-voorkant:
+.. _primary-voorkant:
 .. figure:: images/kastje-voorkant.jpg
    :align: center
    :width: 600
 
-   De voorkant van de HiSPARC II Master; van links naar rechts: groene LED
+   De voorkant van de HiSPARC II Primary; van links naar rechts: groene LED
    voor de voedingsspanning, de gele LED geeft aan of er signalen
    binnenkomen, signaal- en voedingsaansluiting voor fotobuis-1. Midden:
    de inlaat voor de luchtkoeling. Rechts in omgekeerde volgorde:
    voedings- en signaalaansluiting fotobuis-2 en gele signaal LED.
 
-.. _master-achterkant:
-.. figure:: images/master-achterkant.jpg
+.. _primary-achterkant:
+.. figure:: images/primary-achterkant.jpg
    :align: center
    :width: 600
 
-   De achterzijde van de HiSPARC II Master; van links naar rechts: USB
+   De achterzijde van de HiSPARC II Primary; van links naar rechts: USB
    aansluiting voor het versturen van de meetgegevens naar de pc, TTL
    aansluiting voor een externe trigger (alleen voor speciale doeleinden),
    twee UTP verbindingen (niet van toepassing), uitgang luchtkoeling,
@@ -66,41 +66,41 @@ Opstelling met vier skiboxen
 ----------------------------
 
 Om vier scintillatie detectoren uit te kunnen lezen, moet een tweede
-HiSPARC II unit aangesloten worden. Echter, deze unit -- de Slave --
-(:ref:`Vooraanzicht slave <slave-voorkant>`) bezit geen GPS maar is verder
-identiek aan de Master.  Aan de achterzijde is dan ook geen aansluiting
-voor een GPS-antenne aanwezig (:ref:`Achteraanzicht slave
-<slave-achterkant>`).
+HiSPARC II unit aangesloten worden. Echter, deze unit -- de Secondary --
+(:ref:`Vooraanzicht secondary <secondary-voorkant>`) bezit geen GPS maar is verder
+identiek aan de Primary.  Aan de achterzijde is dan ook geen aansluiting
+voor een GPS-antenne aanwezig (:ref:`Achteraanzicht secondary
+<secondary-achterkant>`).
 
-.. _slave-voorkant:
+.. _secondary-voorkant:
 .. figure:: images/kastje-voorkant.jpg
    :align: center
    :width: 600
 
-   De voorkant van de HiSPARC II Master en Slave zijn identiek.
+   De voorkant van de HiSPARC II Primary en Secondary zijn identiek.
 
-.. _slave-achterkant:
-.. figure:: images/slave-achterkant.jpg
+.. _secondary-achterkant:
+.. figure:: images/secondary-achterkant.jpg
    :align: center
    :width: 600
 
-   Data van de HiSPARC II Slave wordt uitgelezen via de linker USB
-   verbinding.  De Slave heeft geen aansluiting voor een GPS antenne kabel
+   Data van de HiSPARC II Secondary wordt uitgelezen via de linker USB
+   verbinding.  De Secondary heeft geen aansluiting voor een GPS antenne kabel
    (rechtsboven); de rechter USB aansluiting is zonder functie.
 
-De Slave wordt via twee korte UTP kabels (kruislings, de lengte mag niet
-veranderd worden!) verbonden met de Master unit (:ref:`Master-Slave
-combinatie <master-slave-combi>`).  Master en Slave versturen hun data dus
+De Secondary wordt via twee korte UTP kabels (kruislings, de lengte mag niet
+veranderd worden!) verbonden met de Primary unit (:ref:`Primary-Secondary
+combinatie <primary-secondary-combi>`).  Primary en Secondary versturen hun data dus
 over aparte USB verbindingen (voor beide units is dit de linker connector
 aan de achterzijde).
 
-.. _master-slave-combi:
-.. figure:: images/master-slave-achterkant.jpg
+.. _primary-secondary-combi:
+.. figure:: images/primary-secondary-achterkant.jpg
    :align: center
    :width: 600
 
-   Een snelle databus verzorgt de communicatie tussen HiSPARC II Master en
-   Slave; de verbinding bestaat uit twee kabels die ‘LVDS data in’ en
+   Een snelle databus verzorgt de communicatie tussen HiSPARC II Primary en
+   Secondary; de verbinding bestaat uit twee kabels die ‘LVDS data in’ en
    ‘LVDS data out’ (kruislings) met elkaar verbinden.
 
 .. _nagios-doc:
