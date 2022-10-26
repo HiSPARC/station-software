@@ -44,12 +44,12 @@ def unpack_legacy_message(self):
     # Nanoseconds
     self.nanoseconds = (struct.unpack(">I", self.blob[11:15])[0] +
                         random.randrange(1, 9000))
-    # Trigger time of Slave relative to Master in ns
+    # Trigger time of Secondary relative to Primary in ns
     self.SLVtime = struct.unpack(">i", self.blob[15:19])[0]
     # Trigger pattern
     # TODO: Unwrap trigger pattern
     self.trigger = struct.unpack(">H", self.blob[19:21])[0]
-    # Master
+    # Primary
     self.mas_baseline1 = struct.unpack(">h", self.blob[21:23])[0]
     self.mas_baseline2 = struct.unpack(">h", self.blob[23:25])[0]
     self.mas_npeaks1 = struct.unpack(">h", self.blob[25:27])[0]
@@ -61,7 +61,7 @@ def unpack_legacy_message(self):
     self.mas_tr1 = compress(self.unpack_trace(self.blob[41:41 + self.N / 2]))
     self.mas_tr2 = compress(self.unpack_trace(self.blob[41 + self.N / 2:
                                                         41 + self.N]))
-    # Slave
+    # Secondary
     if self.Ndev == 2:
         o = 41 + self.N  # Offset
         self.slv_baseline1 = struct.unpack(">h", self.blob[o:o + 2])[0]
