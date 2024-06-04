@@ -232,7 +232,7 @@ HiSPARC Local Diagnostic Tool
 Om te controleren of de installatie succesvol is verlopen en alle
 netwerkverbindingen zonder problemen werken is het van belang de *Local
 Diagnostic Tool* te draaien.  Deze vindt u onder *Start -> Alle
-Programmma's -> HiSPARC -> LocalDiagnosticTool* of *Start -> 
+Programmma's -> HiSPARC -> LocalDiagnosticTool* of *Start ->
 Programs -> HiSPARC -> Status -> Diagnostics*.
 
 .. figure:: images/localdiagnostictool.png
@@ -256,7 +256,7 @@ Bij aanhoudende problemen, kunt u in het witte venster klikken, en met
 *Ctrl-A* alle tekst selecteren.  Met *Ctrl-C* kopieert u het naar het
 klembord.  U kunt dan in een e-mail op *Ctrl-V* drukken en u heeft de
 volledige uitvoer van de controles.  U kunt uw mail sturen naar
-suryab@nikhef.nl.  We zullen dan zo snel mogelijk contact met u opnemen.
+hisparc@utah.edu.  We zullen dan zo snel mogelijk contact met u opnemen.
 
 .. note:: Vóór uiteindelijk gebruik is het nodig de |hisparc| data
    acquisitie software te configureren! Zie :doc:`configuratie`.

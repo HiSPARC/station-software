@@ -8,7 +8,7 @@ station geïnstalleerd moeten worden. Een pdf-versie van deze handleiding
 is ook te downloaden: `HiSPARCsoftware.pdf <HiSPARCsoftware.pdf>`_. Ga
 naar de `HiSPARC Homepage <http://www.hisparc.nl/>`_ voor meer
 informatie over |hisparc|. Bij vragen of suggesties kunt u contact
-opnemen met het `HiSPARC team <beheer@hisparc.nl>`_.
+opnemen met het `HiSPARC team <hisparc@utah.edu>`_.
 
 U kunt het software installatiepakket downloaden met deze link:
 `HiSPARC Installer [exe]

@@ -16,4 +16,4 @@ stappen die nodig zijn om de detectoren in te regelen.
 
 Heeft u vragen of opmerkingen naar aanleiding van de software, deze
 handleiding of het |hisparc| experiment in algemenere zin, neemt u dan
-contact op met onze projectcoördinator Surya Bonam (suryab@nikhef.nl).
+contact op met ons via hisparc@utah.edu.
