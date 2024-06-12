@@ -17,8 +17,6 @@ except ImportError:
 
 from Observer import Observer
 from StorageManager import StorageManager
-from NagiosPush import NagiosPush
-from NagiosResult import NagiosResult
 from UserExceptions import ThreadCrashError
 
 logger = logging.getLogger('hsmonitor.uploader')
@@ -32,12 +30,12 @@ MAXWAIT = 60  # maximum time to wait in seconds after a failed attempt
 
 # requests (connection, read) timeout
 # timeout quickly on connections, but wait for response after upload
-# a long ReadTimeout prevents duplicate events (see issue #2) 
+# a long ReadTimeout prevents duplicate events (see issue #2)
 TIMEOUT = (3, 600)
 
 
 class Uploader(Observer, Thread):
-    def __init__(self, serverID, stationID, password, URL, config,
+    def __init__(self, serverID, stationID, password, URL,
                  retryAfter=MINWAIT, maxWait=MAXWAIT,
                  minBatchSize=BATCHSIZE, maxBatchSize=BATCHSIZE):
         self.storageManager = StorageManager()
@@ -45,7 +43,6 @@ class Uploader(Observer, Thread):
         self.stationID = stationID
         self.password = password
         self.URL = URL
-        self.nagiosPush = NagiosPush(config)
         self.minBatchSize = minBatchSize
         self.maxBatchSize = maxBatchSize
         self.retryAfter = MINWAIT
@@ -205,9 +202,6 @@ class Uploader(Observer, Thread):
                         "number of failed attempts: %i." %
                         (self.serverID, bsize, numFailedAttempts))
                 logger.error(msg2)
-                msg3 = msg1 + "\n" + msg2
-                nr = NagiosResult(2, msg3, "ServerCheck")
-                self.nagiosPush.sendToNagios(nr)
                 sleeptime = min(2 ** numFailedAttempts * self.retryAfter,
                                 self.maxWait)
                 logger.debug('%i: Sleeping for %f seconds.' %

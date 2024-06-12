@@ -33,7 +33,6 @@ from TimedConcurrentLogging import TimedConcurrentRotatingFileHandler
 from EConfigParser import EConfigParser
 from BufferListener import BufferListener
 from Interpreter import Interpreter
-from CheckScheduler import CheckScheduler
 from StorageManager import StorageManager
 from Uploader import Uploader
 from UserExceptions import ThreadCrashError
@@ -68,7 +67,6 @@ class HsMonitor(object):
     This process spawns several threads to perform tasks.
 
     - BufferListener: read messages from the MySQL database.
-    - CheckScheduler: report status to Nagios.
     - Uploader: upload message to a datastore server.
 
     """
@@ -132,26 +130,15 @@ class HsMonitor(object):
             if buffLis.conn:
                 self.hsThreads.append(buffLis)
 
-            # Check scheduler
-            # Get the nagios configuration section from config file
-            nagiosConf = self.config.itemsdict('NagiosPush')
-            machine = re.search('([a-z0-9]+).zip',
-                                self.config.get('Station', 'Certificate'))
-            nagiosConf['machine_name'] = machine.group(1)
-            checkSched = self.createCheckScheduler(interpr, nagiosConf)
-            eventRate = checkSched.getEventRate()
-            storMan.addObserver(eventRate)
-            self.hsThreads.append(checkSched)
-
             # Uploader central
-            up = self.createUploader(0, "Upload-datastore", nagiosConf)
+            up = self.createUploader(0, "Upload-datastore")
             self.hsThreads.append(up)
             storMan.addObserver(up)
             up.setNumServer(self.numServers)
 
             # Try local server
             #try:
-            #    up2 = self.createUploader(1, "Upload-local", nagiosConf)
+            #    up2 = self.createUploader(1, "Upload-local")
             #    self.hsThreads.append(up2)
             #    storMan.addObserver(up2)
             #    self.numServers += 1
@@ -200,11 +187,7 @@ class HsMonitor(object):
         buffLis = BufferListener(bufferdb, interpreter)
         return buffLis
 
-    def createCheckScheduler(self, interpreter, nagiosConf):
-        checkSched = CheckScheduler(nagiosConf, interpreter)
-        return checkSched
-
-    def createUploader(self, serverID, section_name, nagiosConf):
+    def createUploader(self, serverID, section_name):
         stationID = self.config.get("Station", "Nummer")
         url = self.config.get(section_name, "URL")
         passw = self.config.get("Station", "Password")
@@ -217,7 +200,7 @@ class HsMonitor(object):
         minwait = self.config.ifgetfloat(section_name, "MinWait", 1.0)
         maxwait = self.config.ifgetfloat(section_name, "MaxWait", 60.0)
 
-        up = Uploader(serverID, stationID, passw, url, nagiosConf,
+        up = Uploader(serverID, stationID, passw, url,
                       minwait, maxwait, minbs, maxbs)
         return up
 
